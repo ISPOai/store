@@ -10,11 +10,11 @@ store/
 ├── catalog.json          # the curated index the host fetches to render the gallery
 ├── tip-calculator/       # one app = one top-level folder (the `subpath`)
 │   ├── .ispo/project.json #   closed ISPO descriptor (schemaVersion 1)
-│   ├── icon.svg          #   REQUIRED bundled app icon (svg/png/webp/jpg)
+│   ├── icon.png          #   REQUIRED bundled app icon (RASTER: png/webp/jpg)
 │   └── src/              #   app source; the host builds it (React provided by the host)
 └── quote-shuffler/
     ├── .ispo/project.json
-    ├── icon.svg
+    ├── icon.png
     └── src/
 ```
 
@@ -22,11 +22,18 @@ Each app is an ordinary ISPO project: a `.ispo/project.json` descriptor plus `sr
 **no** `package.json`/`node_modules` — the host provides React, `react-dom`, and `@ispo/sdk` at
 build time (inline-v1).
 
-**Every submitted app must bundle an icon** in its own folder (e.g. `icon.svg`) and name it in the
+**Every submitted app must bundle an icon** in its own folder (e.g. `icon.png`) and name it in the
 catalog entry's `icon` field. The icon ships with the app, so it travels on install and identifies
-the app in the store gallery. Allowed: `.svg`, `.png`, `.webp`, `.jpg` (single filename, ≤128 KiB).
-The host fetches it from the pinned store origin and inlines it as a `data:` URL for the gallery
-(the host renderer's CSP forbids remote images), so the icon must live in the repo, not a CDN.
+the app in the store gallery.
+
+- **Raster only** — `.png`, `.webp`, or `.jpg`. **SVG is not accepted**: it is an active-content
+  format, and the host renders icons as inlined `data:` URLs. Raster images are inert by
+  construction. The host verifies the file's **magic bytes** match its extension, so a mislabeled
+  file (e.g. SVG named `.png`) is rejected.
+- Single filename, **≤128 KiB** each; the host inlines up to a **500 KB total** budget across the
+  catalog (extra icons fall back to a monogram).
+- The host fetches it from the pinned store origin and inlines it (the host renderer's CSP forbids
+  remote images), so the icon must live in the repo, not a CDN.
 
 ## How the host consumes this
 
@@ -51,7 +58,7 @@ The host fetches it from the pinned store origin and inlines it as a `data:` URL
       "subpath": "string",         // top-level folder name, /^[a-z0-9][a-z0-9-]*$/
       "ref": "string?",            // optional git ref; defaults to the default branch
       "icon": "string",            // REQUIRED bundled icon filename in the app folder
-                                   //   (svg/png/webp/jpg, single filename, ≤128 KiB)
+                                   //   (RASTER png/webp/jpg, single filename, ≤128 KiB)
       "capabilitySummary": "string?" // optional human summary of what the app asks for
     }
   ]
