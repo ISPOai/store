@@ -1,0 +1,64 @@
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--w-font-sans, system-ui, -apple-system, sans-serif);
+  background: var(--background, #0e0f12);
+  color: var(--foreground, #f4f5f7);
+}
+
+.quote {
+  min-height: 100vh;
+  box-sizing: border-box;
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.quote-card {
+  margin: 0;
+  background: var(--card, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  border-radius: 1rem;
+  padding: 2rem 1.75rem;
+}
+
+.quote-card blockquote {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.quote-card figcaption {
+  margin-top: 1rem;
+  color: var(--muted-foreground, #9aa0ab);
+}
+
+.quote-shuffle {
+  padding: 0.6rem 1.5rem;
+  border-radius: 0.625rem;
+  border: 1px solid var(--primary, #6d8cff);
+  background: var(--primary, #6d8cff);
+  color: var(--primary-foreground, #0b0d12);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.quote-shuffle:hover {
+  filter: brightness(1.07);
+}
+
+.quote-count {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted-foreground, #9aa0ab);
+}

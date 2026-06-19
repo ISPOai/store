@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "apps": [
+    {
+      "id": "tip-calculator",
+      "name": "Tip Calculator",
+      "description": "Split a bill, dial in the tip, and see the per-person total.",
+      "subpath": "tip-calculator",
+      "capabilitySummary": "No special permissions."
+    },
+    {
+      "id": "quote-shuffler",
+      "name": "Quote Shuffler",
+      "description": "A small pocket of quotes — shuffle for a fresh one.",
+      "subpath": "quote-shuffler",
+      "capabilitySummary": "No special permissions."
+    }
+  ]
+}
