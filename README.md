@@ -57,6 +57,8 @@ the app in the store gallery.
       "description": "string",     // one-line summary
       "subpath": "string",         // top-level folder name, /^[a-z0-9][a-z0-9-]*$/
       "ref": "string?",            // optional git ref; defaults to the default branch
+      "category": "string?",       // optional display group for the store sidebar
+                                   //   (free text, ≤64 chars; untagged → "Uncategorized")
       "icon": "string",            // REQUIRED bundled icon filename in the app folder
                                    //   (RASTER png/webp/jpg, single filename, ≤128 KiB)
       "capabilitySummary": "string?" // optional human summary of what the app asks for

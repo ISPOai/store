@@ -6,7 +6,32 @@
       "name": "Tip Calculator",
       "description": "Split a bill, dial in the tip, and see the per-person total.",
       "subpath": "tip-calculator",
+      "category": "Utilities",
       "icon": "icon.png",
+      "capabilitySummary": "No special permissions."
+    },
+    {
+      "id": "unit-converter",
+      "name": "Unit Converter",
+      "description": "Convert a value between meters, kilometers, feet, inches, and miles.",
+      "subpath": "unit-converter",
+      "category": "Utilities",
+      "capabilitySummary": "No special permissions."
+    },
+    {
+      "id": "color-picker",
+      "name": "Color Picker",
+      "description": "Mix an RGB colour and copy the hex and rgb() values.",
+      "subpath": "color-picker",
+      "category": "Utilities",
+      "capabilitySummary": "No special permissions."
+    },
+    {
+      "id": "pomodoro-timer",
+      "name": "Pomodoro Timer",
+      "description": "A focus countdown with 25/15/5-minute presets and start, pause, and reset.",
+      "subpath": "pomodoro-timer",
+      "category": "Productivity",
       "capabilitySummary": "No special permissions."
     },
     {
@@ -14,7 +39,16 @@
       "name": "Quote Shuffler",
       "description": "A small pocket of quotes — shuffle for a fresh one.",
       "subpath": "quote-shuffler",
+      "category": "Fun",
       "icon": "icon.png",
+      "capabilitySummary": "No special permissions."
+    },
+    {
+      "id": "dice-roller",
+      "name": "Dice Roller",
+      "description": "Roll a handful of dice — d4 through d20 — and total the result.",
+      "subpath": "dice-roller",
+      "category": "Fun",
       "capabilitySummary": "No special permissions."
     }
   ]

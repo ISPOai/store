@@ -1,0 +1,79 @@
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--w-font-sans, system-ui, -apple-system, sans-serif);
+  background: var(--background, #0e0f12);
+  color: var(--foreground, #f4f5f7);
+}
+
+.pick {
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pick-head h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.pick-head p {
+  margin: 0;
+  color: var(--muted-foreground, #9aa0ab);
+}
+
+.pick-card,
+.pick-out {
+  background: var(--card, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  border-radius: 0.875rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.pick-swatch {
+  height: 6rem;
+  border-radius: 0.625rem;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+}
+
+.pick-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pick-field > span {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground, #9aa0ab);
+}
+
+.pick-field input[type='range'] {
+  width: 100%;
+  accent-color: var(--primary, #6d8cff);
+}
+
+.pick-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.pick-row-label {
+  color: var(--muted-foreground, #9aa0ab);
+}
+
+.pick-row-value {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--w-font-mono, ui-monospace, monospace);
+  user-select: all;
+}
