@@ -8,19 +8,20 @@ apps a user browses and installs into their own ISPO. This is the repo the host 
 ```
 store/
 ├── catalog.json          # the curated index the host fetches to render the gallery
-├── tip-calculator/       # one app = one top-level folder (the `subpath`)
+├── opencut/              # one app = one top-level folder (the `subpath`)
 │   ├── .ispo/project.json #   closed ISPO descriptor (schemaVersion 1)
-│   ├── icon.png          #   REQUIRED bundled app icon (RASTER: png/webp/jpg)
+│   ├── icon.webp         #   REQUIRED bundled app icon (RASTER: png/webp/jpg)
 │   └── src/              #   app source; the host builds it (React provided by the host)
-└── quote-shuffler/
+└── moodboard/
     ├── .ispo/project.json
-    ├── icon.png
+    ├── icon.webp
     └── src/
 ```
 
-Each app is an ordinary ISPO project: a `.ispo/project.json` descriptor plus `src/`. Apps bring
-**no** `package.json`/`node_modules` — the host provides React, `react-dom`, and `@ispo/sdk` at
-build time (inline-v1).
+Each app is an ordinary ISPO project: a `.ispo/project.json` descriptor plus source. Apps may
+include dependency manifests when they need packages beyond the host-provided React, `react-dom`,
+and `@ispo/sdk` build palette, but the store never carries generated installs or build output such
+as `node_modules/` or `dist/`.
 
 **Every submitted app must bundle an icon** in its own folder (e.g. `icon.png`) and name it in the
 catalog entry's `icon` field. The icon ships with the app, so it travels on install and identifies

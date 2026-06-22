@@ -1,0 +1,15 @@
+*/.agents/
+*/.claude/
+*/.codex/
+*/.mcp.json
+*/AGENTS.md
+*/CLAUDE.md
+*/data/
+*/dist/
+*/node_modules/
+*/tmp/
+*/.cache/
+*/.ispo/agent-runtime.md
+*/.ispo/devlog/
+*/.ispo/runtime*.log
+*/.ispo/scratch/

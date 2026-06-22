@@ -1,0 +1,4 @@
+/* OpenCut's globals.css carries the Tailwind v4 setup, the design tokens,
+ * and every utility OpenCut's components reference. Re-export from src/
+ * root so the standard scaffold entry (main.tsx → ./index.css) finds it. */
+@import "./app/globals.css";

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "name": "Moodboard",
+  "version": "0.0.1",
+  "target": "react",
+  "appEntry": "src/main.tsx",
+  "mode": "edit",
+  "root": "",
+  "requests": {
+    "fs": "self",
+    "shared": [
+      "read",
+      "write"
+    ],
+    "ui": [
+      "notify",
+      "navigate"
+    ],
+    "agent": [],
+    "dialog": [],
+    "files": [
+      "pick"
+    ],
+    "chrome": [],
+    "promptHistory": [],
+    "entities": {},
+    "devices": [],
+    "connectors": {
+      "google": {
+        "calendar": []
+      }
+    }
+  },
+  "env": [],
+  "entityTypes": [],
+  "egress": {
+    "connect": []
+  }
+}

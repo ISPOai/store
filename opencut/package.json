@@ -1,0 +1,26 @@
+{
+  "name": "@user/opencut",
+  "version": "0.0.1",
+  "private": true,
+  "description": "OpenCut (vendored) as a ISPO project. Dependencies listed here are the ones NOT provided by the host's nodePaths fallback (see ISPO spec.html §3.1). Host-provided deps like react, react-dom, @ispo/sdk, all @radix-ui/* primitives, lucide-react, cmdk, etc. are intentionally absent.",
+  "dependencies": {
+    "@hello-pangea/dnd": "^18.0.1",
+    "@hugeicons/core-free-icons": "^3.3.0",
+    "@hugeicons/react": "^1.1.6",
+    "@huggingface/transformers": "^3.8.1",
+    "culori": "^4.0.2",
+    "eventemitter3": "^5.0.1",
+    "mediabunny": "^1.29.1",
+    "motion": "^12.18.1",
+    "nanoid": "^5.1.5",
+    "opencut-wasm": "^0.2.10",
+    "radix-ui": "^1.4.3",
+    "react-icons": "^5.4.0",
+    "react-markdown": "^10.1.0",
+    "react-window": "^2.2.7",
+    "soundtouchjs": "^0.3.0",
+    "tailwindcss-animate": "^1.0.7",
+    "use-deep-compare-effect": "^1.8.1",
+    "wavesurfer.js": "^7.9.8"
+  }
+}

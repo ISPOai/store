@@ -1,0 +1,321 @@
+/* Moodboard canvas surface, board, cards, drop overlay, and empty state.
+   Colours come only from the design-system tokens confirmed present in
+   @ispo/design/tokens.css (the scaffold's index.css imports it once). No raw
+   hex except low-opacity black for elevation shadows. */
+
+.canvas-root {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  color: var(--foreground);
+  font-family: inherit;
+}
+
+/* ── Surface: the fixed viewport. The dot grid tracks the viewport (its
+   background-position/size are set inline from the transform) so panning and
+   zooming read on an empty board. ── */
+.canvas-surface {
+  --canvas-dot: color-mix(in srgb, var(--foreground) 9%, transparent);
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: var(--background);
+  background-image: radial-gradient(circle, var(--canvas-dot) 1.25px, transparent 1.25px);
+  cursor: grab;
+  touch-action: none;
+}
+.canvas-surface.is-panning {
+  cursor: grabbing;
+}
+
+/* ── Board: the single transformed plane. Cards are absolutely positioned in
+   board space inside it, so they never re-layout during pan/zoom. ── */
+.canvas-board {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .canvas-board.is-animating {
+    transition: transform 220ms cubic-bezier(0.2, 0, 0.1, 1);
+  }
+}
+
+/* ── Card ── */
+.board-card {
+  position: absolute;
+  user-select: none;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--card);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.16),
+    0 10px 30px rgba(0, 0, 0, 0.14);
+  cursor: grab;
+  outline: none;
+}
+.board-card.is-active {
+  cursor: grabbing;
+}
+.board-card:focus-visible {
+  box-shadow:
+    var(--w-focus-shadow),
+    0 10px 30px rgba(0, 0, 0, 0.18);
+}
+.board-card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: var(--muted);
+  pointer-events: none;
+}
+
+/* Hover/focus affordances: action buttons (top-right) + filename caption. */
+.board-card-overlay {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity var(--w-transition-fast);
+}
+.board-card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  color: var(--card-foreground);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition:
+    background var(--w-transition-fast),
+    color var(--w-transition-fast);
+}
+.board-card-btn:hover {
+  background: var(--w-surface, var(--muted));
+}
+.board-card-btn-danger:hover {
+  background: var(--destructive);
+  color: #fff;
+  border-color: var(--destructive);
+}
+.board-card-caption {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  right: 6px;
+  padding: 5px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 86%, transparent);
+  color: var(--card-foreground);
+  backdrop-filter: blur(6px);
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  transition: opacity var(--w-transition-fast);
+  pointer-events: none;
+}
+.board-card:hover .board-card-overlay,
+.board-card:focus-within .board-card-overlay,
+.board-card:hover .board-card-caption,
+.board-card:focus-within .board-card-caption {
+  opacity: 1;
+}
+
+/* Inline rename field — same footprint as the caption pill, always visible
+   while editing (the card is focus-within so the opacity rule lifts it). */
+.board-card-rename {
+  pointer-events: auto;
+  font: inherit;
+  font-size: 12px;
+  outline: none;
+}
+.board-card-rename:focus-visible {
+  box-shadow: var(--w-focus-inset-shadow);
+}
+
+/* Resize handle — bottom-right corner, appears on hover/focus like the rest. */
+.board-card-resize {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+  touch-action: none;
+  opacity: 0;
+  transition: opacity var(--w-transition-fast);
+  background:
+    linear-gradient(
+      135deg,
+      transparent 0 50%,
+      color-mix(in srgb, var(--foreground) 55%, transparent) 50% 62%,
+      transparent 62% 74%,
+      color-mix(in srgb, var(--foreground) 55%, transparent) 74% 86%,
+      transparent 86%
+    );
+}
+.board-card:hover .board-card-resize,
+.board-card:focus-within .board-card-resize {
+  opacity: 0.9;
+}
+
+/* ── Toolbar: floating pill, top-left ── */
+.toolbar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 3px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 8px 24px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  /* Retro VCR on-screen-display font, bundled inline in vcr-font.css. */
+  font-family: "VCR OSD Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: 0.04em;
+}
+/* The scaffold Button hardcodes h-9 (36px) and its cn() is plain clsx (no
+   tailwind-merge), so a className h-8 can't win on source order. This unlayered
+   rule beats the layered Tailwind utility and pins every toolbar control to a
+   uniform height. Per user feedback the pill is deliberately compact (26px /
+   12px VCR readout) — below the usual 32px floor, which the OSD font carries
+   legibly at this size. */
+.toolbar button {
+  height: 26px;
+  font-size: 12px;
+  line-height: 1;
+  /* Per user feedback: all-caps OSD readout (FIT / CLEAR). Set on the button
+     itself, not .toolbar, because Tailwind preflight's `button { text-transform:
+     none }` overrides any value inherited from the toolbar div. Digits/% are
+     unaffected; the explicit aria-labels keep natural-case copy for a11y. */
+  text-transform: uppercase;
+}
+.toolbar button svg {
+  width: 14px;
+  height: 14px;
+  /* A lone <svg> that is the only child of an inline-flex button (the icon-only
+     +/− zoom controls) collapses to 0 main-axis width in Chromium — the flex
+     replaced-element sizing path ignores the computed 14px and shrinks the item
+     to nothing, so the icons render invisible. Fit/Clear escape it only because
+     their icon has a text sibling. flex:none pins each icon to its own size and
+     takes it out of the grow/shrink/basis negotiation. */
+  flex: none;
+}
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.toolbar-divider {
+  width: 1px;
+  height: 16px;
+  margin: 0 3px;
+  background: var(--border);
+}
+.toolbar-danger:hover {
+  color: var(--destructive);
+}
+.toolbar-danger-solid {
+  background: var(--destructive);
+  color: #fff;
+}
+.toolbar-danger-solid:hover {
+  background: var(--destructive);
+  opacity: 0.92;
+}
+
+/* ── Drop overlay: full-page, never blocks the board (pointer-events: none) ── */
+.drop-zone {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--w-transition-fast);
+}
+.drop-zone.is-active {
+  opacity: 1;
+}
+.drop-zone::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 2px dashed var(--ring);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.drop-zone-hint {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--card) 94%, transparent);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  color: var(--foreground);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ── Empty state: centered, lets pan-drags through except on the button ── */
+.empty-state {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  pointer-events: none;
+}
+.empty-state button {
+  pointer-events: auto;
+}
+.empty-state-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+}
+.empty-state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+.empty-state-icon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted-foreground);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
