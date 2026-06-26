@@ -18,6 +18,15 @@
       "category": "Design",
       "icon": "icon.webp",
       "capabilitySummary": "Requests project file access, shared-file read/write access, file picker access, notifications, and host navigation."
+    },
+    {
+      "id": "music",
+      "name": "Music",
+      "description": "Compose drum and bass patterns, preview them live, and export MP3 or WAV bounces.",
+      "subpath": "music",
+      "category": "Audio",
+      "icon": "icon.webp",
+      "capabilitySummary": "Requests private project data, notifications, and Files metadata access for adding exports to Files."
     }
   ]
 }

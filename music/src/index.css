@@ -1,0 +1,329 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@ispo/design/tokens.css";
+
+:root {
+  --fd-bg: var(--background);
+  --fd-panel: color-mix(in oklab, var(--card) 92%, var(--background));
+  --fd-panel-2: color-mix(in oklab, var(--card) 84%, var(--accent));
+  --fd-panel-3: color-mix(in oklab, var(--background) 82%, var(--card));
+  --fd-control: color-mix(in oklab, var(--card) 86%, var(--background));
+  --fd-control-strong: color-mix(in oklab, var(--accent) 68%, var(--card));
+  --fd-module: color-mix(in oklab, var(--card) 76%, transparent);
+  --fd-rail: color-mix(in oklab, var(--muted) 74%, var(--background));
+  --fd-border: color-mix(in oklab, var(--border) 76%, transparent);
+  --fd-border-strong: color-mix(in oklab, var(--foreground) 24%, var(--border));
+  --fd-ink: var(--foreground);
+  --fd-muted: var(--muted-foreground);
+  --fd-dim: color-mix(in oklab, var(--muted-foreground) 64%, transparent);
+  --fd-amber: var(--primary);
+  --fd-amber-2: color-mix(in oklab, var(--primary) 72%, var(--accent));
+  --fd-green: var(--chart-2);
+  --fd-red: var(--chart-1);
+  --fd-cyan: var(--chart-3);
+  --fd-purple: var(--chart-4);
+  --fd-on-accent: var(--primary-foreground);
+  --fd-on-cell: color-mix(in oklab, var(--background) 42%, black);
+  --fd-glow-soft: color-mix(in oklab, var(--primary) 18%, transparent);
+  --fd-glow-text: 0 0 18px color-mix(in oklab, var(--primary) 34%, transparent);
+  --fd-glow-readout: 0 0 14px color-mix(in oklab, var(--primary) 48%, transparent);
+  --fd-scope-line: color-mix(in oklab, var(--primary) 78%, var(--foreground));
+  --fd-scope-line-dim: color-mix(in oklab, var(--primary) 42%, transparent);
+  --fd-scope-line-hot: color-mix(in oklab, var(--primary) 58%, var(--foreground));
+  --fd-scope-glow: color-mix(in oklab, var(--primary) 35%, transparent);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background: var(--background);
+  -webkit-font-smoothing: antialiased;
+}
+
+.fd-app {
+  color: var(--fd-ink);
+  background:
+    radial-gradient(circle at 50% -15%, color-mix(in oklab, var(--primary) 11%, transparent), transparent 28rem),
+    linear-gradient(180deg, color-mix(in oklab, var(--background) 94%, var(--card)) 0%, var(--background) 100%);
+  font-variant-numeric: tabular-nums;
+}
+
+.fd-panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--fd-border);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--foreground) 4%, transparent), transparent),
+    linear-gradient(135deg, var(--fd-panel), var(--fd-panel-3));
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--foreground) 5%, transparent),
+    inset 0 -1px 0 color-mix(in oklab, black 18%, transparent),
+    0 18px 45px color-mix(in oklab, black 18%, transparent);
+}
+
+.fd-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--foreground) 2%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--foreground) 1.4%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px, 24px 24px;
+  opacity: 0.42;
+}
+
+.fd-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.fd-section-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--fd-muted);
+}
+
+.fd-micro-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--fd-muted);
+}
+
+.fd-digital {
+  border: 1px solid color-mix(in oklab, var(--primary) 24%, var(--border));
+  border-radius: 5px;
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in oklab, var(--primary) 15%, transparent), transparent 70%),
+    color-mix(in oklab, var(--background) 84%, var(--primary));
+  color: var(--fd-amber);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  text-shadow: var(--fd-glow-readout);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, black 24%, transparent),
+    0 0 24px color-mix(in oklab, var(--primary) 9%, transparent);
+}
+
+.fd-button {
+  border: 1px solid var(--fd-border);
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--foreground) 5%, transparent), transparent),
+    var(--fd-control);
+  color: var(--fd-muted);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--foreground) 5%, transparent),
+    0 6px 18px color-mix(in oklab, black 12%, transparent);
+  transition-property: color, border-color, background-color, box-shadow, transform;
+  transition-duration: 140ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+.fd-button:hover {
+  border-color: var(--fd-border-strong);
+  color: var(--fd-ink);
+}
+
+.fd-button:active {
+  transform: scale(0.96);
+}
+
+.fd-button-primary {
+  border-color: color-mix(in oklab, var(--primary) 48%, var(--border));
+  color: var(--fd-amber);
+  background:
+    radial-gradient(circle at 50% 18%, color-mix(in oklab, var(--primary) 19%, transparent), transparent 62%),
+    linear-gradient(180deg, color-mix(in oklab, var(--card) 76%, var(--primary)), var(--fd-control));
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--foreground) 7%, transparent),
+    0 0 22px color-mix(in oklab, var(--primary) 16%, transparent);
+}
+
+.fd-button-active {
+  border-color: color-mix(in srgb, var(--track-color, var(--fd-amber)) 55%, var(--fd-border));
+  color: var(--fd-ink);
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--foreground) 8%, transparent), transparent),
+    color-mix(in oklab, var(--track-color, var(--fd-amber)) 18%, var(--fd-control));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--track-color, var(--fd-amber)) 22%, transparent),
+    0 0 18px color-mix(in srgb, var(--track-color, var(--fd-amber)) 22%, transparent);
+}
+
+.fd-knob {
+  --knob-size: 58px;
+  --knob-angle: 0deg;
+  --knob-color: var(--fd-amber);
+  --knob-progress: 0deg;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--knob-size);
+  height: var(--knob-size);
+  border-radius: 999px;
+  background:
+    conic-gradient(from -135deg, var(--knob-color) 0deg, var(--knob-color) var(--knob-progress), color-mix(in oklab, var(--muted-foreground) 19%, transparent) var(--knob-progress), color-mix(in oklab, var(--muted-foreground) 19%, transparent) 270deg, transparent 270deg),
+    radial-gradient(circle at 35% 24%, color-mix(in oklab, var(--foreground) 18%, transparent), transparent 20%),
+    var(--fd-control);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--foreground) 16%, transparent),
+    inset 0 -8px 14px color-mix(in oklab, black 22%, transparent),
+    0 8px 18px color-mix(in oklab, black 16%, transparent);
+}
+
+.fd-knob::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 25%, color-mix(in oklab, var(--foreground) 13%, transparent), transparent 24%),
+    linear-gradient(145deg, color-mix(in oklab, var(--card) 70%, var(--foreground) 10%), var(--fd-panel-3) 68%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--foreground) 7%, transparent),
+    inset 0 -6px 10px color-mix(in oklab, black 22%, transparent);
+}
+
+.fd-knob::after {
+  content: "";
+  position: absolute;
+  top: 11px;
+  left: 50%;
+  width: 3px;
+  height: 17px;
+  border-radius: 999px;
+  background: var(--fd-ink);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--knob-color) 55%, transparent);
+  transform: translateX(-50%) rotate(var(--knob-angle));
+  transform-origin: 50% calc(var(--knob-size) / 2 - 11px);
+}
+
+.fd-knob-small {
+  --knob-size: 48px;
+}
+
+.fd-scope {
+  border: 1px solid color-mix(in oklab, var(--primary) 20%, var(--border));
+  border-radius: 5px;
+  background:
+    linear-gradient(color-mix(in oklab, var(--primary) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--primary) 7%, transparent) 1px, transparent 1px),
+    radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--primary) 12%, transparent), transparent 70%),
+    color-mix(in oklab, var(--background) 88%, var(--primary));
+  background-size: 16px 16px, 16px 16px, auto, auto;
+  box-shadow: inset 0 0 20px color-mix(in oklab, var(--primary) 7%, transparent);
+}
+
+.fd-cell {
+  min-width: 42px;
+  height: 46px;
+  border: 1px solid color-mix(in oklab, var(--border) 72%, transparent);
+  border-radius: 5px;
+  background:
+    linear-gradient(180deg, color-mix(in oklab, var(--foreground) 3%, transparent), transparent),
+    var(--fd-control);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--foreground) 3%, transparent),
+    inset 0 -6px 16px color-mix(in oklab, black 14%, transparent);
+  transition-property: background-color, border-color, box-shadow, transform, opacity;
+  transition-duration: 100ms;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+
+.fd-cell:hover {
+  border-color: var(--fd-border-strong);
+  background-color: var(--fd-control-strong);
+}
+
+.fd-cell:active {
+  transform: scale(0.96);
+}
+
+.fd-cell-on {
+  border-color: color-mix(in srgb, var(--track-color) 72%, white 3%);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--track-color) 64%, white 18%), color-mix(in srgb, var(--track-color) 70%, black 24%));
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--foreground) 16%, transparent),
+    inset 0 -8px 18px color-mix(in oklab, black 12%, transparent),
+    0 0 16px color-mix(in srgb, var(--track-color) 38%, transparent);
+}
+
+.fd-cell-playhead {
+  border-color: var(--fd-amber);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--primary) 34%, transparent),
+    0 0 18px color-mix(in oklab, var(--primary) 28%, transparent);
+}
+
+.fd-vu {
+  background:
+    linear-gradient(0deg, var(--chart-2), var(--chart-2) 42%, var(--chart-3) 62%, var(--destructive) 100%);
+  box-shadow: 0 0 12px color-mix(in oklab, var(--chart-2) 20%, transparent);
+}
+
+.fd-select-trigger {
+  border-color: var(--fd-border) !important;
+  background: color-mix(in oklab, var(--background) 62%, var(--card)) !important;
+  color: var(--fd-ink) !important;
+}
+
+.fd-module {
+  border: 1px solid var(--fd-border);
+  background: var(--fd-module);
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--foreground) 4%, transparent);
+}
+
+.fd-channel-strip {
+  display: grid;
+  grid-template-rows: 40px minmax(136px, 1fr) 84px 18px;
+  row-gap: 8px;
+  align-items: center;
+}
+
+.fd-channel-fader {
+  min-height: 136px;
+}
+
+.fd-channel-meter {
+  height: min(100%, 132px);
+  min-height: 112px;
+}
+
+.fd-channel-controls {
+  align-self: end;
+}
+
+.fd-master-channel {
+  border-color: color-mix(in oklab, var(--primary) 34%, var(--border));
+  background: color-mix(in oklab, var(--primary) 6%, var(--fd-module));
+}
+
+@media (max-height: 820px) {
+  .fd-channel-strip {
+    grid-template-rows: 38px minmax(116px, 1fr) 82px 16px;
+    row-gap: 6px;
+  }
+
+  .fd-channel-fader {
+    min-height: 116px;
+  }
+
+  .fd-channel-meter {
+    height: min(100%, 116px);
+    min-height: 96px;
+  }
+}

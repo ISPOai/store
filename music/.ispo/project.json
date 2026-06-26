@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "name": "Music",
+  "version": "0.0.1",
+  "target": "react",
+  "appEntry": "src/main.tsx",
+  "mode": "edit",
+  "root": "",
+  "requests": {
+    "fs": "self",
+    "ui": [
+      "notify"
+    ],
+    "agent": [],
+    "dialog": [],
+    "files": [],
+    "chrome": [],
+    "promptHistory": [],
+    "entities": {
+      "files.file": [
+        "create"
+      ]
+    },
+    "devices": [],
+    "connectors": {
+      "google": {
+        "calendar": []
+      }
+    }
+  },
+  "env": [],
+  "entityTypes": [],
+  "egress": {
+    "connect": []
+  }
+}
