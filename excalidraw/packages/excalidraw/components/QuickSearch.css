@@ -1,0 +1,41 @@
+.excalidraw {
+  --list-border-color: var(--color-gray-20);
+}
+.excalidraw .QuickSearch__wrapper {
+  position: relative;
+  height: 2.6rem;
+  border-bottom: 1px solid var(--list-border-color);
+}
+.excalidraw .QuickSearch__wrapper svg {
+  position: absolute;
+  top: 47.5%;
+  transform: translateY(-50%);
+  left: 0.75rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-gray-40);
+  z-index: 1;
+}
+.excalidraw.theme--dark {
+  --list-border-color: var(--color-gray-80);
+}
+.excalidraw.theme--dark .QuickSearch__wrapper {
+  border-bottom: none;
+}
+.excalidraw .QuickSearch__input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  border: 0 !important;
+  font-size: 0.875rem;
+  padding-left: 2.5rem !important;
+  padding-right: 0.75rem !important;
+}
+.excalidraw .QuickSearch__input::placeholder {
+  color: var(--color-gray-40);
+}
+.excalidraw .QuickSearch__input:focus {
+  box-shadow: none !important;
+}

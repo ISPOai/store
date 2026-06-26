@@ -1,0 +1,206 @@
+.excalidraw .ToolIcon {
+  border-radius: var(--border-radius-lg);
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.excalidraw .ToolIcon__hidden {
+  display: none !important;
+}
+.excalidraw .ToolIcon.fillable .ToolIcon_type_radio:checked + .ToolIcon__icon,
+.excalidraw .ToolIcon.fillable .ToolIcon_type_checkbox:checked + .ToolIcon__icon {
+  --icon-fill-color: var(--color-on-primary-container);
+}
+.excalidraw .ToolIcon.fillable .ToolIcon_type_radio:checked + .ToolIcon__icon svg,
+.excalidraw .ToolIcon.fillable .ToolIcon_type_checkbox:checked + .ToolIcon__icon svg {
+  fill: var(--icon-fill-color);
+}
+.excalidraw .ToolIcon .ToolIcon_type_radio:checked + .ToolIcon__icon,
+.excalidraw .ToolIcon .ToolIcon_type_checkbox:checked + .ToolIcon__icon {
+  background: var(--color-surface-primary-container);
+  --keybinding-color: var(--color-on-primary-container);
+}
+.excalidraw .ToolIcon .ToolIcon_type_radio:checked + .ToolIcon__icon svg,
+.excalidraw .ToolIcon .ToolIcon_type_checkbox:checked + .ToolIcon__icon svg {
+  color: var(--color-on-primary-container);
+}
+.excalidraw .ToolIcon .ToolIcon__keybinding {
+  bottom: 4px;
+  right: 4px;
+}
+.excalidraw .ToolIcon .ToolIcon__icon:hover {
+  background: var(--button-hover-bg);
+}
+.excalidraw .ToolIcon .ToolIcon__icon:active {
+  background: var(--button-hover-bg);
+  border: 1px solid var(--button-active-border);
+}
+.excalidraw .ToolIcon .ToolIcon__icon:active svg {
+  color: var(--color-on-primary-container);
+}
+.excalidraw .ToolIcon .ToolIcon__icon[aria-disabled=true] {
+  background: initial;
+  border: none;
+}
+.excalidraw .ToolIcon .ToolIcon__icon[aria-disabled=true] svg {
+  color: var(--color-disabled);
+}
+.excalidraw .ToolIcon--plain {
+  background-color: transparent;
+}
+.excalidraw .ToolIcon--plain .ToolIcon__icon {
+  width: 2rem;
+  height: 2rem;
+}
+.excalidraw .ToolIcon_type_radio,
+.excalidraw .ToolIcon_type_checkbox {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.excalidraw .ToolIcon__icon {
+  box-sizing: border-box;
+  width: var(--default-button-size);
+  height: var(--default-button-size);
+  color: var(--icon-fill-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--border-radius-lg);
+}
+.excalidraw .ToolIcon__icon + .ToolIcon__label {
+  margin-inline-start: 0;
+}
+.excalidraw .ToolIcon__icon svg {
+  position: relative;
+  width: var(--default-icon-size);
+  height: var(--default-icon-size);
+  color: var(--icon-fill-color);
+}
+.excalidraw .ToolIcon__label {
+  display: flex;
+  align-items: center;
+  color: var(--icon-fill-color);
+  font-family: var(--ui-font);
+  margin: 0 0.8em;
+  text-overflow: ellipsis;
+}
+.excalidraw .ToolIcon__label .Spinner {
+  margin-left: 0.6em;
+}
+.excalidraw .ToolIcon_size_small .ToolIcon__icon {
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.8em;
+}
+.excalidraw .ToolIcon_type_button,
+.excalidraw .Modal .ToolIcon_type_button {
+  padding: 0;
+  border: none;
+  margin: 0;
+  font-size: inherit;
+  background-color: initial;
+}
+.excalidraw .ToolIcon_type_button:focus-visible,
+.excalidraw .Modal .ToolIcon_type_button:focus-visible {
+  box-shadow: 0 0 0 2px var(--focus-highlight-color);
+}
+.excalidraw .ToolIcon_type_button.ToolIcon--selected,
+.excalidraw .Modal .ToolIcon_type_button.ToolIcon--selected {
+  background-color: var(--button-gray-2);
+}
+.excalidraw .ToolIcon_type_button.ToolIcon--selected:active,
+.excalidraw .Modal .ToolIcon_type_button.ToolIcon--selected:active {
+  background-color: var(--button-gray-3);
+}
+.excalidraw .ToolIcon_type_button:active,
+.excalidraw .Modal .ToolIcon_type_button:active {
+  background-color: var(--button-gray-3);
+}
+.excalidraw .ToolIcon_type_button:disabled,
+.excalidraw .Modal .ToolIcon_type_button:disabled {
+  cursor: default;
+}
+.excalidraw .ToolIcon_type_button:disabled:active, .excalidraw .ToolIcon_type_button:disabled:focus-visible, .excalidraw .ToolIcon_type_button:disabled:hover,
+.excalidraw .Modal .ToolIcon_type_button:disabled:active,
+.excalidraw .Modal .ToolIcon_type_button:disabled:focus-visible,
+.excalidraw .Modal .ToolIcon_type_button:disabled:hover {
+  background-color: initial;
+  border: none;
+  box-shadow: none;
+}
+.excalidraw .ToolIcon_type_button:disabled svg,
+.excalidraw .Modal .ToolIcon_type_button:disabled svg {
+  color: var(--color-disabled);
+}
+.excalidraw .ToolIcon_type_button--show,
+.excalidraw .Modal .ToolIcon_type_button--show {
+  visibility: visible;
+}
+.excalidraw .ToolIcon_type_button--hide,
+.excalidraw .Modal .ToolIcon_type_button--hide {
+  display: none !important;
+}
+.excalidraw .ToolIcon_type_floating {
+  background-color: transparent;
+}
+.excalidraw .ToolIcon_type_floating:hover {
+  background-color: transparent;
+}
+.excalidraw .ToolIcon_type_floating:active {
+  background-color: transparent;
+}
+.excalidraw .ToolIcon_type_floating .ToolIcon__icon {
+  background-color: var(--button-gray-1);
+  width: 2rem;
+  height: 2rem;
+}
+.excalidraw .ToolIcon_type_floating .ToolIcon__icon:hover {
+  background-color: var(--button-gray-2);
+}
+.excalidraw .ToolIcon_type_floating .ToolIcon__icon:active {
+  background-color: var(--button-gray-3);
+}
+.excalidraw .ToolIcon__keybinding {
+  position: absolute;
+  bottom: 2px;
+  right: 3px;
+  font-size: 0.625rem;
+  color: var(--keybinding-color);
+  font-family: var(--ui-font);
+  user-select: none;
+}
+:root[dir=ltr] .excalidraw .unlocked-icon {
+  left: 2px;
+}
+:root[dir=rtl] .excalidraw .unlocked-icon {
+  right: 2px;
+}
+.excalidraw .App-toolbar-container .ToolIcon__icon {
+  width: var(--lg-button-size);
+  height: var(--lg-button-size);
+}
+@media screen and (max-width: 450px) {
+  .excalidraw .App-toolbar-container .ToolIcon__icon {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+}
+@media screen and (max-width: 379px) {
+  .excalidraw .App-toolbar-container .ToolIcon__icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+.excalidraw .App-toolbar-container .ToolIcon__icon svg {
+  width: var(--lg-icon-size);
+  height: var(--lg-icon-size);
+}
+.excalidraw .App-toolbar-container .ToolIcon__LaserPointer .ToolIcon__icon,
+.excalidraw .App-toolbar-container .ToolIcon__MagicButton .ToolIcon__icon {
+  width: var(--default-button-size);
+  height: var(--default-button-size);
+}

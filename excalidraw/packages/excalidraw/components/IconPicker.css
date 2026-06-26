@@ -1,0 +1,103 @@
+.excalidraw .picker {
+  padding: 0.5rem;
+  background: var(--popup-bg-color);
+  border: 0 solid rgba(255, 255, 255, 0.25);
+  box-shadow: var(--shadow-island-stronger);
+  border-radius: 4px;
+}
+:root[dir=rtl] .excalidraw .picker {
+  padding: 0.4rem;
+}
+.excalidraw .picker-sections,
+.excalidraw .picker-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.excalidraw .picker-container button,
+.excalidraw .picker button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.excalidraw .picker-container button:focus-visible,
+.excalidraw .picker button:focus-visible {
+  outline: transparent;
+  background-color: var(--button-gray-2);
+}
+.excalidraw .picker-container button:focus-visible svg,
+.excalidraw .picker button:focus-visible svg {
+  opacity: 1;
+}
+.excalidraw .picker-container button:hover,
+.excalidraw .picker button:hover {
+  background-color: var(--button-gray-2);
+}
+.excalidraw .picker-container button:active,
+.excalidraw .picker button:active {
+  background-color: var(--button-gray-3);
+}
+.excalidraw .picker-container button:disabled,
+.excalidraw .picker button:disabled {
+  cursor: not-allowed;
+}
+.excalidraw .picker-container button svg,
+.excalidraw .picker button svg {
+  margin: 0;
+  width: 36px;
+  height: 18px;
+  pointer-events: none;
+}
+.excalidraw .picker button {
+  padding: 0.25rem 0.28rem 0.35rem 0.25rem;
+}
+.excalidraw .picker-content {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  grid-gap: 0.5rem;
+  border-radius: 4px;
+}
+.excalidraw .picker-collapsible {
+  font-size: 0.75rem;
+  padding: 0;
+  color: var(--text-primary-color);
+}
+.excalidraw .picker-section-label {
+  font-size: 0.75rem;
+  color: var(--text-primary-color);
+}
+.excalidraw .picker-keybinding {
+  position: absolute;
+  bottom: 2px;
+  font-size: 0.7em;
+  color: var(--keybinding-color);
+}
+:root[dir=ltr] .excalidraw .picker-keybinding {
+  right: 2px;
+}
+:root[dir=rtl] .excalidraw .picker-keybinding {
+  left: 2px;
+}
+.excalidraw--mobile.excalidraw .picker-keybinding {
+  display: none;
+}
+
+.excalidraw .picker-type-canvasBackground .picker-keybinding {
+  color: #aaa;
+}
+.excalidraw .picker-type-elementBackground .picker-keybinding {
+  color: #fff;
+}
+.excalidraw .picker-swatch[aria-label=transparent] .picker-keybinding {
+  color: #aaa;
+}
+.excalidraw .picker-type-elementStroke .picker-keybinding {
+  color: #d4d4d4;
+}
+.excalidraw.theme--dark .picker-type-elementBackground .picker-keybinding {
+  color: #000;
+}
+.excalidraw.theme--dark .picker-swatch[aria-label=transparent] .picker-keybinding {
+  color: #000;
+}

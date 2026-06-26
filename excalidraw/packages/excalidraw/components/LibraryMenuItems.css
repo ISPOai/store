@@ -1,0 +1,124 @@
+.excalidraw {
+  --container-padding-y: 1rem;
+  --container-padding-x: 0.75rem;
+}
+.excalidraw .library-menu-items-header {
+  display: flex;
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
+  gap: 0.5rem;
+}
+.excalidraw .library-menu-items__no-items {
+  text-align: center;
+  color: var(--color-gray-70);
+  line-height: 1.5;
+  font-size: 0.875rem;
+  width: 100%;
+  min-height: 55px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.excalidraw .library-menu-items__no-items__label {
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 1.125rem;
+  margin-bottom: 0.25rem;
+}
+.excalidraw .library-menu-items__no-items__hint {
+  color: var(--color-border-outline);
+  padding: 0.75rem 1rem;
+}
+.excalidraw.theme--dark .library-menu-items__no-items {
+  color: var(--color-gray-40);
+}
+.excalidraw .library-menu-items-container {
+  width: 100%;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 0;
+  overflow-y: auto;
+  flex-direction: column;
+  height: 100%;
+  justify-content: flex-start;
+  margin: 0;
+  position: relative;
+}
+.excalidraw .library-menu-items-container > div {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+.excalidraw .library-menu-items-container__row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+.excalidraw .library-menu-items-container__items {
+  position: relative;
+  row-gap: 0.5rem;
+  padding: 1rem 0 var(--container-padding-y) 0;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.excalidraw .library-menu-items-container__header {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  color: var(--color-primary);
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.excalidraw .library-menu-items-container__header--excal {
+  margin-top: 2rem;
+}
+.excalidraw .library-menu-items-container__header__hint {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--color-border-outline);
+  font-weight: 400;
+}
+.excalidraw .library-menu-items-container__header__hint kbd {
+  font-family: monospace;
+  border: 1px solid var(--color-border-outline);
+  border-radius: 4px;
+  padding: 1px 3px;
+}
+.excalidraw .library-menu-items-container__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 1rem;
+}
+.excalidraw .library-menu-items-container__search {
+  flex: 1 1 auto;
+  margin: 0;
+}
+.excalidraw .library-menu-items-container__search .ExcTextField__input {
+  height: var(--lg-button-size);
+}
+.excalidraw .library-menu-items-container__search .ExcTextField__input input {
+  font-size: 0.875rem;
+}
+.excalidraw .library-menu-items-container__search.hideCancelButton input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+.excalidraw .library-menu-items-container .separator {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin: 0.6em 0.2em;
+  color: var(--text-primary-color);
+}
+.excalidraw .library-menu-items-private-library-container {
+  min-height: 3.75rem;
+  width: 100%;
+}

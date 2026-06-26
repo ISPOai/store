@@ -1,0 +1,93 @@
+.excalidraw .PasteChartDialog .PasteChartDialog__title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.excalidraw .PasteChartDialog .PasteChartDialog__titleText {
+  min-width: 0;
+}
+.excalidraw .PasteChartDialog .PasteChartDialog__reshuffleBtn {
+  margin-left: auto;
+  flex: 0 0 auto;
+  width: 1rem;
+  height: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-primary-color);
+  transition: transform 120ms ease, background-color 120ms ease, color 120ms ease;
+  user-select: none;
+}
+.excalidraw .PasteChartDialog .PasteChartDialog__reshuffleBtn:hover {
+  color: #228be6;
+}
+.excalidraw .PasteChartDialog .PasteChartDialog__reshuffleBtn:active {
+  transform: scale(0.94);
+}
+.excalidraw--mobile.excalidraw .PasteChartDialog .Island {
+  display: flex;
+  flex-direction: column;
+}
+
+.excalidraw .PasteChartDialog .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.excalidraw--mobile.excalidraw .PasteChartDialog .container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.excalidraw .PasteChartDialog .ChartPreview {
+  width: 260px;
+  min-height: 190px;
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 10px;
+  background: transparent;
+}
+.excalidraw .PasteChartDialog .ChartPreview .ChartPreview__canvas {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.excalidraw .PasteChartDialog .ChartPreview .ChartPreview__label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  color: var(--text-primary-color);
+}
+.excalidraw .PasteChartDialog .ChartPreview svg {
+  max-height: 144px;
+  max-width: 100%;
+}
+.excalidraw .PasteChartDialog .ChartPreview:hover {
+  border-color: #339af0;
+}
+.excalidraw .PasteChartDialog .ChartPreview:active {
+  border-color: #339af0;
+  box-shadow: 0 0 0 1px #339af0;
+  transform: scale(0.98);
+}
+.excalidraw .PasteChartDialog .ChartPreview:focus-visible {
+  border-color: #339af0;
+  box-shadow: 0 0 0 1px #339af0;
+}
+.excalidraw--mobile.excalidraw .PasteChartDialog .ChartPreview {
+  width: 100%;
+  min-height: 200px;
+}

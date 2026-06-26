@@ -1,0 +1,78 @@
+.excalidraw .sidebar-trigger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.625rem;
+  width: var(--button-width, var(--default-button-size));
+  height: var(--button-height, var(--default-button-size));
+  box-sizing: border-box;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--button-border, var(--default-border-color));
+  border-radius: var(--border-radius-lg);
+  cursor: pointer;
+  background-color: var(--button-bg, var(--island-bg-color));
+  color: var(--button-color, var(--color-on-surface));
+  font-family: var(--ui-font);
+  border: none;
+  box-shadow: 0 0 0 1px var(--color-surface-lowest);
+  background-color: var(--color-surface-low);
+  width: auto;
+  height: var(--lg-button-size);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.4px;
+}
+.excalidraw .sidebar-trigger svg {
+  width: var(--button-width, var(--lg-icon-size));
+  height: var(--button-height, var(--lg-icon-size));
+}
+.excalidraw .sidebar-trigger:hover {
+  background-color: var(--button-hover-bg, var(--island-bg-color));
+  border-color: var(--button-hover-border, var(--button-border, var(--default-border-color)));
+  color: var(--button-hover-color, var(--button-color, var(--text-primary-color, inherit)));
+}
+.excalidraw .sidebar-trigger:active {
+  background-color: var(--button-active-bg, var(--island-bg-color));
+  border-color: var(--button-active-border, var(--color-primary-darkest));
+}
+.excalidraw .sidebar-trigger.active {
+  background-color: var(--button-selected-bg, var(--color-surface-primary-container));
+  border-color: var(--button-selected-border, var(--color-surface-primary-container));
+}
+.excalidraw .sidebar-trigger.active:hover {
+  background-color: var(--button-selected-hover-bg, var(--color-surface-primary-container));
+}
+.excalidraw .sidebar-trigger.active svg {
+  color: var(--button-color, var(--color-on-primary-container));
+}
+.excalidraw--mobile.excalidraw .sidebar-trigger {
+  width: var(--mobile-action-button-size, var(--default-button-size));
+  height: var(--mobile-action-button-size, var(--default-button-size));
+}
+
+.excalidraw .sidebar-trigger:active {
+  box-shadow: 0 0 0 1px var(--color-brand-active);
+}
+.excalidraw--mobile.excalidraw .sidebar-trigger {
+  width: var(--mobile-action-button-size, 2rem);
+  height: var(--mobile-action-button-size, 2rem);
+}
+
+.excalidraw .sidebar-trigger svg {
+  width: var(--lg-icon-size);
+  height: var(--lg-icon-size);
+}
+.excalidraw .sidebar-trigger__label-element {
+  align-self: flex-start;
+}
+.excalidraw .default-sidebar-trigger .sidebar-trigger__label {
+  display: block;
+  white-space: nowrap;
+}
+.excalidraw.excalidraw--mobile .default-sidebar-trigger .sidebar-trigger__label {
+  display: none;
+}

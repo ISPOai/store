@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "name": "Excalidraw",
+  "version": "0.0.1",
+  "target": "react",
+  "appEntry": "excalidraw-app/index.tsx",
+  "mode": "edit",
+  "root": "",
+  "requests": {
+    "fs": "none",
+    "ui": [
+      "notify"
+    ],
+    "agent": [],
+    "dialog": [],
+    "files": [
+      "pick"
+    ],
+    "promptHistory": [],
+    "entities": {},
+    "devices": []
+  },
+  "env": [],
+  "entityTypes": [],
+  "egress": {
+    "connect": []
+  }
+}

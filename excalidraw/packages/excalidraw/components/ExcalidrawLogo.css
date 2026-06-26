@@ -1,0 +1,57 @@
+.excalidraw .ExcalidrawLogo {
+  --logo-icon--mobile: 1rem;
+  --logo-text--mobile: 0.75rem;
+  --logo-icon--xs: 2rem;
+  --logo-text--xs: 1.5rem;
+  --logo-icon--small: 2.5rem;
+  --logo-text--small: 1.75rem;
+  --logo-icon--normal: 3rem;
+  --logo-text--normal: 2.2rem;
+  --logo-icon--large: 90px;
+  --logo-text--large: 65px;
+  display: flex;
+  align-items: center;
+}
+.excalidraw .ExcalidrawLogo svg {
+  flex: 0 0 auto;
+}
+.excalidraw .ExcalidrawLogo .ExcalidrawLogo-icon {
+  width: auto;
+  color: var(--color-logo-icon);
+}
+.excalidraw .ExcalidrawLogo .ExcalidrawLogo-text {
+  margin-left: 0.75rem;
+  width: auto;
+  color: var(--color-logo-text);
+}
+.excalidraw .ExcalidrawLogo.is-mobile .ExcalidrawLogo-icon {
+  height: var(--logo-icon--mobile);
+}
+.excalidraw .ExcalidrawLogo.is-mobile .ExcalidrawLogo-text {
+  height: var(--logo-text--mobile);
+  margin-left: 0.5rem;
+}
+.excalidraw .ExcalidrawLogo.is-xs .ExcalidrawLogo-icon {
+  height: var(--logo-icon--xs);
+}
+.excalidraw .ExcalidrawLogo.is-xs .ExcalidrawLogo-text {
+  height: var(--logo-text--xs);
+}
+.excalidraw .ExcalidrawLogo.is-small .ExcalidrawLogo-icon {
+  height: var(--logo-icon--small);
+}
+.excalidraw .ExcalidrawLogo.is-small .ExcalidrawLogo-text {
+  height: var(--logo-text--small);
+}
+.excalidraw .ExcalidrawLogo.is-normal .ExcalidrawLogo-icon {
+  height: var(--logo-icon--normal);
+}
+.excalidraw .ExcalidrawLogo.is-normal .ExcalidrawLogo-text {
+  height: var(--logo-text--normal);
+}
+.excalidraw .ExcalidrawLogo.is-large .ExcalidrawLogo-icon {
+  height: var(--logo-icon--large);
+}
+.excalidraw .ExcalidrawLogo.is-large .ExcalidrawLogo-text {
+  height: var(--logo-text--large);
+}

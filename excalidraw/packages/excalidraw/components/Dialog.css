@@ -1,0 +1,42 @@
+.excalidraw .Dialog {
+  user-select: text;
+  cursor: auto;
+}
+.excalidraw .Dialog__title {
+  margin: 0;
+  text-align: left;
+  font-size: 1.25rem;
+  border-bottom: 1px solid var(--dialog-border-color);
+  padding: 0 0 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.excalidraw .Dialog__close {
+  color: var(--color-gray-40);
+  margin: 0;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.5rem;
+  border: 0;
+  background-color: transparent;
+  line-height: 0;
+  cursor: pointer;
+}
+.excalidraw .Dialog__close:hover {
+  color: var(--color-gray-60);
+}
+.excalidraw .Dialog__close:active {
+  color: var(--color-gray-40);
+}
+.excalidraw .Dialog__close svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.excalidraw .Dialog__close + .Dialog__content {
+  --offset: 28px;
+  height: calc(100% - var(--offset)) !important;
+  margin-top: var(--offset) !important;
+}
+.excalidraw .Dialog--fullscreen .Dialog__close {
+  top: 1.25rem;
+  right: 1.25rem;
+}

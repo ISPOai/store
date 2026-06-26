@@ -1,0 +1,147 @@
+.excalidraw .publish-library__fields {
+  display: flex;
+  flex-direction: column;
+}
+.excalidraw .publish-library__fields label {
+  padding: 1em 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.excalidraw .publish-library__fields label span {
+  font-weight: 500;
+  font-size: 1rem;
+  color: #868e96;
+}
+.excalidraw .publish-library__fields label input,
+.excalidraw .publish-library__fields label textarea {
+  width: 70%;
+  padding: 0.6em;
+  font-family: var(--ui-font);
+}
+.excalidraw .publish-library__fields label .required {
+  color: #e03131;
+  margin: 0.2rem;
+}
+.excalidraw .publish-library__buttons {
+  display: flex;
+  padding: 0.2rem 0;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+.excalidraw .publish-library__buttons .ToolIcon__icon {
+  min-width: 2.5rem;
+  width: auto;
+  font-size: 1rem;
+}
+.excalidraw .publish-library__buttons .ToolIcon_type_button {
+  margin-left: 1rem;
+  padding: 0 0.5rem;
+}
+.excalidraw .publish-library__buttons--confirm.ToolIcon_type_button {
+  background-color: #228be6;
+}
+.excalidraw .publish-library__buttons--confirm.ToolIcon_type_button:hover {
+  background-color: #1971c2;
+}
+.excalidraw .publish-library__buttons--cancel.ToolIcon_type_button {
+  background-color: #adb5bd;
+}
+.excalidraw .publish-library__buttons--cancel.ToolIcon_type_button:hover {
+  background-color: #868e96;
+}
+.excalidraw .publish-library__buttons .ToolIcon__icon {
+  color: #fff;
+}
+.excalidraw .publish-library__buttons .ToolIcon__icon .Spinner {
+  --spinner-color: #fff;
+}
+.excalidraw .publish-library__buttons .ToolIcon__icon .Spinner svg {
+  padding: 0.5rem;
+}
+.excalidraw .publish-library .selected-library-items {
+  display: flex;
+  flex-wrap: wrap;
+}
+.excalidraw .publish-library .selected-library-items .single-library-item-wrapper {
+  width: 9rem;
+}
+.excalidraw .publish-library-warning {
+  color: #fa5252;
+}
+.excalidraw .publish-library-note {
+  padding: 1em 0;
+  font-style: italic;
+  font-size: 14px;
+  display: block;
+}
+.excalidraw .single-library-item {
+  position: relative;
+}
+.excalidraw .single-library-item-status {
+  position: absolute;
+  top: 0.3rem;
+  left: 0.3rem;
+  font-size: 0.7rem;
+  color: #f03e3e;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 0.1rem 0.2rem;
+  border-radius: 0.2rem;
+}
+.excalidraw .single-library-item__svg {
+  background-color: #fff;
+  padding: 0.3rem;
+  width: 7.5rem;
+  height: 7.5rem;
+  border: 1px solid var(--button-gray-2);
+}
+.excalidraw .single-library-item__svg svg {
+  width: 100%;
+  height: 100%;
+}
+.excalidraw .single-library-item .ToolIcon__icon {
+  background-color: #fff;
+  width: auto;
+  height: auto;
+  margin: 0 0.5rem;
+}
+.excalidraw .single-library-item .ToolIcon,
+.excalidraw .single-library-item .ToolIcon_type_button:hover {
+  background-color: white;
+}
+.excalidraw .single-library-item .required,
+.excalidraw .single-library-item .error {
+  color: #e03131;
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0.2rem;
+}
+.excalidraw .single-library-item .error {
+  font-weight: 500;
+  margin: 0;
+  padding: 0.3em 0;
+}
+.excalidraw .single-library-item--remove {
+  position: absolute;
+  top: 0.2rem;
+  right: 1rem;
+}
+.excalidraw .single-library-item--remove .ToolIcon__icon {
+  margin: 0;
+}
+.excalidraw .single-library-item--remove .ToolIcon__icon {
+  background-color: #fa5252;
+}
+.excalidraw .single-library-item--remove .ToolIcon__icon:hover {
+  background-color: #f03e3e;
+}
+.excalidraw .single-library-item--remove .ToolIcon__icon:active {
+  background-color: #e03131;
+}
+.excalidraw .single-library-item--remove svg {
+  color: #fff;
+  padding: 0.26rem;
+  border-radius: 0.3em;
+  width: 1rem;
+  height: 1rem;
+}

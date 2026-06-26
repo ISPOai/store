@@ -1,0 +1,141 @@
+.excalidraw .layer-ui__wrapper.animate {
+  transition: width 0.1s ease-in-out;
+}
+.excalidraw .layer-ui__wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: var(--zIndex-layerUI);
+}
+.excalidraw .layer-ui__wrapper__top-right {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  pointer-events: none !important;
+}
+.excalidraw .layer-ui__wrapper__top-right--compact {
+  gap: 0.5rem;
+}
+.excalidraw .layer-ui__wrapper__top-right > * {
+  pointer-events: var(--ui-pointerEvents);
+}
+.excalidraw .layer-ui__wrapper__footer {
+  width: 100%;
+}
+.excalidraw .layer-ui__wrapper__footer-right {
+  z-index: 100;
+  display: flex;
+}
+.excalidraw .layer-ui__wrapper .zen-mode-transition {
+  transition: transform 0.5s ease-in-out;
+}
+:root[dir=ltr] .excalidraw .layer-ui__wrapper .zen-mode-transition.transition-left {
+  transform: translate(-999px, 0);
+}
+:root[dir=ltr] .excalidraw .layer-ui__wrapper .zen-mode-transition.transition-right {
+  transform: translate(999px, 0);
+}
+:root[dir=rtl] .excalidraw .layer-ui__wrapper .zen-mode-transition.transition-left {
+  transform: translate(999px, 0);
+}
+:root[dir=rtl] .excalidraw .layer-ui__wrapper .zen-mode-transition.transition-right {
+  transform: translate(-999px, 0);
+}
+.excalidraw .layer-ui__wrapper .zen-mode-transition.layer-ui__wrapper__footer-left--transition-bottom {
+  transform: translate(0, 92px);
+}
+.excalidraw .layer-ui__wrapper .disable-zen-mode {
+  padding: 10px;
+  position: absolute;
+  bottom: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: visibility 0s linear 0s, opacity 0.5s;
+  font-family: var(--ui-font);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--default-border-color);
+  background-color: var(--island-bg-color);
+  color: var(--text-primary-color);
+}
+[dir=ltr] .excalidraw .layer-ui__wrapper .disable-zen-mode {
+  right: 1rem;
+}
+[dir=rtl] .excalidraw .layer-ui__wrapper .disable-zen-mode {
+  left: 1rem;
+}
+.excalidraw .layer-ui__wrapper .disable-zen-mode:hover {
+  background-color: var(--button-hover-bg);
+}
+.excalidraw .layer-ui__wrapper .disable-zen-mode:active {
+  border-color: var(--color-primary);
+}
+.excalidraw .layer-ui__wrapper .disable-zen-mode--visible {
+  opacity: 1;
+  visibility: visible;
+  transition: visibility 0s linear 300ms, opacity 0.5s;
+  transition-delay: 0.8s;
+  pointer-events: var(--ui-pointerEvents);
+}
+.excalidraw .layer-ui__wrapper .layer-ui__wrapper__footer-left > *,
+.excalidraw .layer-ui__wrapper .footer-center > *,
+.excalidraw .layer-ui__wrapper .layer-ui__wrapper__footer-right > * {
+  pointer-events: var(--ui-pointerEvents);
+}
+.excalidraw .layer-ui__wrapper .layer-ui__wrapper__footer-right {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+.excalidraw .App-menu_top__left > .ToolIcon__penMode {
+  justify-self: center;
+}
+.excalidraw .App-menu_top__left > .ToolIcon__penMode .ToolIcon__icon {
+  width: var(--lg-button-size);
+  height: var(--lg-button-size);
+  background-color: var(--island-bg-color);
+  box-shadow: var(--shadow-island);
+}
+.excalidraw .App-menu_top__left > .ToolIcon__penMode .ToolIcon_type_checkbox:checked + .ToolIcon__icon {
+  box-shadow: none;
+}
+.excalidraw .disable-view-mode {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  align-items: center;
+  border: 1px solid var(--color-primary);
+  padding: 0.5rem;
+  border-radius: var(--border-radius-lg);
+  background-color: var(--island-bg-color);
+  text-decoration: none !important;
+  font-family: var(--ui-font);
+  font-size: 0.8333rem;
+  box-sizing: border-box;
+  width: var(--mobile-action-button-size, var(--default-button-size));
+  height: var(--mobile-action-button-size, var(--default-button-size));
+  border: none;
+  box-shadow: 0 0 0 1px var(--color-surface-lowest);
+  background-color: var(--color-surface-low);
+  color: var(--button-color, var(--color-on-surface)) !important;
+}
+.excalidraw .disable-view-mode:active {
+  box-shadow: 0 0 0 1px var(--color-brand-active);
+}
+.excalidraw .disable-view-mode:hover {
+  background-color: var(--color-primary);
+  color: white !important;
+}
+.excalidraw .disable-view-mode:active {
+  background-color: var(--color-primary-darker);
+}
+.excalidraw .disable-view-mode svg {
+  width: 20px;
+  height: 20px;
+}
+.excalidraw .theme--dark .plus-banner:hover {
+  color: black !important;
+}

@@ -1,0 +1,40 @@
+/*
+ * ISPO host layout shim.
+ *
+ * The real excalidraw-app/index.html sets `html, body, #root { height: 100% }`,
+ * but under ISPO the host generates its own index.html and does not include
+ * those rules. Without an explicit height the Excalidraw container (which sizes
+ * to its parent) collapses to 0px and the app renders blank. Restore full-height
+ * layout here so the editor fills the iframe.
+ */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.excalidraw-app {
+  height: 100%;
+}
+
+/*
+ * Transparent background under ISPO.
+ *
+ * Remove every backdrop Excalidraw would otherwise paint behind the canvas so
+ * the host chrome shows through. The drawing canvas itself is kept transparent
+ * via appState.viewBackgroundColor (forced in App.tsx); these rules make sure no
+ * page / container / canvas-element fill sits behind it. UI islands (toolbars,
+ * panels) keep their own surface colors — only the full-area background is
+ * cleared.
+ */
+html,
+body,
+#root,
+.excalidraw-app,
+.excalidraw,
+.excalidraw .layer-ui__wrapper,
+.excalidraw__canvas {
+  background: transparent !important;
+}

@@ -17,7 +17,16 @@
       "subpath": "moodboard",
       "category": "Design",
       "icon": "icon.webp",
-      "capabilitySummary": "Requests project file access, shared-file read/write access, file picker access, notifications, and host navigation."
+      "capabilitySummary": "Requests private project data, file picker access, notifications, and host navigation."
+    },
+    {
+      "id": "excalidraw",
+      "name": "Excalidraw",
+      "description": "Sketch diagrams, wireframes, and ideas on an infinite hand-drawn canvas.",
+      "subpath": "excalidraw",
+      "category": "Design",
+      "icon": "icon.webp",
+      "capabilitySummary": "Requests file picker access and notifications."
     },
     {
       "id": "music",

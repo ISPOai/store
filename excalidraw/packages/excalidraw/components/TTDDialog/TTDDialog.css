@@ -1,0 +1,978 @@
+.excalidraw.theme--dark .chat-message--assistant .chat-message__content {
+  background: var(--color-surface-lowest);
+}
+.excalidraw.theme--dark .chat-message--system .chat-message__content {
+  color: var(--color-surface-low);
+}
+.excalidraw .chat-interface {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  position: relative;
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .chat-interface {
+    min-height: 200px;
+  }
+}
+.excalidraw .chat-interface__messages {
+  flex: 1 1 0;
+  overflow-y: auto;
+  margin-bottom: 0.5rem;
+  padding: 1rem 0.5rem 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-height: 0;
+  border-top-left-radius: var(--border-radius-lg);
+  border-top-right-radius: var(--border-radius-lg);
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .chat-interface__messages {
+    min-height: 100px;
+    padding: 0.75rem;
+  }
+}
+.excalidraw .chat-interface__welcome-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 200px;
+}
+.excalidraw .chat-interface__welcome-screen__welcome-message {
+  text-align: center;
+}
+.excalidraw .chat-interface__welcome-screen__welcome-message h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.excalidraw .chat-interface__welcome-screen__welcome-message p {
+  margin: 0 0 0.2rem 0;
+  font-size: 0.875rem;
+  color: var(--color-on-surface);
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .chat-interface__welcome-screen {
+    min-height: 100px;
+  }
+}
+.excalidraw .chat-interface__input-outer {
+  position: relative;
+  min-height: 71px;
+}
+.excalidraw .chat-interface__input-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.excalidraw .chat-interface__input-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  border: 1px solid var(--dialog-border-color);
+  border-radius: var(--border-radius-lg);
+  padding: 0.75rem;
+  background: var(--color-surface-lowest);
+  transition: border-color 0.2s ease;
+}
+.excalidraw .chat-interface__input-wrapper:focus-within {
+  border-color: var(--color-primary);
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .chat-interface__input-wrapper {
+    padding: 0.5rem 0.75rem;
+  }
+}
+.excalidraw .chat-interface__input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  min-height: 24px;
+  max-height: 120px;
+  overflow-x: hidden;
+  border: none !important;
+  background: transparent !important;
+  color: var(--color-on-surface);
+}
+.excalidraw .chat-interface__input::placeholder {
+  color: var(--color-gray-40);
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .chat-interface__input {
+    line-height: 1.4;
+    min-height: 20px;
+    max-height: 100px;
+    resize: none;
+    padding: 0;
+  }
+  .excalidraw .chat-interface__input::placeholder {
+    opacity: 0.6;
+  }
+}
+.excalidraw .chat-interface__send-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-surface-lowest);
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+.excalidraw .chat-interface__send-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+.excalidraw .chat-interface__send-button:hover {
+  background-color: var(--color-primary-darker);
+}
+.excalidraw .chat-interface__send-button svg {
+  transform: rotate(-90deg);
+}
+.excalidraw .chat-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.excalidraw .chat-message--user {
+  justify-content: flex-end;
+}
+.excalidraw .chat-message--user .chat-message__content {
+  background: var(--color-primary-light);
+  color: var(--text-primary-color);
+  border-radius: var(--border-radius-md);
+  min-width: 6rem;
+}
+.excalidraw .chat-message--assistant {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.excalidraw .chat-message--assistant .chat-message__content {
+  background: var(--color-surface-low);
+  color: var(--color-on-surface);
+  border-radius: var(--border-radius-md);
+  min-width: 6rem;
+}
+.excalidraw .chat-message--assistant .chat-message__content .chat-message__body {
+  font-family: monospace;
+}
+.excalidraw .chat-message--system {
+  justify-content: flex-start;
+  margin-bottom: 0;
+}
+.excalidraw .chat-message--system .chat-message__content {
+  background: var(--color-warning);
+  color: var(--color-on-surface);
+  border-radius: var(--border-radius-md);
+  min-width: 6rem;
+}
+.excalidraw .chat-message--system .chat-message__content .chat-message__body {
+  font-family: monospace;
+}
+.excalidraw .chat-message__content {
+  max-width: 80%;
+  padding: 0.75rem 1rem;
+  box-shadow: var(--chat-msg-shadow);
+}
+.excalidraw .chat-message__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+}
+.excalidraw .chat-message__role {
+  font-weight: 600;
+}
+.excalidraw .chat-message__timestamp {
+  font-size: 0.625rem;
+}
+.excalidraw .chat-message__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.excalidraw .chat-message__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem 0;
+  color: var(--color-gray-60);
+  transition: color 0.2s ease;
+  flex-shrink: 0;
+}
+.excalidraw .chat-message__action.invisible {
+  visibility: hidden;
+  pointer-events: none;
+}
+.excalidraw .chat-message__action:hover {
+  color: var(--color-primary);
+}
+.excalidraw .chat-message__action svg {
+  width: 14px;
+  height: 14px;
+}
+.excalidraw .chat-message__action--danger:hover {
+  color: var(--color-danger);
+}
+.excalidraw .chat-message__body {
+  line-height: 1.5;
+}
+.excalidraw .chat-message__text {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.excalidraw .chat-message__cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: currentColor;
+  animation: blink 1s infinite;
+}
+.excalidraw .chat-message__loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.excalidraw .chat-message__typing-indicator {
+  display: flex;
+  gap: 0.25rem;
+}
+.excalidraw .chat-message__typing-indicator span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.4;
+  animation: typing 1.4s infinite ease-in-out;
+}
+.excalidraw .chat-message__typing-indicator span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+.excalidraw .chat-message__typing-indicator span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+.excalidraw .chat-message__typing-indicator span:nth-child(3) {
+  animation-delay: 0s;
+}
+.excalidraw .chat-message__error {
+  color: var(--color-danger);
+  font-weight: 500;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.excalidraw .chat-message__error_message {
+  background: var(--color-warning-background);
+  color: var(--color-warning-color);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--border-radius-md);
+  margin-top: 1rem;
+  font-size: 0.875rem;
+}
+.excalidraw .chat-message__error-link {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0;
+  margin-top: 1rem;
+  text-decoration: underline;
+  font-family: inherit;
+  color: var(--link-color);
+}
+.excalidraw .chat-message__error-link:hover {
+  color: var(--link-color-hover);
+}
+.excalidraw .chat-message__error-link:active {
+  color: var(--link-color-active);
+}
+.excalidraw .chat-message__error-link:disabled {
+  cursor: not-allowed;
+  text-decoration: none;
+}
+@keyframes typing {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.4;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+.excalidraw .Modal.Dialog.ttd-dialog {
+  padding: 1.25rem;
+}
+.excalidraw .Modal.Dialog.ttd-dialog.Dialog--fullscreen {
+  margin-top: 0;
+}
+.excalidraw .Modal.Dialog.ttd-dialog .Island {
+  padding-inline: 0 !important;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+.excalidraw .Modal.Dialog.ttd-dialog .Modal__content {
+  max-height: 100%;
+  min-height: 95vh;
+  height: 100%;
+}
+@media screen and (min-width: 861px) {
+  .excalidraw .Modal.Dialog.ttd-dialog .Modal__content {
+    max-height: min(950px, 100vh - 4rem);
+    height: 100%;
+    min-height: unset;
+  }
+}
+.excalidraw .Modal.Dialog.ttd-dialog .Dialog__content {
+  flex: 1 1 auto;
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .Modal.Dialog.ttd-dialog .Dialog__content {
+    margin-top: 0 !important;
+  }
+}
+.excalidraw .ttd-dialog-desc {
+  font-size: 15px;
+  font-style: italic;
+  font-weight: 500;
+  margin: 0.5rem 0 1.5rem 0;
+}
+.excalidraw .ttd-dialog-tabs-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.excalidraw .ttd-dialog-tab-trigger {
+  color: var(--color-on-surface);
+  font-size: 0.875rem;
+  margin: 0;
+  padding: 0 1rem;
+  background-color: transparent;
+  border: 0;
+  height: 2.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: 0.4px;
+}
+.excalidraw .ttd-dialog-tab-trigger[data-state=active] {
+  border-bottom: 2px solid var(--color-primary);
+}
+.excalidraw .ttd-dialog-tab-trigger__content {
+  display: flex;
+  align-items: center;
+}
+.excalidraw .ttd-dialog-tab-trigger__badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 6px;
+  margin-left: 10px;
+  font-size: 10px;
+  border-radius: 12px;
+  background: var(--color-promo);
+  color: var(--color-surface-lowest);
+}
+.excalidraw .ttd-dialog-triggers {
+  border-bottom: 1px solid var(--color-surface-high);
+  margin-bottom: 1rem;
+  padding-inline: 2.5rem;
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .ttd-dialog-triggers {
+    margin-bottom: 1rem;
+  }
+}
+.excalidraw .ttd-dialog-content {
+  padding-inline: 2.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  outline: none;
+}
+.excalidraw .ttd-dialog-content[hidden] {
+  display: none;
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .ttd-dialog-content {
+    padding-inline: 1rem;
+    flex-grow: 1;
+  }
+}
+.excalidraw .ttd-dialog-panel__header .dropdown-menu {
+  z-index: 2;
+  margin: 0;
+  right: 0;
+  left: auto;
+  min-width: 280px;
+}
+.excalidraw .ttd-dialog-panel__header .dropdown-menu .dropdown-menu-container.dropdown-menu-container {
+  padding-inline: 0.5rem !important;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  max-height: min(400px, 70vh);
+  height: fit-content;
+  overflow-y: auto;
+  box-shadow: var(--shadow-island);
+  border-radius: var(--border-radius-lg);
+  background-color: var(--island-bg-color-alt);
+}
+.excalidraw .ttd-dialog-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+}
+.excalidraw .ttd-dialog-layout--split {
+  gap: 2rem;
+  min-width: 0;
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .ttd-dialog-layout--split {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    grid-row-gap: 0;
+  }
+}
+.excalidraw .ttd-dialog-layout--split .ttd-dialog-chat-panel {
+  min-width: 0;
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .ttd-dialog-layout--split .ttd-dialog-chat-panel {
+    width: 100%;
+    flex: 0 0 auto;
+    height: auto;
+    min-height: 250px;
+  }
+}
+.excalidraw .ttd-dialog-layout--split .ttd-dialog-preview-panel {
+  min-width: 0;
+  overflow: hidden;
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .ttd-dialog-layout--split .ttd-dialog-preview-panel {
+    width: 100%;
+    flex: 0 0 auto;
+    max-width: 100%;
+    min-height: 280px;
+    height: unset;
+  }
+}
+.excalidraw .ttd-dialog-layout--chat-only {
+  grid-template-columns: 1fr;
+}
+.excalidraw .ttd-dialog-layout--chat-only .invisible {
+  display: none;
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .ttd-dialog-layout--chat-only .ttd-dialog-chat-panel {
+    height: unset;
+  }
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .ttd-dialog-layout--chat-only .chat-interface {
+    max-height: 100%;
+  }
+  .excalidraw .ttd-dialog-layout--chat-only .chat-interface__messages {
+    max-height: unset;
+  }
+}
+.excalidraw .ttd-dialog-input {
+  width: auto;
+  height: 10rem;
+  resize: none;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--dialog-border-color);
+  white-space: pre-wrap;
+  padding: 0.85rem;
+  box-sizing: border-box;
+  font-family: monospace;
+}
+@media screen and (min-width: 861px) {
+  .excalidraw .ttd-dialog-input {
+    width: 100%;
+    height: 100%;
+  }
+}
+.excalidraw .ttd-dialog-input--loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.excalidraw .ttd-dialog-input--codemirror {
+  padding: 0;
+  overflow: hidden;
+  height: 0;
+  flex: 1 1 0;
+  min-height: 0;
+}
+.excalidraw .ttd-dialog-input--codemirror .cm-editor {
+  height: 100%;
+  font-family: monospace;
+}
+.excalidraw .ttd-dialog-input--codemirror .cm-editor.cm-focused {
+  outline: none;
+}
+.excalidraw .ttd-dialog-input--codemirror .cm-scroller {
+  padding: 0.85rem 0;
+  overflow: auto;
+}
+.excalidraw .ttd-dialog-input--codemirror .cm-gutters {
+  padding-left: 0.25rem;
+}
+.excalidraw .ttd-dialog-input--codemirror .cm-content {
+  padding: 0;
+}
+.excalidraw .ttd-dialog-input--codemirror .cm-placeholder {
+  color: var(--color-gray-40);
+  font-style: italic;
+}
+.excalidraw .ttd-dialog-output-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex-grow: 1;
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+  max-height: 100%;
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0pgAAAABJRU5ErkJggg==") left center;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--dialog-border-color);
+  height: 400px;
+  width: auto;
+  max-width: 100%;
+}
+@media screen and (max-width: 600px) {
+  .excalidraw .ttd-dialog-output-wrapper {
+    height: 200px;
+  }
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .ttd-dialog-output-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+.excalidraw .ttd-dialog-output-wrapper--error {
+  background: none;
+  border: 1px solid var(--dialog-border-color);
+  border-radius: var(--border-radius-lg);
+}
+.excalidraw .ttd-dialog-output-wrapper canvas {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+.excalidraw .ttd-dialog-output-canvas-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  position: relative;
+  user-select: none;
+}
+.excalidraw .ttd-dialog-output-canvas-container.invisible {
+  visibility: hidden;
+  pointer-events: none;
+}
+.excalidraw .ttd-dialog-output-canvas-content {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+}
+.excalidraw .ttd-dialog-output-canvas-content canvas {
+  image-rendering: auto;
+}
+.excalidraw .ttd-dialog-output-error {
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.excalidraw .ttd-dialog-output-error .ttd-dialog-output-error-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2.5rem 2rem;
+  background: var(--color-surface-primary);
+}
+.excalidraw .ttd-dialog-output-error .ttd-dialog-output-error-icon {
+  color: var(--color-danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.excalidraw .ttd-dialog-output-error .ttd-dialog-output-error-icon svg {
+  width: 52px;
+  height: 52px;
+  stroke-width: 1.5;
+}
+.excalidraw .ttd-dialog-output-error .ttd-dialog-output-error-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-danger);
+  text-align: center;
+  margin-top: 0.25rem;
+}
+.excalidraw .ttd-dialog-output-error .ttd-dialog-output-error-summary {
+  width: 100%;
+  max-width: 640px;
+  color: var(--color-gray-50);
+  font-size: 0.9rem;
+  text-align: left;
+}
+.excalidraw .ttd-dialog-output-error .ttd-dialog-output-error-summary__headline {
+  font-weight: 600;
+  color: var(--color-gray-60);
+}
+.excalidraw .ttd-dialog-output-error .ttd-dialog-output-error-summary__label {
+  margin-top: 0.35rem;
+  font-weight: 500;
+}
+.excalidraw .ttd-dialog-output-error .ttd-dialog-output-error-summary__causes {
+  margin: 0.35rem 0 0;
+  padding-left: 2rem;
+}
+.excalidraw .ttd-dialog-output-error .ttd-dialog-output-error-message {
+  text-align: left;
+  font-weight: 400;
+  color: var(--color-gray-50);
+  word-break: break-word;
+  white-space: pre-wrap;
+  max-width: 640px;
+  width: 100%;
+  font-family: monospace;
+}
+.excalidraw .ttd-dialog-output-error .ttd-dialog-output-error-message__caret {
+  color: var(--color-danger);
+}
+.excalidraw .ttd-dialog-output-error .ttd-dialog-output-error-autofix-slot {
+  align-self: flex-start;
+  margin-top: 0.35rem;
+  min-height: 2.5rem;
+  display: flex;
+  align-items: flex-start;
+}
+.excalidraw .ttd-dialog-output-error .ttd-dialog-output-error-autofix {
+  margin-top: 0;
+  white-space: nowrap;
+}
+.excalidraw .ttd-dialog-panels {
+  height: 100%;
+}
+@media screen and (min-width: 861px) {
+  .excalidraw .ttd-dialog-panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+.excalidraw .ttd-dialog-chat-panel,
+.excalidraw .ttd-dialog-preview-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  align-items: stretch;
+}
+.excalidraw .ttd-dialog-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .ttd-dialog-panel {
+    height: 50%;
+  }
+}
+.excalidraw .ttd-dialog-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  height: 36px;
+  margin-top: 0.2rem;
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
+}
+.excalidraw .ttd-dialog-panel__header label {
+  font-size: 14px;
+  line-height: 22px;
+  font-style: normal;
+  font-weight: 600;
+}
+.excalidraw .ttd-dialog-panel__label-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.excalidraw .ttd-dialog-panel__label-group {
+  display: flex;
+  gap: 5px;
+}
+.excalidraw .ttd-dialog-panel__header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.excalidraw .ttd-dialog-panel__rate-limit {
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.excalidraw .ttd-dialog-panel__rate-limit--danger {
+  color: var(--color-danger);
+}
+.excalidraw .ttd-dialog-panel__menu-wrapper {
+  position: relative;
+}
+.excalidraw .ttd-dialog-panel__menu-wrapper .ttd-dialog-menu-trigger {
+  height: 40px;
+  width: 40px;
+}
+.excalidraw .ttd-dialog-panel__menu-wrapper .dropdown-menu {
+  margin-top: 0.375rem;
+  right: 0;
+}
+.excalidraw .ttd-dialog-panel textarea {
+  height: 100%;
+  resize: none;
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--dialog-border-color);
+  white-space: pre-wrap;
+  padding: 0.85rem;
+  box-sizing: border-box;
+  width: 100%;
+  font-family: monospace;
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .ttd-dialog-panel textarea {
+    width: auto;
+  }
+}
+.excalidraw .ttd-dialog-panel-button-container {
+  display: flex;
+  align-items: center;
+  flex-grow: 0;
+  height: 40px;
+  flex-shrink: 0;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .ttd-dialog-panel-button-container {
+    margin-top: 0.5rem;
+  }
+}
+.excalidraw .ttd-dialog-panel-button-container.invisible {
+  visibility: hidden;
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .ttd-dialog-panel-button-container.invisible {
+    display: none;
+  }
+}
+.excalidraw .ttd-dialog-panel-button.excalidraw-button {
+  font-family: inherit;
+  font-weight: 600;
+  height: 2.5rem;
+  font-size: 12px;
+  color: #fff;
+  background-color: var(--color-primary);
+  width: 100%;
+}
+.excalidraw .ttd-dialog-panel-button.excalidraw-button:hover {
+  background-color: var(--color-primary-darker);
+}
+.excalidraw .ttd-dialog-panel-button.excalidraw-button:active {
+  background-color: var(--color-primary-darkest);
+}
+.excalidraw .ttd-dialog-panel-button.excalidraw-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.excalidraw .ttd-dialog-panel-button.excalidraw-button:disabled:hover {
+  background-color: var(--color-primary);
+}
+@media screen and (min-width: 861px) {
+  .excalidraw .ttd-dialog-panel-button.excalidraw-button {
+    width: auto;
+    min-width: 7.5rem;
+  }
+}
+.excalidraw.theme--dark.excalidraw .ttd-dialog-panel-button.excalidraw-button {
+  color: var(--color-gray-100);
+}
+
+.excalidraw .ttd-dialog-panel-button {
+  position: relative;
+}
+.excalidraw .ttd-dialog-panel-button div {
+  display: contents;
+}
+.excalidraw .ttd-dialog-panel-button div.invisible {
+  visibility: hidden;
+}
+.excalidraw .ttd-dialog-panel-button div.Spinner {
+  display: flex !important;
+  position: absolute;
+  inset: 0;
+  --spinner-color: white;
+}
+.excalidraw.theme--dark.excalidraw .ttd-dialog-panel-button div.Spinner {
+  --spinner-color: var(--color-gray-100);
+}
+
+.excalidraw .ttd-dialog-panel-button div span {
+  padding-left: 0.5rem;
+  display: flex;
+}
+.excalidraw .ttd-dialog-submit-shortcut {
+  margin-inline-start: 0.5rem;
+  font-size: 0.625rem;
+  opacity: 0.6;
+  display: flex;
+  gap: 0.125rem;
+}
+.excalidraw .ttd-dialog-submit-shortcut__key {
+  border: 1px solid gray;
+  padding: 2px 3px;
+  border-radius: 4px;
+}
+.excalidraw .ttd-dialog-panel-action-link {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-weight: 500;
+  font-family: inherit;
+  height: 40px;
+}
+.excalidraw .ttd-dialog-panel-action-link__icon {
+  display: inline-flex;
+  align-items: center;
+}
+.excalidraw .ttd-dialog-panel-action-link__icon svg {
+  width: 12px;
+  height: 12px;
+}
+@media screen and (max-width: 861px) {
+  .excalidraw .ttd-dialog-panel-action-link {
+    height: unset;
+  }
+}
+.excalidraw .dropdown-menu-item-custom.ttd-chat-menu-item {
+  display: flex;
+  width: unset;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-md);
+  margin-top: 1px;
+}
+.excalidraw .dropdown-menu-item-custom.ttd-chat-menu-item:hover {
+  background-color: var(--button-hover-bg);
+}
+.excalidraw .dropdown-menu-item-custom.ttd-chat-menu-item:active {
+  border: 1px solid var(--button-active-border);
+}
+.excalidraw .dropdown-menu-item-custom.ttd-chat-menu-item--active {
+  background-color: var(--color-surface-primary-container);
+}
+.excalidraw .dropdown-menu-item-custom.ttd-chat-menu-item .ttd-chat-menu-item__title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.excalidraw .dropdown-menu-item-custom.ttd-chat-menu-item:hover .ttd-chat-menu-item__delete {
+  visibility: visible;
+}
+.excalidraw .dropdown-menu-item-custom.ttd-chat-menu-item .ttd-chat-menu-item__delete {
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  visibility: hidden;
+}
+.excalidraw .dropdown-menu-item-custom.ttd-chat-menu-item .ttd-chat-menu-item__delete:hover {
+  color: var(--color-danger);
+}
+.excalidraw.theme--dark.excalidraw .dropdown-menu-item-custom.ttd-chat-menu-item .ttd-chat-menu-item__delete svg {
+  color: var(--color-on-surface);
+}
+.excalidraw.theme--dark.excalidraw .dropdown-menu-item-custom.ttd-chat-menu-item .ttd-chat-menu-item__delete:hover svg {
+  color: var(--color-danger);
+}
+
+.excalidraw .dropdown-menu-item-custom.ttd-chat-menu-item .ttd-chat-menu-item__delete svg {
+  width: 16px;
+  height: 16px;
+}
+.excalidraw .ttd-dialog-preview-panel--hidden {
+  display: none;
+}
+.excalidraw .ttd-chat-history-menu {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
