@@ -1,4 +1,5 @@
 import { exportToBlob } from "@excalidraw/excalidraw";
+import { loadFromBlob } from "@excalidraw/excalidraw/data/blob";
 import { serializeAsJSON } from "@excalidraw/excalidraw/data/json";
 import { getDefaultAppState } from "@excalidraw/excalidraw/appState";
 
@@ -29,6 +30,69 @@ const toBytes = (value: string | ArrayBuffer | Uint8Array) => {
     return value;
   }
   return new Uint8Array(value);
+};
+
+const blobToDataUrl = (blob: Blob): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(reader.error ?? new Error("Could not read preview."));
+    reader.onload = () => resolve(String(reader.result));
+    reader.readAsDataURL(blob);
+  });
+
+const toBlobPart = (value: string | Uint8Array): BlobPart => {
+  if (typeof value === "string") {
+    return value;
+  }
+  const copy = new Uint8Array(value.byteLength);
+  copy.set(value);
+  return copy.buffer;
+};
+
+export const loadEditSessionFromISPO = async (sessionId: string) => {
+  const session = await ispoFiles.editSession.read({ sessionId });
+  const content = session.item.content;
+  const blob = new Blob([toBlobPart(content)], {
+    type: session.item.mimeType ?? "application/json",
+  });
+  const scene = await loadFromBlob(blob, null, null);
+  return { session, scene };
+};
+
+export const saveEditSessionToISPO = async (
+  sessionId: string,
+  elements: readonly NonDeletedExcalidrawElement[],
+  appState: Partial<AppState>,
+  files: BinaryFiles,
+  name: string,
+  expectedVersion?: number,
+) => {
+  if (elements.length === 0) {
+    throw new Error("Cannot save an empty canvas.");
+  }
+  const serialized = serializeAsJSON(elements, appState, files, "local");
+  const previewBlob = await exportToBlob({
+    elements,
+    appState: {
+      ...appState,
+      exportBackground: appState.exportBackground ?? true,
+      viewBackgroundColor:
+        appState.viewBackgroundColor ??
+        getDefaultAppState().viewBackgroundColor,
+    },
+    files,
+    mimeType: "image/png",
+  });
+  return ispoFiles.editSession.save({
+    sessionId,
+    content: serialized,
+    preview: {
+      dataUrl: await blobToDataUrl(previewBlob),
+      mimeType: "image/png",
+      name: `${sanitizeName(name)}.png`,
+    },
+    ...(expectedVersion !== undefined ? { expectedVersion } : {}),
+  });
 };
 
 /** Save the editable `.excalidraw` scene into ISPO Files. */

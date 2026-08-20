@@ -35,6 +35,7 @@ import polyfill from "@excalidraw/excalidraw/polyfill";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { loadFromBlob } from "@excalidraw/excalidraw/data/blob";
 import { t } from "@excalidraw/excalidraw/i18n";
+import { host as ispoHost } from "@ispo/sdk";
 
 import {
   GithubIcon,
@@ -100,7 +101,11 @@ import { AppMainMenu } from "./components/AppMainMenu";
 import { AppWelcomeScreen } from "./components/AppWelcomeScreen";
 import { ExportToISPO } from "./components/ExportToISPO";
 import { TopErrorBoundary } from "./components/TopErrorBoundary";
-import { exportSceneToISPO } from "./data/ispo";
+import {
+  exportSceneToISPO,
+  loadEditSessionFromISPO,
+  saveEditSessionToISPO,
+} from "./data/ispo";
 
 import {
   getCollaborationLinkData,
@@ -369,10 +374,22 @@ const initializeScene = async (opts: {
   return { scene: null, isExternalScene: false };
 };
 
+const editSessionIdFromPath = (path: string | undefined) => {
+  if (!path) {
+    return null;
+  }
+  const match = path.match(/(?:^|\/)edit-session\/([^/?#]+)/);
+  return match ? decodeURIComponent(match[1]) : null;
+};
+
 const ExcalidrawWrapper = () => {
   const excalidrawAPI = useExcalidrawAPI();
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [activeEditSession, setActiveEditSession] = useState<{
+    sessionId: string;
+    expectedVersion?: number;
+  } | null>(null);
   const isCollabDisabled = isRunningInIframe();
 
   const { editorTheme, appTheme, setAppTheme } = useHandleAppTheme();
@@ -517,6 +534,57 @@ const ExcalidrawWrapper = () => {
     },
     [collabAPI, excalidrawAPI],
   );
+
+  useEffect(() => {
+    if (!excalidrawAPI) {
+      return;
+    }
+
+    let disposed = false;
+    const openEditSession = async (path: string | undefined) => {
+      const sessionId = editSessionIdFromPath(path);
+      if (!sessionId) {
+        return;
+      }
+      try {
+        excalidrawAPI.updateScene({ appState: { isLoading: true } });
+        const { session, scene } = await loadEditSessionFromISPO(sessionId);
+        if (disposed) {
+          return;
+        }
+        if (scene.files) {
+          excalidrawAPI.addFiles(Object.values(scene.files));
+        }
+        excalidrawAPI.updateScene({
+          elements: restoreElements(scene.elements, null, {
+            repairBindings: true,
+          }),
+          appState: {
+            ...restoreAppState(scene.appState, null),
+            isLoading: false,
+          },
+          captureUpdate: CaptureUpdateAction.IMMEDIATELY,
+        });
+        setActiveEditSession({
+          sessionId,
+          ...(session.baseVersion !== undefined
+            ? { expectedVersion: session.baseVersion }
+            : {}),
+        });
+      } catch (error) {
+        if (!disposed) {
+          setErrorMessage(error instanceof Error ? error.message : String(error));
+        }
+      }
+    };
+
+    const unsubscribe = ispoHost.onNavigate(openEditSession);
+    void openEditSession(window.location.pathname);
+    return () => {
+      disposed = true;
+      unsubscribe();
+    };
+  }, [excalidrawAPI]);
 
   useEffect(() => {
     if (!excalidrawAPI || (!isCollabDisabled && !collabAPI)) {
@@ -963,12 +1031,32 @@ const ExcalidrawWrapper = () => {
               title={t("overwriteConfirm.action.ispo.title")}
               actionLabel={t("overwriteConfirm.action.ispo.button")}
               onClick={() => {
-                exportSceneToISPO(
-                  excalidrawAPI.getSceneElements(),
-                  excalidrawAPI.getAppState(),
-                  excalidrawAPI.getFiles(),
-                  excalidrawAPI.getName(),
-                ).catch((error) => {
+                const elements = excalidrawAPI.getSceneElements();
+                const appState = excalidrawAPI.getAppState();
+                const files = excalidrawAPI.getFiles();
+                const name = excalidrawAPI.getName();
+                const request = activeEditSession
+                  ? saveEditSessionToISPO(
+                      activeEditSession.sessionId,
+                      elements,
+                      appState,
+                      files,
+                      name,
+                      activeEditSession.expectedVersion,
+                    ).then((result) => {
+                      if (result.status === "conflict") {
+                        throw new Error("This drawing changed elsewhere. Reopen it before saving back.");
+                      }
+                      setActiveEditSession({
+                        sessionId: activeEditSession.sessionId,
+                        ...(result.version !== undefined
+                          ? { expectedVersion: result.version }
+                          : {}),
+                      });
+                    })
+                  : exportSceneToISPO(elements, appState, files, name);
+
+                request.catch((error) => {
                   if (error?.name !== "AbortError") {
                     setErrorMessage(error.message);
                   }

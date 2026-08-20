@@ -93,6 +93,7 @@ declare module "image-blob-reduce" {
 
     interface ImageBlobReduceOptions extends PicaResizeOptions {
       max: number;
+      alpha?: boolean;
     }
   }
   const reduce: ImageBlobReduce.ImageBlobReduceStatic;

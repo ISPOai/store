@@ -3,7 +3,6 @@
     "rootDir": "./",
     "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["vitest/globals", "@testing-library/jest-dom"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -36,5 +35,17 @@
     }
   },
   "include": ["packages", "excalidraw-app"],
-  "exclude": ["examples", "dist", "types", "tests"]
+  "exclude": [
+    "examples",
+    "dist",
+    "types",
+    "tests",
+    "**/__tests__/**",
+    "**/tests/**",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.test.helpers.tsx",
+    "**/test-utils.ts",
+    "excalidraw-app/vite.config.mts"
+  ]
 }
