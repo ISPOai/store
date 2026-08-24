@@ -7,7 +7,7 @@ import { buildScene } from "@/services/renderer/scene-builder";
 import { createTimelineAudioBuffer } from "@/media/audio";
 import { formatTimecode } from "opencut-wasm";
 import { frameRateToFloat } from "@/fps/utils";
-import { downloadBlob } from "@/utils/browser";
+import { saveBlobToFiles } from "@/utils/browser";
 
 type SnapshotResult =
 	| { success: true; blob: Blob; filename: string }
@@ -45,7 +45,9 @@ export class RendererManager {
 			return snapshot;
 		}
 
-		downloadBlob({ blob: snapshot.blob, filename: snapshot.filename });
+		// Cancelling the Files picker is a user decision, not a failure — the
+		// snapshot simply is not published anywhere.
+		await saveBlobToFiles({ blob: snapshot.blob, filename: snapshot.filename });
 		return { success: true };
 	}
 

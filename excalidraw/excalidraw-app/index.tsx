@@ -17,6 +17,10 @@ import "../excalidraw-app/sentry";
 
 import ExcalidrawApp from "./App";
 
+// ISPO: registers this project's command catalog with the host. Imported for
+// effect — the module exposes the commands and reports the bundle ready on load.
+import "./data/ispo-commands";
+
 window.__EXCALIDRAW_SHA__ = (globalThis.__ISPO_ENV||(globalThis.__ISPO_ENV={MODE:"production",PROD:true,DEV:false,SSR:false})).VITE_APP_GIT_SHA;
 const rootElement = document.getElementById("root")!;
 const root = createRoot(rootElement);

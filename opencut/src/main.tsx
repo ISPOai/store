@@ -4,6 +4,9 @@ import { connectToHost } from "@ispo/sdk";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import Editor from "./app/editor/[project_id]/page";
+// Registers this project's command catalog with the host. Imported for effect:
+// the module exposes the commands and reports the bundle ready on load.
+import "./lib/ispo-commands";
 
 // OpenCut as a ISPO project. The original Next app had a /projects picker
 // that routed into /editor/<id>; inside a single ISPO iframe there's no

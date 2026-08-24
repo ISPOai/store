@@ -1,18 +1,23 @@
-export function downloadBlob({
+import { files } from "@ispo/sdk";
+
+// ISPO: user artifacts leave this app through the Files powerbox, never a
+// browser download. A downloaded file lands outside the platform's storage
+// planes — invisible to Files, to other projects, and to agents — so the host
+// build rejects `<a download>` exits (spec §25). The picker is the consent
+// surface; `false` means the user cancelled, which is an ordinary outcome.
+export async function saveBlobToFiles({
 	blob,
 	filename,
 }: {
 	blob: Blob;
 	filename: string;
-}): void {
-	const url = URL.createObjectURL(blob);
-	const anchor = document.createElement("a");
-	anchor.href = url;
-	anchor.download = filename;
-	document.body.appendChild(anchor);
-	anchor.click();
-	document.body.removeChild(anchor);
-	URL.revokeObjectURL(url);
+}): Promise<boolean> {
+	const saved = await files.save({
+		content: new Uint8Array(await blob.arrayBuffer()),
+		name: filename,
+		...(blob.type ? { accept: [blob.type] } : {}),
+	});
+	return saved !== null;
 }
 
 export function findScrollParent({
