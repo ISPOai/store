@@ -13,3 +13,7 @@
 */.ispo/devlog/
 */.ispo/runtime*.log
 */.ispo/scratch/
+
+# Reference builds of upstream apps, used during validation to compare our
+# port with the original side by side (docs/adding-an-app.md, Phase 5).
+/.reference/

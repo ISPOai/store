@@ -70,7 +70,12 @@ the app in the store gallery.
 
 ## Adding an app
 
+Follow **[docs/adding-an-app.md](docs/adding-an-app.md)** — the full pipeline
+from upstream review through permission-envelope design, the build gates, live
+self-validation, and the handoff report for the human validator. In brief:
+
 1. Add a top-level folder named `[a-z0-9][a-z0-9-]*` containing `.ispo/project.json` + `src/`.
 2. The app's browser entry must be one of `src/main.{tsx,jsx,ts,js}` (the host detects it).
 3. Add a matching entry to `catalog.json`.
 4. Keep `requests`/`egress` least-privilege — the gallery surfaces them as the capability summary.
+5. Validate against a running host before opening the PR; the PR carries the validation report.
