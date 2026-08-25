@@ -5,7 +5,6 @@ import "./ispo-asset-path";
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { commands } from "@ispo/sdk";
 
 import "./ispo-host.css";
 
@@ -18,6 +17,10 @@ import "../excalidraw-app/sentry";
 
 import ExcalidrawApp from "./App";
 
+// ISPO: registers this project's command catalog with the host. Imported for
+// effect — the module exposes the commands and reports the bundle ready on load.
+import "./data/ispo-commands";
+
 window.__EXCALIDRAW_SHA__ = (globalThis.__ISPO_ENV||(globalThis.__ISPO_ENV={MODE:"production",PROD:true,DEV:false,SSR:false})).VITE_APP_GIT_SHA;
 const rootElement = document.getElementById("root")!;
 const root = createRoot(rootElement);
@@ -27,21 +30,3 @@ root.render(
     <ExcalidrawApp />
   </StrictMode>,
 );
-
-const focusCanvas = commands.define({
-  id: "focus-canvas",
-  label: "Focus canvas",
-  description: "Bring the Excalidraw canvas workspace into focus.",
-  inputSchema: { type: "object" },
-  resultSchema: { type: "object" },
-  invocationMode: "iframe-action",
-  resultChannels: ["json"],
-  confirmation: "none",
-}, async () => {
-  rootElement.setAttribute("tabindex", "-1");
-  rootElement.focus();
-  return { kind: "json", data: { focused: document.activeElement === rootElement } };
-});
-
-export const projectCommands = commands.expose([focusCanvas]);
-projectCommands.ready();

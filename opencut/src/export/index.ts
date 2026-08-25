@@ -50,7 +50,11 @@ export function getExportFileExtension({
 	return `.${format}`;
 }
 
-export function downloadBuffer({
+// ISPO: the finished render leaves this app through the Files powerbox, never a
+// browser download — see saveBlobToFiles in utils/browser.ts for why the host
+// build rejects `<a download>` exits (spec §25). Returns false when the user
+// cancels the picker.
+export async function saveBufferToFiles({
 	buffer,
 	filename,
 	mimeType,
@@ -59,9 +63,10 @@ export function downloadBuffer({
 	filename: string;
 	mimeType: string;
 }): Promise<boolean> {
-	return files.save({
+	const saved = await files.save({
 		content: new Uint8Array(buffer),
 		name: filename,
 		accept: [mimeType],
-	}).then((saved) => saved !== null);
+	});
+	return saved !== null;
 }
