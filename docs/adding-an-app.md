@@ -245,6 +245,33 @@ Each check has a pass condition an agent can assert, not eyeball.
 10. **Screenshot for the human.** One screenshot per major surface
     (`screenshot.mjs` on the host page with the app active), saved for the
     handoff report.
+11. **Reference build of the original.** Stand up the UNMODIFIED upstream app
+    next to the port so the human validator can compare them side by side:
+
+    ```bash
+    mkdir -p .reference
+    git clone <upstream-url> .reference/<app>
+    git -C .reference/<app> checkout <the SHA recorded in UPSTREAM.md>
+    # then install and run with UPSTREAM'S OWN toolchain, e.g.:
+    cd .reference/<app> && pnpm install && pnpm dev   # or npm/yarn per upstream docs
+    ```
+
+    `/.reference/` is gitignored — nothing under it is ever committed. Rules:
+
+    - Check out the **exact SHA from `UPSTREAM.md`**, not upstream HEAD: the
+      comparison is against what we took, or feature drift upstream reads as
+      bugs in the port.
+    - Run it with upstream's own toolchain, untouched. If it needs a config
+      tweak just to boot (a port number, an env var), record the tweak in the
+      handoff report.
+    - Leave it running and note the URL. If it cannot run on this machine
+      (needs a backend, platform-locked), say so in the report and substitute
+      upstream's hosted demo URL if one exists.
+    - Write a **parity table** while both are in front of you — every
+      user-visible behaviour of the original: `same | adapted | dropped`,
+      with one line of why for every non-`same` row. This is the agent's own
+      first pass of the comparison the human will repeat; surprises belong in
+      the table, not in the human's lap.
 
 If any check fails: fix, **delete the project and folder, reinstall from
 scratch**, and rerun from check 1. Never validate on top of a manually patched
@@ -280,6 +307,13 @@ PR must let them do that **without reading the code first**. Include:
    the access review → first-run state → the core loop, step by step, with
    what should be seen at each point → each command → present/special modes →
    restart. Ten minutes, no source diving.
+6. **The side-by-side comparison:** where the reference build is running
+   (`.reference/<app>`, its URL, how to relaunch it), the parity table from
+   check 11, and which rows deserve the human's eyes first — typically the
+   `adapted` rows, since `same` should look identical and `dropped` is already
+   argued in the adaptation plan. The human validator compares the two apps
+   directly; the port does not have to be pixel-identical, but every
+   difference must be one the table already names.
 
 For bulk runs (several apps in one loop): one branch and one PR per app, each
 with its own full report. A batch summary may link them, but validation is per
@@ -297,6 +331,8 @@ Phase 3  □ command export + ready()  □ no <a download>  □ handlers use ctx
          □ lockfile installs under pnpm 10 (or no manifest)  □ first-run access race handled
          □ layout survives hidden frames  □ entry/folder/tsconfig conventions
 Phase 4  □ raster icon ≤128KiB, magic bytes match  □ catalog entry, subpath = folder
-Phase 5  □ all 10 checks pass on a live host, from a scratch install
+Phase 5  □ all 11 checks pass on a live host, from a scratch install
+         □ reference build of upstream running from .reference/ at the recorded SHA
 Phase 6  □ PR report: plan + envelope + transcript + warts + hand-validation script
+         □ parity table + where the reference build runs
 ```
