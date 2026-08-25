@@ -182,11 +182,12 @@ function ExportPopover({
 		}
 
 		if (result.success && result.buffer) {
-			downloadBuffer({
+			const saved = await downloadBuffer({
 				buffer: result.buffer,
 				filename: `${activeProject.metadata.name}${getExportFileExtension({ format })}`,
 				mimeType: getExportMimeType({ format }),
 			});
+			if (!saved) return;
 
 			editor.project.clearExportState();
 			onOpenChange(false);

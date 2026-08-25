@@ -1,18 +1,19 @@
+import { files } from "@ispo/sdk";
+
 export function downloadBlob({
 	blob,
 	filename,
 }: {
 	blob: Blob;
 	filename: string;
-}): void {
-	const url = URL.createObjectURL(blob);
-	const anchor = document.createElement("a");
-	anchor.href = url;
-	anchor.download = filename;
-	document.body.appendChild(anchor);
-	anchor.click();
-	document.body.removeChild(anchor);
-	URL.revokeObjectURL(url);
+}): Promise<boolean> {
+	return blob.arrayBuffer().then(async (buffer) => {
+		const content = new Uint8Array(buffer);
+		const saved = await files.save(blob.type
+			? { content, name: filename, accept: [blob.type] }
+			: { content, name: filename });
+		return saved !== null;
+	});
 }
 
 export function findScrollParent({

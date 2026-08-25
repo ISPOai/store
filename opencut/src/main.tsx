@@ -1,6 +1,6 @@
 import "./index.css";
 import { createRoot } from "react-dom/client";
-import { connectToHost } from "@ispo/sdk";
+import { commands, connectToHost } from "@ispo/sdk";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import Editor from "./app/editor/[project_id]/page";
@@ -23,3 +23,21 @@ if (rootEl) {
 		</TooltipProvider>,
 	);
 }
+
+const focusEditor = commands.define({
+	id: "focus-editor",
+	label: "Focus editor",
+	description: "Bring the OpenCut video editor workspace into focus.",
+	inputSchema: { type: "object" },
+	resultSchema: { type: "object" },
+	invocationMode: "iframe-action",
+	resultChannels: ["json"],
+	confirmation: "none",
+}, async () => {
+	rootEl?.setAttribute("tabindex", "-1");
+	rootEl?.focus();
+	return { kind: "json", data: { focused: document.activeElement === rootEl } };
+});
+
+export const projectCommands = commands.expose([focusEditor]);
+projectCommands.ready();

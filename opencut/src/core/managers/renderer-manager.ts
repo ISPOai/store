@@ -45,8 +45,13 @@ export class RendererManager {
 			return snapshot;
 		}
 
-		downloadBlob({ blob: snapshot.blob, filename: snapshot.filename });
-		return { success: true };
+		const saved = await downloadBlob({
+			blob: snapshot.blob,
+			filename: snapshot.filename,
+		});
+		return saved
+			? { success: true }
+			: { success: false, error: "Save cancelled" };
 	}
 
 	async copySnapshot(): Promise<{ success: boolean; error?: string }> {
