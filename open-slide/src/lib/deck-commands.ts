@@ -21,6 +21,7 @@ type RawBlock = {
   attribution?: string
   value?: string
   caption?: string
+  step?: number
 }
 
 /**
@@ -29,6 +30,12 @@ type RawBlock = {
  * empty box — a page with fewer blocks still presents; a broken one does not.
  */
 function toBlock(raw: RawBlock): Block | null {
+  const staged = (block: Block | null): Block | null =>
+    block && typeof raw.step === 'number' && raw.step > 0 ? { ...block, step: raw.step } : block
+  return staged(toBlockKind(raw))
+}
+
+function toBlockKind(raw: RawBlock): Block | null {
   switch (raw.kind) {
     case 'eyebrow':
     case 'heading':
@@ -71,6 +78,7 @@ export const createDeckCommand = commands.define(
       properties: {
         title: { type: 'string', minLength: 1, maxLength: 160 },
         design: { type: 'string', enum: ['default', 'midnight'] },
+        transition: { type: 'string', enum: ['none', 'fade', 'slide'] },
         pages: {
           type: 'array',
           minItems: 1,
@@ -113,6 +121,7 @@ export const createDeckCommand = commands.define(
                     attribution: { type: 'string', maxLength: 200 },
                     value: { type: 'string', maxLength: 40 },
                     caption: { type: 'string', maxLength: 200 },
+                    step: { type: 'number', minimum: 0, maximum: 20 },
                   },
                 },
               },
@@ -179,6 +188,7 @@ export const createDeckCommand = commands.define(
       id,
       title: input.title,
       design: input.design === 'midnight' ? 'midnight' : 'default',
+      ...(input.transition ? { transition: input.transition } : {}),
       pages,
       createdAt: now,
       updatedAt: now,

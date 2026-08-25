@@ -506,3 +506,153 @@ body {
   gap: 6px;
   margin-top: 4px;
 }
+
+/* ── Steps, transitions, present-mode overlays ────────────────────────────── */
+
+/* Page transitions run on the keyed wrapper, so each page animates its own
+   entrance. Honouring reduced motion is upstream behaviour and a11y baseline. */
+.osd-page {
+  width: 100%;
+  height: 100%;
+}
+
+.osd-page-fade {
+  animation: osd-fade-in 260ms ease-out both;
+}
+
+.osd-page-slide {
+  animation: osd-slide-in 300ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes osd-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes osd-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(48px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .osd-page-fade,
+  .osd-page-slide {
+    animation: none;
+  }
+}
+
+.osd-step-count {
+  font-style: normal;
+  opacity: 0.7;
+}
+
+.osd-blackout {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  cursor: pointer;
+}
+
+.osd-jump {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 25;
+  transform: translate(-50%, -50%);
+  padding: 14px 28px;
+  border-radius: 14px;
+  background: rgb(0 0 0 / 78%);
+  color: #fff;
+  font-size: 44px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+.osd-presenter {
+  position: absolute;
+  right: 22px;
+  bottom: 86px;
+  z-index: 15;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--chrome-line);
+  border-radius: 14px;
+  background: rgb(16 18 23 / 96%);
+  box-shadow: 0 20px 50px rgb(0 0 0 / 55%);
+}
+
+.osd-presenter-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.osd-presenter-clock {
+  flex: 1;
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+}
+
+.osd-presenter-pos {
+  font-size: 12px;
+  color: var(--chrome-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.osd-presenter-next {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.osd-presenter-thumb {
+  position: relative;
+  height: 108px;
+  border: 1px solid var(--chrome-line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+}
+
+.osd-presenter-empty {
+  margin: 0;
+  font-size: 13px;
+  color: var(--chrome-dim);
+}
+
+.osd-presenter-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 190px;
+  overflow-y: auto;
+}
+
+.osd-presenter-notes p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #c3c8d4;
+}
+
+.osd-step-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--chrome-dim);
+}
+
+.osd-field-step {
+  width: 72px;
+  padding: 4px 8px;
+}

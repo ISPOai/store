@@ -8,8 +8,10 @@ import {
   movePage,
   removeBlock,
   removePage,
+  setBlockStep,
   setDeckDesign,
   setDeckTitle,
+  setDeckTransition,
   setPageLayout,
   setPageNotes,
   updateBlock,
@@ -154,6 +156,21 @@ export function EditorPanel({
             <option value="default">Default — warm serif</option>
             <option value="midnight">Midnight — dark mono</option>
           </select>
+          <label className="osd-label" htmlFor="osd-deck-transition">
+            Transition
+          </label>
+          <select
+            id="osd-deck-transition"
+            className="osd-field"
+            value={deck.transition ?? 'fade'}
+            onChange={(e) =>
+              onChange(setDeckTransition(deck, e.target.value as NonNullable<Deck['transition']>))
+            }
+          >
+            <option value="none">None</option>
+            <option value="fade">Fade</option>
+            <option value="slide">Slide</option>
+          </select>
         </section>
 
         <section className="osd-editor-section">
@@ -270,6 +287,19 @@ export function EditorPanel({
                 block={block}
                 onChange={(next) => onChange(updateBlock(deck, pageIndex, i, next))}
               />
+              <label className="osd-step-field">
+                <span>Reveal at step</span>
+                <input
+                  className="osd-field osd-field-step"
+                  type="number"
+                  min={0}
+                  max={20}
+                  value={block.step ?? 0}
+                  onChange={(e) =>
+                    onChange(setBlockStep(deck, pageIndex, i, Number(e.target.value) || 0))
+                  }
+                />
+              </label>
             </div>
           ))}
           <div className="osd-add-block">

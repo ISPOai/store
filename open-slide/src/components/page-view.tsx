@@ -167,7 +167,11 @@ function BlockView({ block, layout }: { block: Block; layout: DeckPage['layout']
   }
 }
 
-export function PageView({ page }: { page: DeckPage }) {
+export function PageView({ page, revealed = Number.POSITIVE_INFINITY }: {
+  page: DeckPage
+  /** Highest step currently on screen. Defaults to "everything" for thumbnails. */
+  revealed?: number
+}) {
   return (
     <div
       style={{
@@ -190,9 +194,25 @@ export function PageView({ page }: { page: DeckPage }) {
           style={{ width: 180, height: 10, background: 'var(--osd-accent)', marginBottom: 20 }}
         />
       ) : null}
-      {page.blocks.map((block, i) => (
-        <BlockView key={`${block.kind}-${i}`} block={block} layout={page.layout} />
-      ))}
+      {page.blocks.map((block, i) => {
+        const step = block.step ?? 0
+        const shown = step <= revealed
+        return (
+          // A pending block keeps its box so revealing it does not reflow the
+          // page — the layout is settled from the first frame, only opacity moves.
+          <div
+            key={`${block.kind}-${i}`}
+            style={{
+              opacity: shown ? 1 : 0,
+              transform: shown ? 'none' : 'translateY(14px)',
+              transition: 'opacity 320ms ease-out, transform 320ms ease-out',
+            }}
+            aria-hidden={shown ? undefined : true}
+          >
+            <BlockView block={block} layout={page.layout} />
+          </div>
+        )
+      })}
     </div>
   )
 }

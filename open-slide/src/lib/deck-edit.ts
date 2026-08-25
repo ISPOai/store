@@ -1,4 +1,4 @@
-import type { Block, Deck, DeckPage, PageLayout } from './types'
+import type { Block, Deck, DeckPage, DeckTransition, PageLayout } from './types'
 
 // Every deck mutation the editor performs, as pure functions over a deck. They
 // return a new deck (or the same one when nothing changed) so the component
@@ -54,6 +54,24 @@ export function setDeckTitle(deck: Deck, title: string): Deck {
 
 export function setDeckDesign(deck: Deck, design: Deck['design']): Deck {
   return { ...deck, design, updatedAt: new Date().toISOString() }
+}
+
+export function setDeckTransition(deck: Deck, transition: DeckTransition): Deck {
+  return { ...deck, transition, updatedAt: new Date().toISOString() }
+}
+
+/** Step 0 means "on the page from the start", so it is stored as no step. */
+export function setBlockStep(
+  deck: Deck,
+  pageIndex: number,
+  blockIndex: number,
+  step: number,
+): Deck {
+  const block = deck.pages[pageIndex]?.blocks[blockIndex]
+  if (!block) return deck
+  const { step: _dropped, ...rest } = block
+  const next = (step > 0 ? { ...rest, step } : rest) as Block
+  return updateBlock(deck, pageIndex, blockIndex, next)
 }
 
 export function setPageLayout(deck: Deck, index: number, layout: PageLayout): Deck {

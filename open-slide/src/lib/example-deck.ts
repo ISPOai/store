@@ -11,6 +11,7 @@ export function exampleDeck(now: string): Deck {
     id: 'welcome-to-open-slide',
     title: 'Welcome to Open Slide',
     design: 'default',
+    transition: 'fade',
     createdAt: now,
     updatedAt: now,
     pages: [
@@ -43,6 +44,7 @@ export function exampleDeck(now: string): Deck {
           },
           {
             kind: 'bullets',
+            step: 1,
             items: [
               'Type sizes stay put — a heading is the same heading in a thumbnail and full screen',
               'The overview grid renders the real page, not a separate preview',
@@ -50,8 +52,13 @@ export function exampleDeck(now: string): Deck {
               'Press O for the overview, Esc to leave present mode',
             ],
           },
+          {
+            kind: 'body',
+            step: 2,
+            text: 'This line waited for a second keypress — blocks can be staged so a page arrives a piece at a time.',
+          },
         ],
-        notes: 'Walk the bullets; demo the keys live rather than reading them out.',
+        notes: 'Walk the bullets, then press forward once more to stage the closing line.',
       },
       {
         layout: 'content',

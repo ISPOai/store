@@ -1,17 +1,18 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { hasModifier, isBackwardKey, isForwardKey, isTypingTarget } from '../lib/keys'
 import { DESIGN_PRESETS } from '../lib/design'
-import type { Deck } from '../lib/types'
+import { maxStep, type Deck } from '../lib/types'
 import { PageView } from './page-view'
+import { PresenterView } from './presenter-view'
 import { SlideCanvas } from './slide-canvas'
 
 // Navigation and present mode, following upstream's bindings: arrows / space /
 // PageDown advance, Home and End jump to the ends, O toggles the overview, Esc
-// leaves present mode.
+// leaves present mode. While presenting, B and W black or white the screen, P
+// opens the presenter view, and typing digits then Enter jumps to a page.
 //
-// Two upstream affordances are deliberately absent rather than half-built: the
-// presenter window (a second window the sandboxed project iframe cannot open)
-// and per-page reveal steps (they belong to the compiled-React page model).
+// The presenter *window* stays absent — a sandboxed project iframe cannot open a
+// second window — so what that window would have shown is an in-frame overlay.
 
 type Props = {
   deck: Deck
@@ -33,23 +34,76 @@ export function Player({
   onEditingChange,
 }: Props) {
   const [overviewOpen, setOverviewOpen] = useState(false)
+  const [revealed, setRevealed] = useState(0)
+  const [blackout, setBlackout] = useState<'black' | 'white' | null>(null)
+  const [presenterOpen, setPresenterOpen] = useState(false)
+  const [jumpBuffer, setJumpBuffer] = useState('')
+  const [startedAt, setStartedAt] = useState(() => Date.now())
+
   const design = DESIGN_PRESETS[deck.design] ?? DESIGN_PRESETS.default
   const total = deck.pages.length
   const page = deck.pages[Math.min(index, total - 1)]
+  const steps = page ? maxStep(page) : 0
+  const transition = deck.transition ?? 'fade'
+
+  // While editing, every block must be visible or the panel would be editing
+  // something the canvas is hiding.
+  const shownSteps = editing ? Number.POSITIVE_INFINITY : revealed
 
   const goTo = useCallback(
-    (next: number) => onIndexChange(Math.max(0, Math.min(total - 1, next))),
-    [onIndexChange, total],
+    (next: number, opts?: { fromEnd?: boolean }) => {
+      const clamped = Math.max(0, Math.min(total - 1, next))
+      const target = deck.pages[clamped]
+      // Entering a page backwards lands on its finished state; entering it
+      // forwards starts it over. Upstream calls this the entry direction.
+      setRevealed(opts?.fromEnd && target ? maxStep(target) : 0)
+      onIndexChange(clamped)
+    },
+    [deck.pages, onIndexChange, total],
   )
-  const goPrev = useCallback(() => goTo(index - 1), [goTo, index])
-  const goNext = useCallback(() => goTo(index + 1), [goTo, index])
+
+  const goNext = useCallback(() => {
+    if (revealed < steps) {
+      setRevealed(revealed + 1)
+      return
+    }
+    if (index < total - 1) goTo(index + 1)
+  }, [goTo, index, revealed, steps, total])
+
+  const goPrev = useCallback(() => {
+    if (revealed > 0) {
+      setRevealed(revealed - 1)
+      return
+    }
+    if (index > 0) goTo(index - 1, { fromEnd: true })
+  }, [goTo, index, revealed])
+
+  // A deck switch or an out-of-band index change (overview, editor) restarts the
+  // current page's steps rather than carrying the previous page's progress over.
+  useEffect(() => {
+    setRevealed(0)
+  }, [deck.id])
+
+  useEffect(() => {
+    if (!presenting) {
+      setBlackout(null)
+      setPresenterOpen(false)
+      setJumpBuffer('')
+      return
+    }
+    setStartedAt(Date.now())
+  }, [presenting])
+
+  const jumpTimer = useRef<number | null>(null)
+  const queueJumpClear = useCallback(() => {
+    if (jumpTimer.current !== null) window.clearTimeout(jumpTimer.current)
+    jumpTimer.current = window.setTimeout(() => setJumpBuffer(''), 1600)
+  }, [])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (isTypingTarget(e.target)) return
 
-      // While the overview is open only Esc and O reach the player, so arrow
-      // keys keep moving the selection inside the grid instead of the deck.
       if (overviewOpen) {
         if (e.key === 'Escape' || e.key === 'o' || e.key === 'O') {
           e.preventDefault()
@@ -59,11 +113,40 @@ export function Player({
       }
 
       if (e.key === 'Escape') {
+        // Esc clears a blackout first — it is the state most likely to look like
+        // a frozen app — and only then leaves present mode.
+        if (blackout) {
+          e.preventDefault()
+          setBlackout(null)
+          return
+        }
+        if (jumpBuffer) {
+          e.preventDefault()
+          setJumpBuffer('')
+          return
+        }
         if (presenting) {
           e.preventDefault()
           onPresentingChange(false)
         }
         return
+      }
+
+      if (presenting && !hasModifier(e) && /^[0-9]$/.test(e.key)) {
+        e.preventDefault()
+        setJumpBuffer((current) => (current + e.key).slice(0, 4))
+        queueJumpClear()
+        return
+      }
+      if (presenting && e.key === 'Enter' && jumpBuffer) {
+        e.preventDefault()
+        goTo(Number(jumpBuffer) - 1)
+        setJumpBuffer('')
+        return
+      }
+
+      if (isForwardKey(e) || isBackwardKey(e)) {
+        if (blackout) setBlackout(null)
       }
       if (isForwardKey(e)) {
         e.preventDefault()
@@ -82,21 +165,43 @@ export function Player({
       }
       if (e.key === 'End') {
         e.preventDefault()
-        goTo(total - 1)
+        goTo(total - 1, { fromEnd: true })
         return
       }
+
       if (hasModifier(e)) return
       if (e.key === 'o' || e.key === 'O') {
         e.preventDefault()
         setOverviewOpen(true)
+        return
+      }
+      if (!presenting) return
+      if (e.key === 'b' || e.key === 'B') {
+        e.preventDefault()
+        setBlackout((c) => (c === 'black' ? null : 'black'))
+      } else if (e.key === 'w' || e.key === 'W') {
+        e.preventDefault()
+        setBlackout((c) => (c === 'white' ? null : 'white'))
+      } else if (e.key === 'p' || e.key === 'P') {
+        e.preventDefault()
+        setPresenterOpen((v) => !v)
       }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [goNext, goPrev, goTo, overviewOpen, presenting, onPresentingChange, total])
+  }, [
+    blackout,
+    goNext,
+    goPrev,
+    goTo,
+    jumpBuffer,
+    overviewOpen,
+    presenting,
+    onPresentingChange,
+    queueJumpClear,
+    total,
+  ])
 
-  // Leaving present mode should not strand the overview open on top of the
-  // ordinary editor view.
   useEffect(() => {
     if (!presenting) setOverviewOpen(false)
   }, [presenting])
@@ -111,37 +216,64 @@ export function Player({
 
   return (
     <div className={presenting ? 'osd-player osd-player-presenting' : 'osd-player'}>
-      <div
-        className="osd-stage"
-        onClick={editing ? undefined : goNext}
-        role="presentation"
-      >
+      <div className="osd-stage" onClick={editing ? undefined : goNext} role="presentation">
         <SlideCanvas design={design} flat={presenting}>
-          <PageView page={page} />
+          {/* Keyed on the page so the transition class re-runs per page rather
+              than animating a mutation of the page already on screen. */}
+          <div key={index} className={`osd-page osd-page-${transition}`}>
+            <PageView page={page} revealed={shownSteps} />
+          </div>
         </SlideCanvas>
       </div>
 
+      {blackout ? (
+        <div
+          className="osd-blackout"
+          style={{ background: blackout === 'black' ? '#000' : '#fff' }}
+          onClick={() => setBlackout(null)}
+          role="presentation"
+        />
+      ) : null}
+
+      {jumpBuffer ? <div className="osd-jump">{jumpBuffer}</div> : null}
+
+      {presenting && presenterOpen ? (
+        <PresenterView
+          deck={deck}
+          index={index}
+          startedAt={startedAt}
+          onClose={() => setPresenterOpen(false)}
+        />
+      ) : null}
+
       <div className="osd-controls">
-        <button type="button" onClick={goPrev} disabled={index === 0} aria-label="Previous page">
+        <button type="button" onClick={goPrev} disabled={index === 0 && revealed === 0} aria-label="Previous">
           ‹
         </button>
         <span className="osd-counter">
           {index + 1} / {total}
+          {steps > 0 && !editing ? <em className="osd-step-count"> · {revealed}/{steps}</em> : null}
         </span>
         <button
           type="button"
           onClick={goNext}
-          disabled={index >= total - 1}
-          aria-label="Next page"
+          disabled={index >= total - 1 && revealed >= steps}
+          aria-label="Next"
         >
           ›
         </button>
         <button type="button" onClick={() => setOverviewOpen(true)}>
           Overview
         </button>
-        <button type="button" onClick={() => onEditingChange(!editing)}>
-          {editing ? 'Done' : 'Edit'}
-        </button>
+        {presenting ? (
+          <button type="button" onClick={() => setPresenterOpen((v) => !v)}>
+            {presenterOpen ? 'Hide notes' : 'Presenter'}
+          </button>
+        ) : (
+          <button type="button" onClick={() => onEditingChange(!editing)}>
+            {editing ? 'Done' : 'Edit'}
+          </button>
+        )}
         <button type="button" onClick={() => onPresentingChange(!presenting)}>
           {presenting ? 'Exit present' : 'Present'}
         </button>
