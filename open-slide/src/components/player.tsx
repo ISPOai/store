@@ -19,9 +19,19 @@ type Props = {
   onIndexChange: (index: number) => void
   presenting: boolean
   onPresentingChange: (presenting: boolean) => void
+  editing: boolean
+  onEditingChange: (editing: boolean) => void
 }
 
-export function Player({ deck, index, onIndexChange, presenting, onPresentingChange }: Props) {
+export function Player({
+  deck,
+  index,
+  onIndexChange,
+  presenting,
+  onPresentingChange,
+  editing,
+  onEditingChange,
+}: Props) {
   const [overviewOpen, setOverviewOpen] = useState(false)
   const design = DESIGN_PRESETS[deck.design] ?? DESIGN_PRESETS.default
   const total = deck.pages.length
@@ -101,7 +111,11 @@ export function Player({ deck, index, onIndexChange, presenting, onPresentingCha
 
   return (
     <div className={presenting ? 'osd-player osd-player-presenting' : 'osd-player'}>
-      <div className="osd-stage" onClick={goNext} role="presentation">
+      <div
+        className="osd-stage"
+        onClick={editing ? undefined : goNext}
+        role="presentation"
+      >
         <SlideCanvas design={design} flat={presenting}>
           <PageView page={page} />
         </SlideCanvas>
@@ -124,6 +138,9 @@ export function Player({ deck, index, onIndexChange, presenting, onPresentingCha
         </button>
         <button type="button" onClick={() => setOverviewOpen(true)}>
           Overview
+        </button>
+        <button type="button" onClick={() => onEditingChange(!editing)}>
+          {editing ? 'Done' : 'Edit'}
         </button>
         <button type="button" onClick={() => onPresentingChange(!presenting)}>
           {presenting ? 'Exit present' : 'Present'}

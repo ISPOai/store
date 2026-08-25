@@ -3,6 +3,7 @@ import { exampleDeck } from '../lib/example-deck'
 import { createDeckCommand } from '../lib/deck-commands'
 import { listDecks, writeDeck } from '../lib/deck-store'
 import type { Deck } from '../lib/types'
+import { EditorPanel } from './editor-panel'
 import { Player } from './player'
 
 // Owns the deck library and the current selection. Deck writes go through the
@@ -14,13 +15,20 @@ type Status = 'loading' | 'ready' | 'no-access'
 /** Retry cadence while file access is still pending. */
 const ACCESS_RETRY_MS = 2500
 
+/** Keystrokes coalesce into one write rather than one write per character. */
+const SAVE_DEBOUNCE_MS = 400
+
 export function App() {
   const [decks, setDecks] = useState<Deck[]>([])
   const [status, setStatus] = useState<Status>('loading')
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [index, setIndex] = useState(0)
   const [presenting, setPresenting] = useState(false)
+  const [editing, setEditing] = useState(false)
+  const [saving, setSaving] = useState(false)
   const seeded = useRef(false)
+  const saveTimer = useRef<number | null>(null)
+  const pendingSave = useRef<Deck | null>(null)
 
   // The first run of a freshly installed app races the file-access prompt: the
   // initial read is refused or held while the user is still deciding. Treating
@@ -66,6 +74,9 @@ export function App() {
   // refresh when the window regains focus rather than polling for it.
   useEffect(() => {
     const onFocus = () => {
+      // A refresh mid-edit would re-read the file and discard whatever has not
+      // been flushed yet, so skip while a write is still owed.
+      if (pendingSave.current !== null) return
       void refresh()
     }
     window.addEventListener('focus', onFocus)
@@ -105,6 +116,44 @@ export function App() {
     }
   }, [refresh])
 
+  // An edit updates the in-memory library at once so the canvas repaints on the
+  // keystroke, and schedules the write. The timer holds the latest deck rather
+  // than a queue: successive keystrokes supersede each other.
+  const flushSave = useCallback(async () => {
+    const deck = pendingSave.current
+    pendingSave.current = null
+    if (!deck) return
+    try {
+      await writeDeck(deck)
+    } catch (err) {
+      console.warn('[open-slide] could not save deck:', err)
+    } finally {
+      if (pendingSave.current === null) setSaving(false)
+    }
+  }, [])
+
+  const editDeck = useCallback(
+    (next: Deck) => {
+      setDecks((current) => current.map((deck) => (deck.id === next.id ? next : deck)))
+      pendingSave.current = next
+      setSaving(true)
+      if (saveTimer.current !== null) window.clearTimeout(saveTimer.current)
+      saveTimer.current = window.setTimeout(() => {
+        saveTimer.current = null
+        void flushSave()
+      }, SAVE_DEBOUNCE_MS)
+    },
+    [flushSave],
+  )
+
+  // A pending edit must not be lost to an unmount or a reload.
+  useEffect(() => {
+    return () => {
+      if (saveTimer.current !== null) window.clearTimeout(saveTimer.current)
+      void flushSave()
+    }
+  }, [flushSave])
+
   const selected = decks.find((deck) => deck.id === selectedId) ?? decks[0] ?? null
 
   useEffect(() => {
@@ -136,8 +185,16 @@ export function App() {
     )
   }
 
+  const appClass = [
+    'osd-app',
+    presenting ? 'osd-app-presenting' : '',
+    editing && !presenting ? 'osd-app-editing' : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
+
   return (
-    <div className={presenting ? 'osd-app osd-app-presenting' : 'osd-app'}>
+    <div className={appClass}>
       <aside className="osd-sidebar">
         <header className="osd-sidebar-header">
           <span className="osd-wordmark">Open Slide</span>
@@ -181,8 +238,21 @@ export function App() {
           onIndexChange={setIndex}
           presenting={presenting}
           onPresentingChange={setPresenting}
+          editing={editing}
+          onEditingChange={setEditing}
         />
       </main>
+
+      {editing && !presenting ? (
+        <EditorPanel
+          deck={selected}
+          pageIndex={Math.min(index, selected.pages.length - 1)}
+          onChange={editDeck}
+          onPageIndexChange={setIndex}
+          onClose={() => setEditing(false)}
+          saving={saving}
+        />
+      ) : null}
     </div>
   )
 }

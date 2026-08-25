@@ -1,4 +1,12 @@
-import { useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from 'react'
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from '../lib/types'
 import { designToCssVars, type DesignSystem } from '../lib/design'
 
@@ -23,22 +31,45 @@ export function SlideCanvas({ children, scale, design, flat = false }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [fitScale, setFitScale] = useState<number | null>(null)
 
-  useLayoutEffect(() => {
-    if (scale !== undefined) return
+  const measure = useCallback(() => {
     const el = containerRef.current
     if (!el) return
-    const measure = () => {
-      const { width, height } = el.getBoundingClientRect()
-      if (width === 0 || height === 0) return
-      setFitScale(Math.min(width / CANVAS_WIDTH, height / CANVAS_HEIGHT))
-    }
+    const { width, height } = el.getBoundingClientRect()
+    if (width === 0 || height === 0) return
+    setFitScale(Math.min(width / CANVAS_WIDTH, height / CANVAS_HEIGHT))
+  }, [])
+
+  // `flat` is in the deps because entering present mode changes this canvas's
+  // container in the same commit: re-measuring here means the fit is correct on
+  // the first presented frame instead of waiting on an observer callback.
+  useLayoutEffect(() => {
+    if (scale !== undefined) return
     // Measured synchronously before paint so the first visible frame is already
     // fitted — otherwise the canvas flashes at full 1920px width.
     measure()
     const ro = new ResizeObserver(measure)
-    ro.observe(el)
+    const el = containerRef.current
+    if (el) ro.observe(el)
     return () => ro.disconnect()
-  }, [scale])
+  }, [scale, flat, measure])
+
+  // A hidden frame gets no rendering steps, so no ResizeObserver callback and no
+  // rAF are delivered while the window is occluded or the pane is in the
+  // background — a layout change made in that state would otherwise keep a stale
+  // scale once the deck came back on screen. These two listeners are the safety
+  // net; the observer above still handles the ordinary case.
+  useEffect(() => {
+    if (scale !== undefined) return
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') measure()
+    }
+    window.addEventListener('resize', measure)
+    document.addEventListener('visibilitychange', onVisible)
+    return () => {
+      window.removeEventListener('resize', measure)
+      document.removeEventListener('visibilitychange', onVisible)
+    }
+  }, [scale, measure])
 
   const measured = scale ?? fitScale
   const s = measured ?? 1
