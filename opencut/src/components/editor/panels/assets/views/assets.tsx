@@ -122,10 +122,29 @@ export function MediaView() {
 	// so binary media (mp3/wav/mp4) works, unlike the text-only shared picker.
 	const handleAddFromFiles = async () => {
 		try {
-			const picked = await filesApi.pick({ accept: ["audio/", "video/", "image/"] });
+			const selection = await filesApi.pick({
+				accept: ["audio/", "video/", "image/"],
+			});
+			const picked = Array.isArray(selection) ? selection[0] : selection;
 			if (!picked) return;
-			const bytes = await fs.readBinary(picked.path);
-			const file = new File([bytes], picked.name, { type: picked.mimeType });
+
+			// Small Files picks arrive as a private project copy (`path`). Larger
+			// media can instead arrive as a controlled, seekable `url`. Both are
+			// valid powerbox results; never pass an absent optional path to fs.
+			let content: Uint8Array | Blob;
+			if (picked.path) {
+				content = await fs.readBinary(picked.path);
+			} else if (picked.url) {
+				const response = await fetch(picked.url);
+				if (!response.ok) {
+					throw new Error(`Files attachment read failed (${response.status})`);
+				}
+				content = await response.blob();
+			} else {
+				throw new Error("Files attachment did not include readable content");
+			}
+
+			const file = new File([content], picked.name, { type: picked.mimeType });
 			await processFiles({ files: [file] });
 		} catch (error) {
 			console.error("Add from Files failed:", error);

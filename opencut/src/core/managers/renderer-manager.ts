@@ -7,7 +7,7 @@ import { buildScene } from "@/services/renderer/scene-builder";
 import { createTimelineAudioBuffer } from "@/media/audio";
 import { formatTimecode } from "opencut-wasm";
 import { frameRateToFloat } from "@/fps/utils";
-import { downloadBlob } from "@/utils/browser";
+import { saveBlobToFiles } from "@/utils/browser";
 
 type SnapshotResult =
 	| { success: true; blob: Blob; filename: string }
@@ -45,8 +45,13 @@ export class RendererManager {
 			return snapshot;
 		}
 
-		downloadBlob({ blob: snapshot.blob, filename: snapshot.filename });
-		return { success: true };
+		const saved = await saveBlobToFiles({
+			blob: snapshot.blob,
+			filename: snapshot.filename,
+		});
+		return saved
+			? { success: true }
+			: { success: false, error: "Save cancelled" };
 	}
 
 	async copySnapshot(): Promise<{ success: boolean; error?: string }> {

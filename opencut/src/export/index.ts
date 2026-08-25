@@ -1,4 +1,5 @@
 import type { FrameRate } from "opencut-wasm";
+import { files } from "@ispo/sdk";
 import { EXPORT_MIME_TYPES } from "./mime-types";
 
 export const EXPORT_QUALITY_VALUES = [
@@ -49,7 +50,11 @@ export function getExportFileExtension({
 	return `.${format}`;
 }
 
-export function downloadBuffer({
+// ISPO: the finished render leaves this app through the Files powerbox, never a
+// browser download — see saveBlobToFiles in utils/browser.ts for why the host
+// build rejects `<a download>` exits (spec §25). Returns false when the user
+// cancels the picker.
+export async function saveBufferToFiles({
 	buffer,
 	filename,
 	mimeType,
@@ -57,14 +62,11 @@ export function downloadBuffer({
 	buffer: ArrayBuffer;
 	filename: string;
 	mimeType: string;
-}): void {
-	const blob = new Blob([buffer], { type: mimeType });
-	const url = URL.createObjectURL(blob);
-	const downloadLink = document.createElement("a");
-	downloadLink.href = url;
-	downloadLink.download = filename;
-	document.body.appendChild(downloadLink);
-	downloadLink.click();
-	document.body.removeChild(downloadLink);
-	URL.revokeObjectURL(url);
+}): Promise<boolean> {
+	const saved = await files.save({
+		content: new Uint8Array(buffer),
+		name: filename,
+		accept: [mimeType],
+	});
+	return saved !== null;
 }

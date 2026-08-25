@@ -22,7 +22,7 @@ import { cn } from "@/utils/ui";
 import {
 	getExportMimeType,
 	getExportFileExtension,
-	downloadBuffer,
+	saveBufferToFiles,
 } from "@/export";
 import { Check, Copy, Download, RotateCcw } from "lucide-react";
 import {
@@ -182,11 +182,12 @@ function ExportPopover({
 		}
 
 		if (result.success && result.buffer) {
-			downloadBuffer({
+			const saved = await saveBufferToFiles({
 				buffer: result.buffer,
 				filename: `${activeProject.metadata.name}${getExportFileExtension({ format })}`,
 				mimeType: getExportMimeType({ format }),
 			});
+			if (!saved) return;
 
 			editor.project.clearExportState();
 			onOpenChange(false);

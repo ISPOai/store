@@ -78,11 +78,28 @@ export function CanvasBoard() {
     if (importingFromFiles) return
     setImportingFromFiles(true)
     try {
-      const picked = await filesApi.pick({ accept: FILES_ACCEPT })
+      const selection = await filesApi.pick({ accept: FILES_ACCEPT })
+      const picked = Array.isArray(selection) ? selection[0] : selection
       if (!picked) return
-      const bytes = await fs.readBinary(picked.path)
+
+      // Small Files picks arrive as a private project copy (`path`). Larger
+      // images can instead arrive as a controlled `url`. Both are valid
+      // powerbox results, so normalize either form into a File for ingest.
+      let content: Uint8Array | Blob
+      if (picked.path) {
+        content = await fs.readBinary(picked.path)
+      } else if (picked.url) {
+        const response = await fetch(picked.url)
+        if (!response.ok) {
+          throw new Error(`Files attachment read failed (${response.status})`)
+        }
+        content = await response.blob()
+      } else {
+        throw new Error('Files attachment did not include readable content')
+      }
+
       const file = new File(
-        [bytes],
+        [content],
         picked.name || 'files-image',
         { type: picked.mimeType || 'application/octet-stream' },
       )
