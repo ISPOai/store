@@ -7,8 +7,9 @@ This is the curated app store for ISPO: one top-level folder per app plus
 the required pipeline — upstream review, the permission-envelope decision,
 the build gates that will otherwise fail your install, and a mandatory
 self-validation phase against a running host, ending in a handoff report for
-the human validator. One branch and one PR per app; the PR description carries
-the report.
+the human validator. One branch and one PR per app, on a branch namespaced
+by the implementing agent — `claude/<topic>` or `codex/<topic>` — and the PR
+description carries the report.
 
 House rules that trip people up (details and rationale in the guide):
 

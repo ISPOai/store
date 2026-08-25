@@ -319,6 +319,11 @@ For bulk runs (several apps in one loop): one branch and one PR per app, each
 with its own full report. A batch summary may link them, but validation is per
 app; no app rides another's report.
 
+**Branch naming:** branches are namespaced by the agent that did the work —
+`claude/<topic>` for Claude, `codex/<topic>` for Codex (e.g.
+`claude/add-open-slide`, `codex/fix-opencut-export`). The prefix says who to
+hand follow-up work to and lets parallel agent runs coexist without collisions.
+
 ---
 
 ## Quick checklist
