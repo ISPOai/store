@@ -77,6 +77,23 @@ Before writing anything, read the upstream project and answer, in writing:
 the app's one job, the state plan, the egress plan, and the dropped features
 with reasons.
 
+**Then say which of the two things you are actually building**, because the
+answer changes how everything downstream must be worded:
+
+- a **port** — the same app, adapted to this host; or
+- a **re-implementation** — a new app that takes an idea, and maybe a few
+  files, from upstream.
+
+Identifying "the app inside the framework" usually produces the second one.
+Open Slide is the worked example: upstream is 28k lines where a slide is a
+hand-written `.tsx` module compiled per deck, inside a workspace with folders,
+themes, assets and search. Ours is 2.8k lines where a deck is a JSON document
+edited through a block form. About **3.5% of our source has any verbatim
+overlap** with upstream — one idea (the fixed 1920×1080 canvas scaled to fit),
+a key map, and a design-token shape. A human validator who opens the two side
+by side sees two different apps, and is right to. That is a fine thing to
+build; calling it a port is not.
+
 ## Phase 1 — Take the code once; do not track upstream
 
 The store's model is **boilerplate, taken once**. We copy what is useful at a
@@ -92,6 +109,12 @@ Required bookkeeping (see `open-slide/UPSTREAM.md` for the shape):
 - A license-attribution header comment in each file that is a port.
 - Keep upstream's LICENSE file when you vendor substantial code (Excalidraw
   does this).
+- **Quantify what was actually taken**, don't characterise it. Count it —
+  lines of upstream vs lines of yours, and how many of your non-comment lines
+  appear verbatim in the file you ported from. "Started from upstream" reads
+  as a fork when the real answer is a few dozen shared lines; the number
+  settles it and costs one command. If the number is small, say so in
+  `UPSTREAM.md` in those words.
 
 Never copy into the store: `node_modules/`, `dist/`, build output, lockfiles
 for package managers we don't use, CI configs, or upstream's agent/skill
@@ -265,9 +288,18 @@ Each check has a pass condition an agent can assert, not eyeball.
 6. **Core loop through the DOM.** Drive the app's one job end to end via CDP —
    real clicks and keydowns, asserted DOM state, not screenshots alone.
    Include keyboard paths if the app claims them.
-7. **Command handlers end to end.** Invoke each command's handler (the UI
-   button that calls `.run()`, or the command surface) and assert the durable
-   effect on disk (`~/ISPO/.state/<projectId>/…`).
+7. **Command handlers end to end.** Invoke each command's handler and assert
+   the durable effect on disk (`~/ISPO/.state/<projectId>/…`). The path that
+   works is the app's own UI calling `theCommand.run(...)`. **The chat
+   capability surface cannot stand in for it:**
+   `agentSession.invokeCapabilityFromChat` dispatches
+   `input: { instruction }`, and every project command's `inputSchema` is
+   closed (`additionalProperties: false`), so it fails at the schema — for a
+   command with required fields (`input.title is required`), and for one
+   without (`input.instruction is not allowed`). This is not app-specific:
+   every first-party bundled command fails it identically. A command with no
+   UI entry point therefore has **no** agent-reachable invocation path today —
+   say so in the report rather than claiming the handler ran.
 8. **Layout-change survival.** Toggle every mode that changes the container
    (present, panels, editors) and assert measured geometry — expected scale vs
    actual, container width non-zero. This is where the hidden-frame and
@@ -287,6 +319,13 @@ Each check has a pass condition an agent can assert, not eyeball.
     # then install and run with UPSTREAM'S OWN toolchain, e.g.:
     cd .reference/<app> && pnpm install && pnpm dev   # or npm/yarn per upstream docs
     ```
+
+    Two things bite here. Upstream dev servers commonly bind **IPv6-only**
+    (`[::1]`), which is refused at `127.0.0.1` and fails in any browser that
+    resolves `localhost` to IPv4 first — pass `--host 0.0.0.0`. And pass an
+    explicit `--port`: the ISPO dev host holds 5173, and a reference server
+    that silently lands on the same port in a different address family is
+    worse than a collision, because both answer.
 
     `/.reference/` is gitignored — nothing under it is ever committed. Rules:
 
@@ -318,6 +357,28 @@ install.
 - The E2E seams make the host window invisible unless
   `ISPO_E2E_VISIBLE_WINDOW=1` is set. An invisible window still renders and
   answers CDP — do not mistake it for a working user-visible app.
+- **Raise the window before you measure anything, or you will file a bug that
+  isn't there.** `ISPO_E2E_VISIBLE_WINDOW=1` makes the window exist, not
+  frontmost. While it is occluded, every frame reports
+  `document.visibilityState === "hidden"` and receives **no** rendering steps:
+  no `ResizeObserver` callback, no `resize`, no `visibilitychange`, no rAF. Any
+  app that measures its container then reads as stale — in one run a canvas
+  measured 0.6062 inside a container wanting 0.4292, which looks exactly like
+  the hidden-frame bug this guide warns about and was purely the occlusion.
+  With the window raised, every mode measured exact. Raise it with
+  `osascript -e 'tell application "Electron" to activate'` (System Events
+  window resizing needs assistive access, which is usually not granted), then
+  re-run the measurement. **A stale-geometry finding measured against an
+  occluded window is void.**
+- Emulation is not a resize. `Emulation.setDeviceMetricsOverride` on the host
+  page does change an OOPIF's layout viewport, but combined with an occluded
+  window it delivers no events at all — so it cannot prove the re-measure path
+  either way. It also outlives a sloppy disconnect: clear it explicitly.
+- Electron's CDP exposes no `Browser` domain — `Browser.getWindowForTarget`
+  and `setWindowBounds` are unavailable, so you cannot resize the real window
+  over CDP. And `Page.reload` is rejected on an OOPIF target ("Command can
+  only be executed on top-level targets"); use `location.reload()` through
+  `Runtime.evaluate` instead.
 - `store.revalidate` is stubbed under the seam; the gallery serves the local
   catalog. Icons may fall back to monograms locally — that is a seam
   limitation, not an app bug (verify the icon file's magic bytes instead).
@@ -351,6 +412,15 @@ PR must let them do that **without reading the code first**. Include:
    argued in the adaptation plan. The human validator compares the two apps
    directly; the port does not have to be pixel-identical, but every
    difference must be one the table already names.
+
+   **Lead this section with the port/re-implementation call from Phase 0 and
+   the overlap number**, before the table. A parity table read cold implies
+   "same app, some rows adapted"; if the honest answer is "different app,
+   shares an idea", the table's shape actively misleads and the human finds
+   out by opening both — which is the wrong way for them to find out. When
+   the answer is re-implementation, also check that the app's **name and
+   `catalog.json` description** do not claim more lineage than the code
+   supports, and raise it in the report rather than deciding it silently.
 
 ## Phase 7 — Retrospective: feed what you learned back into this guide
 
@@ -392,15 +462,19 @@ hand follow-up work to and lets parallel agent runs coexist without collisions.
 
 ```
 Phase 0  □ adaptation plan written (one job, state plan, egress plan, dropped features)
+         □ port or re-implementation? called explicitly
 Phase 1  □ code taken once at a recorded SHA  □ UPSTREAM.md  □ attribution headers
+         □ overlap with upstream counted, not characterised
 Phase 2  □ requests/egress/env minimal, justified per key  □ capabilitySummary matches
 Phase 3  □ command export + ready()  □ no <a download>  □ handlers use ctx.sdk
          □ lockfile installs under pnpm 10 (or no manifest)  □ first-run access race handled
          □ layout survives hidden frames  □ entry/folder/tsconfig conventions
 Phase 4  □ raster icon ≤128KiB, magic bytes match  □ catalog entry, subpath = folder
-Phase 5  □ all 11 checks pass on a live host, from a scratch install
+Phase 5  □ host window RAISED before any geometry is measured
+         □ all 11 checks pass on a live host, from a scratch install
          □ reference build of upstream running from .reference/ at the recorded SHA
 Phase 6  □ PR report: plan + envelope + transcript + warts + hand-validation script
          □ host findings (or an explicit "none")  □ parity table + reference build location
+         □ lineage call + overlap number stated BEFORE the parity table
 Phase 7  □ retrospective written  □ guide updated with anything it taught
 ```
