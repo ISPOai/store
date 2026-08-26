@@ -17,6 +17,7 @@ import { ThemeProvider } from 'next-themes'
 import { createRoot } from 'react-dom/client'
 import { App } from './app/app'
 import { installDevServerShim } from './runtime/dev-server-shim'
+import { rememberRoute, restoreRoute } from './runtime/route-memory'
 import { refreshFolders } from './virtual/folders'
 import { refreshSlideIndex } from './virtual/slides'
 import { refreshThemes } from './virtual/themes'
@@ -24,6 +25,11 @@ import { refreshThemes } from './virtual/themes'
 async function start(): Promise<void> {
   // Patched before anything can call a `/__*` route.
   installDevServerShim()
+
+  // Before the router reads the URL: a rebuild reloads this frame without the
+  // fragment, which would otherwise drop the user back on the deck catalog.
+  restoreRoute()
+  rememberRoute()
 
   // A first `fs` read races the access review on a freshly installed app: it
   // may be held or refused while the user is still deciding. Failing here would
