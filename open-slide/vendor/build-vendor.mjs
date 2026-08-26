@@ -56,8 +56,6 @@ const PACKAGES = [
   'react-image-crop',
   'html-to-image',
   'fflate',
-  'use-sync-external-store',
-  'use-sync-external-store/shim',
   'sucrase',
   '@babel/parser',
   '@babel/types',
@@ -68,6 +66,29 @@ const EXTERNAL = ['react', 'react-dom', 'react-dom/client', 'react/jsx-runtime',
 /** `@dnd-kit/core` → `dnd-kit__core` so every bundle is one flat file. */
 function outName(pkg) {
   return `${pkg.replace(/^@/, '').replace(/\//g, '__')}.js`
+}
+
+
+// Resolves react (and the CJS useSyncExternalStore backport) to real ESM
+// modules inside the vendored bundles, so a CommonJS dependency's
+// `require("react")` never becomes a dynamic-require stub. Only the shim's own
+// import of react stays external, which keeps a single React instance.
+const shimDir = path.join(here, 'shims')
+const reactShim = path.join(shimDir, 'react-esm.js')
+const cjsInteropPlugin = {
+  name: 'cjs-react-interop',
+  setup(build) {
+    build.onResolve({ filter: /^react$/ }, (args) => {
+      if (path.resolve(args.importer) === reactShim) return { path: 'react', external: true }
+      return { path: reactShim }
+    })
+    build.onResolve({ filter: /^use-sync-external-store(\/shim)?$/ }, () => ({
+      path: path.join(shimDir, 'use-sync-external-store-shim.js'),
+    }))
+    build.onResolve({ filter: /^use-sync-external-store\/(shim\/)?with-selector(\.js)?$/ }, () => ({
+      path: path.join(shimDir, 'use-sync-external-store-with-selector.js'),
+    }))
+  },
 }
 
 await rm(path.join(here, 'dist'), { recursive: true, force: true })
@@ -95,6 +116,7 @@ for (const pkg of PACKAGES) {
       absWorkingDir: appRoot,
       logLevel: 'silent',
       define: { 'process.env.NODE_ENV': '"production"', global: 'globalThis' },
+      plugins: [cjsInteropPlugin],
     })
     built.push(pkg)
   } catch (err) {
@@ -114,6 +136,7 @@ for (const pkg of PACKAGES) {
         absWorkingDir: appRoot,
         logLevel: 'silent',
         define: { 'process.env.NODE_ENV': '"production"', global: 'globalThis' },
+        plugins: [cjsInteropPlugin],
       })
       built.push(`${pkg} (no default)`)
     } catch (err2) {

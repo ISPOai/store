@@ -1,5 +1,30 @@
-// node_modules/.pnpm/emoji-picker-react@4.19.1_react@19.2.8/node_modules/emoji-picker-react/dist/emoji-picker-react.esm.js
-import React__default, { memo, createElement, useState, useEffect, useContext, createContext, useRef, useMemo, createRef, useCallback, Fragment, useLayoutEffect, Suspense, Component } from "react";
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
+
+// vendor/shims/react-esm.js
+var react_esm_exports = {};
+__export(react_esm_exports, {
+  default: () => react_esm_default
+});
+__reExport(react_esm_exports, react_star);
+import * as React from "react";
+import * as react_star from "react";
+var react_esm_default = React.default ?? React;
 
 // node_modules/.pnpm/flairup@1.0.0/node_modules/flairup/dist/esm/index.js
 function asArray(v) {
@@ -433,9 +458,9 @@ var commonStyles = /* @__PURE__ */ stylesheet.create({
     ".": ClassNames.hidden
   }, hidden)
 });
-var PickerStyleTag = /* @__PURE__ */ memo(function PickerStyleTag2(_ref) {
+var PickerStyleTag = /* @__PURE__ */ (0, react_esm_exports.memo)(function PickerStyleTag2(_ref) {
   var nonce = _ref.nonce;
-  return createElement("style", {
+  return (0, react_esm_exports.createElement)("style", {
     nonce,
     suppressHydrationWarning: true,
     dangerouslySetInnerHTML: {
@@ -793,20 +818,20 @@ var basePreviewConfig = {
   showPreview: true
 };
 var _excluded = ["children"];
-var ConfigContext = /* @__PURE__ */ createContext(/* @__PURE__ */ basePickerConfig());
+var ConfigContext = /* @__PURE__ */ (0, react_esm_exports.createContext)(/* @__PURE__ */ basePickerConfig());
 function PickerConfigProvider(_ref) {
   var children = _ref.children, config = _objectWithoutPropertiesLoose(_ref, _excluded);
   var mergedConfig = useSetConfig(config);
-  return createElement(ConfigContext.Provider, {
+  return (0, react_esm_exports.createElement)(ConfigContext.Provider, {
     value: mergedConfig
   }, children);
 }
 function useSetConfig(config) {
   var _config$customEmojis;
-  var _React$useState = useState(function() {
+  var _React$useState = (0, react_esm_exports.useState)(function() {
     return mergeConfig(config);
   }), mergedConfig = _React$useState[0], setMergedConfig = _React$useState[1];
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     if (compareConfig(mergedConfig, config)) {
       return;
     }
@@ -815,14 +840,14 @@ function useSetConfig(config) {
   return mergedConfig;
 }
 function usePickerConfig() {
-  return useContext(ConfigContext);
+  return (0, react_esm_exports.useContext)(ConfigContext);
 }
 function useDebouncedState(initialValue, delay) {
   if (delay === void 0) {
     delay = 0;
   }
-  var _useState = useState(initialValue), state = _useState[0], setState = _useState[1];
-  var timer = useRef(null);
+  var _useState = (0, react_esm_exports.useState)(initialValue), state = _useState[0], setState = _useState[1];
+  var timer = (0, react_esm_exports.useRef)(null);
   function debouncedSetState(value) {
     return new Promise(function(resolve) {
       var _window;
@@ -22363,7 +22388,7 @@ function emojiUnified$1(emoji, skinTone) {
 function useGetEmojisByCategory() {
   var suggestedEmojisModeConfig = useSuggestedEmojisModeConfig();
   var _useUpdateSuggested = useUpdateSuggested(), suggestedUpdated = _useUpdateSuggested[0];
-  var suggested = React__default.useMemo(
+  var suggested = react_esm_default.useMemo(
     function() {
       var _getSuggested;
       var suggested2 = (_getSuggested = getSuggested(suggestedEmojisModeConfig)) != null ? _getSuggested : [];
@@ -22419,7 +22444,7 @@ function activeVariationFromUnified$1(unified) {
   var _unified$split = unified.split("-"), suspectedSkinTone = _unified$split[1];
   return skinToneVariations.includes(suspectedSkinTone) ? suspectedSkinTone : null;
 }
-var PickerDataContext = /* @__PURE__ */ React__default.createContext({
+var PickerDataContext = /* @__PURE__ */ react_esm_default.createContext({
   emojiData: {},
   allEmojis: [],
   allEmojisByUnified: {},
@@ -22432,7 +22457,7 @@ var PickerDataContext = /* @__PURE__ */ React__default.createContext({
 function PickerDataProvider(_ref) {
   var children = _ref.children;
   var _usePickerConfig = usePickerConfig(), customEmojis = _usePickerConfig.customEmojis, genericEmojiData = _usePickerConfig.emojiData;
-  var data = React__default.useMemo(function() {
+  var data = react_esm_default.useMemo(function() {
     var emojiData = genericEmojiData || defaultEmojiData;
     var newData = JSON.parse(JSON.stringify(emojiData));
     if (customEmojis && customEmojis.length > 0) {
@@ -22465,13 +22490,13 @@ function PickerDataProvider(_ref) {
       searchIndex
     };
   }, [genericEmojiData, customEmojis]);
-  var emojiByUnified2 = React__default.useCallback(function(unified) {
+  var emojiByUnified2 = react_esm_default.useCallback(function(unified) {
     var _data$allEmojisByUnif;
     if (!unified) return void 0;
     var result = (_data$allEmojisByUnif = data.allEmojisByUnified[unified]) != null ? _data$allEmojisByUnif : data.allEmojisByUnified[unifiedWithoutSkinTone(unified)];
     return result;
   }, [data.allEmojisByUnified]);
-  return React__default.createElement(PickerDataContext.Provider, {
+  return react_esm_default.createElement(PickerDataContext.Provider, {
     value: _extends({}, data, {
       emojiByUnified: emojiByUnified2,
       activeVariationFromUnified
@@ -22479,13 +22504,13 @@ function PickerDataProvider(_ref) {
   }, children);
 }
 function usePickerDataContext() {
-  return React__default.useContext(PickerDataContext);
+  return react_esm_default.useContext(PickerDataContext);
 }
 function useGetEmojisByCategory$1() {
   var _usePickerDataContext = usePickerDataContext(), emojiData = _usePickerDataContext.emojiData, emojiByUnified2 = _usePickerDataContext.emojiByUnified;
   var suggestedEmojisModeConfig = useSuggestedEmojisModeConfig();
   var _useUpdateSuggested = useUpdateSuggested(), suggestedUpdated = _useUpdateSuggested[0];
-  var suggested = React__default.useMemo(function() {
+  var suggested = react_esm_default.useMemo(function() {
     var _getSuggested;
     var suggested2 = (_getSuggested = getSuggested(suggestedEmojisModeConfig)) != null ? _getSuggested : [];
     return suggested2.map(function(s) {
@@ -22516,10 +22541,10 @@ function useIsUnicodeHidden() {
   };
 }
 function useDisallowedEmojis() {
-  var DisallowedEmojisRef = useRef({});
+  var DisallowedEmojisRef = (0, react_esm_exports.useRef)({});
   var emojiVersionConfig = useEmojiVersionConfig();
   var _usePickerDataContext = usePickerDataContext(), allEmojis2 = _usePickerDataContext.allEmojis;
-  return useMemo(function() {
+  return (0, react_esm_exports.useMemo)(function() {
     var emojiVersion = parseFloat("" + emojiVersionConfig);
     if (!emojiVersionConfig || Number.isNaN(emojiVersion)) {
       return DisallowedEmojisRef.current;
@@ -22544,7 +22569,7 @@ function addedInNewerVersion(emoji, supportedLevel) {
   return addedIn(emoji) > supportedLevel;
 }
 function useMarkInitialLoad(dispatch) {
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     dispatch(true);
   }, [dispatch]);
 }
@@ -22554,26 +22579,26 @@ function PickerContextProvider(_ref) {
   var defaultSkinTone = useDefaultSkinToneConfig();
   var reactionsDefaultOpen = useReactionsOpenConfig();
   var _usePickerDataContext = usePickerDataContext(), searchIndex = _usePickerDataContext.searchIndex;
-  var filterRef = useRef(searchIndex);
-  useEffect(function() {
+  var filterRef = (0, react_esm_exports.useRef)(searchIndex);
+  (0, react_esm_exports.useEffect)(function() {
     filterRef.current = searchIndex;
   }, [searchIndex]);
-  var disallowClickRef = useRef(false);
-  var disallowMouseRef = useRef(false);
-  var disallowedEmojisRef = useRef(disallowedEmojis);
+  var disallowClickRef = (0, react_esm_exports.useRef)(false);
+  var disallowMouseRef = (0, react_esm_exports.useRef)(false);
+  var disallowedEmojisRef = (0, react_esm_exports.useRef)(disallowedEmojis);
   var suggestedUpdateState = useDebouncedState(Date.now(), 200);
   var searchTerm = useDebouncedState("", 100);
-  var skinToneFanOpenState = useState(false);
-  var activeSkinTone = useState(defaultSkinTone);
-  var activeCategoryState = useState(null);
-  var emojisThatFailedToLoadState = useState(/* @__PURE__ */ new Set());
-  var emojiVariationPickerState = useState(null);
-  var reactionsModeState = useState(reactionsDefaultOpen);
-  var _useState = useState(false), isPastInitialLoad = _useState[0], setIsPastInitialLoad = _useState[1];
-  var visibleCategoriesState = useState([]);
-  var emojiSizeState = useState(null);
+  var skinToneFanOpenState = (0, react_esm_exports.useState)(false);
+  var activeSkinTone = (0, react_esm_exports.useState)(defaultSkinTone);
+  var activeCategoryState = (0, react_esm_exports.useState)(null);
+  var emojisThatFailedToLoadState = (0, react_esm_exports.useState)(/* @__PURE__ */ new Set());
+  var emojiVariationPickerState = (0, react_esm_exports.useState)(null);
+  var reactionsModeState = (0, react_esm_exports.useState)(reactionsDefaultOpen);
+  var _useState = (0, react_esm_exports.useState)(false), isPastInitialLoad = _useState[0], setIsPastInitialLoad = _useState[1];
+  var visibleCategoriesState = (0, react_esm_exports.useState)([]);
+  var emojiSizeState = (0, react_esm_exports.useState)(null);
   useMarkInitialLoad(setIsPastInitialLoad);
-  return createElement(PickerContext.Provider, {
+  return (0, react_esm_exports.createElement)(PickerContext.Provider, {
     value: {
       activeCategoryState,
       activeSkinTone,
@@ -22593,7 +22618,7 @@ function PickerContextProvider(_ref) {
     }
   }, children);
 }
-var PickerContext = /* @__PURE__ */ createContext({
+var PickerContext = /* @__PURE__ */ (0, react_esm_exports.createContext)({
   activeCategoryState: [null, function() {
   }],
   activeSkinTone: [SkinTones.NEUTRAL, function() {
@@ -22633,72 +22658,72 @@ var PickerContext = /* @__PURE__ */ createContext({
   }]
 });
 function useFilterRef() {
-  var _React$useContext = useContext(PickerContext), filterRef = _React$useContext.filterRef;
+  var _React$useContext = (0, react_esm_exports.useContext)(PickerContext), filterRef = _React$useContext.filterRef;
   return filterRef;
 }
 function useDisallowClickRef() {
-  var _React$useContext2 = useContext(PickerContext), disallowClickRef = _React$useContext2.disallowClickRef;
+  var _React$useContext2 = (0, react_esm_exports.useContext)(PickerContext), disallowClickRef = _React$useContext2.disallowClickRef;
   return disallowClickRef;
 }
 function useDisallowMouseRef() {
-  var _React$useContext3 = useContext(PickerContext), disallowMouseRef = _React$useContext3.disallowMouseRef;
+  var _React$useContext3 = (0, react_esm_exports.useContext)(PickerContext), disallowMouseRef = _React$useContext3.disallowMouseRef;
   return disallowMouseRef;
 }
 function useReactionsModeState() {
-  var _React$useContext4 = useContext(PickerContext), reactionsModeState = _React$useContext4.reactionsModeState;
+  var _React$useContext4 = (0, react_esm_exports.useContext)(PickerContext), reactionsModeState = _React$useContext4.reactionsModeState;
   return reactionsModeState;
 }
 function useSearchTermState() {
-  var _React$useContext5 = useContext(PickerContext), searchTerm = _React$useContext5.searchTerm;
+  var _React$useContext5 = (0, react_esm_exports.useContext)(PickerContext), searchTerm = _React$useContext5.searchTerm;
   return searchTerm;
 }
 function useActiveSkinToneState() {
-  var _React$useContext6 = useContext(PickerContext), activeSkinTone = _React$useContext6.activeSkinTone;
+  var _React$useContext6 = (0, react_esm_exports.useContext)(PickerContext), activeSkinTone = _React$useContext6.activeSkinTone;
   return activeSkinTone;
 }
 function useEmojisThatFailedToLoadState() {
-  var _React$useContext7 = useContext(PickerContext), emojisThatFailedToLoadState = _React$useContext7.emojisThatFailedToLoadState;
+  var _React$useContext7 = (0, react_esm_exports.useContext)(PickerContext), emojisThatFailedToLoadState = _React$useContext7.emojisThatFailedToLoadState;
   return emojisThatFailedToLoadState;
 }
 function useEmojiVariationPickerState() {
-  var _React$useContext9 = useContext(PickerContext), emojiVariationPickerState = _React$useContext9.emojiVariationPickerState;
+  var _React$useContext9 = (0, react_esm_exports.useContext)(PickerContext), emojiVariationPickerState = _React$useContext9.emojiVariationPickerState;
   return emojiVariationPickerState;
 }
 function useSkinToneFanOpenState() {
-  var _React$useContext0 = useContext(PickerContext), skinToneFanOpenState = _React$useContext0.skinToneFanOpenState;
+  var _React$useContext0 = (0, react_esm_exports.useContext)(PickerContext), skinToneFanOpenState = _React$useContext0.skinToneFanOpenState;
   return skinToneFanOpenState;
 }
 function useVisibleCategoriesState() {
-  var _React$useContext10 = useContext(PickerContext), visibleCategoriesState = _React$useContext10.visibleCategoriesState;
+  var _React$useContext10 = (0, react_esm_exports.useContext)(PickerContext), visibleCategoriesState = _React$useContext10.visibleCategoriesState;
   return visibleCategoriesState;
 }
 function useEmojiSizeState() {
-  var _React$useContext11 = useContext(PickerContext), emojiSizeState = _React$useContext11.emojiSizeState;
+  var _React$useContext11 = (0, react_esm_exports.useContext)(PickerContext), emojiSizeState = _React$useContext11.emojiSizeState;
   return emojiSizeState;
 }
 function useUpdateSuggested() {
-  var _React$useContext12 = useContext(PickerContext), suggestedUpdateState = _React$useContext12.suggestedUpdateState;
+  var _React$useContext12 = (0, react_esm_exports.useContext)(PickerContext), suggestedUpdateState = _React$useContext12.suggestedUpdateState;
   var suggestedUpdated = suggestedUpdateState[0], setsuggestedUpdate = suggestedUpdateState[1];
   return [suggestedUpdated, function updateSuggested() {
     setsuggestedUpdate(Date.now());
   }];
 }
-var MutableConfigContext = /* @__PURE__ */ React__default.createContext({});
+var MutableConfigContext = /* @__PURE__ */ react_esm_default.createContext({});
 function useMutableConfig() {
-  var mutableConfig = React__default.useContext(MutableConfigContext);
+  var mutableConfig = react_esm_default.useContext(MutableConfigContext);
   return mutableConfig;
 }
 function useDefineMutableConfig(config) {
-  var MutableConfigRef = React__default.useRef({
+  var MutableConfigRef = react_esm_default.useRef({
     onEmojiClick: config.onEmojiClick || emptyFunc,
     onReactionClick: config.onReactionClick || config.onEmojiClick,
     onSkinToneChange: config.onSkinToneChange || emptyFunc
   });
-  React__default.useEffect(function() {
+  react_esm_default.useEffect(function() {
     MutableConfigRef.current.onEmojiClick = config.onEmojiClick || emptyFunc;
     MutableConfigRef.current.onReactionClick = config.onReactionClick || config.onEmojiClick;
   }, [config.onEmojiClick, config.onReactionClick]);
-  React__default.useEffect(function() {
+  react_esm_default.useEffect(function() {
     MutableConfigRef.current.onSkinToneChange = config.onSkinToneChange || emptyFunc;
   }, [config.onSkinToneChange]);
   return MutableConfigRef;
@@ -22891,16 +22916,16 @@ function getActiveElement() {
 }
 function ElementRefContextProvider(_ref) {
   var children = _ref.children;
-  var PickerMainRef = useRef(null);
-  var AnchoredEmojiRef = useRef(null);
-  var BodyRef = useRef(null);
-  var EmojiListRef = useRef(null);
-  var SearchInputRef = useRef(null);
-  var SkinTonePickerRef = useRef(null);
-  var CategoryNavigationRef = useRef(null);
-  var VariationPickerRef = useRef(null);
-  var ReactionsRef = useRef(null);
-  return createElement(ElementRefContext.Provider, {
+  var PickerMainRef = (0, react_esm_exports.useRef)(null);
+  var AnchoredEmojiRef = (0, react_esm_exports.useRef)(null);
+  var BodyRef = (0, react_esm_exports.useRef)(null);
+  var EmojiListRef = (0, react_esm_exports.useRef)(null);
+  var SearchInputRef = (0, react_esm_exports.useRef)(null);
+  var SkinTonePickerRef = (0, react_esm_exports.useRef)(null);
+  var CategoryNavigationRef = (0, react_esm_exports.useRef)(null);
+  var VariationPickerRef = (0, react_esm_exports.useRef)(null);
+  var ReactionsRef = (0, react_esm_exports.useRef)(null);
+  return (0, react_esm_exports.createElement)(ElementRefContext.Provider, {
     value: {
       AnchoredEmojiRef,
       BodyRef,
@@ -22914,19 +22939,19 @@ function ElementRefContextProvider(_ref) {
     }
   }, children);
 }
-var ElementRefContext = /* @__PURE__ */ createContext({
-  AnchoredEmojiRef: /* @__PURE__ */ createRef(),
-  BodyRef: /* @__PURE__ */ createRef(),
-  CategoryNavigationRef: /* @__PURE__ */ createRef(),
-  EmojiListRef: /* @__PURE__ */ createRef(),
-  PickerMainRef: /* @__PURE__ */ createRef(),
-  SearchInputRef: /* @__PURE__ */ createRef(),
-  SkinTonePickerRef: /* @__PURE__ */ createRef(),
-  VariationPickerRef: /* @__PURE__ */ createRef(),
-  ReactionsRef: /* @__PURE__ */ createRef()
+var ElementRefContext = /* @__PURE__ */ (0, react_esm_exports.createContext)({
+  AnchoredEmojiRef: /* @__PURE__ */ (0, react_esm_exports.createRef)(),
+  BodyRef: /* @__PURE__ */ (0, react_esm_exports.createRef)(),
+  CategoryNavigationRef: /* @__PURE__ */ (0, react_esm_exports.createRef)(),
+  EmojiListRef: /* @__PURE__ */ (0, react_esm_exports.createRef)(),
+  PickerMainRef: /* @__PURE__ */ (0, react_esm_exports.createRef)(),
+  SearchInputRef: /* @__PURE__ */ (0, react_esm_exports.createRef)(),
+  SkinTonePickerRef: /* @__PURE__ */ (0, react_esm_exports.createRef)(),
+  VariationPickerRef: /* @__PURE__ */ (0, react_esm_exports.createRef)(),
+  ReactionsRef: /* @__PURE__ */ (0, react_esm_exports.createRef)()
 });
 function useElementRef() {
-  return useContext(ElementRefContext);
+  return (0, react_esm_exports.useContext)(ElementRefContext);
 }
 function useEmojiListRef() {
   return useElementRef()["EmojiListRef"];
@@ -22987,7 +23012,7 @@ function scrollBy(root, by) {
 }
 function useScrollTo() {
   var BodyRef = useBodyRef();
-  return useCallback(function(top) {
+  return (0, react_esm_exports.useCallback)(function(top) {
     requestAnimationFrame(function() {
       if (BodyRef.current) {
         BodyRef.current.scrollTop = top;
@@ -23124,7 +23149,7 @@ function visibleEmojiOneRowDown(element) {
 function useCloseAllOpenToggles() {
   var _useEmojiVariationPic = useEmojiVariationPickerState(), variationPicker = _useEmojiVariationPic[0], setVariationPicker = _useEmojiVariationPic[1];
   var _useSkinToneFanOpenSt = useSkinToneFanOpenState(), skinToneFanOpen = _useSkinToneFanOpenSt[0], setSkinToneFanOpen = _useSkinToneFanOpenSt[1];
-  var closeAllOpenToggles = useCallback(function() {
+  var closeAllOpenToggles = (0, react_esm_exports.useCallback)(function() {
     if (variationPicker) {
       setVariationPicker(null);
     }
@@ -23163,7 +23188,7 @@ function useOnMouseMove() {
   var BodyRef = useBodyRef();
   var allowMouseMove = useAllowMouseMove();
   var isMouseDisallowed = useIsMouseDisallowed();
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     var bodyRef = BodyRef.current;
     bodyRef == null ? void 0 : bodyRef.addEventListener("mousemove", onMouseMove, {
       passive: true
@@ -23180,13 +23205,13 @@ function useOnMouseMove() {
 }
 function useFocusSearchInput() {
   var SearchInputRef = useSearchInputRef();
-  return useCallback(function() {
+  return (0, react_esm_exports.useCallback)(function() {
     focusElement(SearchInputRef.current);
   }, [SearchInputRef]);
 }
 function useFocusSkinTonePicker() {
   var SkinTonePickerRef = useSkinTonePickerRef();
-  return useCallback(function() {
+  return (0, react_esm_exports.useCallback)(function() {
     if (!SkinTonePickerRef.current) {
       return;
     }
@@ -23195,7 +23220,7 @@ function useFocusSkinTonePicker() {
 }
 function useFocusCategoryNavigation() {
   var CategoryNavigationRef = useCategoryNavigationRef();
-  return useCallback(function() {
+  return (0, react_esm_exports.useCallback)(function() {
     if (!CategoryNavigationRef.current) {
       return;
     }
@@ -23379,7 +23404,7 @@ function usePickerMainKeyboardEvents() {
   var hasOpenToggles = useHasOpenToggles();
   var disallowMouseMove = useDisallowMouseMove();
   var closeAllOpenToggles = useCloseAllOpenToggles();
-  var onKeyDown = useMemo(function() {
+  var onKeyDown = (0, react_esm_exports.useMemo)(function() {
     return function onKeyDown2(event) {
       var key = event.key;
       disallowMouseMove();
@@ -23398,7 +23423,7 @@ function usePickerMainKeyboardEvents() {
       }
     };
   }, [scrollTo2, clearSearch, closeAllOpenToggles, focusSearchInput, hasOpenToggles, disallowMouseMove]);
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     var current = PickerMainRef.current;
     if (!current) {
       return;
@@ -23417,7 +23442,7 @@ function useSearchInputKeyboardEvents() {
   var _useSkinToneFanOpenSt = useSkinToneFanOpenState(), setSkinToneFanOpenState = _useSkinToneFanOpenSt[1];
   var goDownFromSearchInput = useGoDownFromSearchInput();
   var isSkinToneInSearch = useIsSkinToneInSearch();
-  var onKeyDown = useMemo(function() {
+  var onKeyDown = (0, react_esm_exports.useMemo)(function() {
     return function onKeyDown2(event) {
       var key = event.key;
       switch (key) {
@@ -23440,7 +23465,7 @@ function useSearchInputKeyboardEvents() {
       }
     };
   }, [focusSkinTonePicker, goDownFromSearchInput, setSkinToneFanOpenState, BodyRef, isSkinToneInSearch]);
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     var current = SearchInputRef.current;
     if (!current) {
       return;
@@ -23460,7 +23485,7 @@ function useSkinTonePickerKeyboardEvents() {
   var isSkinToneInPreview = useIsSkinToneInPreview();
   var isSkinToneInSearch = useIsSkinToneInSearch();
   var onType = useOnType();
-  var onKeyDown = useMemo(function() {
+  var onKeyDown = (0, react_esm_exports.useMemo)(function() {
     return (
       // eslint-disable-next-line complexity
       (function onKeyDown2(event) {
@@ -23517,7 +23542,7 @@ function useSkinTonePickerKeyboardEvents() {
       })
     );
   }, [isOpen, focusSearchInput, setIsOpen, goDownFromSearchInput, onType, isSkinToneInPreview, isSkinToneInSearch]);
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     var current = SkinTonePickerRef.current;
     if (!current) {
       return;
@@ -23533,7 +23558,7 @@ function useCategoryNavigationKeyboardEvents() {
   var CategoryNavigationRef = useCategoryNavigationRef();
   var BodyRef = useBodyRef();
   var onType = useOnType();
-  var onKeyDown = useMemo(function() {
+  var onKeyDown = (0, react_esm_exports.useMemo)(function() {
     return function onKeyDown2(event) {
       var key = event.key;
       switch (key) {
@@ -23559,7 +23584,7 @@ function useCategoryNavigationKeyboardEvents() {
       }
     };
   }, [BodyRef, focusSearchInput, onType]);
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     var current = CategoryNavigationRef.current;
     if (!current) {
       return;
@@ -23577,7 +23602,7 @@ function useBodyKeyboardEvents() {
   var hasOpenToggles = useHasOpenToggles();
   var closeAllOpenToggles = useCloseAllOpenToggles();
   var onType = useOnType();
-  var onKeyDown = useMemo(function() {
+  var onKeyDown = (0, react_esm_exports.useMemo)(function() {
     return (
       // eslint-disable-next-line complexity
       (function onKeyDown2(event) {
@@ -23619,7 +23644,7 @@ function useBodyKeyboardEvents() {
       })
     );
   }, [goUpFromBody, onType, setVariationPicker, hasOpenToggles, closeAllOpenToggles]);
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     var current = BodyRef.current;
     if (!current) {
       return;
@@ -23634,7 +23659,7 @@ function useGoDownFromSearchInput() {
   var focusCategoryNavigation = useFocusCategoryNavigation();
   var isSearchMode = useIsSearchMode();
   var BodyRef = useBodyRef();
-  return useCallback(function goDownFromSearchInput() {
+  return (0, react_esm_exports.useCallback)(function goDownFromSearchInput() {
     if (isSearchMode) {
       return focusFirstVisibleEmoji(BodyRef.current);
     }
@@ -23645,7 +23670,7 @@ function useGoUpFromBody() {
   var focusSearchInput = useFocusSearchInput();
   var focusCategoryNavigation = useFocusCategoryNavigation();
   var isSearchMode = useIsSearchMode();
-  return useCallback(function goUpFromEmoji() {
+  return (0, react_esm_exports.useCallback)(function goUpFromEmoji() {
     if (isSearchMode) {
       return focusSearchInput();
     }
@@ -23737,7 +23762,7 @@ function useOnFocus() {
   var BodyRef = useBodyRef();
   var emojiStyle = useEmojiStyleConfig();
   var getEmojiUrl = useGetEmojiUrlConfig();
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     if (emojiStyle === EmojiStyle.NATIVE) {
       return;
     }
@@ -23765,7 +23790,7 @@ var _excluded$1 = ["width", "height"];
 var DEFAULT_LABEL_HEIGHT = 40;
 function PickerMain(_ref) {
   var children = _ref.children;
-  return createElement(PickerContextProvider, null, createElement(PickerRootElement, null, children));
+  return (0, react_esm_exports.createElement)(PickerContextProvider, null, (0, react_esm_exports.createElement)(PickerRootElement, null, children));
 }
 function PickerRootElement(_ref2) {
   var _cx;
@@ -23779,7 +23804,7 @@ function PickerRootElement(_ref2) {
   useKeyboardNavigation();
   useOnFocus();
   var _ref3 = style || {}, width = _ref3.width, height = _ref3.height, styleProps = _objectWithoutPropertiesLoose(_ref3, _excluded$1);
-  return createElement("aside", {
+  return (0, react_esm_exports.createElement)("aside", {
     className: cx(styles.main, styles.baseVariables, theme === Theme.DARK && styles.darkTheme, theme === Theme.AUTO && styles.autoThemeDark, (_cx = {}, _cx[ClassNames.searchActive] = searchModeActive, _cx), reactionsMode && styles.reactionsMenu, className),
     ref: PickerMainRef,
     style: _extends({}, styleProps, !reactionsMode && {
@@ -24193,7 +24218,7 @@ function isCustomEmoji(emoji) {
   return emoji.imgUrl !== void 0;
 }
 function useMouseDownHandlers(ContainerRef, mouseEventSource) {
-  var mouseDownTimerRef = useRef();
+  var mouseDownTimerRef = (0, react_esm_exports.useRef)();
   var setVariationPicker = useSetVariationPicker();
   var disallowClickRef = useDisallowClickRef();
   var _useEmojiVariationPic = useEmojiVariationPickerState(), setEmojiVariationPicker = _useEmojiVariationPic[1];
@@ -24204,7 +24229,7 @@ function useMouseDownHandlers(ContainerRef, mouseEventSource) {
   var getEmojiUrl = useGetEmojiUrlConfig();
   var activeEmojiStyle = useEmojiStyleConfig();
   var _usePickerDataContext = usePickerDataContext(), emojiByUnified2 = _usePickerDataContext.emojiByUnified;
-  var onClick = useCallback(function onClick2(event) {
+  var onClick = (0, react_esm_exports.useCallback)(function onClick2(event) {
     if (disallowClickRef.current) {
       return;
     }
@@ -24218,7 +24243,7 @@ function useMouseDownHandlers(ContainerRef, mouseEventSource) {
     setSuggested(emoji, skinToneToUse);
     onEmojiClick(emojiClickOutput(emoji, skinToneToUse, activeEmojiStyle, getEmojiUrl), event);
   }, [activeSkinTone, closeAllOpenToggles, disallowClickRef, emojiByUnified2, onEmojiClick, updateSuggested, getEmojiUrl, activeEmojiStyle]);
-  var onMouseDown = useCallback(function onMouseDown2(event) {
+  var onMouseDown = (0, react_esm_exports.useCallback)(function onMouseDown2(event) {
     var _window;
     if (mouseDownTimerRef.current) {
       clearTimeout(mouseDownTimerRef.current);
@@ -24235,7 +24260,7 @@ function useMouseDownHandlers(ContainerRef, mouseEventSource) {
       setEmojiVariationPicker(emoji);
     }, 500);
   }, [disallowClickRef, emojiByUnified2, closeAllOpenToggles, setVariationPicker, setEmojiVariationPicker]);
-  var onMouseUp = useCallback(function onMouseUp2() {
+  var onMouseUp = (0, react_esm_exports.useCallback)(function onMouseUp2() {
     if (mouseDownTimerRef.current) {
       clearTimeout(mouseDownTimerRef.current);
       mouseDownTimerRef.current = void 0;
@@ -24245,7 +24270,7 @@ function useMouseDownHandlers(ContainerRef, mouseEventSource) {
       });
     }
   }, [disallowClickRef]);
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     if (!ContainerRef.current) {
       return;
     }
@@ -24317,7 +24342,7 @@ function emojiClickOutput(emoji, activeSkinTone, activeEmojiStyle, getEmojiUrl) 
   };
 }
 function Button(props) {
-  return createElement("button", Object.assign({
+  return (0, react_esm_exports.createElement)("button", Object.assign({
     type: "button"
   }, props, {
     className: cx(styles$1.button, props.className)
@@ -24335,7 +24360,7 @@ var styles$1 = /* @__PURE__ */ stylesheet.create({
 function ClickableEmojiButton(_ref) {
   var _cx;
   var emojiNames2 = _ref.emojiNames, unified = _ref.unified, hidden2 = _ref.hidden, hiddenOnSearch = _ref.hiddenOnSearch, _ref$showVariations = _ref.showVariations, showVariations = _ref$showVariations === void 0 ? true : _ref$showVariations, hasVariations = _ref.hasVariations, children = _ref.children, className = _ref.className, _ref$noBackground = _ref.noBackground, noBackground = _ref$noBackground === void 0 ? false : _ref$noBackground, style = _ref.style;
-  return createElement(Button, {
+  return (0, react_esm_exports.createElement)(Button, {
     className: cx(styles$2.emoji, hidden2 && commonStyles.hidden, hiddenOnSearch && commonInteractionStyles.hiddenOnSearch, (_cx = {}, _cx[ClassNames.visible] = !hidden2 && !hiddenOnSearch, _cx), !!(hasVariations && showVariations) && styles$2.hasVariations, noBackground && styles$2.noBackground, className),
     "data-unified": unified,
     "aria-label": getAriaLabel(emojiNames2),
@@ -24413,7 +24438,7 @@ var emojiStyles = /* @__PURE__ */ stylesheet.create({
 });
 function EmojiImg(_ref) {
   var emojiName2 = _ref.emojiName, style = _ref.style, _ref$lazyLoad = _ref.lazyLoad, lazyLoad = _ref$lazyLoad === void 0 ? false : _ref$lazyLoad, imgUrl = _ref.imgUrl, onError = _ref.onError, className = _ref.className;
-  return createElement("img", {
+  return (0, react_esm_exports.createElement)("img", {
     src: imgUrl,
     alt: emojiName2,
     className: cx(styles$3.emojiImag, emojiStyles.external, emojiStyles.common, className),
@@ -24434,7 +24459,7 @@ var styles$3 = /* @__PURE__ */ stylesheet.create({
 });
 function NativeEmoji(_ref) {
   var unified = _ref.unified, style = _ref.style, className = _ref.className;
-  return createElement("span", {
+  return (0, react_esm_exports.createElement)("span", {
     className: cx(styles$4.nativeEmoji, emojiStyles.common, emojiStyles.external, className),
     "data-unified": unified,
     style
@@ -24467,7 +24492,7 @@ function ViewOnlyEmoji(_ref) {
     return null;
   }
   if (isCustomEmoji(emojiToRender)) {
-    return createElement(EmojiImg, {
+    return (0, react_esm_exports.createElement)(EmojiImg, {
       style,
       emojiName: unified,
       emojiStyle: EmojiStyle.NATIVE,
@@ -24477,11 +24502,11 @@ function ViewOnlyEmoji(_ref) {
       className
     });
   }
-  return createElement(Fragment, null, emojiStyle === EmojiStyle.NATIVE ? createElement(NativeEmoji, {
+  return (0, react_esm_exports.createElement)(react_esm_exports.Fragment, null, emojiStyle === EmojiStyle.NATIVE ? (0, react_esm_exports.createElement)(NativeEmoji, {
     unified,
     style,
     className
-  }) : createElement(EmojiImg, {
+  }) : (0, react_esm_exports.createElement)(EmojiImg, {
     style,
     emojiName: emojiName(emojiToRender),
     emojiStyle,
@@ -24499,7 +24524,7 @@ function ViewOnlyEmoji(_ref) {
 function ClickableEmoji(_ref) {
   var emoji = _ref.emoji, unified = _ref.unified, hidden2 = _ref.hidden, hiddenOnSearch = _ref.hiddenOnSearch, emojiStyle = _ref.emojiStyle, _ref$showVariations = _ref.showVariations, showVariations = _ref$showVariations === void 0 ? true : _ref$showVariations, size = _ref.size, lazyLoad = _ref.lazyLoad, getEmojiUrl = _ref.getEmojiUrl, className = _ref.className, _ref$noBackground = _ref.noBackground, noBackground = _ref$noBackground === void 0 ? false : _ref$noBackground, style = _ref.style;
   var hasVariations = emojiHasVariations$1(emoji);
-  return createElement(ClickableEmojiButton, {
+  return (0, react_esm_exports.createElement)(ClickableEmojiButton, {
     hasVariations,
     showVariations,
     hidden: hidden2,
@@ -24508,7 +24533,7 @@ function ClickableEmoji(_ref) {
     unified,
     noBackground,
     style
-  }, createElement(ViewOnlyEmoji, {
+  }, (0, react_esm_exports.createElement)(ViewOnlyEmoji, {
     unified,
     emoji,
     size,
@@ -24521,7 +24546,7 @@ function ClickableEmoji(_ref) {
 var Plus = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI4LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHdpZHRoPSIyMHB4IiBoZWlnaHQ9IjgwcHgiIHZpZXdCb3g9IjAgMCAyMCA4MCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjAgODAiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8cGF0aCBmaWxsPSIjODY4Njg2IiBkPSJNNS43LDEwLjRjMCwwLjEsMC4xLDAuMywwLjIsMC40QzYsMTAuOSw2LjEsMTEsNi4zLDExaDMuNHYzLjRjMCwwLjEsMC4xLDAuMywwLjIsMC40CgljMC4xLDAuMSwwLjIsMC4yLDAuNCwwLjJjMC4zLDAsMC41LTAuMiwwLjUtMC41di0zLjRoMy40YzAuMywwLDAuNS0wLjIsMC41LTAuNXMtMC4yLTAuNS0wLjUtMC41aC0zLjRWNi43YzAtMC4zLTAuMi0wLjUtMC41LTAuNQoJQzkuOCw2LDkuNiw2LjIsOS42LDYuNXYzLjRINi4yQzUuOSw5LjksNS43LDEwLjEsNS43LDEwLjRMNS43LDEwLjR6Ii8+CjxwYXRoIGZpbGw9IiMzMzcxQjciIGQ9Ik01LjcsMzAuNGMwLDAuMSwwLjEsMC4zLDAuMiwwLjRTNi4xLDMxLDYuMywzMWgzLjR2My40YzAsMC4xLDAuMSwwLjMsMC4yLDAuNGMwLjEsMC4xLDAuMiwwLjIsMC40LDAuMgoJYzAuMywwLDAuNS0wLjIsMC41LTAuNXYtMy40aDMuNGMwLjMsMCwwLjUtMC4yLDAuNS0wLjVzLTAuMi0wLjUtMC41LTAuNWgtMy40di0zLjRjMC0wLjMtMC4yLTAuNS0wLjUtMC41cy0wLjUsMC4yLTAuNSwwLjV2My40SDYuMgoJQzUuOSwyOS45LDUuNywzMC4xLDUuNywzMC40TDUuNywzMC40eiIvPgo8cGF0aCBmaWxsPSIjQzBDMEJGIiBkPSJNNS43LDUwLjRjMCwwLjEsMC4xLDAuMywwLjIsMC40QzYsNTAuOSw2LjEsNTEsNi4zLDUxaDMuNHYzLjRjMCwwLjEsMC4xLDAuMywwLjIsMC40CgljMC4xLDAuMSwwLjIsMC4yLDAuNCwwLjJjMC4zLDAsMC41LTAuMiwwLjUtMC41di0zLjRoMy40YzAuMywwLDAuNS0wLjIsMC41LTAuNXMtMC4yLTAuNS0wLjUtMC41aC0zLjR2LTMuNGMwLTAuMy0wLjItMC41LTAuNS0wLjUKCXMtMC41LDAuMi0wLjUsMC41djMuNEg2LjJDNS45LDQ5LjksNS43LDUwLjEsNS43LDUwLjRMNS43LDUwLjR6Ii8+CjxwYXRoIGZpbGw9IiM2QUE5REQiIGQ9Ik01LjcsNzAuNGMwLDAuMSwwLjEsMC4zLDAuMiwwLjRTNi4xLDcxLDYuMyw3MWgzLjR2My40YzAsMC4xLDAuMSwwLjMsMC4yLDAuNGMwLjEsMC4xLDAuMiwwLjIsMC40LDAuMgoJYzAuMywwLDAuNS0wLjIsMC41LTAuNXYtMy40aDMuNGMwLjMsMCwwLjUtMC4yLDAuNS0wLjVzLTAuMi0wLjUtMC41LTAuNWgtMy40di0zLjRjMC0wLjMtMC4yLTAuNS0wLjUtMC41cy0wLjUsMC4yLTAuNSwwLjV2My40SDYuNAoJQzUuOSw2OS45LDUuNyw3MC4xLDUuNyw3MC40TDUuNyw3MC40eiIvPgo8L3N2Zz4=";
 function BtnPlus() {
   var _useReactionsModeStat = useReactionsModeState(), setReactionsMode = _useReactionsModeStat[1];
-  return createElement(Button, {
+  return (0, react_esm_exports.createElement)(Button, {
     "aria-label": "Show all Emojis",
     title: "Show all Emojis",
     tabIndex: 0,
@@ -24589,7 +24614,7 @@ function Reactions() {
   if (!reactionsOpen) {
     return null;
   }
-  return createElement("ul", {
+  return (0, react_esm_exports.createElement)("ul", {
     className: cx(styles$6.list, !reactionsOpen && commonStyles.hidden),
     ref: ReactionsRef,
     "aria-label": "Reactions"
@@ -24598,9 +24623,9 @@ function Reactions() {
     if (!emoji) {
       return null;
     }
-    return createElement("li", {
+    return (0, react_esm_exports.createElement)("li", {
       key: reaction
-    }, createElement(ClickableEmoji, {
+    }, (0, react_esm_exports.createElement)(ClickableEmoji, {
       emoji,
       emojiStyle,
       unified: reaction,
@@ -24609,7 +24634,7 @@ function Reactions() {
       noBackground: true,
       getEmojiUrl
     }));
-  }), allowExpandReactions ? createElement("li", null, createElement(BtnPlus, null)) : null);
+  }), allowExpandReactions ? (0, react_esm_exports.createElement)("li", null, (0, react_esm_exports.createElement)(BtnPlus, null)) : null);
 }
 var styles$6 = /* @__PURE__ */ stylesheet.create({
   list: {
@@ -24636,8 +24661,8 @@ var styles$6 = /* @__PURE__ */ stylesheet.create({
 });
 function useOnScroll(BodyRef) {
   var closeAllOpenToggles = useCloseAllOpenToggles();
-  var _useState = useState(0), scrollTop = _useState[0], setScrollTop = _useState[1];
-  useEffect(function() {
+  var _useState = (0, react_esm_exports.useState)(0), scrollTop = _useState[0], setScrollTop = _useState[1];
+  (0, react_esm_exports.useEffect)(function() {
     var bodyRef = BodyRef.current;
     if (!bodyRef) {
       return;
@@ -24677,11 +24702,11 @@ function useCategoryHeight(emojiCount) {
   var EmojiListRef = useEmojiListRef();
   var _useReactionsModeStat = useReactionsModeState(), isReactionsMode = _useReactionsModeStat[0];
   var PickerMainRef = usePickerMainRef();
-  var emojiSizeRef = useRef();
+  var emojiSizeRef = (0, react_esm_exports.useRef)();
   var _useVisibleCategories = useVisibleCategoriesState(), visibleCategories = _useVisibleCategories[0];
   var _useEmojiSizeState = useEmojiSizeState(), emojiSizeFromContext = _useEmojiSizeState[0];
-  var _React$useState = useState(), dimensions = _React$useState[0], setDimensions = _React$useState[1];
-  var computeAndSetDimensions = useCallback(function() {
+  var _React$useState = (0, react_esm_exports.useState)(), dimensions = _React$useState[0], setDimensions = _React$useState[1];
+  var computeAndSetDimensions = (0, react_esm_exports.useCallback)(function() {
     var listEl = EmojiListRef.current;
     if (!listEl) return;
     var emojiElement = listEl.querySelector(EmojiButtonSelector);
@@ -24701,10 +24726,10 @@ function useCategoryHeight(emojiCount) {
       emojiSize
     });
   }, [EmojiListRef, emojiCount, emojiSizeFromContext]);
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     computeAndSetDimensions();
   }, [emojiCount, isReactionsMode, computeAndSetDimensions, visibleCategories.length]);
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     var rootEl = PickerMainRef.current;
     if (!rootEl) return;
     var handler = function handler2(e) {
@@ -24762,7 +24787,7 @@ function useEmojiVirtualization(_ref) {
     return !failedToLoad && !filteredOut && !hidden2 && !isDisallowed;
   });
   var dimensions = useCategoryHeight(emojisToPush.length);
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     if (dimensions) {
       onHeightReady(dimensions.categoryHeight);
     }
@@ -24790,7 +24815,7 @@ function useEmojiVirtualization(_ref) {
       virtualizedCounter++;
       return accumulator;
     }
-    accumulator.push(createElement(ClickableEmoji, {
+    accumulator.push((0, react_esm_exports.createElement)(ClickableEmoji, {
       showVariations,
       key: unified,
       emoji,
@@ -24814,13 +24839,13 @@ function EmojiCategory(_ref) {
   var categoryConfig = _ref.categoryConfig, children = _ref.children, hidden2 = _ref.hidden, hiddenOnSearch = _ref.hiddenOnSearch, height = _ref.height;
   var category = categoryFromCategoryConfig(categoryConfig);
   var categoryName = categoryNameFromCategoryConfig(categoryConfig);
-  return createElement("li", {
+  return (0, react_esm_exports.createElement)("li", {
     className: cx(styles$7.category, hidden2 && commonStyles.hidden, hiddenOnSearch && commonInteractionStyles.hiddenOnSearch),
     "data-name": category,
     "aria-label": categoryName
-  }, createElement("h2", {
+  }, (0, react_esm_exports.createElement)("h2", {
     className: cx(styles$7.label)
-  }, categoryName), createElement("div", {
+  }, categoryName), (0, react_esm_exports.createElement)("div", {
     className: cx(styles$7.categoryContent),
     style: {
       height
@@ -24870,8 +24895,8 @@ function MeasureEmoji() {
   var lazyLoadEmojis = useLazyLoadEmojisConfig();
   var _useActiveSkinToneSta = useActiveSkinToneState(), activeSkinTone = _useActiveSkinToneSta[0];
   var _useEmojiSizeState = useEmojiSizeState(), emojiSize = _useEmojiSizeState[0], setEmojiSize = _useEmojiSizeState[1];
-  var ref = useRef(null);
-  useLayoutEffect(function() {
+  var ref = (0, react_esm_exports.useRef)(null);
+  (0, react_esm_exports.useLayoutEffect)(function() {
     if (ref.current) {
       setEmojiSize(ref.current.clientHeight);
     }
@@ -24885,9 +24910,9 @@ function MeasureEmoji() {
   if (!dummyEmoji) {
     return null;
   }
-  return createElement("div", {
+  return (0, react_esm_exports.createElement)("div", {
     ref
-  }, createElement(ClickableEmoji, {
+  }, (0, react_esm_exports.createElement)(ClickableEmoji, {
     emoji: dummyEmoji,
     unified,
     emojiStyle,
@@ -24910,24 +24935,24 @@ function MeasureEmoji() {
 function EmojiList(_ref) {
   var scrollTop = _ref.scrollTop;
   var categories2 = useCategoriesConfig();
-  var _React$useState = useState({}), categoryHeights = _React$useState[0], setCategoryHeights = _React$useState[1];
+  var _React$useState = (0, react_esm_exports.useState)({}), categoryHeights = _React$useState[0], setCategoryHeights = _React$useState[1];
   var EmojiListRef = useEmojiListRef();
   var getEmojisByCategory = useGetEmojisByCategory$1();
   var labelHeight = getLabelHeight(EmojiListRef.current);
   var topOffset = 0;
-  return createElement("ul", {
+  return (0, react_esm_exports.createElement)("ul", {
     className: cx(styles$8.emojiList),
     ref: EmojiListRef
-  }, createElement(MeasureEmoji, null), categories2.map(function(categoryConfig) {
+  }, (0, react_esm_exports.createElement)(MeasureEmoji, null), categories2.map(function(categoryConfig) {
     var category = categoryFromCategoryConfig(categoryConfig);
     var currentOffset = topOffset;
     var categoryHeight = categoryHeights[category];
     if (categoryHeight) {
       topOffset += categoryHeight + labelHeight;
     }
-    return createElement(Suspense, {
+    return (0, react_esm_exports.createElement)(react_esm_exports.Suspense, {
       key: category
-    }, createElement(RenderCategory, {
+    }, (0, react_esm_exports.createElement)(RenderCategory, {
       categoryEmojis: getEmojisByCategory(category),
       categoryConfig,
       topOffset: currentOffset,
@@ -24953,7 +24978,7 @@ function RenderCategory(_ref2) {
     scrollTop,
     isCategoryVisible: visibleCategories.includes(categoryConfig.category)
   }), virtualizedCounter = _useEmojiVirtualizati.virtualizedCounter, emojis2 = _useEmojiVirtualizati.emojis, dimensions = _useEmojiVirtualizati.dimensions;
-  return createElement(EmojiCategory, {
+  return (0, react_esm_exports.createElement)(EmojiCategory, {
     categoryConfig,
     height: dimensions == null ? void 0 : dimensions.categoryHeight,
     // Indicates that there are no visible emojis
@@ -24986,7 +25011,7 @@ function EmojiVariationPicker() {
   var getEmojiUrl = useGetEmojiUrlConfig();
   var button = buttonFromTarget(AnchoredEmojiRef.current);
   var visible = Boolean(emoji && button && emojiHasVariations$1(emoji) && button.classList.contains(ClassNames.emojiHasVariations));
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     if (!visible) {
       return;
     }
@@ -24999,14 +25024,14 @@ function EmojiVariationPicker() {
     top = getTop();
     pointerStyle = getPointerStyle();
   }
-  return createElement("div", {
+  return (0, react_esm_exports.createElement)("div", {
     ref: VariationPickerRef,
     className: cx(styles$9.variationPicker, getMenuDirection() === Direction.Down && styles$9.pointingUp, visible && styles$9.visible),
     style: {
       top
     }
   }, visible && emoji ? [emojiUnified$1(emoji)].concat(emojiVariations$1(emoji)).slice(0, 6).map(function(unified) {
-    return createElement(ClickableEmoji, {
+    return (0, react_esm_exports.createElement)(ClickableEmoji, {
       key: unified,
       emoji,
       unified,
@@ -25014,7 +25039,7 @@ function EmojiVariationPicker() {
       showVariations: false,
       getEmojiUrl
     });
-  }) : null, createElement("div", {
+  }) : null, (0, react_esm_exports.createElement)("div", {
     className: cx(styles$9.pointer),
     style: pointerStyle
   }));
@@ -25131,10 +25156,10 @@ function Body() {
   var scrollTop = useOnScroll(BodyRef);
   useMouseDownHandlers(BodyRef, MOUSE_EVENT_SOURCE.PICKER);
   useOnMouseMove();
-  return createElement("div", {
+  return (0, react_esm_exports.createElement)("div", {
     className: cx(styles$a.body, commonInteractionStyles.hiddenOnReactions),
     ref: BodyRef
-  }, createElement(EmojiVariationPicker, null), createElement(EmojiList, {
+  }, (0, react_esm_exports.createElement)(EmojiVariationPicker, null), (0, react_esm_exports.createElement)(EmojiList, {
     scrollTop
   }));
 }
@@ -25159,7 +25184,7 @@ function useEmojiPreviewEvents(allow, setPreviewEmoji) {
   var BodyRef = useBodyRef();
   var isMouseDisallowed = useIsMouseDisallowed();
   var allowMouseMove = useAllowMouseMove();
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     if (!allow) {
       return;
     }
@@ -25244,7 +25269,7 @@ var FlexDirection;
 })(FlexDirection || (FlexDirection = {}));
 function Flex(_ref) {
   var children = _ref.children, className = _ref.className, _ref$style = _ref.style, style = _ref$style === void 0 ? {} : _ref$style, _ref$direction = _ref.direction, direction = _ref$direction === void 0 ? FlexDirection.ROW : _ref$direction;
-  return createElement("div", {
+  return (0, react_esm_exports.createElement)("div", {
     style: _extends({}, style),
     className: cx(styles$b.flex, className, styles$b[direction])
   }, children);
@@ -25260,7 +25285,7 @@ var styles$b = /* @__PURE__ */ stylesheet.create((_stylesheet$create = {
 }, _stylesheet$create));
 function Space(_ref) {
   var className = _ref.className, _ref$style = _ref.style, style = _ref$style === void 0 ? {} : _ref$style;
-  return createElement("div", {
+  return (0, react_esm_exports.createElement)("div", {
     style: _extends({
       flex: 1
     }, style),
@@ -25269,7 +25294,7 @@ function Space(_ref) {
 }
 function Absolute(_ref) {
   var children = _ref.children, className = _ref.className, style = _ref.style;
-  return createElement("div", {
+  return (0, react_esm_exports.createElement)("div", {
     style: _extends({}, style, {
       position: "absolute"
     }),
@@ -25278,7 +25303,7 @@ function Absolute(_ref) {
 }
 function Relative(_ref) {
   var children = _ref.children, className = _ref.className, style = _ref.style;
-  return createElement("div", {
+  return (0, react_esm_exports.createElement)("div", {
     style: _extends({}, style, {
       position: "relative"
     }),
@@ -25287,7 +25312,7 @@ function Relative(_ref) {
 }
 function BtnSkinToneVariation(_ref) {
   var isOpen = _ref.isOpen, onClick = _ref.onClick, isActive = _ref.isActive, skinToneVariation = _ref.skinToneVariation, style = _ref.style;
-  return createElement(Button, {
+  return (0, react_esm_exports.createElement)(Button, {
     style,
     onClick,
     className: cx("epr-tone-" + skinToneVariation, styles$c.tone, !isOpen && styles$c.closedTone, isActive && styles$c.active),
@@ -25346,16 +25371,16 @@ var styles$c = /* @__PURE__ */ stylesheet.create({
 });
 var ITEM_SIZE = 28;
 function SkinTonePickerMenu() {
-  return createElement(Relative, {
+  return (0, react_esm_exports.createElement)(Relative, {
     style: {
       height: ITEM_SIZE
     }
-  }, createElement(Absolute, {
+  }, (0, react_esm_exports.createElement)(Absolute, {
     style: {
       bottom: 0,
       right: 0
     }
-  }, createElement(SkinTonePicker, {
+  }, (0, react_esm_exports.createElement)(SkinTonePicker, {
     direction: SkinTonePickerDirection.VERTICAL
   })));
 }
@@ -25374,7 +25399,7 @@ function SkinTonePicker(_ref) {
   var fullWidth = ITEM_SIZE * skinToneVariations.length + "px";
   var expandedSize = isOpen ? fullWidth : ITEM_SIZE + "px";
   var vertical = direction === SkinTonePickerDirection.VERTICAL;
-  return createElement(Relative, {
+  return (0, react_esm_exports.createElement)(Relative, {
     className: cx(styles$d.skinTones, vertical && styles$d.vertical, isOpen && styles$d.open, vertical && isOpen && styles$d.verticalShadow),
     style: vertical ? {
       flexBasis: expandedSize,
@@ -25382,12 +25407,12 @@ function SkinTonePicker(_ref) {
     } : {
       flexBasis: expandedSize
     }
-  }, createElement("div", {
+  }, (0, react_esm_exports.createElement)("div", {
     className: cx(styles$d.select),
     ref: SkinTonePickerRef
   }, skinToneVariations.map(function(skinToneVariation, i) {
     var active = skinToneVariation === activeSkinTone;
-    return createElement(BtnSkinToneVariation, {
+    return (0, react_esm_exports.createElement)(BtnSkinToneVariation, {
       key: skinToneVariation,
       skinToneVariation,
       isOpen,
@@ -25457,14 +25482,14 @@ function Preview() {
   if (!previewConfig.showPreview) {
     return null;
   }
-  return createElement(Flex, {
+  return (0, react_esm_exports.createElement)(Flex, {
     className: cx(styles$e.preview, commonInteractionStyles.hiddenOnReactions, reactionsOpen && styles$e.hideOnReactions)
-  }, createElement(PreviewBody, null), createElement(Space, null), isSkinToneInPreview ? createElement(SkinTonePickerMenu, null) : null);
+  }, (0, react_esm_exports.createElement)(PreviewBody, null), (0, react_esm_exports.createElement)(Space, null), isSkinToneInPreview ? (0, react_esm_exports.createElement)(SkinTonePickerMenu, null) : null);
 }
 function PreviewBody() {
   var _previewEmoji$unified;
   var previewConfig = usePreviewConfig();
-  var _useState = useState(null), previewEmoji = _useState[0], setPreviewEmoji = _useState[1];
+  var _useState = (0, react_esm_exports.useState)(null), previewEmoji = _useState[0], setPreviewEmoji = _useState[1];
   var emojiStyle = useEmojiStyleConfig();
   var _useEmojiVariationPic = useEmojiVariationPickerState(), variationPickerEmoji = _useEmojiVariationPic[0];
   var getEmojiUrl = useGetEmojiUrlConfig();
@@ -25472,28 +25497,28 @@ function PreviewBody() {
   useEmojiPreviewEvents(previewConfig.showPreview, setPreviewEmoji);
   var emoji = emojiByUnified2((_previewEmoji$unified = previewEmoji == null ? void 0 : previewEmoji.unified) != null ? _previewEmoji$unified : previewEmoji == null ? void 0 : previewEmoji.originalUnified);
   var show = emoji != null && previewEmoji != null;
-  return createElement(PreviewContent, null);
+  return (0, react_esm_exports.createElement)(PreviewContent, null);
   function PreviewContent() {
     var defaultEmoji = variationPickerEmoji != null ? variationPickerEmoji : emojiByUnified2(previewConfig.defaultEmoji);
     if (!defaultEmoji) {
       return null;
     }
     var defaultText = variationPickerEmoji ? emojiName$1(variationPickerEmoji) : previewConfig.defaultCaption;
-    return createElement(Fragment, null, createElement("div", null, show ? createElement(ViewOnlyEmoji, {
+    return (0, react_esm_exports.createElement)(react_esm_exports.Fragment, null, (0, react_esm_exports.createElement)("div", null, show ? (0, react_esm_exports.createElement)(ViewOnlyEmoji, {
       unified: previewEmoji == null ? void 0 : previewEmoji.unified,
       emoji,
       emojiStyle,
       size: 45,
       getEmojiUrl,
       className: cx(styles$e.emoji)
-    }) : defaultEmoji ? createElement(ViewOnlyEmoji, {
+    }) : defaultEmoji ? (0, react_esm_exports.createElement)(ViewOnlyEmoji, {
       unified: emojiUnified$1(defaultEmoji),
       emoji: defaultEmoji,
       emojiStyle,
       size: 45,
       getEmojiUrl,
       className: cx(styles$e.emoji)
-    }) : null), createElement("div", {
+    }) : null), (0, react_esm_exports.createElement)("div", {
       className: cx(styles$e.label)
     }, show ? emojiName$1(emoji) : defaultText));
   }
@@ -25528,7 +25553,7 @@ function categoryNameFromDom($category) {
 function useActiveCategoryScrollDetection(_ref) {
   var setActiveCategory = _ref.setActiveCategory, setVisibleCategories = _ref.setVisibleCategories;
   var BodyRef = useBodyRef();
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     var visibleCategories = /* @__PURE__ */ new Map();
     var intersectingCategories = /* @__PURE__ */ new Map();
     var bodyRef = BodyRef.current;
@@ -25606,7 +25631,7 @@ function CategoryButton(_ref) {
   var isActiveCategory = _ref.isActiveCategory, category = _ref.category, allowNavigation = _ref.allowNavigation, categoryConfig = _ref.categoryConfig, onClick = _ref.onClick, customIcon = _ref.customIcon;
   var icon = (_categoryConfig$icon = categoryConfig.icon) != null ? _categoryConfig$icon : customIcon;
   var hasCustomIcon = icon != null;
-  return createElement(Button, {
+  return (0, react_esm_exports.createElement)(Button, {
     tabIndex: allowNavigation ? 0 : -1,
     className: cx(styles$f.catBtn, commonInteractionStyles.categoryBtn, hasCustomIcon ? styles$f.customIcon : "epr-icn-" + category, (_cx = {}, _cx[ClassNames.active] = isActiveCategory, _cx)),
     onClick,
@@ -25695,7 +25720,7 @@ var styles$f = /* @__PURE__ */ stylesheet.create(/* @__PURE__ */ _extends({
   ".epr-auto-theme": /* @__PURE__ */ _extends({}, DarkInactivePosition)
 }));
 function CategoryNavigation() {
-  var _useState = useState(null), activeCategory = _useState[0], setActiveCategory = _useState[1];
+  var _useState = (0, react_esm_exports.useState)(null), activeCategory = _useState[0], setActiveCategory = _useState[1];
   var _useVisibleCategories = useVisibleCategoriesState(), setVisibleCategories = _useVisibleCategories[1];
   var scrollCategoryIntoView = useScrollCategoryIntoView();
   useActiveCategoryScrollDetection({
@@ -25707,7 +25732,7 @@ function CategoryNavigation() {
   var categoryIcons = useCategoryIconsConfig();
   var CategoryNavigationRef = useCategoryNavigationRef();
   var hideCustomCategory = useShouldHideCustomEmojis();
-  return createElement("div", {
+  return (0, react_esm_exports.createElement)("div", {
     className: cx(styles$g.nav),
     role: "tablist",
     "aria-label": "Category navigation",
@@ -25720,7 +25745,7 @@ function CategoryNavigation() {
       return null;
     }
     var allowNavigation = !isSearchMode && !isActiveCategory;
-    return createElement(CategoryButton, {
+    return (0, react_esm_exports.createElement)(CategoryButton, {
       key: category,
       category,
       isActiveCategory,
@@ -25763,12 +25788,12 @@ var SVGTimes = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz
 function BtnClearSearch() {
   var clearSearch = useClearSearch();
   var searchClearButtonLabel = useSearchClearButtonLabelConfig();
-  return createElement(Button, {
+  return (0, react_esm_exports.createElement)(Button, {
     className: cx(styles$h.btnClearSearch, commonInteractionStyles.visibleOnSearchOnly),
     onClick: clearSearch,
     "aria-label": searchClearButtonLabel,
     title: searchClearButtonLabel
-  }, createElement("div", {
+  }, (0, react_esm_exports.createElement)("div", {
     className: cx(styles$h.icnClearnSearch)
   }));
 }
@@ -25820,7 +25845,7 @@ var styles$h = /* @__PURE__ */ stylesheet.create(/* @__PURE__ */ _extends({
 }), /* @__PURE__ */ darkMode("btnClearSearch", HoverDark)));
 var SVGMagnifier = "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI2LjMuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHdpZHRoPSIyMHB4IiBoZWlnaHQ9IjQwcHgiIHZpZXdCb3g9IjAgMCAyMCA0MCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjAgNDAiIHhtbDpzcGFjZT0icHJlc2VydmUiPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzg2ODY4NiIgZD0iTTEyLDguODFjMCwyLjA4LTEuNjgsMy43Ni0zLjc2LDMuNzZjLTIuMDgsMC0zLjc2LTEuNjgtMy43Ni0zLjc2CgljMC0yLjA4LDEuNjgtMy43NiwzLjc2LTMuNzZDMTAuMzIsNS4wNSwxMiw2LjczLDEyLDguODF6IE0xMS4yMywxMi43MmMtMC44MywwLjY0LTEuODcsMS4wMS0yLjk5LDEuMDFjLTIuNzIsMC00LjkyLTIuMi00LjkyLTQuOTIKCWMwLTIuNzIsMi4yLTQuOTIsNC45Mi00LjkyYzIuNzIsMCw0LjkyLDIuMiw0LjkyLDQuOTJjMCwxLjEzLTAuMzgsMi4xNi0xLjAxLDIuOTlsMy45NCwzLjkzYzAuMjUsMC4yNSwwLjI1LDAuNjYsMCwwLjkyCgljLTAuMjUsMC4yNS0wLjY2LDAuMjUtMC45MiwwTDExLjIzLDEyLjcyeiIvPgo8cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iI0MwQzBCRiIgZD0iTTEyLDI4LjgxYzAsMi4wOC0xLjY4LDMuNzYtMy43NiwzLjc2Yy0yLjA4LDAtMy43Ni0xLjY4LTMuNzYtMy43NgoJYzAtMi4wOCwxLjY4LTMuNzYsMy43Ni0zLjc2QzEwLjMyLDI1LjA1LDEyLDI2LjczLDEyLDI4LjgxeiBNMTEuMjMsMzIuNzJjLTAuODMsMC42NC0xLjg3LDEuMDEtMi45OSwxLjAxCgljLTIuNzIsMC00LjkyLTIuMi00LjkyLTQuOTJjMC0yLjcyLDIuMi00LjkyLDQuOTItNC45MmMyLjcyLDAsNC45MiwyLjIsNC45Miw0LjkyYzAsMS4xMy0wLjM4LDIuMTYtMS4wMSwyLjk5bDMuOTQsMy45MwoJYzAuMjUsMC4yNSwwLjI1LDAuNjYsMCwwLjkyYy0wLjI1LDAuMjUtMC42NiwwLjI1LTAuOTIsMEwxMS4yMywzMi43MnoiLz4KPC9zdmc+";
 function IcnSearch() {
-  return createElement("div", {
+  return (0, react_esm_exports.createElement)("div", {
     className: cx(styles$i.icnSearch)
   });
 }
@@ -25848,9 +25873,9 @@ function SearchContainer() {
   if (searchDisabled) {
     return null;
   }
-  return createElement(Flex, {
+  return (0, react_esm_exports.createElement)(Flex, {
     className: cx(styles$j.overlay)
-  }, createElement(Search, null), isSkinToneInSearch ? createElement(SkinTonePicker, null) : null);
+  }, (0, react_esm_exports.createElement)(Search, null), isSkinToneInSearch ? (0, react_esm_exports.createElement)(SkinTonePicker, null) : null);
 }
 function Search() {
   var closeAllOpenToggles = useCloseAllOpenToggles();
@@ -25860,9 +25885,9 @@ function Search() {
   var _useFilter = useFilter(), statusSearchResults = _useFilter.statusSearchResults, searchTerm = _useFilter.searchTerm, _onChange = _useFilter.onChange;
   var input = SearchInputRef == null ? void 0 : SearchInputRef.current;
   var value = input == null ? void 0 : input.value;
-  return createElement(Relative, {
+  return (0, react_esm_exports.createElement)(Relative, {
     className: cx(styles$j.searchContainer)
-  }, createElement("input", {
+  }, (0, react_esm_exports.createElement)("input", {
     // eslint-disable-next-line jsx-a11y/no-autofocus
     autoFocus,
     "aria-label": "Type to search for an emoji",
@@ -25876,13 +25901,13 @@ function Search() {
       _onChange((_event$target$value = event == null ? void 0 : (_event$target = event.target) == null ? void 0 : _event$target.value) != null ? _event$target$value : value);
     },
     ref: SearchInputRef
-  }), searchTerm ? createElement("div", {
+  }), searchTerm ? (0, react_esm_exports.createElement)("div", {
     role: "status",
     className: cx("epr-status-search-results", styles$j.visuallyHidden),
     "aria-live": "polite",
     id: "epr-search-id",
     "aria-atomic": "true"
-  }, statusSearchResults) : null, createElement(IcnSearch, null), createElement(BtnClearSearch, null));
+  }, statusSearchResults) : null, (0, react_esm_exports.createElement)(IcnSearch, null), (0, react_esm_exports.createElement)(BtnClearSearch, null));
 }
 var styles$j = /* @__PURE__ */ stylesheet.create(/* @__PURE__ */ _extends({
   overlay: {
@@ -25965,21 +25990,21 @@ var styles$j = /* @__PURE__ */ stylesheet.create(/* @__PURE__ */ _extends({
   }
 })));
 function Header() {
-  return createElement(Relative, {
+  return (0, react_esm_exports.createElement)(Relative, {
     className: cx("epr-header", commonInteractionStyles.hiddenOnReactions)
-  }, createElement(SearchContainer, null), createElement(CategoryNavigation, null));
+  }, (0, react_esm_exports.createElement)(SearchContainer, null), (0, react_esm_exports.createElement)(CategoryNavigation, null));
 }
 function EmojiPicker(props) {
-  return createElement(ElementRefContextProvider, null, createElement(PickerStyleTag, {
+  return (0, react_esm_exports.createElement)(ElementRefContextProvider, null, (0, react_esm_exports.createElement)(PickerStyleTag, {
     nonce: props.nonce
-  }), createElement(PickerConfigProvider, Object.assign({}, props), createElement(PickerDataProvider, null, createElement(ContentControl, null))));
+  }), (0, react_esm_exports.createElement)(PickerConfigProvider, Object.assign({}, props), (0, react_esm_exports.createElement)(PickerDataProvider, null, (0, react_esm_exports.createElement)(ContentControl, null))));
 }
 function ContentControl() {
   var _useReactionsModeStat = useReactionsModeState(), reactionsDefaultOpen = _useReactionsModeStat[0];
   var allowExpandReactions = useAllowExpandReactions();
-  var _React$useState = useState(!reactionsDefaultOpen), renderAll = _React$useState[0], setRenderAll = _React$useState[1];
+  var _React$useState = (0, react_esm_exports.useState)(!reactionsDefaultOpen), renderAll = _React$useState[0], setRenderAll = _React$useState[1];
   var isOpen = useOpenConfig();
-  useEffect(function() {
+  (0, react_esm_exports.useEffect)(function() {
     if (reactionsDefaultOpen && !allowExpandReactions) {
       return;
     }
@@ -25990,7 +26015,7 @@ function ContentControl() {
   if (!isOpen) {
     return null;
   }
-  return createElement(PickerMain, null, createElement(Reactions, null), createElement(ExpandedPickerContent, {
+  return (0, react_esm_exports.createElement)(PickerMain, null, (0, react_esm_exports.createElement)(Reactions, null), (0, react_esm_exports.createElement)(ExpandedPickerContent, {
     renderAll
   }));
 }
@@ -25999,9 +26024,9 @@ function ExpandedPickerContent(_ref) {
   if (!renderAll) {
     return null;
   }
-  return createElement(Fragment, null, createElement(Header, null), createElement(Body, null), createElement(Preview, null));
+  return (0, react_esm_exports.createElement)(react_esm_exports.Fragment, null, (0, react_esm_exports.createElement)(Header, null), (0, react_esm_exports.createElement)(Body, null), (0, react_esm_exports.createElement)(Preview, null));
 }
-var EmojiPickerReact = /* @__PURE__ */ memo(EmojiPicker, compareConfig);
+var EmojiPickerReact = /* @__PURE__ */ (0, react_esm_exports.memo)(EmojiPicker, compareConfig);
 var ErrorBoundary = /* @__PURE__ */ (function(_React$Component) {
   _inheritsLoose(ErrorBoundary2, _React$Component);
   function ErrorBoundary2(props) {
@@ -26028,13 +26053,13 @@ var ErrorBoundary = /* @__PURE__ */ (function(_React$Component) {
     return this.props.children;
   };
   return ErrorBoundary2;
-})(Component);
+})(react_esm_exports.Component);
 function ExportedEmoji(_ref) {
   var unified = _ref.unified, _ref$size = _ref.size, size = _ref$size === void 0 ? 32 : _ref$size, _ref$emojiStyle = _ref.emojiStyle, emojiStyle = _ref$emojiStyle === void 0 ? EmojiStyle.APPLE : _ref$emojiStyle, _ref$lazyLoad = _ref.lazyLoad, lazyLoad = _ref$lazyLoad === void 0 ? false : _ref$lazyLoad, getEmojiUrl = _ref.getEmojiUrl, emojiUrl = _ref.emojiUrl;
   if (!unified && !emojiUrl && !getEmojiUrl) {
     return null;
   }
-  return createElement(ViewOnlyEmoji, {
+  return (0, react_esm_exports.createElement)(ViewOnlyEmoji, {
     unified,
     size,
     emojiStyle,
@@ -26050,9 +26075,9 @@ function EmojiPicker$1(props) {
     onReactionClick: props.onReactionClick,
     onSkinToneChange: props.onSkinToneChange
   });
-  return createElement(ErrorBoundary, null, createElement(MutableConfigContext.Provider, {
+  return (0, react_esm_exports.createElement)(ErrorBoundary, null, (0, react_esm_exports.createElement)(MutableConfigContext.Provider, {
     value: MutableConfigRef
-  }, createElement(EmojiPickerReact, Object.assign({}, props))));
+  }, (0, react_esm_exports.createElement)(EmojiPickerReact, Object.assign({}, props))));
 }
 var emoji_picker_react_esm_default = EmojiPicker$1;
 export {

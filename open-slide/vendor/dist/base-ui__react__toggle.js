@@ -1,14 +1,32 @@
 var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toggle/Toggle.mjs
-import * as React16 from "react";
+// vendor/shims/react-esm.js
+var react_esm_exports = {};
+__export(react_esm_exports, {
+  default: () => react_esm_default
+});
+__reExport(react_esm_exports, react_star);
+import * as React from "react";
+import * as react_star from "react";
+var react_esm_default = React.default ?? React;
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useControlled.mjs
-import * as React from "react";
 function useControlled({
   controlled,
   default: defaultProp,
@@ -17,25 +35,25 @@ function useControlled({
 }) {
   const {
     current: isControlled
-  } = React.useRef(controlled !== void 0);
-  const [valueState, setValue] = React.useState(defaultProp);
+  } = react_esm_exports.useRef(controlled !== void 0);
+  const [valueState, setValue] = react_esm_exports.useState(defaultProp);
   const value = isControlled ? controlled : valueState;
   if (false) {
-    React.useEffect(() => {
+    react_esm_exports.useEffect(() => {
       if (isControlled !== (controlled !== void 0)) {
         error([`A component is changing the ${isControlled ? "" : "un"}controlled ${state} state of ${name} to be ${isControlled ? "un" : ""}controlled.`, "Elements should not switch from uncontrolled to controlled (or vice versa).", `Decide between using a controlled or uncontrolled ${name} element for the lifetime of the component.`, "The nature of the state is determined during the first render. It's considered controlled if the value is not `undefined`.", "More info: https://fb.me/react-controlled-components"].join("\n"));
       }
     }, [state, name, controlled]);
     const {
       current: defaultValue
-    } = React.useRef(defaultProp);
-    React.useEffect(() => {
+    } = react_esm_exports.useRef(defaultProp);
+    react_esm_exports.useEffect(() => {
       if (!isControlled && serializeToDevModeString(defaultValue) !== serializeToDevModeString(defaultProp)) {
         error([`A component is changing the default ${state} state of an uncontrolled ${name} after being initialized. To suppress this warning opt to use a controlled ${name}.`].join("\n"));
       }
     }, [defaultProp]);
   }
-  const setValueIfUncontrolled = React.useCallback((newValue) => {
+  const setValueIfUncontrolled = react_esm_exports.useCallback((newValue) => {
     if (!isControlled) {
       setValue(newValue);
     }
@@ -44,26 +62,21 @@ function useControlled({
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useIsoLayoutEffect.mjs
-import * as React2 from "react";
 var noop = () => {
 };
-var useIsoLayoutEffect = typeof document !== "undefined" ? React2.useLayoutEffect : noop;
-
-// node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useId.mjs
-import * as React4 from "react";
+var useIsoLayoutEffect = typeof document !== "undefined" ? react_esm_exports.useLayoutEffect : noop;
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/safeReact.mjs
-import * as React3 from "react";
 var SafeReact = {
-  ...React3
+  ...react_esm_exports
 };
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useId.mjs
 var globalId = 0;
 function useGlobalId(idOverride, prefix = "mui") {
-  const [defaultId, setDefaultId] = React4.useState(idOverride);
+  const [defaultId, setDefaultId] = react_esm_exports.useState(idOverride);
   const id = idOverride || defaultId;
-  React4.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (defaultId == null) {
       globalId += 1;
       setDefaultId(`${prefix}-${globalId}`);
@@ -97,14 +110,10 @@ function createFormatErrorMessage(baseUrl, prefix) {
 var formatErrorMessage = createFormatErrorMessage("https://base-ui.com/production-error", "Base UI");
 var formatErrorMessage_default = formatErrorMessage;
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
-import * as React8 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useRefWithInit.mjs
-import * as React5 from "react";
 var UNINITIALIZED = {};
 function useRefWithInit(init, initArg) {
-  const ref = React5.useRef(UNINITIALIZED);
+  const ref = react_esm_exports.useRef(UNINITIALIZED);
   if (ref.current === UNINITIALIZED) {
     ref.current = init(initArg);
   }
@@ -200,19 +209,15 @@ function update(forkRef, refs) {
   };
 }
 
-// node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
-import * as React7 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/reactVersion.mjs
-import * as React6 from "react";
-var majorVersion = parseInt(React6.version, 10);
+var majorVersion = parseInt(react_esm_exports.version, 10);
 function isReactVersionAtLeast(reactVersionToCheck) {
   return majorVersion >= reactVersionToCheck;
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
 function getReactElementRef(element) {
-  if (!/* @__PURE__ */ React7.isValidElement(element)) {
+  if (!/* @__PURE__ */ react_esm_exports.isValidElement(element)) {
     return null;
   }
   const reactElement = element;
@@ -428,7 +433,6 @@ function isSyntheticEvent(event) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
-import { createElement as _createElement } from "react";
 function useRenderElement(element, componentProps, params = {}) {
   const renderProp = componentProps.render;
   const outProps = useRenderElementProps(componentProps, params);
@@ -495,15 +499,15 @@ function evaluateRenderProp(element, render, props, state) {
     mergedProps.ref = props.ref;
     let newElement = render;
     if (newElement?.$$typeof === REACT_LAZY_TYPE) {
-      const children = React8.Children.toArray(render);
+      const children = react_esm_exports.Children.toArray(render);
       newElement = children[0];
     }
     if (false) {
-      if (!/* @__PURE__ */ React8.isValidElement(newElement)) {
+      if (!/* @__PURE__ */ react_esm_exports.isValidElement(newElement)) {
         throw new Error(["Base UI: The `render` prop was provided an invalid React element as `React.isValidElement(render)` is `false`.", "A valid React element must be provided to the `render` prop because it is cloned with props to replace the default element.", "https://base-ui.com/r/invalid-render-prop"].join("\n"));
       }
     }
-    return /* @__PURE__ */ React8.cloneElement(newElement, mergedProps);
+    return /* @__PURE__ */ react_esm_exports.cloneElement(newElement, mergedProps);
   }
   if (element) {
     if (typeof element === "string") {
@@ -514,36 +518,32 @@ function evaluateRenderProp(element, render, props, state) {
 }
 function renderTag(Tag, props) {
   if (Tag === "button") {
-    return /* @__PURE__ */ _createElement("button", {
+    return /* @__PURE__ */ (0, react_esm_exports.createElement)("button", {
       type: "button",
       ...props,
       key: props.key
     });
   }
   if (Tag === "img") {
-    return /* @__PURE__ */ _createElement("img", {
+    return /* @__PURE__ */ (0, react_esm_exports.createElement)("img", {
       alt: "",
       ...props,
       key: props.key
     });
   }
-  return /* @__PURE__ */ React8.createElement(Tag, props);
+  return /* @__PURE__ */ react_esm_exports.createElement(Tag, props);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toggle-group/ToggleGroupContext.mjs
-import * as React9 from "react";
-var ToggleGroupContext = /* @__PURE__ */ React9.createContext(void 0);
+var ToggleGroupContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ToggleGroupContext.displayName = "ToggleGroupContext";
 function useToggleGroupContext(optional = true) {
-  const context = React9.useContext(ToggleGroupContext);
+  const context = react_esm_exports.useContext(ToggleGroupContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: ToggleGroupContext is missing. ToggleGroup parts must be placed within <ToggleGroup>." : formatErrorMessage_default(7));
   }
   return context;
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/use-button/useButton.mjs
-import * as React12 from "react";
 
 // node_modules/.pnpm/@floating-ui+utils@0.2.12/node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
 function hasWindow() {
@@ -594,11 +594,10 @@ function assertNotCalled() {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/root/CompositeRootContext.mjs
-import * as React10 from "react";
-var CompositeRootContext = /* @__PURE__ */ React10.createContext(void 0);
+var CompositeRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) CompositeRootContext.displayName = "CompositeRootContext";
 function useCompositeRootContext(optional = false) {
-  const context = React10.useContext(CompositeRootContext);
+  const context = react_esm_exports.useContext(CompositeRootContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: CompositeRootContext is missing. Composite parts must be placed within <Composite.Root>." : formatErrorMessage_default(16));
   }
@@ -606,7 +605,6 @@ function useCompositeRootContext(optional = false) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useFocusableWhenDisabled.mjs
-import * as React11 from "react";
 function useFocusableWhenDisabled(parameters) {
   const {
     focusableWhenDisabled,
@@ -617,7 +615,7 @@ function useFocusableWhenDisabled(parameters) {
   } = parameters;
   const isFocusableComposite = composite && focusableWhenDisabled !== false;
   const isNonFocusableComposite = composite && focusableWhenDisabled === false;
-  const props = React11.useMemo(() => {
+  const props = react_esm_exports.useMemo(() => {
     const additionalProps = {
       // allow Tabbing away from focusableWhenDisabled elements
       onKeyDown(event) {
@@ -654,7 +652,7 @@ function useButton(parameters = {}) {
     native: isNativeButton = true,
     composite: compositeProp
   } = parameters;
-  const elementRef = React12.useRef(null);
+  const elementRef = react_esm_exports.useRef(null);
   const compositeRootContext = useCompositeRootContext(true);
   const isCompositeItem = compositeProp ?? compositeRootContext !== void 0;
   const {
@@ -667,7 +665,7 @@ function useButton(parameters = {}) {
     isNativeButton
   });
   if (false) {
-    React12.useEffect(() => {
+    react_esm_exports.useEffect(() => {
       if (!elementRef.current) {
         return;
       }
@@ -685,7 +683,7 @@ function useButton(parameters = {}) {
       }
     }, [isNativeButton]);
   }
-  const updateDisabled = React12.useCallback(() => {
+  const updateDisabled = react_esm_exports.useCallback(() => {
     const element = elementRef.current;
     if (!isButtonElement(element)) {
       return;
@@ -695,7 +693,7 @@ function useButton(parameters = {}) {
     }
   }, [disabled2, focusableWhenDisabledProps.disabled, isCompositeItem]);
   useIsoLayoutEffect(updateDisabled, [updateDisabled]);
-  const getButtonProps = React12.useCallback((externalProps = {}) => {
+  const getButtonProps = react_esm_exports.useCallback((externalProps = {}) => {
     const {
       onClick: externalOnClick,
       onMouseDown: externalOnMouseDown,
@@ -804,15 +802,8 @@ function isValidLinkElement(elem) {
   return Boolean(elem?.tagName === "A" && elem?.href);
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/item/useCompositeItem.mjs
-import * as React15 from "react";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/useCompositeListItem.mjs
-import * as React14 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/CompositeListContext.mjs
-import * as React13 from "react";
-var CompositeListContext = /* @__PURE__ */ React13.createContext({
+var CompositeListContext = /* @__PURE__ */ react_esm_exports.createContext({
   register: () => {
   },
   unregister: () => {
@@ -830,7 +821,7 @@ var CompositeListContext = /* @__PURE__ */ React13.createContext({
 });
 if (false) CompositeListContext.displayName = "CompositeListContext";
 function useCompositeListContext() {
-  return React13.useContext(CompositeListContext);
+  return react_esm_exports.useContext(CompositeListContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/useCompositeListItem.mjs
@@ -855,8 +846,8 @@ function useCompositeListItem(params = {}) {
     labelsRef,
     nextIndexRef
   } = useCompositeListContext();
-  const indexRef = React14.useRef(-1);
-  const [index, setIndex] = React14.useState(externalIndex ?? (indexGuessBehavior === IndexGuessBehavior.GuessFromOrder ? () => {
+  const indexRef = react_esm_exports.useRef(-1);
+  const [index, setIndex] = react_esm_exports.useState(externalIndex ?? (indexGuessBehavior === IndexGuessBehavior.GuessFromOrder ? () => {
     if (indexRef.current === -1) {
       const newIndex = nextIndexRef.current;
       nextIndexRef.current += 1;
@@ -864,8 +855,8 @@ function useCompositeListItem(params = {}) {
     }
     return indexRef.current;
   } : -1));
-  const componentRef = React14.useRef(null);
-  const ref = React14.useCallback((node) => {
+  const componentRef = react_esm_exports.useRef(null);
+  const ref = react_esm_exports.useCallback((node) => {
     componentRef.current = node;
     if (index !== -1 && node !== null) {
       elementsRef.current[index] = node;
@@ -917,7 +908,7 @@ function useCompositeItem(params = {}) {
     index
   } = useCompositeListItem(params);
   const isHighlighted = highlightedIndex === index;
-  const itemRef = React15.useRef(null);
+  const itemRef = react_esm_exports.useRef(null);
   const mergedRef = useMergedRefs(ref, itemRef);
   const compositeProps = {
     tabIndex: isHighlighted ? 0 : -1,
@@ -1073,7 +1064,7 @@ function createChangeEventDetails(reason, event, trigger, customProperties) {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toggle/Toggle.mjs
 import { jsx as _jsx } from "react/jsx-runtime";
-var Toggle = /* @__PURE__ */ React16.forwardRef(function Toggle2(componentProps, forwardedRef) {
+var Toggle = /* @__PURE__ */ react_esm_exports.forwardRef(function Toggle2(componentProps, forwardedRef) {
   const {
     className,
     defaultPressed: defaultPressedProp = false,
@@ -1144,7 +1135,7 @@ var Toggle = /* @__PURE__ */ React16.forwardRef(function Toggle2(componentProps,
     ref: refs,
     props
   });
-  const itemMetadata = React16.useMemo(() => ({
+  const itemMetadata = react_esm_exports.useMemo(() => ({
     disabled: disabled2,
     focusableWhenDisabled: false
   }), [disabled2]);

@@ -1,8 +1,20 @@
 var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/index.parts.mjs
 var index_parts_exports = {};
@@ -14,20 +26,25 @@ __export(index_parts_exports, {
   Value: () => ProgressValue
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/root/ProgressRoot.mjs
-import * as React7 from "react";
+// vendor/shims/react-esm.js
+var react_esm_exports = {};
+__export(react_esm_exports, {
+  default: () => react_esm_default
+});
+__reExport(react_esm_exports, react_star);
+import * as React from "react";
+import * as react_star from "react";
+var react_esm_default = React.default ?? React;
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useIsoLayoutEffect.mjs
-import * as React from "react";
 var noop = () => {
 };
-var useIsoLayoutEffect = typeof document !== "undefined" ? React.useLayoutEffect : noop;
+var useIsoLayoutEffect = typeof document !== "undefined" ? react_esm_exports.useLayoutEffect : noop;
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useRefWithInit.mjs
-import * as React2 from "react";
 var UNINITIALIZED = {};
 function useRefWithInit(init, initArg) {
-  const ref = React2.useRef(UNINITIALIZED);
+  const ref = react_esm_exports.useRef(UNINITIALIZED);
   if (ref.current === UNINITIALIZED) {
     ref.current = init(initArg);
   }
@@ -130,9 +147,6 @@ function createFormatErrorMessage(baseUrl, prefix) {
 var formatErrorMessage = createFormatErrorMessage("https://base-ui.com/production-error", "Base UI");
 var formatErrorMessage_default = formatErrorMessage;
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
-import * as React5 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useMergedRefs.mjs
 function useMergedRefs(a, b, c, d) {
   const forkRef = useRefWithInit(createForkRef).current;
@@ -222,19 +236,15 @@ function update(forkRef, refs) {
   };
 }
 
-// node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
-import * as React4 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/reactVersion.mjs
-import * as React3 from "react";
-var majorVersion = parseInt(React3.version, 10);
+var majorVersion = parseInt(react_esm_exports.version, 10);
 function isReactVersionAtLeast(reactVersionToCheck) {
   return majorVersion >= reactVersionToCheck;
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
 function getReactElementRef(element) {
-  if (!/* @__PURE__ */ React4.isValidElement(element)) {
+  if (!/* @__PURE__ */ react_esm_exports.isValidElement(element)) {
     return null;
   }
   const reactElement = element;
@@ -450,7 +460,6 @@ function isSyntheticEvent(event) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
-import { createElement as _createElement } from "react";
 function useRenderElement(element, componentProps, params = {}) {
   const renderProp = componentProps.render;
   const outProps = useRenderElementProps(componentProps, params);
@@ -517,15 +526,15 @@ function evaluateRenderProp(element, render, props, state) {
     mergedProps.ref = props.ref;
     let newElement = render;
     if (newElement?.$$typeof === REACT_LAZY_TYPE) {
-      const children = React5.Children.toArray(render);
+      const children = react_esm_exports.Children.toArray(render);
       newElement = children[0];
     }
     if (false) {
-      if (!/* @__PURE__ */ React5.isValidElement(newElement)) {
+      if (!/* @__PURE__ */ react_esm_exports.isValidElement(newElement)) {
         throw new Error(["Base UI: The `render` prop was provided an invalid React element as `React.isValidElement(render)` is `false`.", "A valid React element must be provided to the `render` prop because it is cloned with props to replace the default element.", "https://base-ui.com/r/invalid-render-prop"].join("\n"));
       }
     }
-    return /* @__PURE__ */ React5.cloneElement(newElement, mergedProps);
+    return /* @__PURE__ */ react_esm_exports.cloneElement(newElement, mergedProps);
   }
   if (element) {
     if (typeof element === "string") {
@@ -536,28 +545,27 @@ function evaluateRenderProp(element, render, props, state) {
 }
 function renderTag(Tag, props) {
   if (Tag === "button") {
-    return /* @__PURE__ */ _createElement("button", {
+    return /* @__PURE__ */ (0, react_esm_exports.createElement)("button", {
       type: "button",
       ...props,
       key: props.key
     });
   }
   if (Tag === "img") {
-    return /* @__PURE__ */ _createElement("img", {
+    return /* @__PURE__ */ (0, react_esm_exports.createElement)("img", {
       alt: "",
       ...props,
       key: props.key
     });
   }
-  return /* @__PURE__ */ React5.createElement(Tag, props);
+  return /* @__PURE__ */ react_esm_exports.createElement(Tag, props);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/root/ProgressRootContext.mjs
-import * as React6 from "react";
-var ProgressRootContext = /* @__PURE__ */ React6.createContext(void 0);
+var ProgressRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ProgressRootContext.displayName = "ProgressRootContext";
 function useProgressRootContext() {
-  const context = React6.useContext(ProgressRootContext);
+  const context = react_esm_exports.useContext(ProgressRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: ProgressRootContext is missing. Progress parts must be placed within <Progress.Root>." : formatErrorMessage_default(51));
   }
@@ -602,7 +610,7 @@ function getDefaultAriaValueText(formattedValue, value) {
   }
   return formattedValue || `${value}%`;
 }
-var ProgressRoot = /* @__PURE__ */ React7.forwardRef(function ProgressRoot2(componentProps, forwardedRef) {
+var ProgressRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function ProgressRoot2(componentProps, forwardedRef) {
   const {
     format,
     getAriaValueText = getDefaultAriaValueText,
@@ -616,14 +624,14 @@ var ProgressRoot = /* @__PURE__ */ React7.forwardRef(function ProgressRoot2(comp
     style,
     ...elementProps
   } = componentProps;
-  const [labelId, setLabelId] = React7.useState();
+  const [labelId, setLabelId] = react_esm_exports.useState();
   const formatOptionsRef = useValueAsRef(format);
   let status = "indeterminate";
   if (Number.isFinite(value)) {
     status = value === max ? "complete" : "progressing";
   }
   const formattedValue = formatNumberValue(value, locale, formatOptionsRef.current);
-  const state = React7.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     status
   }), [status]);
   const defaultProps = {
@@ -633,7 +641,7 @@ var ProgressRoot = /* @__PURE__ */ React7.forwardRef(function ProgressRoot2(comp
     "aria-valuenow": value ?? void 0,
     "aria-valuetext": getAriaValueText(formattedValue, value),
     role: "progressbar",
-    children: /* @__PURE__ */ _jsxs(React7.Fragment, {
+    children: /* @__PURE__ */ _jsxs(react_esm_exports.Fragment, {
       children: [children, /* @__PURE__ */ _jsx("span", {
         role: "presentation",
         style: visuallyHidden,
@@ -641,7 +649,7 @@ var ProgressRoot = /* @__PURE__ */ React7.forwardRef(function ProgressRoot2(comp
       })]
     })
   };
-  const contextValue = React7.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     formattedValue,
     max,
     min,
@@ -664,8 +672,7 @@ var ProgressRoot = /* @__PURE__ */ React7.forwardRef(function ProgressRoot2(comp
 if (false) ProgressRoot.displayName = "ProgressRoot";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/track/ProgressTrack.mjs
-import * as React8 from "react";
-var ProgressTrack = /* @__PURE__ */ React8.forwardRef(function ProgressTrack2(componentProps, forwardedRef) {
+var ProgressTrack = /* @__PURE__ */ react_esm_exports.forwardRef(function ProgressTrack2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -685,16 +692,13 @@ var ProgressTrack = /* @__PURE__ */ React8.forwardRef(function ProgressTrack2(co
 });
 if (false) ProgressTrack.displayName = "ProgressTrack";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/indicator/ProgressIndicator.mjs
-import * as React9 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/valueToPercent.mjs
 function valueToPercent(value, min, max) {
   return (value - min) * 100 / (max - min);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/indicator/ProgressIndicator.mjs
-var ProgressIndicator = /* @__PURE__ */ React9.forwardRef(function ProgressIndicator2(componentProps, forwardedRef) {
+var ProgressIndicator = /* @__PURE__ */ react_esm_exports.forwardRef(function ProgressIndicator2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -726,8 +730,7 @@ var ProgressIndicator = /* @__PURE__ */ React9.forwardRef(function ProgressIndic
 if (false) ProgressIndicator.displayName = "ProgressIndicator";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/value/ProgressValue.mjs
-import * as React10 from "react";
-var ProgressValue = /* @__PURE__ */ React10.forwardRef(function ProgressValue2(componentProps, forwardedRef) {
+var ProgressValue = /* @__PURE__ */ react_esm_exports.forwardRef(function ProgressValue2(componentProps, forwardedRef) {
   const {
     className,
     render,
@@ -755,24 +758,17 @@ var ProgressValue = /* @__PURE__ */ React10.forwardRef(function ProgressValue2(c
 });
 if (false) ProgressValue.displayName = "ProgressValue";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/label/ProgressLabel.mjs
-import * as React13 from "react";
-
-// node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useId.mjs
-import * as React12 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/safeReact.mjs
-import * as React11 from "react";
 var SafeReact = {
-  ...React11
+  ...react_esm_exports
 };
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useId.mjs
 var globalId = 0;
 function useGlobalId(idOverride, prefix = "mui") {
-  const [defaultId, setDefaultId] = React12.useState(idOverride);
+  const [defaultId, setDefaultId] = react_esm_exports.useState(idOverride);
   const id = idOverride || defaultId;
-  React12.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (defaultId == null) {
       globalId += 1;
       setDefaultId(`${prefix}-${globalId}`);
@@ -807,7 +803,7 @@ function useRegisteredLabelId(idProp, setLabelId) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/label/ProgressLabel.mjs
-var ProgressLabel = /* @__PURE__ */ React13.forwardRef(function ProgressLabel2(componentProps, forwardedRef) {
+var ProgressLabel = /* @__PURE__ */ react_esm_exports.forwardRef(function ProgressLabel2(componentProps, forwardedRef) {
   const {
     render,
     className,

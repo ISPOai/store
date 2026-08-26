@@ -81,10 +81,10 @@
         "./vendor/dist/fflate.js"
       ],
       "use-sync-external-store": [
-        "./vendor/dist/use-sync-external-store.js"
+        "./vendor/shims/use-sync-external-store-shim.js"
       ],
       "use-sync-external-store/shim": [
-        "./vendor/dist/use-sync-external-store__shim.js"
+        "./vendor/shims/use-sync-external-store-shim.js"
       ],
       "sucrase": [
         "./vendor/dist/sucrase.js"
@@ -142,6 +142,9 @@
       ],
       "@base-ui/react/toggle-group": [
         "./vendor/dist/base-ui__react__toggle-group.js"
+      ],
+      "use-sync-external-store/shim/with-selector": [
+        "./vendor/shims/use-sync-external-store-with-selector.js"
       ]
     }
   },

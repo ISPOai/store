@@ -1,8 +1,20 @@
 var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/index.parts.mjs
 var index_parts_exports = {};
@@ -15,20 +27,25 @@ __export(index_parts_exports, {
   Viewport: () => ScrollAreaViewport
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/root/ScrollAreaRoot.mjs
-import * as React10 from "react";
+// vendor/shims/react-esm.js
+var react_esm_exports = {};
+__export(react_esm_exports, {
+  default: () => react_esm_default
+});
+__reExport(react_esm_exports, react_star);
+import * as React from "react";
+import * as react_star from "react";
+var react_esm_default = React.default ?? React;
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/safeReact.mjs
-import * as React from "react";
 var SafeReact = {
-  ...React
+  ...react_esm_exports
 };
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useRefWithInit.mjs
-import * as React2 from "react";
 var UNINITIALIZED = {};
 function useRefWithInit(init, initArg) {
-  const ref = React2.useRef(UNINITIALIZED);
+  const ref = react_esm_exports.useRef(UNINITIALIZED);
   if (ref.current === UNINITIALIZED) {
     ref.current = init(initArg);
   }
@@ -69,10 +86,9 @@ function assertNotCalled() {
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useOnMount.mjs
-import * as React3 from "react";
 var EMPTY = [];
 function useOnMount(fn) {
-  React3.useEffect(fn, EMPTY);
+  react_esm_exports.useEffect(fn, EMPTY);
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useTimeout.mjs
@@ -124,19 +140,15 @@ var formatErrorMessage = createFormatErrorMessage("https://base-ui.com/productio
 var formatErrorMessage_default = formatErrorMessage;
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/root/ScrollAreaRootContext.mjs
-import * as React4 from "react";
-var ScrollAreaRootContext = /* @__PURE__ */ React4.createContext(void 0);
+var ScrollAreaRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ScrollAreaRootContext.displayName = "ScrollAreaRootContext";
 function useScrollAreaRootContext() {
-  const context = React4.useContext(ScrollAreaRootContext);
+  const context = react_esm_exports.useContext(ScrollAreaRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: ScrollAreaRootContext is missing. ScrollArea parts must be placed within <ScrollArea.Root>." : formatErrorMessage_default(53));
   }
   return context;
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
-import * as React7 from "react";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useMergedRefs.mjs
 function useMergedRefs(a, b, c, d) {
@@ -227,19 +239,15 @@ function update(forkRef, refs) {
   };
 }
 
-// node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
-import * as React6 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/reactVersion.mjs
-import * as React5 from "react";
-var majorVersion = parseInt(React5.version, 10);
+var majorVersion = parseInt(react_esm_exports.version, 10);
 function isReactVersionAtLeast(reactVersionToCheck) {
   return majorVersion >= reactVersionToCheck;
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
 function getReactElementRef(element) {
-  if (!/* @__PURE__ */ React6.isValidElement(element)) {
+  if (!/* @__PURE__ */ react_esm_exports.isValidElement(element)) {
     return null;
   }
   const reactElement = element;
@@ -455,7 +463,6 @@ function isSyntheticEvent(event) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
-import { createElement as _createElement } from "react";
 function useRenderElement(element, componentProps, params = {}) {
   const renderProp = componentProps.render;
   const outProps = useRenderElementProps(componentProps, params);
@@ -522,15 +529,15 @@ function evaluateRenderProp(element, render, props, state) {
     mergedProps.ref = props.ref;
     let newElement = render;
     if (newElement?.$$typeof === REACT_LAZY_TYPE) {
-      const children = React7.Children.toArray(render);
+      const children = react_esm_exports.Children.toArray(render);
       newElement = children[0];
     }
     if (false) {
-      if (!/* @__PURE__ */ React7.isValidElement(newElement)) {
+      if (!/* @__PURE__ */ react_esm_exports.isValidElement(newElement)) {
         throw new Error(["Base UI: The `render` prop was provided an invalid React element as `React.isValidElement(render)` is `false`.", "A valid React element must be provided to the `render` prop because it is cloned with props to replace the default element.", "https://base-ui.com/r/invalid-render-prop"].join("\n"));
       }
     }
-    return /* @__PURE__ */ React7.cloneElement(newElement, mergedProps);
+    return /* @__PURE__ */ react_esm_exports.cloneElement(newElement, mergedProps);
   }
   if (element) {
     if (typeof element === "string") {
@@ -541,20 +548,20 @@ function evaluateRenderProp(element, render, props, state) {
 }
 function renderTag(Tag, props) {
   if (Tag === "button") {
-    return /* @__PURE__ */ _createElement("button", {
+    return /* @__PURE__ */ (0, react_esm_exports.createElement)("button", {
       type: "button",
       ...props,
       key: props.key
     });
   }
   if (Tag === "img") {
-    return /* @__PURE__ */ _createElement("img", {
+    return /* @__PURE__ */ (0, react_esm_exports.createElement)("img", {
       alt: "",
       ...props,
       key: props.key
     });
   }
-  return /* @__PURE__ */ React7.createElement(Tag, props);
+  return /* @__PURE__ */ react_esm_exports.createElement(Tag, props);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/root/ScrollAreaRootCssVars.mjs
@@ -612,12 +619,11 @@ var styleDisableScrollbar = {
 if (false) styleDisableScrollbar.getElement.displayName = "styleDisableScrollbar.getElement";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useId.mjs
-import * as React8 from "react";
 var globalId = 0;
 function useGlobalId(idOverride, prefix = "mui") {
-  const [defaultId, setDefaultId] = React8.useState(idOverride);
+  const [defaultId, setDefaultId] = react_esm_exports.useState(idOverride);
   const id = idOverride || defaultId;
-  React8.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (defaultId == null) {
       globalId += 1;
       setDefaultId(`${prefix}-${globalId}`);
@@ -807,14 +813,13 @@ function getTarget(event) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/csp-context/CSPContext.mjs
-import * as React9 from "react";
-var CSPContext = /* @__PURE__ */ React9.createContext(void 0);
+var CSPContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) CSPContext.displayName = "CSPContext";
 var DEFAULT_CSP_CONTEXT_VALUE = {
   disableStyleElements: false
 };
 function useCSPContext() {
-  return React9.useContext(CSPContext) ?? DEFAULT_CSP_CONTEXT_VALUE;
+  return react_esm_exports.useContext(CSPContext) ?? DEFAULT_CSP_CONTEXT_VALUE;
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/root/ScrollAreaRoot.mjs
@@ -838,7 +843,7 @@ var DEFAULT_HIDDEN_STATE = {
   y: true,
   corner: true
 };
-var ScrollAreaRoot = /* @__PURE__ */ React10.forwardRef(function ScrollAreaRoot2(componentProps, forwardedRef) {
+var ScrollAreaRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function ScrollAreaRoot2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -859,29 +864,29 @@ var ScrollAreaRoot = /* @__PURE__ */ React10.forwardRef(function ScrollAreaRoot2
     nonce,
     disableStyleElements
   } = useCSPContext();
-  const [hovering, setHovering] = React10.useState(false);
-  const [scrollingX, setScrollingX] = React10.useState(false);
-  const [scrollingY, setScrollingY] = React10.useState(false);
-  const [touchModality, setTouchModality] = React10.useState(false);
-  const [hasMeasuredScrollbar, setHasMeasuredScrollbar] = React10.useState(false);
-  const [cornerSize, setCornerSize] = React10.useState(DEFAULT_SIZE);
-  const [thumbSize, setThumbSize] = React10.useState(DEFAULT_SIZE);
-  const [overflowEdges, setOverflowEdges] = React10.useState(DEFAULT_OVERFLOW_EDGES);
-  const [hiddenState, setHiddenState] = React10.useState(DEFAULT_HIDDEN_STATE);
-  const rootRef = React10.useRef(null);
-  const viewportRef = React10.useRef(null);
-  const scrollbarYRef = React10.useRef(null);
-  const scrollbarXRef = React10.useRef(null);
-  const thumbYRef = React10.useRef(null);
-  const thumbXRef = React10.useRef(null);
-  const cornerRef = React10.useRef(null);
-  const thumbDraggingRef = React10.useRef(false);
-  const startYRef = React10.useRef(0);
-  const startXRef = React10.useRef(0);
-  const startScrollTopRef = React10.useRef(0);
-  const startScrollLeftRef = React10.useRef(0);
-  const currentOrientationRef = React10.useRef("vertical");
-  const scrollPositionRef = React10.useRef(DEFAULT_COORDS);
+  const [hovering, setHovering] = react_esm_exports.useState(false);
+  const [scrollingX, setScrollingX] = react_esm_exports.useState(false);
+  const [scrollingY, setScrollingY] = react_esm_exports.useState(false);
+  const [touchModality, setTouchModality] = react_esm_exports.useState(false);
+  const [hasMeasuredScrollbar, setHasMeasuredScrollbar] = react_esm_exports.useState(false);
+  const [cornerSize, setCornerSize] = react_esm_exports.useState(DEFAULT_SIZE);
+  const [thumbSize, setThumbSize] = react_esm_exports.useState(DEFAULT_SIZE);
+  const [overflowEdges, setOverflowEdges] = react_esm_exports.useState(DEFAULT_OVERFLOW_EDGES);
+  const [hiddenState, setHiddenState] = react_esm_exports.useState(DEFAULT_HIDDEN_STATE);
+  const rootRef = react_esm_exports.useRef(null);
+  const viewportRef = react_esm_exports.useRef(null);
+  const scrollbarYRef = react_esm_exports.useRef(null);
+  const scrollbarXRef = react_esm_exports.useRef(null);
+  const thumbYRef = react_esm_exports.useRef(null);
+  const thumbXRef = react_esm_exports.useRef(null);
+  const cornerRef = react_esm_exports.useRef(null);
+  const thumbDraggingRef = react_esm_exports.useRef(false);
+  const startYRef = react_esm_exports.useRef(0);
+  const startXRef = react_esm_exports.useRef(0);
+  const startScrollTopRef = react_esm_exports.useRef(0);
+  const startScrollLeftRef = react_esm_exports.useRef(0);
+  const currentOrientationRef = react_esm_exports.useRef("vertical");
+  const scrollPositionRef = react_esm_exports.useRef(DEFAULT_COORDS);
   const handleScroll = useStableCallback((scrollPosition) => {
     const offsetX = scrollPosition.x - scrollPositionRef.current.x;
     const offsetY = scrollPosition.y - scrollPositionRef.current.y;
@@ -976,7 +981,7 @@ var ScrollAreaRoot = /* @__PURE__ */ React10.forwardRef(function ScrollAreaRoot2
       setHovering(isTargetRootChild);
     }
   }
-  const state = React10.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     scrolling: scrollingX || scrollingY,
     hasOverflowX: !hiddenState.x,
     hasOverflowY: !hiddenState.y,
@@ -1006,7 +1011,7 @@ var ScrollAreaRoot = /* @__PURE__ */ React10.forwardRef(function ScrollAreaRoot2
     props: [props, elementProps],
     stateAttributesMapping: scrollAreaStateAttributesMapping
   });
-  const contextValue = React10.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
@@ -1068,21 +1073,16 @@ function normalizeOverflowEdgeThreshold(threshold) {
   };
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/viewport/ScrollAreaViewport.mjs
-import * as React14 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useIsoLayoutEffect.mjs
-import * as React11 from "react";
 var noop = () => {
 };
-var useIsoLayoutEffect = typeof document !== "undefined" ? React11.useLayoutEffect : noop;
+var useIsoLayoutEffect = typeof document !== "undefined" ? react_esm_exports.useLayoutEffect : noop;
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/viewport/ScrollAreaViewportContext.mjs
-import * as React12 from "react";
-var ScrollAreaViewportContext = /* @__PURE__ */ React12.createContext(void 0);
+var ScrollAreaViewportContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ScrollAreaViewportContext.displayName = "ScrollAreaViewportContext";
 function useScrollAreaViewportContext() {
-  const context = React12.useContext(ScrollAreaViewportContext);
+  const context = react_esm_exports.useContext(ScrollAreaViewportContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: ScrollAreaViewportContext missing. ScrollAreaViewport parts must be placed within <ScrollArea.Viewport>." : formatErrorMessage_default(55));
   }
@@ -1090,11 +1090,10 @@ function useScrollAreaViewportContext() {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/direction-context/DirectionContext.mjs
-import * as React13 from "react";
-var DirectionContext = /* @__PURE__ */ React13.createContext(void 0);
+var DirectionContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) DirectionContext.displayName = "DirectionContext";
 function useDirection() {
-  const context = React13.useContext(DirectionContext);
+  const context = react_esm_exports.useContext(DirectionContext);
   return context?.direction ?? "ltr";
 }
 
@@ -1159,7 +1158,7 @@ function removeCSSVariableInheritance() {
   }
   scrollAreaOverflowVarsRegistered = true;
 }
-var ScrollAreaViewport = /* @__PURE__ */ React14.forwardRef(function ScrollAreaViewport2(componentProps, forwardedRef) {
+var ScrollAreaViewport = /* @__PURE__ */ react_esm_exports.forwardRef(function ScrollAreaViewport2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -1189,8 +1188,8 @@ var ScrollAreaViewport = /* @__PURE__ */ React14.forwardRef(function ScrollAreaV
     scrollingY
   } = useScrollAreaRootContext();
   const direction = useDirection();
-  const programmaticScrollRef = React14.useRef(true);
-  const lastMeasuredViewportMetricsRef = React14.useRef([NaN, NaN, NaN, NaN]);
+  const programmaticScrollRef = react_esm_exports.useRef(true);
+  const lastMeasuredViewportMetricsRef = react_esm_exports.useRef([NaN, NaN, NaN, NaN]);
   const scrollEndTimeout = useTimeout();
   const waitForAnimationsTimeout = useTimeout();
   const computeThumbPosition = useStableCallback(() => {
@@ -1400,7 +1399,7 @@ var ScrollAreaViewport = /* @__PURE__ */ React14.forwardRef(function ScrollAreaV
     onPointerEnter: handleUserInteraction,
     onKeyDown: handleUserInteraction
   };
-  const viewportState = React14.useMemo(() => ({
+  const viewportState = react_esm_exports.useMemo(() => ({
     scrolling: scrollingX || scrollingY,
     hasOverflowX: !hiddenState.x,
     hasOverflowY: !hiddenState.y,
@@ -1416,7 +1415,7 @@ var ScrollAreaViewport = /* @__PURE__ */ React14.forwardRef(function ScrollAreaV
     props: [props, elementProps],
     stateAttributesMapping: scrollAreaStateAttributesMapping
   });
-  const contextValue = React14.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     computeThumbPosition
   }), [computeThumbPosition]);
   return /* @__PURE__ */ _jsx2(ScrollAreaViewportContext.Provider, {
@@ -1441,9 +1440,6 @@ function mergeHiddenState(prevState, nextState) {
   return nextState;
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/scrollbar/ScrollAreaScrollbar.mjs
-import * as React16 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/addEventListener.mjs
 function addEventListener(target, type, listener, options) {
   target.addEventListener(type, listener, options);
@@ -1453,11 +1449,10 @@ function addEventListener(target, type, listener, options) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/scrollbar/ScrollAreaScrollbarContext.mjs
-import * as React15 from "react";
-var ScrollAreaScrollbarContext = /* @__PURE__ */ React15.createContext(void 0);
+var ScrollAreaScrollbarContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ScrollAreaScrollbarContext.displayName = "ScrollAreaScrollbarContext";
 function useScrollAreaScrollbarContext() {
-  const context = React15.useContext(ScrollAreaScrollbarContext);
+  const context = react_esm_exports.useContext(ScrollAreaScrollbarContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: ScrollAreaScrollbarContext is missing. ScrollAreaScrollbar parts must be placed within <ScrollArea.Scrollbar>." : formatErrorMessage_default(54));
   }
@@ -1473,7 +1468,7 @@ var ScrollAreaScrollbarCssVars = /* @__PURE__ */ (function(ScrollAreaScrollbarCs
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/scrollbar/ScrollAreaScrollbar.mjs
 import { jsx as _jsx3 } from "react/jsx-runtime";
-var ScrollAreaScrollbar = /* @__PURE__ */ React16.forwardRef(function ScrollAreaScrollbar2(componentProps, forwardedRef) {
+var ScrollAreaScrollbar = /* @__PURE__ */ react_esm_exports.forwardRef(function ScrollAreaScrollbar2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -1519,7 +1514,7 @@ var ScrollAreaScrollbar = /* @__PURE__ */ React16.forwardRef(function ScrollArea
   const hideTrackUntilMeasured = !hasMeasuredScrollbar && !keepMounted;
   const isHidden = orientation === "vertical" ? hiddenState.y : hiddenState.x;
   const shouldRender = keepMounted || !isHidden;
-  React16.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!shouldRender) {
       return void 0;
     }
@@ -1642,7 +1637,7 @@ var ScrollAreaScrollbar = /* @__PURE__ */ React16.forwardRef(function ScrollArea
     props: [props, elementProps],
     stateAttributesMapping: scrollAreaStateAttributesMapping
   });
-  const contextValue = React16.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     orientation
   }), [orientation]);
   if (!shouldRender) {
@@ -1656,8 +1651,7 @@ var ScrollAreaScrollbar = /* @__PURE__ */ React16.forwardRef(function ScrollArea
 if (false) ScrollAreaScrollbar.displayName = "ScrollAreaScrollbar";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/content/ScrollAreaContent.mjs
-import * as React17 from "react";
-var ScrollAreaContent = /* @__PURE__ */ React17.forwardRef(function ScrollAreaContent2(componentProps, forwardedRef) {
+var ScrollAreaContent = /* @__PURE__ */ react_esm_exports.forwardRef(function ScrollAreaContent2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -1671,8 +1665,8 @@ var ScrollAreaContent = /* @__PURE__ */ React17.forwardRef(function ScrollAreaCo
     hasMeasuredScrollbar,
     viewportState
   } = useScrollAreaRootContext();
-  const contentWrapperRef = React17.useRef(null);
-  const computeOnInitialResizeRef = React17.useRef(hasMeasuredScrollbar);
+  const contentWrapperRef = react_esm_exports.useRef(null);
+  const computeOnInitialResizeRef = react_esm_exports.useRef(hasMeasuredScrollbar);
   useIsoLayoutEffect(() => {
     if (typeof ResizeObserver === "undefined") {
       return void 0;
@@ -1710,8 +1704,7 @@ var ScrollAreaContent = /* @__PURE__ */ React17.forwardRef(function ScrollAreaCo
 if (false) ScrollAreaContent.displayName = "ScrollAreaContent";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/thumb/ScrollAreaThumb.mjs
-import * as React18 from "react";
-var ScrollAreaThumb = /* @__PURE__ */ React18.forwardRef(function ScrollAreaThumb2(componentProps, forwardedRef) {
+var ScrollAreaThumb = /* @__PURE__ */ react_esm_exports.forwardRef(function ScrollAreaThumb2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -1770,8 +1763,7 @@ var ScrollAreaThumb = /* @__PURE__ */ React18.forwardRef(function ScrollAreaThum
 if (false) ScrollAreaThumb.displayName = "ScrollAreaThumb";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/corner/ScrollAreaCorner.mjs
-import * as React19 from "react";
-var ScrollAreaCorner = /* @__PURE__ */ React19.forwardRef(function ScrollAreaCorner2(componentProps, forwardedRef) {
+var ScrollAreaCorner = /* @__PURE__ */ react_esm_exports.forwardRef(function ScrollAreaCorner2(componentProps, forwardedRef) {
   const {
     render,
     className,

@@ -3,9 +3,13 @@
 // meaningful are fixed. `base`/`port` describe a dev server that does not
 // exist here and are omitted.
 
+import { en } from '../locale/en'
+
 const config = {
   slidesDir: 'slides',
-  locale: 'en' as const,
+  // `locale` is the resolved Locale table, not its id — upstream's config
+  // loader inlines the object and the store reads `config.locale` directly.
+  locale: en,
   version: '1.19.1',
   build: {
     showSlideBrowser: true,

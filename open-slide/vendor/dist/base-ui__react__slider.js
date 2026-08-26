@@ -1,18 +1,7 @@
-var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
-}) : x)(function(x) {
-  if (typeof require !== "undefined") return require.apply(this, arguments);
-  throw Error('Dynamic require of "' + x + '" is not supported');
-});
-var __commonJS = (cb, mod) => function __require2() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
@@ -25,79 +14,7 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-
-// node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.production.js
-var require_use_sync_external_store_shim_production = __commonJS({
-  "node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.production.js"(exports) {
-    "use strict";
-    var React29 = __require("react");
-    function is(x, y) {
-      return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
-    }
-    var objectIs = "function" === typeof Object.is ? Object.is : is;
-    var useState7 = React29.useState;
-    var useEffect6 = React29.useEffect;
-    var useLayoutEffect2 = React29.useLayoutEffect;
-    var useDebugValue = React29.useDebugValue;
-    function useSyncExternalStore$2(subscribe2, getSnapshot2) {
-      var value = getSnapshot2(), _useState = useState7({ inst: { value, getSnapshot: getSnapshot2 } }), inst = _useState[0].inst, forceUpdate = _useState[1];
-      useLayoutEffect2(
-        function() {
-          inst.value = value;
-          inst.getSnapshot = getSnapshot2;
-          checkIfSnapshotChanged(inst) && forceUpdate({ inst });
-        },
-        [subscribe2, value, getSnapshot2]
-      );
-      useEffect6(
-        function() {
-          checkIfSnapshotChanged(inst) && forceUpdate({ inst });
-          return subscribe2(function() {
-            checkIfSnapshotChanged(inst) && forceUpdate({ inst });
-          });
-        },
-        [subscribe2]
-      );
-      useDebugValue(value);
-      return value;
-    }
-    function checkIfSnapshotChanged(inst) {
-      var latestGetSnapshot = inst.getSnapshot;
-      inst = inst.value;
-      try {
-        var nextValue = latestGetSnapshot();
-        return !objectIs(inst, nextValue);
-      } catch (error) {
-        return true;
-      }
-    }
-    function useSyncExternalStore$1(subscribe2, getSnapshot2) {
-      return getSnapshot2();
-    }
-    var shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
-    exports.useSyncExternalStore = void 0 !== React29.useSyncExternalStore ? React29.useSyncExternalStore : shim;
-  }
-});
-
-// node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/shim/index.js
-var require_shim = __commonJS({
-  "node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/shim/index.js"(exports, module) {
-    "use strict";
-    if (true) {
-      module.exports = require_use_sync_external_store_shim_production();
-    } else {
-      module.exports = null;
-    }
-  }
-});
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/index.parts.mjs
 var index_parts_exports = {};
@@ -111,8 +28,15 @@ __export(index_parts_exports, {
   Value: () => SliderValue
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/root/SliderRoot.mjs
-import * as React17 from "react";
+// vendor/shims/react-esm.js
+var react_esm_exports = {};
+__export(react_esm_exports, {
+  default: () => react_esm_default
+});
+__reExport(react_esm_exports, react_star);
+import * as React from "react";
+import * as react_star from "react";
+var react_esm_default = React.default ?? React;
 
 // node_modules/.pnpm/@floating-ui+utils@0.2.12/node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
 function hasWindow() {
@@ -147,7 +71,6 @@ function ownerDocument(node) {
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useControlled.mjs
-import * as React from "react";
 function useControlled({
   controlled,
   default: defaultProp,
@@ -156,25 +79,25 @@ function useControlled({
 }) {
   const {
     current: isControlled
-  } = React.useRef(controlled !== void 0);
-  const [valueState, setValue] = React.useState(defaultProp);
+  } = react_esm_exports.useRef(controlled !== void 0);
+  const [valueState, setValue] = react_esm_exports.useState(defaultProp);
   const value = isControlled ? controlled : valueState;
   if (false) {
-    React.useEffect(() => {
+    react_esm_exports.useEffect(() => {
       if (isControlled !== (controlled !== void 0)) {
         error([`A component is changing the ${isControlled ? "" : "un"}controlled ${state} state of ${name} to be ${isControlled ? "un" : ""}controlled.`, "Elements should not switch from uncontrolled to controlled (or vice versa).", `Decide between using a controlled or uncontrolled ${name} element for the lifetime of the component.`, "The nature of the state is determined during the first render. It's considered controlled if the value is not `undefined`.", "More info: https://fb.me/react-controlled-components"].join("\n"));
       }
     }, [state, name, controlled]);
     const {
       current: defaultValue
-    } = React.useRef(defaultProp);
-    React.useEffect(() => {
+    } = react_esm_exports.useRef(defaultProp);
+    react_esm_exports.useEffect(() => {
       if (!isControlled && serializeToDevModeString(defaultValue) !== serializeToDevModeString(defaultProp)) {
         error([`A component is changing the default ${state} state of an uncontrolled ${name} after being initialized. To suppress this warning opt to use a controlled ${name}.`].join("\n"));
       }
     }, [defaultProp]);
   }
-  const setValueIfUncontrolled = React.useCallback((newValue) => {
+  const setValueIfUncontrolled = react_esm_exports.useCallback((newValue) => {
     if (!isControlled) {
       setValue(newValue);
     }
@@ -183,16 +106,14 @@ function useControlled({
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/safeReact.mjs
-import * as React2 from "react";
 var SafeReact = {
-  ...React2
+  ...react_esm_exports
 };
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useRefWithInit.mjs
-import * as React3 from "react";
 var UNINITIALIZED = {};
 function useRefWithInit(init, initArg) {
-  const ref = React3.useRef(UNINITIALIZED);
+  const ref = react_esm_exports.useRef(UNINITIALIZED);
   if (ref.current === UNINITIALIZED) {
     ref.current = init(initArg);
   }
@@ -233,10 +154,9 @@ function assertNotCalled() {
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useIsoLayoutEffect.mjs
-import * as React4 from "react";
 var noop = () => {
 };
-var useIsoLayoutEffect = typeof document !== "undefined" ? React4.useLayoutEffect : noop;
+var useIsoLayoutEffect = typeof document !== "undefined" ? react_esm_exports.useLayoutEffect : noop;
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useValueAsRef.mjs
 function useValueAsRef(value) {
@@ -373,9 +293,8 @@ function createGenericEventDetails(reason, event, customProperties) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useValueChanged.mjs
-import * as React5 from "react";
 function useValueChanged(value, onChange) {
-  const valueRef = React5.useRef(value);
+  const valueRef = react_esm_exports.useRef(value);
   const onChangeCallback = useStableCallback(onChange);
   useIsoLayoutEffect(() => {
     if (valueRef.current === value) {
@@ -389,12 +308,11 @@ function useValueChanged(value, onChange) {
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useId.mjs
-import * as React6 from "react";
 var globalId = 0;
 function useGlobalId(idOverride, prefix = "mui") {
-  const [defaultId, setDefaultId] = React6.useState(idOverride);
+  const [defaultId, setDefaultId] = react_esm_exports.useState(idOverride);
   const id = idOverride || defaultId;
-  React6.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (defaultId == null) {
       globalId += 1;
       setDefaultId(`${prefix}-${globalId}`);
@@ -427,9 +345,6 @@ function createFormatErrorMessage(baseUrl, prefix) {
 }
 var formatErrorMessage = createFormatErrorMessage("https://base-ui.com/production-error", "Base UI");
 var formatErrorMessage_default = formatErrorMessage;
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
-import * as React9 from "react";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useMergedRefs.mjs
 function useMergedRefs(a, b, c, d) {
@@ -520,19 +435,15 @@ function update(forkRef, refs) {
   };
 }
 
-// node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
-import * as React8 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/reactVersion.mjs
-import * as React7 from "react";
-var majorVersion = parseInt(React7.version, 10);
+var majorVersion = parseInt(react_esm_exports.version, 10);
 function isReactVersionAtLeast(reactVersionToCheck) {
   return majorVersion >= reactVersionToCheck;
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
 function getReactElementRef(element) {
-  if (!/* @__PURE__ */ React8.isValidElement(element)) {
+  if (!/* @__PURE__ */ react_esm_exports.isValidElement(element)) {
     return null;
   }
   const reactElement = element;
@@ -744,7 +655,6 @@ function isSyntheticEvent(event) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
-import { createElement as _createElement } from "react";
 function useRenderElement(element, componentProps, params = {}) {
   const renderProp = componentProps.render;
   const outProps = useRenderElementProps(componentProps, params);
@@ -811,15 +721,15 @@ function evaluateRenderProp(element, render, props, state) {
     mergedProps.ref = props.ref;
     let newElement = render;
     if (newElement?.$$typeof === REACT_LAZY_TYPE) {
-      const children = React9.Children.toArray(render);
+      const children = react_esm_exports.Children.toArray(render);
       newElement = children[0];
     }
     if (false) {
-      if (!/* @__PURE__ */ React9.isValidElement(newElement)) {
+      if (!/* @__PURE__ */ react_esm_exports.isValidElement(newElement)) {
         throw new Error(["Base UI: The `render` prop was provided an invalid React element as `React.isValidElement(render)` is `false`.", "A valid React element must be provided to the `render` prop because it is cloned with props to replace the default element.", "https://base-ui.com/r/invalid-render-prop"].join("\n"));
       }
     }
-    return /* @__PURE__ */ React9.cloneElement(newElement, mergedProps);
+    return /* @__PURE__ */ react_esm_exports.cloneElement(newElement, mergedProps);
   }
   if (element) {
     if (typeof element === "string") {
@@ -830,20 +740,20 @@ function evaluateRenderProp(element, render, props, state) {
 }
 function renderTag(Tag, props) {
   if (Tag === "button") {
-    return /* @__PURE__ */ _createElement("button", {
+    return /* @__PURE__ */ (0, react_esm_exports.createElement)("button", {
       type: "button",
       ...props,
       key: props.key
     });
   }
   if (Tag === "img") {
-    return /* @__PURE__ */ _createElement("img", {
+    return /* @__PURE__ */ (0, react_esm_exports.createElement)("img", {
       alt: "",
       ...props,
       key: props.key
     });
   }
-  return /* @__PURE__ */ React9.createElement(Tag, props);
+  return /* @__PURE__ */ react_esm_exports.createElement(Tag, props);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/clamp.mjs
@@ -992,12 +902,8 @@ function matchesFocusVisible(element) {
   }
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/CompositeList.mjs
-import * as React11 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/CompositeListContext.mjs
-import * as React10 from "react";
-var CompositeListContext = /* @__PURE__ */ React10.createContext({
+var CompositeListContext = /* @__PURE__ */ react_esm_exports.createContext({
   register: () => {
   },
   unregister: () => {
@@ -1015,7 +921,7 @@ var CompositeListContext = /* @__PURE__ */ React10.createContext({
 });
 if (false) CompositeListContext.displayName = "CompositeListContext";
 function useCompositeListContext() {
-  return React10.useContext(CompositeListContext);
+  return react_esm_exports.useContext(CompositeListContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/CompositeList.mjs
@@ -1028,11 +934,11 @@ function CompositeList(props) {
     onMapChange: onMapChangeProp
   } = props;
   const onMapChange = useStableCallback(onMapChangeProp);
-  const nextIndexRef = React11.useRef(0);
+  const nextIndexRef = react_esm_exports.useRef(0);
   const listeners = useRefWithInit(createListeners).current;
   const map = useRefWithInit(createMap).current;
-  const [mapTick, setMapTick] = React11.useState(0);
-  const lastTickRef = React11.useRef(mapTick);
+  const [mapTick, setMapTick] = react_esm_exports.useState(0);
+  const lastTickRef = react_esm_exports.useRef(mapTick);
   const register = useStableCallback((node, metadata) => {
     map.set(node, metadata ?? null);
     lastTickRef.current += 1;
@@ -1043,7 +949,7 @@ function CompositeList(props) {
     lastTickRef.current += 1;
     setMapTick(lastTickRef.current);
   });
-  const sortedMap = React11.useMemo(() => {
+  const sortedMap = react_esm_exports.useMemo(() => {
     disableEslintWarning(mapTick);
     const newMap = /* @__PURE__ */ new Map();
     const sortedNodes = Array.from(map.keys()).filter((node) => node.isConnected).sort(sortByDocumentPosition);
@@ -1117,7 +1023,7 @@ function CompositeList(props) {
   useIsoLayoutEffect(() => {
     listeners.forEach((l) => l(sortedMap));
   }, [listeners, sortedMap]);
-  const contextValue = React11.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     register,
     unregister,
     subscribeMapChange,
@@ -1148,9 +1054,6 @@ function sortByDocumentPosition(a, b) {
 }
 function disableEslintWarning(_) {
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/field-root-context/FieldRootContext.mjs
-import * as React12 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/field/control/FieldControlDataAttributes.mjs
 var FieldControlDataAttributes = /* @__PURE__ */ (function(FieldControlDataAttributes2) {
@@ -1246,10 +1149,10 @@ var DEFAULT_FIELD_ROOT_CONTEXT = {
     change: NOOP
   }
 };
-var FieldRootContext = /* @__PURE__ */ React12.createContext(DEFAULT_FIELD_ROOT_CONTEXT);
+var FieldRootContext = /* @__PURE__ */ react_esm_exports.createContext(DEFAULT_FIELD_ROOT_CONTEXT);
 if (false) FieldRootContext.displayName = "FieldRootContext";
 function useFieldRootContext(optional = true) {
-  const context = React12.useContext(FieldRootContext);
+  const context = react_esm_exports.useContext(FieldRootContext);
   if (context.setValidityData === NOOP && !optional) {
     throw new Error(false ? "Base UI: FieldRootContext is missing. Field parts must be placed within <Field.Root>." : formatErrorMessage_default(28));
   }
@@ -1257,12 +1160,11 @@ function useFieldRootContext(optional = true) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/field-register-control/useRegisterFieldControl.mjs
-import * as React13 from "react";
 function useRegisterFieldControl(controlRef, id, value, getFormValueOverride, enabled = true, name) {
   const {
     registerFieldControl
   } = useFieldRootContext();
-  const sourceRef = React13.useRef(null);
+  const sourceRef = react_esm_exports.useRef(null);
   if (!sourceRef.current) {
     sourceRef.current = Symbol();
   }
@@ -1286,8 +1188,7 @@ function useRegisterFieldControl(controlRef, id, value, getFormValueOverride, en
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/form-context/FormContext.mjs
-import * as React14 from "react";
-var FormContext = /* @__PURE__ */ React14.createContext({
+var FormContext = /* @__PURE__ */ react_esm_exports.createContext({
   formRef: {
     current: {
       fields: /* @__PURE__ */ new Map()
@@ -1302,12 +1203,11 @@ var FormContext = /* @__PURE__ */ React14.createContext({
 });
 if (false) FormContext.displayName = "FormContext";
 function useFormContext() {
-  return React14.useContext(FormContext);
+  return react_esm_exports.useContext(FormContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/labelable-provider/LabelableContext.mjs
-import * as React15 from "react";
-var LabelableContext = /* @__PURE__ */ React15.createContext({
+var LabelableContext = /* @__PURE__ */ react_esm_exports.createContext({
   controlId: void 0,
   registerControlId: NOOP,
   labelId: void 0,
@@ -1318,7 +1218,7 @@ var LabelableContext = /* @__PURE__ */ React15.createContext({
 });
 if (false) LabelableContext.displayName = "LabelableContext";
 function useLabelableContext() {
-  return React15.useContext(LabelableContext);
+  return react_esm_exports.useContext(LabelableContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/resolveAriaLabelledBy.mjs
@@ -1383,11 +1283,10 @@ var sliderStateAttributesMapping = {
 };
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/root/SliderRootContext.mjs
-import * as React16 from "react";
-var SliderRootContext = /* @__PURE__ */ React16.createContext(void 0);
+var SliderRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) SliderRootContext.displayName = "SliderRootContext";
 function useSliderRootContext() {
-  const context = React16.useContext(SliderRootContext);
+  const context = react_esm_exports.useContext(SliderRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: SliderRootContext is missing. Slider parts must be placed within <Slider.Root>." : formatErrorMessage_default(62));
   }
@@ -1408,7 +1307,7 @@ function areValuesEqual(newValue, oldValue) {
   }
   return false;
 }
-var SliderRoot = /* @__PURE__ */ React17.forwardRef(function SliderRoot2(componentProps, forwardedRef) {
+var SliderRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function SliderRoot2(componentProps, forwardedRef) {
   const {
     "aria-labelledby": ariaLabelledByProp,
     className,
@@ -1453,7 +1352,7 @@ var SliderRoot = /* @__PURE__ */ React17.forwardRef(function SliderRoot2(compone
   const {
     labelId: fieldLabelId
   } = useLabelableContext();
-  const [labelId, setLabelId] = React17.useState();
+  const [labelId, setLabelId] = react_esm_exports.useState();
   const ariaLabelledby = ariaLabelledByProp ?? resolveAriaLabelledBy(fieldLabelId, labelId);
   const disabled2 = fieldDisabled || disabledProp;
   const name = fieldName ?? nameProp;
@@ -1462,20 +1361,20 @@ var SliderRoot = /* @__PURE__ */ React17.forwardRef(function SliderRoot2(compone
     default: defaultValue ?? min,
     name: "Slider"
   });
-  const sliderRef = React17.useRef(null);
-  const controlRef = React17.useRef(null);
-  const thumbRefs = React17.useRef([]);
-  const pressedInputRef = React17.useRef(null);
-  const pressedThumbCenterOffsetRef = React17.useRef(null);
-  const pressedThumbIndexRef = React17.useRef(-1);
-  const pressedValuesRef = React17.useRef(null);
-  const lastChangeReasonRef = React17.useRef("none");
+  const sliderRef = react_esm_exports.useRef(null);
+  const controlRef = react_esm_exports.useRef(null);
+  const thumbRefs = react_esm_exports.useRef([]);
+  const pressedInputRef = react_esm_exports.useRef(null);
+  const pressedThumbCenterOffsetRef = react_esm_exports.useRef(null);
+  const pressedThumbIndexRef = react_esm_exports.useRef(-1);
+  const pressedValuesRef = react_esm_exports.useRef(null);
+  const lastChangeReasonRef = react_esm_exports.useRef("none");
   const formatOptionsRef = useValueAsRef(format);
-  const [active, setActiveState] = React17.useState(-1);
-  const [lastUsedThumbIndex, setLastUsedThumbIndex] = React17.useState(-1);
-  const [dragging, setDragging] = React17.useState(false);
-  const [thumbMap, setThumbMap] = React17.useState(() => /* @__PURE__ */ new Map());
-  const [indicatorPosition, setIndicatorPosition] = React17.useState([void 0, void 0]);
+  const [active, setActiveState] = react_esm_exports.useState(-1);
+  const [lastUsedThumbIndex, setLastUsedThumbIndex] = react_esm_exports.useState(-1);
+  const [dragging, setDragging] = react_esm_exports.useState(false);
+  const [thumbMap, setThumbMap] = react_esm_exports.useState(() => /* @__PURE__ */ new Map());
+  const [indicatorPosition, setIndicatorPosition] = react_esm_exports.useState([void 0, void 0]);
   const setActive = useStableCallback((value) => {
     setActiveState(value);
     if (value !== -1) {
@@ -1501,7 +1400,7 @@ var SliderRoot = /* @__PURE__ */ React17.forwardRef(function SliderRoot2(compone
     }
   });
   const range = Array.isArray(valueUnwrapped);
-  const values = React17.useMemo(() => {
+  const values = react_esm_exports.useMemo(() => {
     if (!range) {
       return [clamp(valueUnwrapped, min, max)];
     }
@@ -1560,7 +1459,7 @@ var SliderRoot = /* @__PURE__ */ React17.forwardRef(function SliderRoot2(compone
   if (disabled2 && active !== -1) {
     setActive(-1);
   }
-  const state = React17.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     ...fieldState,
     activeThumbIndex: active,
     disabled: disabled2,
@@ -1572,7 +1471,7 @@ var SliderRoot = /* @__PURE__ */ React17.forwardRef(function SliderRoot2(compone
     step,
     values
   }), [fieldState, active, disabled2, dragging, max, min, minStepsBetweenValues, orientation, step, values]);
-  const contextValue = React17.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     active,
     controlRef,
     disabled: disabled2,
@@ -1633,9 +1532,6 @@ var SliderRoot = /* @__PURE__ */ React17.forwardRef(function SliderRoot2(compone
   });
 });
 if (false) SliderRoot.displayName = "SliderRoot";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/label/SliderLabel.mjs
-import * as React18 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useRegisteredLabelId.mjs
 function useRegisteredLabelId(idProp, setLabelId) {
@@ -1715,7 +1611,7 @@ function focusElementWithVisible(element) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/label/SliderLabel.mjs
-var SliderLabel = /* @__PURE__ */ React18.forwardRef(function SliderLabel2(componentProps, forwardedRef) {
+var SliderLabel = /* @__PURE__ */ react_esm_exports.forwardRef(function SliderLabel2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -1758,9 +1654,6 @@ var SliderLabel = /* @__PURE__ */ React18.forwardRef(function SliderLabel2(compo
 });
 if (false) SliderLabel.displayName = "SliderLabel";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/value/SliderValue.mjs
-import * as React19 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/stringifyLocale.mjs
 function stringifyLocale(locale) {
   if (Array.isArray(locale)) {
@@ -1795,7 +1688,7 @@ function formatNumber(value, locale, options) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/value/SliderValue.mjs
-var SliderValue = /* @__PURE__ */ React19.forwardRef(function SliderValue2(componentProps, forwardedRef) {
+var SliderValue = /* @__PURE__ */ react_esm_exports.forwardRef(function SliderValue2(componentProps, forwardedRef) {
   const {
     "aria-live": ariaLive = "off",
     render,
@@ -1818,7 +1711,7 @@ var SliderValue = /* @__PURE__ */ React19.forwardRef(function SliderValue2(compo
     }
   }
   const outputFor = htmlFor.trim() === "" ? void 0 : htmlFor.trim();
-  const formattedValues = React19.useMemo(() => {
+  const formattedValues = react_esm_exports.useMemo(() => {
     const arr = [];
     for (let i = 0; i < values.length; i += 1) {
       arr.push(formatNumber(values[i], locale, formatOptionsRef.current ?? void 0));
@@ -1842,9 +1735,6 @@ var SliderValue = /* @__PURE__ */ React19.forwardRef(function SliderValue2(compo
 });
 if (false) SliderValue.displayName = "SliderValue";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/control/SliderControl.mjs
-import * as React22 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/addEventListener.mjs
 function addEventListener(target, type, listener, options) {
   target.addEventListener(type, listener, options);
@@ -1854,10 +1744,9 @@ function addEventListener(target, type, listener, options) {
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useOnMount.mjs
-import * as React20 from "react";
 var EMPTY = [];
 function useOnMount(fn) {
-  React20.useEffect(fn, EMPTY);
+  react_esm_exports.useEffect(fn, EMPTY);
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useAnimationFrame.mjs
@@ -1949,11 +1838,10 @@ function useAnimationFrame() {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/direction-context/DirectionContext.mjs
-import * as React21 from "react";
-var DirectionContext = /* @__PURE__ */ React21.createContext(void 0);
+var DirectionContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) DirectionContext.displayName = "DirectionContext";
 function useDirection() {
-  const context = React21.useContext(DirectionContext);
+  const context = react_esm_exports.useContext(DirectionContext);
   return context?.direction ?? "ltr";
 }
 
@@ -2195,7 +2083,7 @@ function getFingerCoords(event, touchIdRef) {
     y: event.clientY
   };
 }
-var SliderControl = /* @__PURE__ */ React22.forwardRef(function SliderControl2(componentProps, forwardedRef) {
+var SliderControl = /* @__PURE__ */ react_esm_exports.forwardRef(function SliderControl2(componentProps, forwardedRef) {
   const {
     render: renderProp,
     className,
@@ -2230,17 +2118,17 @@ var SliderControl = /* @__PURE__ */ React22.forwardRef(function SliderControl2(c
   const direction = useDirection();
   const range = values.length > 1;
   const vertical = orientation === "vertical";
-  const controlRef = React22.useRef(null);
-  const stylesRef = React22.useRef(null);
+  const controlRef = react_esm_exports.useRef(null);
+  const stylesRef = react_esm_exports.useRef(null);
   const setStylesRef = useStableCallback((element2) => {
     if (element2 && stylesRef.current == null) {
       stylesRef.current = getWindow(element2).getComputedStyle(element2);
     }
   });
-  const touchIdRef = React22.useRef(null);
-  const moveCountRef = React22.useRef(0);
-  const insetThumbOffsetRef = React22.useRef(0);
-  const currentInteractionValueRef = React22.useRef(null);
+  const touchIdRef = react_esm_exports.useRef(null);
+  const moveCountRef = react_esm_exports.useRef(0);
+  const insetThumbOffsetRef = react_esm_exports.useRef(0);
+  const currentInteractionValueRef = react_esm_exports.useRef(null);
   const latestValuesRef = useValueAsRef(values);
   function updatePressedThumb(nextIndex) {
     if (pressedThumbIndexRef.current !== nextIndex) {
@@ -2471,7 +2359,7 @@ var SliderControl = /* @__PURE__ */ React22.forwardRef(function SliderControl2(c
     currentInteractionValueRef.current = null;
   });
   const focusFrame = useAnimationFrame();
-  React22.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     const control = controlRef.current;
     if (!control) {
       return () => stopListening();
@@ -2485,7 +2373,7 @@ var SliderControl = /* @__PURE__ */ React22.forwardRef(function SliderControl2(c
       stopListening();
     };
   }, [stopListening, handleTouchStart, controlRef, focusFrame]);
-  React22.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (disabled2) {
       stopListening();
     }
@@ -2550,8 +2438,7 @@ var SliderControl = /* @__PURE__ */ React22.forwardRef(function SliderControl2(c
 if (false) SliderControl.displayName = "SliderControl";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/track/SliderTrack.mjs
-import * as React23 from "react";
-var SliderTrack = /* @__PURE__ */ React23.forwardRef(function SliderTrack2(componentProps, forwardedRef) {
+var SliderTrack = /* @__PURE__ */ react_esm_exports.forwardRef(function SliderTrack2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -2574,9 +2461,6 @@ var SliderTrack = /* @__PURE__ */ React23.forwardRef(function SliderTrack2(compo
   return element;
 });
 if (false) SliderTrack.displayName = "SliderTrack";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/thumb/SliderThumb.mjs
-import * as React27 from "react";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/visuallyHidden.mjs
 var visuallyHiddenBase = {
@@ -2601,7 +2485,6 @@ var visuallyHiddenInput = {
 };
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useIsHydrating.mjs
-var import_shim = __toESM(require_shim(), 1);
 function subscribe() {
   return NOOP;
 }
@@ -2612,7 +2495,7 @@ function getServerSnapshot() {
   return true;
 }
 function useIsHydrating() {
-  return (0, import_shim.useSyncExternalStore)(subscribe, getSnapshot, getServerSnapshot);
+  return (0, react_esm_exports.useSyncExternalStore)(subscribe, getSnapshot, getServerSnapshot);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/valueToPercent.mjs
@@ -2635,7 +2518,6 @@ var ARROW_KEYS = /* @__PURE__ */ new Set([...HORIZONTAL_KEYS, ...VERTICAL_KEYS])
 var COMPOSITE_KEYS = /* @__PURE__ */ new Set([...ARROW_KEYS, HOME, END]);
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/useCompositeListItem.mjs
-import * as React24 from "react";
 var IndexGuessBehavior = /* @__PURE__ */ (function(IndexGuessBehavior2) {
   IndexGuessBehavior2[IndexGuessBehavior2["None"] = 0] = "None";
   IndexGuessBehavior2[IndexGuessBehavior2["GuessFromOrder"] = 1] = "GuessFromOrder";
@@ -2657,8 +2539,8 @@ function useCompositeListItem(params = {}) {
     labelsRef,
     nextIndexRef
   } = useCompositeListContext();
-  const indexRef = React24.useRef(-1);
-  const [index, setIndex] = React24.useState(externalIndex ?? (indexGuessBehavior === IndexGuessBehavior.GuessFromOrder ? () => {
+  const indexRef = react_esm_exports.useRef(-1);
+  const [index, setIndex] = react_esm_exports.useState(externalIndex ?? (indexGuessBehavior === IndexGuessBehavior.GuessFromOrder ? () => {
     if (indexRef.current === -1) {
       const newIndex = nextIndexRef.current;
       nextIndexRef.current += 1;
@@ -2666,8 +2548,8 @@ function useCompositeListItem(params = {}) {
     }
     return indexRef.current;
   } : -1));
-  const componentRef = React24.useRef(null);
-  const ref = React24.useCallback((node) => {
+  const componentRef = react_esm_exports.useRef(null);
+  const ref = react_esm_exports.useCallback((node) => {
     componentRef.current = node;
     if (index !== -1 && node !== null) {
       elementsRef.current[index] = node;
@@ -2708,18 +2590,16 @@ function useCompositeListItem(params = {}) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/csp-context/CSPContext.mjs
-import * as React25 from "react";
-var CSPContext = /* @__PURE__ */ React25.createContext(void 0);
+var CSPContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) CSPContext.displayName = "CSPContext";
 var DEFAULT_CSP_CONTEXT_VALUE = {
   disableStyleElements: false
 };
 function useCSPContext() {
-  return React25.useContext(CSPContext) ?? DEFAULT_CSP_CONTEXT_VALUE;
+  return react_esm_exports.useContext(CSPContext) ?? DEFAULT_CSP_CONTEXT_VALUE;
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/labelable-provider/useLabelableId.mjs
-import * as React26 from "react";
 function useLabelableId(params = {}) {
   const {
     id,
@@ -2733,8 +2613,8 @@ function useLabelableId(params = {}) {
   const defaultId = useBaseUiId(id);
   const controlIdForEffect = implicit ? controlId : void 0;
   const controlSourceRef = useRefWithInit(() => Symbol("labelable-control"));
-  const hasRegisteredRef = React26.useRef(false);
-  const hadExplicitIdRef = React26.useRef(id != null);
+  const hasRegisteredRef = react_esm_exports.useRef(false);
+  const hadExplicitIdRef = react_esm_exports.useRef(id != null);
   const unregisterControlId = useStableCallback(() => {
     if (!hasRegisteredRef.current || registerControlId === NOOP) {
       return;
@@ -2771,7 +2651,7 @@ function useLabelableId(params = {}) {
     registerControlId(controlSourceRef.current, nextId);
     return void 0;
   }, [id, controlRef, controlIdForEffect, registerControlId, implicit, defaultId, controlSourceRef, unregisterControlId]);
-  React26.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     return unregisterControlId;
   }, [unregisterControlId]);
   return controlId ?? defaultId;
@@ -2814,7 +2694,7 @@ function getNewValue(thumbValue, increment, direction, min, max) {
   const roundedValue = Number(value.toFixed(Math.max(getDecimalPrecision(thumbValue), getDecimalPrecision(increment), getDecimalPrecision(min))));
   return clamp(roundedValue, min, max);
 }
-var SliderThumb = /* @__PURE__ */ React27.forwardRef(function SliderThumb2(componentProps, forwardedRef) {
+var SliderThumb = /* @__PURE__ */ react_esm_exports.forwardRef(function SliderThumb2(componentProps, forwardedRef) {
   const {
     render,
     children: childrenProp,
@@ -2878,13 +2758,13 @@ var SliderThumb = /* @__PURE__ */ React27.forwardRef(function SliderThumb2(compo
     setFocused,
     validationMode
   } = useFieldRootContext();
-  const thumbRef = React27.useRef(null);
-  const inputRef = React27.useRef(null);
-  const restoringFocusVisibleRef = React27.useRef(false);
+  const thumbRef = react_esm_exports.useRef(null);
+  const inputRef = react_esm_exports.useRef(null);
+  const restoringFocusVisibleRef = react_esm_exports.useRef(false);
   const defaultInputId = useBaseUiId();
   const labelableId = useLabelableId();
   const inputId = range ? defaultInputId : labelableId;
-  const thumbMetadata = React27.useMemo(() => ({
+  const thumbMetadata = react_esm_exports.useMemo(() => ({
     inputId
   }), [inputId]);
   const {
@@ -2897,7 +2777,7 @@ var SliderThumb = /* @__PURE__ */ React27.forwardRef(function SliderThumb2(compo
   const last = index === sliderValues.length - 1;
   const thumbValue = sliderValues[index];
   const thumbValuePercent = valueToPercent(thumbValue, min, max);
-  const [positionPercent, setPositionPercent] = React27.useState();
+  const [positionPercent, setPositionPercent] = react_esm_exports.useState();
   const isHydrating = useIsHydrating();
   const safeLastUsedThumbIndex = lastUsedThumbIndex >= 0 && lastUsedThumbIndex < sliderValues.length ? lastUsedThumbIndex : -1;
   const getInsetPosition = useStableCallback(() => {
@@ -3109,7 +2989,7 @@ var SliderThumb = /* @__PURE__ */ React27.forwardRef(function SliderThumb2(compo
     ref: [forwardedRef, listItemRef, thumbRef],
     props: [{
       [SliderThumbDataAttributes.index]: index,
-      children: /* @__PURE__ */ _jsxs(React27.Fragment, {
+      children: /* @__PURE__ */ _jsxs(react_esm_exports.Fragment, {
         children: [childrenProp, /* @__PURE__ */ _jsx3("input", {
           ref: mergedInputRef,
           ...inputProps,
@@ -3152,7 +3032,6 @@ var SliderThumb = /* @__PURE__ */ React27.forwardRef(function SliderThumb2(compo
 if (false) SliderThumb.displayName = "SliderThumb";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/indicator/SliderIndicator.mjs
-import * as React28 from "react";
 function getInsetStyles(vertical, range, start, end, renderBeforeHydration, hydrating) {
   const visibility = start === void 0 || range && end === void 0 ? "hidden" : void 0;
   const startEdge = vertical ? "bottom" : "insetInlineStart";
@@ -3192,7 +3071,7 @@ function getCenteredStyles(vertical, range, start, end) {
   styles[mainSide] = `${size}%`;
   return styles;
 }
-var SliderIndicator = /* @__PURE__ */ React28.forwardRef(function SliderIndicator2(componentProps, forwardedRef) {
+var SliderIndicator = /* @__PURE__ */ react_esm_exports.forwardRef(function SliderIndicator2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -3229,16 +3108,3 @@ if (false) SliderIndicator.displayName = "SliderIndicator";
 export {
   index_parts_exports as Slider
 };
-/*! Bundled license information:
-
-use-sync-external-store/cjs/use-sync-external-store-shim.production.js:
-  (**
-   * @license React
-   * use-sync-external-store-shim.production.js
-   *
-   * Copyright (c) Meta Platforms, Inc. and affiliates.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE file in the root directory of this source tree.
-   *)
-*/

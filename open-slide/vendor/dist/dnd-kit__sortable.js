@@ -1,17 +1,40 @@
-// node_modules/.pnpm/@dnd-kit+sortable@10.0.0_@dnd-kit+core@6.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8__react@19.2.8/node_modules/@dnd-kit/sortable/dist/sortable.esm.js
-import React3, { useMemo as useMemo3, useRef as useRef3, useEffect as useEffect3, useState as useState3, useContext as useContext2 } from "react";
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
+
+// vendor/shims/react-esm.js
+var react_esm_exports = {};
+__export(react_esm_exports, {
+  default: () => react_esm_default
+});
+__reExport(react_esm_exports, react_star);
+import * as React from "react";
+import * as react_star from "react";
+var react_esm_default = React.default ?? React;
 
 // node_modules/.pnpm/@dnd-kit+core@6.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@dnd-kit/core/dist/core.esm.js
-import React2, { createContext, useContext, useEffect as useEffect2, useState as useState2, useCallback as useCallback3, useMemo as useMemo2, useRef as useRef2, memo, useReducer, cloneElement, forwardRef } from "react";
 import { createPortal, unstable_batchedUpdates } from "react-dom";
 
 // node_modules/.pnpm/@dnd-kit+utilities@3.2.2_react@19.2.8/node_modules/@dnd-kit/utilities/dist/utilities.esm.js
-import { useMemo, useLayoutEffect, useEffect, useRef, useCallback } from "react";
 function useCombinedRefs() {
   for (var _len = arguments.length, refs = new Array(_len), _key = 0; _key < _len; _key++) {
     refs[_key] = arguments[_key];
   }
-  return useMemo(
+  return (0, react_esm_exports.useMemo)(
     () => (node) => {
       refs.forEach((ref) => ref(node));
     },
@@ -74,13 +97,13 @@ function getOwnerDocument(target) {
   }
   return document;
 }
-var useIsomorphicLayoutEffect = canUseDOM ? useLayoutEffect : useEffect;
+var useIsomorphicLayoutEffect = canUseDOM ? react_esm_exports.useLayoutEffect : react_esm_exports.useEffect;
 function useEvent(handler) {
-  const handlerRef = useRef(handler);
+  const handlerRef = (0, react_esm_exports.useRef)(handler);
   useIsomorphicLayoutEffect(() => {
     handlerRef.current = handler;
   });
-  return useCallback(function() {
+  return (0, react_esm_exports.useCallback)(function() {
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
@@ -91,7 +114,7 @@ function useLatestValue(value, dependencies) {
   if (dependencies === void 0) {
     dependencies = [value];
   }
-  const valueRef = useRef(value);
+  const valueRef = (0, react_esm_exports.useRef)(value);
   useIsomorphicLayoutEffect(() => {
     if (valueRef.current !== value) {
       valueRef.current = value;
@@ -101,8 +124,8 @@ function useLatestValue(value, dependencies) {
 }
 function useNodeRef(onChange) {
   const onChangeHandler = useEvent(onChange);
-  const node = useRef(null);
-  const setNodeRef = useCallback(
+  const node = (0, react_esm_exports.useRef)(null);
+  const setNodeRef = (0, react_esm_exports.useCallback)(
     (element) => {
       if (element !== node.current) {
         onChangeHandler == null ? void 0 : onChangeHandler(element, node.current);
@@ -116,7 +139,7 @@ function useNodeRef(onChange) {
 }
 var ids = {};
 function useUniqueId(prefix, value) {
-  return useMemo(() => {
+  return (0, react_esm_exports.useMemo)(() => {
     if (value) {
       return value;
     }
@@ -241,9 +264,6 @@ var CSS = /* @__PURE__ */ Object.freeze({
     }
   }
 });
-
-// node_modules/.pnpm/@dnd-kit+accessibility@3.1.1_react@19.2.8/node_modules/@dnd-kit/accessibility/dist/accessibility.esm.js
-import React, { useState, useCallback as useCallback2 } from "react";
 
 // node_modules/.pnpm/@dnd-kit+core@6.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@dnd-kit/core/dist/core.esm.js
 var Action;
@@ -1226,7 +1246,7 @@ function useResizeObserver(_ref) {
     disabled
   } = _ref;
   const handleResize = useEvent(callback);
-  const resizeObserver = useMemo2(
+  const resizeObserver = (0, react_esm_exports.useMemo)(
     () => {
       if (disabled || typeof window === "undefined" || typeof window.ResizeObserver === "undefined") {
         return void 0;
@@ -1239,13 +1259,13 @@ function useResizeObserver(_ref) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [disabled]
   );
-  useEffect2(() => {
+  (0, react_esm_exports.useEffect)(() => {
     return () => resizeObserver == null ? void 0 : resizeObserver.disconnect();
   }, [resizeObserver]);
   return resizeObserver;
 }
 function useSyntheticListeners(listeners, id) {
-  return useMemo2(() => {
+  return (0, react_esm_exports.useMemo)(() => {
     return listeners.reduce((acc, _ref) => {
       let {
         eventName,
@@ -1330,9 +1350,9 @@ var defaultInternalContext = {
   over: null,
   measureDroppableContainers: noop
 };
-var InternalContext = /* @__PURE__ */ createContext(defaultInternalContext);
-var PublicContext = /* @__PURE__ */ createContext(defaultPublicContext);
-var ActiveDraggableContext = /* @__PURE__ */ createContext({
+var InternalContext = /* @__PURE__ */ (0, react_esm_exports.createContext)(defaultInternalContext);
+var PublicContext = /* @__PURE__ */ (0, react_esm_exports.createContext)(defaultPublicContext);
+var ActiveDraggableContext = /* @__PURE__ */ (0, react_esm_exports.createContext)({
   ...defaultCoordinates,
   scaleX: 1,
   scaleY: 1
@@ -1343,7 +1363,7 @@ var Status;
   Status2[Status2["Initializing"] = 1] = "Initializing";
   Status2[Status2["Initialized"] = 2] = "Initialized";
 })(Status || (Status = {}));
-var NullContext = /* @__PURE__ */ createContext(null);
+var NullContext = /* @__PURE__ */ (0, react_esm_exports.createContext)(null);
 var defaultRole = "button";
 var ID_PREFIX = "Draggable";
 function useDraggable(_ref) {
@@ -1362,14 +1382,14 @@ function useDraggable(_ref) {
     ariaDescribedById,
     draggableNodes,
     over
-  } = useContext(InternalContext);
+  } = (0, react_esm_exports.useContext)(InternalContext);
   const {
     role = defaultRole,
     roleDescription = "draggable",
     tabIndex = 0
   } = attributes != null ? attributes : {};
   const isDragging = (active == null ? void 0 : active.id) === id;
-  const transform = useContext(isDragging ? ActiveDraggableContext : NullContext);
+  const transform = (0, react_esm_exports.useContext)(isDragging ? ActiveDraggableContext : NullContext);
   const [node, setNodeRef] = useNodeRef();
   const [activatorNode, setActivatorNodeRef] = useNodeRef();
   const listeners = useSyntheticListeners(activators, id);
@@ -1393,7 +1413,7 @@ function useDraggable(_ref) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [draggableNodes, id]
   );
-  const memoizedAttributes = useMemo2(() => ({
+  const memoizedAttributes = (0, react_esm_exports.useMemo)(() => ({
     role,
     tabIndex,
     "aria-disabled": disabled,
@@ -1416,7 +1436,7 @@ function useDraggable(_ref) {
   };
 }
 function useDndContext() {
-  return useContext(PublicContext);
+  return (0, react_esm_exports.useContext)(PublicContext);
 }
 var ID_PREFIX$1 = "Droppable";
 var defaultResizeObserverConfig = {
@@ -1435,13 +1455,13 @@ function useDroppable(_ref) {
     dispatch,
     over,
     measureDroppableContainers
-  } = useContext(InternalContext);
-  const previous = useRef2({
+  } = (0, react_esm_exports.useContext)(InternalContext);
+  const previous = (0, react_esm_exports.useRef)({
     disabled
   });
-  const resizeObserverConnected = useRef2(false);
-  const rect = useRef2(null);
-  const callbackId = useRef2(null);
+  const resizeObserverConnected = (0, react_esm_exports.useRef)(false);
+  const rect = (0, react_esm_exports.useRef)(null);
+  const callbackId = (0, react_esm_exports.useRef)(null);
   const {
     disabled: resizeObserverDisabled,
     updateMeasurementsFor,
@@ -1451,7 +1471,7 @@ function useDroppable(_ref) {
     ...resizeObserverConfig
   };
   const ids2 = useLatestValue(updateMeasurementsFor != null ? updateMeasurementsFor : id);
-  const handleResize = useCallback3(
+  const handleResize = (0, react_esm_exports.useCallback)(
     () => {
       if (!resizeObserverConnected.current) {
         resizeObserverConnected.current = true;
@@ -1472,7 +1492,7 @@ function useDroppable(_ref) {
     callback: handleResize,
     disabled: resizeObserverDisabled || !active
   });
-  const handleNodeChange = useCallback3((newElement, previousElement) => {
+  const handleNodeChange = (0, react_esm_exports.useCallback)((newElement, previousElement) => {
     if (!resizeObserver) {
       return;
     }
@@ -1486,7 +1506,7 @@ function useDroppable(_ref) {
   }, [resizeObserver]);
   const [nodeRef, setNodeRef] = useNodeRef(handleNodeChange);
   const dataRef = useLatestValue(data);
-  useEffect2(() => {
+  (0, react_esm_exports.useEffect)(() => {
     if (!resizeObserver || !nodeRef.current) {
       return;
     }
@@ -1494,7 +1514,7 @@ function useDroppable(_ref) {
     resizeObserverConnected.current = false;
     resizeObserver.observe(nodeRef.current);
   }, [nodeRef, resizeObserver]);
-  useEffect2(
+  (0, react_esm_exports.useEffect)(
     () => {
       dispatch({
         type: Action.RegisterDroppable,
@@ -1516,7 +1536,7 @@ function useDroppable(_ref) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [id]
   );
-  useEffect2(() => {
+  (0, react_esm_exports.useEffect)(() => {
     if (disabled !== previous.current.disabled) {
       dispatch({
         type: Action.SetDroppableDisabled,
@@ -1754,7 +1774,7 @@ function getItemGap$1(clientRects, index, activeIndex) {
   return nextRect ? nextRect.top - (currentRect.top + currentRect.height) : previousRect ? currentRect.top - (previousRect.top + previousRect.height) : 0;
 }
 var ID_PREFIX2 = "Sortable";
-var Context = /* @__PURE__ */ React3.createContext({
+var Context = /* @__PURE__ */ react_esm_default.createContext({
   activeIndex: -1,
   containerId: ID_PREFIX2,
   disableTransforms: false,
@@ -1785,11 +1805,11 @@ function SortableContext(_ref) {
   } = useDndContext();
   const containerId = useUniqueId(ID_PREFIX2, id);
   const useDragOverlay = Boolean(dragOverlay.rect !== null);
-  const items = useMemo3(() => userDefinedItems.map((item) => typeof item === "object" && "id" in item ? item.id : item), [userDefinedItems]);
+  const items = (0, react_esm_exports.useMemo)(() => userDefinedItems.map((item) => typeof item === "object" && "id" in item ? item.id : item), [userDefinedItems]);
   const isDragging = active != null;
   const activeIndex = active ? items.indexOf(active.id) : -1;
   const overIndex = over ? items.indexOf(over.id) : -1;
-  const previousItemsRef = useRef3(items);
+  const previousItemsRef = (0, react_esm_exports.useRef)(items);
   const itemsHaveChanged = !itemsEqual(items, previousItemsRef.current);
   const disableTransforms = overIndex !== -1 && activeIndex === -1 || itemsHaveChanged;
   const disabled = normalizeDisabled(disabledProp);
@@ -1798,10 +1818,10 @@ function SortableContext(_ref) {
       measureDroppableContainers(items);
     }
   }, [itemsHaveChanged, items, isDragging, measureDroppableContainers]);
-  useEffect3(() => {
+  (0, react_esm_exports.useEffect)(() => {
     previousItemsRef.current = items;
   }, [items]);
-  const contextValue = useMemo3(
+  const contextValue = (0, react_esm_exports.useMemo)(
     () => ({
       activeIndex,
       containerId,
@@ -1816,7 +1836,7 @@ function SortableContext(_ref) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [activeIndex, containerId, disabled.draggable, disabled.droppable, disableTransforms, items, overIndex, droppableRects, useDragOverlay, strategy]
   );
-  return React3.createElement(Context.Provider, {
+  return react_esm_default.createElement(Context.Provider, {
     value: contextValue
   }, children);
 }
@@ -1872,8 +1892,8 @@ function useDerivedTransform(_ref) {
     node,
     rect
   } = _ref;
-  const [derivedTransform, setDerivedtransform] = useState3(null);
-  const previousIndex = useRef3(index);
+  const [derivedTransform, setDerivedtransform] = (0, react_esm_exports.useState)(null);
+  const previousIndex = (0, react_esm_exports.useRef)(index);
   useIsomorphicLayoutEffect(() => {
     if (!disabled && index !== previousIndex.current && node.current) {
       const initial = rect.current;
@@ -1896,7 +1916,7 @@ function useDerivedTransform(_ref) {
       previousIndex.current = index;
     }
   }, [disabled, index, node, rect]);
-  useEffect3(() => {
+  (0, react_esm_exports.useEffect)(() => {
     if (derivedTransform) {
       setDerivedtransform(null);
     }
@@ -1925,10 +1945,10 @@ function useSortable(_ref) {
     overIndex,
     useDragOverlay,
     strategy: globalStrategy
-  } = useContext2(Context);
+  } = (0, react_esm_exports.useContext)(Context);
   const disabled = normalizeLocalDisabled(localDisabled, globalDisabled);
   const index = items.indexOf(id);
-  const data = useMemo3(() => ({
+  const data = (0, react_esm_exports.useMemo)(() => ({
     sortable: {
       containerId,
       index,
@@ -1936,7 +1956,7 @@ function useSortable(_ref) {
     },
     ...customData
   }), [containerId, customData, index, items]);
-  const itemsAfterCurrentSortable = useMemo3(() => items.slice(items.indexOf(id)), [items, id]);
+  const itemsAfterCurrentSortable = (0, react_esm_exports.useMemo)(() => items.slice(items.indexOf(id)), [items, id]);
   const {
     rect,
     node,
@@ -1991,7 +2011,7 @@ function useSortable(_ref) {
     overIndex
   }) : index;
   const activeId = active == null ? void 0 : active.id;
-  const previous = useRef3({
+  const previous = (0, react_esm_exports.useRef)({
     activeId,
     items,
     newIndex,
@@ -2018,7 +2038,7 @@ function useSortable(_ref) {
     node,
     rect
   });
-  useEffect3(() => {
+  (0, react_esm_exports.useEffect)(() => {
     if (isSorting && previous.current.newIndex !== newIndex) {
       previous.current.newIndex = newIndex;
     }
@@ -2029,7 +2049,7 @@ function useSortable(_ref) {
       previous.current.items = items;
     }
   }, [isSorting, newIndex, containerId, items]);
-  useEffect3(() => {
+  (0, react_esm_exports.useEffect)(() => {
     if (activeId === previous.current.activeId) {
       return;
     }

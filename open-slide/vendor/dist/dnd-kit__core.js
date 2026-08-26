@@ -1,9 +1,35 @@
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key2 of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key2) && key2 !== except)
+        __defProp(to, key2, { get: () => from[key2], enumerable: !(desc = __getOwnPropDesc(from, key2)) || desc.enumerable });
+  }
+  return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
+
+// vendor/shims/react-esm.js
+var react_esm_exports = {};
+__export(react_esm_exports, {
+  default: () => react_esm_default
+});
+__reExport(react_esm_exports, react_star);
+import * as React from "react";
+import * as react_star from "react";
+var react_esm_default = React.default ?? React;
+
 // node_modules/.pnpm/@dnd-kit+core@6.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@dnd-kit/core/dist/core.esm.js
-import React2, { createContext, useContext, useEffect as useEffect2, useState as useState2, useCallback as useCallback3, useMemo as useMemo2, useRef as useRef2, memo, useReducer, cloneElement, forwardRef } from "react";
 import { createPortal, unstable_batchedUpdates } from "react-dom";
 
 // node_modules/.pnpm/@dnd-kit+utilities@3.2.2_react@19.2.8/node_modules/@dnd-kit/utilities/dist/utilities.esm.js
-import { useMemo, useLayoutEffect, useEffect, useRef, useCallback } from "react";
 var canUseDOM = typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined";
 function isWindow(element) {
   const elementString = Object.prototype.toString.call(element);
@@ -59,13 +85,13 @@ function getOwnerDocument(target) {
   }
   return document;
 }
-var useIsomorphicLayoutEffect = canUseDOM ? useLayoutEffect : useEffect;
+var useIsomorphicLayoutEffect = canUseDOM ? react_esm_exports.useLayoutEffect : react_esm_exports.useEffect;
 function useEvent(handler) {
-  const handlerRef = useRef(handler);
+  const handlerRef = (0, react_esm_exports.useRef)(handler);
   useIsomorphicLayoutEffect(() => {
     handlerRef.current = handler;
   });
-  return useCallback(function() {
+  return (0, react_esm_exports.useCallback)(function() {
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
@@ -73,11 +99,11 @@ function useEvent(handler) {
   }, []);
 }
 function useInterval() {
-  const intervalRef = useRef(null);
-  const set = useCallback((listener, duration) => {
+  const intervalRef = (0, react_esm_exports.useRef)(null);
+  const set = (0, react_esm_exports.useCallback)((listener, duration) => {
     intervalRef.current = setInterval(listener, duration);
   }, []);
-  const clear = useCallback(() => {
+  const clear = (0, react_esm_exports.useCallback)(() => {
     if (intervalRef.current !== null) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -89,7 +115,7 @@ function useLatestValue(value, dependencies) {
   if (dependencies === void 0) {
     dependencies = [value];
   }
-  const valueRef = useRef(value);
+  const valueRef = (0, react_esm_exports.useRef)(value);
   useIsomorphicLayoutEffect(() => {
     if (valueRef.current !== value) {
       valueRef.current = value;
@@ -98,8 +124,8 @@ function useLatestValue(value, dependencies) {
   return valueRef;
 }
 function useLazyMemo(callback, dependencies) {
-  const valueRef = useRef();
-  return useMemo(
+  const valueRef = (0, react_esm_exports.useRef)();
+  return (0, react_esm_exports.useMemo)(
     () => {
       const newValue = callback(valueRef.current);
       valueRef.current = newValue;
@@ -111,8 +137,8 @@ function useLazyMemo(callback, dependencies) {
 }
 function useNodeRef(onChange) {
   const onChangeHandler = useEvent(onChange);
-  const node = useRef(null);
-  const setNodeRef = useCallback(
+  const node = (0, react_esm_exports.useRef)(null);
+  const setNodeRef = (0, react_esm_exports.useCallback)(
     (element) => {
       if (element !== node.current) {
         onChangeHandler == null ? void 0 : onChangeHandler(element, node.current);
@@ -125,15 +151,15 @@ function useNodeRef(onChange) {
   return [node, setNodeRef];
 }
 function usePrevious(value) {
-  const ref = useRef();
-  useEffect(() => {
+  const ref = (0, react_esm_exports.useRef)();
+  (0, react_esm_exports.useEffect)(() => {
     ref.current = value;
   }, [value]);
   return ref.current;
 }
 var ids = {};
 function useUniqueId(prefix, value) {
-  return useMemo(() => {
+  return (0, react_esm_exports.useMemo)(() => {
     if (value) {
       return value;
     }
@@ -267,7 +293,6 @@ function findFirstFocusableNode(element) {
 }
 
 // node_modules/.pnpm/@dnd-kit+accessibility@3.1.1_react@19.2.8/node_modules/@dnd-kit/accessibility/dist/accessibility.esm.js
-import React, { useState, useCallback as useCallback2 } from "react";
 var hiddenStyles = {
   display: "none"
 };
@@ -276,7 +301,7 @@ function HiddenText(_ref) {
     id,
     value
   } = _ref;
-  return React.createElement("div", {
+  return react_esm_default.createElement("div", {
     id,
     style: hiddenStyles
   }, value);
@@ -301,7 +326,7 @@ function LiveRegion(_ref) {
     clipPath: "inset(100%)",
     whiteSpace: "nowrap"
   };
-  return React.createElement("div", {
+  return react_esm_default.createElement("div", {
     id,
     style: visuallyHidden,
     role: "status",
@@ -310,8 +335,8 @@ function LiveRegion(_ref) {
   }, announcement);
 }
 function useAnnouncement() {
-  const [announcement, setAnnouncement] = useState("");
-  const announce = useCallback2((value) => {
+  const [announcement, setAnnouncement] = (0, react_esm_exports.useState)("");
+  const announce = (0, react_esm_exports.useCallback)((value) => {
     if (value != null) {
       setAnnouncement(value);
     }
@@ -323,10 +348,10 @@ function useAnnouncement() {
 }
 
 // node_modules/.pnpm/@dnd-kit+core@6.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@dnd-kit/core/dist/core.esm.js
-var DndMonitorContext = /* @__PURE__ */ createContext(null);
+var DndMonitorContext = /* @__PURE__ */ (0, react_esm_exports.createContext)(null);
 function useDndMonitor(listener) {
-  const registerListener = useContext(DndMonitorContext);
-  useEffect2(() => {
+  const registerListener = (0, react_esm_exports.useContext)(DndMonitorContext);
+  (0, react_esm_exports.useEffect)(() => {
     if (!registerListener) {
       throw new Error("useDndMonitor must be used within a children of <DndContext>");
     }
@@ -335,12 +360,12 @@ function useDndMonitor(listener) {
   }, [listener, registerListener]);
 }
 function useDndMonitorProvider() {
-  const [listeners] = useState2(() => /* @__PURE__ */ new Set());
-  const registerListener = useCallback3((listener) => {
+  const [listeners] = (0, react_esm_exports.useState)(() => /* @__PURE__ */ new Set());
+  const registerListener = (0, react_esm_exports.useCallback)((listener) => {
     listeners.add(listener);
     return () => listeners.delete(listener);
   }, [listeners]);
-  const dispatch = useCallback3((_ref) => {
+  const dispatch = (0, react_esm_exports.useCallback)((_ref) => {
     let {
       type,
       event
@@ -401,11 +426,11 @@ function Accessibility(_ref) {
     announcement
   } = useAnnouncement();
   const liveRegionId = useUniqueId("DndLiveRegion");
-  const [mounted, setMounted] = useState2(false);
-  useEffect2(() => {
+  const [mounted, setMounted] = (0, react_esm_exports.useState)(false);
+  (0, react_esm_exports.useEffect)(() => {
     setMounted(true);
   }, []);
-  useDndMonitor(useMemo2(() => ({
+  useDndMonitor((0, react_esm_exports.useMemo)(() => ({
     onDragStart(_ref2) {
       let {
         active
@@ -460,10 +485,10 @@ function Accessibility(_ref) {
   if (!mounted) {
     return null;
   }
-  const markup = React2.createElement(React2.Fragment, null, React2.createElement(HiddenText, {
+  const markup = react_esm_default.createElement(react_esm_default.Fragment, null, react_esm_default.createElement(HiddenText, {
     id: hiddenTextDescribedById,
     value: screenReaderInstructions.draggable
-  }), React2.createElement(LiveRegion, {
+  }), react_esm_default.createElement(LiveRegion, {
     id: liveRegionId,
     announcement
   }));
@@ -483,7 +508,7 @@ var Action;
 function noop() {
 }
 function useSensor(sensor, options) {
-  return useMemo2(
+  return (0, react_esm_exports.useMemo)(
     () => ({
       sensor,
       options: options != null ? options : {}
@@ -496,7 +521,7 @@ function useSensors() {
   for (var _len = arguments.length, sensors = new Array(_len), _key = 0; _key < _len; _key++) {
     sensors[_key] = arguments[_key];
   }
-  return useMemo2(
+  return (0, react_esm_exports.useMemo)(
     () => [...sensors].filter((sensor) => sensor != null),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [...sensors]
@@ -1790,15 +1815,15 @@ function useAutoScroller(_ref) {
     disabled: !enabled
   });
   const [setAutoScrollInterval, clearAutoScrollInterval] = useInterval();
-  const scrollSpeed = useRef2({
+  const scrollSpeed = (0, react_esm_exports.useRef)({
     x: 0,
     y: 0
   });
-  const scrollDirection = useRef2({
+  const scrollDirection = (0, react_esm_exports.useRef)({
     x: 0,
     y: 0
   });
-  const rect = useMemo2(() => {
+  const rect = (0, react_esm_exports.useMemo)(() => {
     switch (activator) {
       case AutoScrollActivator.Pointer:
         return pointerCoordinates ? {
@@ -1811,8 +1836,8 @@ function useAutoScroller(_ref) {
         return draggingRect;
     }
   }, [activator, draggingRect, pointerCoordinates]);
-  const scrollContainerRef = useRef2(null);
-  const autoScroll = useCallback3(() => {
+  const scrollContainerRef = (0, react_esm_exports.useRef)(null);
+  const autoScroll = (0, react_esm_exports.useCallback)(() => {
     const scrollContainer = scrollContainerRef.current;
     if (!scrollContainer) {
       return;
@@ -1821,8 +1846,8 @@ function useAutoScroller(_ref) {
     const scrollTop = scrollSpeed.current.y * scrollDirection.current.y;
     scrollContainer.scrollBy(scrollLeft, scrollTop);
   }, []);
-  const sortedScrollableAncestors = useMemo2(() => order === TraversalOrder.TreeOrder ? [...scrollableAncestors].reverse() : scrollableAncestors, [order, scrollableAncestors]);
-  useEffect2(
+  const sortedScrollableAncestors = (0, react_esm_exports.useMemo)(() => order === TraversalOrder.TreeOrder ? [...scrollableAncestors].reverse() : scrollableAncestors, [order, scrollableAncestors]);
+  (0, react_esm_exports.useEffect)(
     () => {
       if (!enabled || !scrollableAncestors.length || !rect) {
         clearAutoScrollInterval();
@@ -1935,7 +1960,7 @@ function useCachedNode(draggableNodes, id) {
   }, [node, id]);
 }
 function useCombineActivators(sensors, getSyntheticHandler) {
-  return useMemo2(() => sensors.reduce((accumulator, sensor) => {
+  return (0, react_esm_exports.useMemo)(() => sensors.reduce((accumulator, sensor) => {
     const {
       sensor: Sensor
     } = sensor;
@@ -1963,16 +1988,16 @@ function useDroppableMeasuring(containers, _ref) {
     dependencies,
     config
   } = _ref;
-  const [queue, setQueue] = useState2(null);
+  const [queue, setQueue] = (0, react_esm_exports.useState)(null);
   const {
     frequency,
     measure,
     strategy
   } = config;
-  const containersRef = useRef2(containers);
+  const containersRef = (0, react_esm_exports.useRef)(containers);
   const disabled = isDisabled();
   const disabledRef = useLatestValue(disabled);
-  const measureDroppableContainers = useCallback3(function(ids2) {
+  const measureDroppableContainers = (0, react_esm_exports.useCallback)(function(ids2) {
     if (ids2 === void 0) {
       ids2 = [];
     }
@@ -1986,7 +2011,7 @@ function useDroppableMeasuring(containers, _ref) {
       return value.concat(ids2.filter((id) => !value.includes(id)));
     });
   }, [disabledRef]);
-  const timeoutId = useRef2(null);
+  const timeoutId = (0, react_esm_exports.useRef)(null);
   const droppableRects = useLazyMemo((previousValue) => {
     if (disabled && !dragging) {
       return defaultValue;
@@ -2012,10 +2037,10 @@ function useDroppableMeasuring(containers, _ref) {
     }
     return previousValue;
   }, [containers, queue, dragging, disabled, measure]);
-  useEffect2(() => {
+  (0, react_esm_exports.useEffect)(() => {
     containersRef.current = containers;
   }, [containers]);
-  useEffect2(
+  (0, react_esm_exports.useEffect)(
     () => {
       if (disabled) {
         return;
@@ -2025,7 +2050,7 @@ function useDroppableMeasuring(containers, _ref) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [dragging, disabled]
   );
-  useEffect2(
+  (0, react_esm_exports.useEffect)(
     () => {
       if (queue && queue.length > 0) {
         setQueue(null);
@@ -2034,7 +2059,7 @@ function useDroppableMeasuring(containers, _ref) {
     //eslint-disable-next-line react-hooks/exhaustive-deps
     [JSON.stringify(queue)]
   );
-  useEffect2(
+  (0, react_esm_exports.useEffect)(
     () => {
       if (disabled || typeof frequency !== "number" || timeoutId.current !== null) {
         return;
@@ -2083,7 +2108,7 @@ function useMutationObserver(_ref) {
     disabled
   } = _ref;
   const handleMutations = useEvent(callback);
-  const mutationObserver = useMemo2(() => {
+  const mutationObserver = (0, react_esm_exports.useMemo)(() => {
     if (disabled || typeof window === "undefined" || typeof window.MutationObserver === "undefined") {
       return void 0;
     }
@@ -2092,7 +2117,7 @@ function useMutationObserver(_ref) {
     } = window;
     return new MutationObserver(handleMutations);
   }, [handleMutations, disabled]);
-  useEffect2(() => {
+  (0, react_esm_exports.useEffect)(() => {
     return () => mutationObserver == null ? void 0 : mutationObserver.disconnect();
   }, [mutationObserver]);
   return mutationObserver;
@@ -2103,7 +2128,7 @@ function useResizeObserver(_ref) {
     disabled
   } = _ref;
   const handleResize = useEvent(callback);
-  const resizeObserver = useMemo2(
+  const resizeObserver = (0, react_esm_exports.useMemo)(
     () => {
       if (disabled || typeof window === "undefined" || typeof window.ResizeObserver === "undefined") {
         return void 0;
@@ -2116,7 +2141,7 @@ function useResizeObserver(_ref) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [disabled]
   );
-  useEffect2(() => {
+  (0, react_esm_exports.useEffect)(() => {
     return () => resizeObserver == null ? void 0 : resizeObserver.disconnect();
   }, [resizeObserver]);
   return resizeObserver;
@@ -2128,7 +2153,7 @@ function useRect(element, measure, fallbackRect) {
   if (measure === void 0) {
     measure = defaultMeasure;
   }
-  const [rect, setRect] = useState2(null);
+  const [rect, setRect] = (0, react_esm_exports.useState)(null);
   function measureRect() {
     setRect((currentRect) => {
       if (!element) {
@@ -2186,7 +2211,7 @@ function useRectDelta(rect) {
 }
 var defaultValue$1 = [];
 function useScrollableAncestors(node) {
-  const previousNode = useRef2(node);
+  const previousNode = (0, react_esm_exports.useRef)(node);
   const ancestors = useLazyMemo((previousValue) => {
     if (!node) {
       return defaultValue$1;
@@ -2196,15 +2221,15 @@ function useScrollableAncestors(node) {
     }
     return getScrollableAncestors(node);
   }, [node]);
-  useEffect2(() => {
+  (0, react_esm_exports.useEffect)(() => {
     previousNode.current = node;
   }, [node]);
   return ancestors;
 }
 function useScrollOffsets(elements) {
-  const [scrollCoordinates, setScrollCoordinates] = useState2(null);
-  const prevElements = useRef2(elements);
-  const handleScroll = useCallback3((event) => {
+  const [scrollCoordinates, setScrollCoordinates] = (0, react_esm_exports.useState)(null);
+  const prevElements = (0, react_esm_exports.useRef)(elements);
+  const handleScroll = (0, react_esm_exports.useCallback)((event) => {
     const scrollingElement = getScrollableElement(event.target);
     if (!scrollingElement) {
       return;
@@ -2217,7 +2242,7 @@ function useScrollOffsets(elements) {
       return new Map(scrollCoordinates2);
     });
   }, []);
-  useEffect2(() => {
+  (0, react_esm_exports.useEffect)(() => {
     const previousElements = prevElements.current;
     if (elements !== previousElements) {
       cleanup(previousElements);
@@ -2245,7 +2270,7 @@ function useScrollOffsets(elements) {
       });
     }
   }, [handleScroll, elements]);
-  return useMemo2(() => {
+  return (0, react_esm_exports.useMemo)(() => {
     if (elements.length) {
       return scrollCoordinates ? Array.from(scrollCoordinates.values()).reduce((acc, coordinates) => add(acc, coordinates), defaultCoordinates) : getScrollOffsets(elements);
     }
@@ -2256,15 +2281,15 @@ function useScrollOffsetsDelta(scrollOffsets, dependencies) {
   if (dependencies === void 0) {
     dependencies = [];
   }
-  const initialScrollOffsets = useRef2(null);
-  useEffect2(
+  const initialScrollOffsets = (0, react_esm_exports.useRef)(null);
+  (0, react_esm_exports.useEffect)(
     () => {
       initialScrollOffsets.current = null;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     dependencies
   );
-  useEffect2(() => {
+  (0, react_esm_exports.useEffect)(() => {
     const hasScrollOffsets = scrollOffsets !== defaultCoordinates;
     if (hasScrollOffsets && !initialScrollOffsets.current) {
       initialScrollOffsets.current = scrollOffsets;
@@ -2276,7 +2301,7 @@ function useScrollOffsetsDelta(scrollOffsets, dependencies) {
   return initialScrollOffsets.current ? subtract(scrollOffsets, initialScrollOffsets.current) : defaultCoordinates;
 }
 function useSensorSetup(sensors) {
-  useEffect2(
+  (0, react_esm_exports.useEffect)(
     () => {
       if (!canUseDOM) {
         return;
@@ -2304,7 +2329,7 @@ function useSensorSetup(sensors) {
   );
 }
 function useSyntheticListeners(listeners, id) {
-  return useMemo2(() => {
+  return (0, react_esm_exports.useMemo)(() => {
     return listeners.reduce((acc, _ref) => {
       let {
         eventName,
@@ -2318,7 +2343,7 @@ function useSyntheticListeners(listeners, id) {
   }, [listeners, id]);
 }
 function useWindowRect(element) {
-  return useMemo2(() => element ? getWindowClientRect(element) : null, [element]);
+  return (0, react_esm_exports.useMemo)(() => element ? getWindowClientRect(element) : null, [element]);
 }
 var defaultValue$2 = [];
 function useRects(elements, measure) {
@@ -2327,7 +2352,7 @@ function useRects(elements, measure) {
   }
   const [firstElement] = elements;
   const windowRect = useWindowRect(firstElement ? getWindow(firstElement) : null);
-  const [rects, setRects] = useState2(defaultValue$2);
+  const [rects, setRects] = (0, react_esm_exports.useState)(defaultValue$2);
   function measureRects() {
     setRects(() => {
       if (!elements.length) {
@@ -2360,8 +2385,8 @@ function useDragOverlayMeasuring(_ref) {
   let {
     measure
   } = _ref;
-  const [rect, setRect] = useState2(null);
-  const handleResize = useCallback3((entries) => {
+  const [rect, setRect] = (0, react_esm_exports.useState)(null);
+  const handleResize = (0, react_esm_exports.useCallback)((entries) => {
     for (const {
       target
     } of entries) {
@@ -2381,7 +2406,7 @@ function useDragOverlayMeasuring(_ref) {
   const resizeObserver = useResizeObserver({
     callback: handleResize
   });
-  const handleNodeChange = useCallback3((element) => {
+  const handleNodeChange = (0, react_esm_exports.useCallback)((element) => {
     const node = getMeasurableNode(element);
     resizeObserver == null ? void 0 : resizeObserver.disconnect();
     if (node) {
@@ -2390,7 +2415,7 @@ function useDragOverlayMeasuring(_ref) {
     setRect(node ? measure(node) : null);
   }, [measure, resizeObserver]);
   const [nodeRef, setRef] = useNodeRef(handleNodeChange);
-  return useMemo2(() => ({
+  return (0, react_esm_exports.useMemo)(() => ({
     nodeRef,
     rect,
     setRef
@@ -2478,8 +2503,8 @@ var defaultInternalContext = {
   over: null,
   measureDroppableContainers: noop
 };
-var InternalContext = /* @__PURE__ */ createContext(defaultInternalContext);
-var PublicContext = /* @__PURE__ */ createContext(defaultPublicContext);
+var InternalContext = /* @__PURE__ */ (0, react_esm_exports.createContext)(defaultInternalContext);
+var PublicContext = /* @__PURE__ */ (0, react_esm_exports.createContext)(defaultPublicContext);
 function getInitialState() {
   return {
     draggable: {
@@ -2613,10 +2638,10 @@ function RestoreFocus(_ref) {
     active,
     activatorEvent,
     draggableNodes
-  } = useContext(InternalContext);
+  } = (0, react_esm_exports.useContext)(InternalContext);
   const previousActivatorEvent = usePrevious(activatorEvent);
   const previousActiveId = usePrevious(active == null ? void 0 : active.id);
-  useEffect2(() => {
+  (0, react_esm_exports.useEffect)(() => {
     if (disabled) {
       return;
     }
@@ -2667,7 +2692,7 @@ function applyModifiers(modifiers, _ref) {
   }, transform) : transform;
 }
 function useMeasuringConfiguration(config) {
-  return useMemo2(
+  return (0, react_esm_exports.useMemo)(
     () => ({
       draggable: {
         ...defaultMeasuringConfiguration.draggable,
@@ -2693,7 +2718,7 @@ function useLayoutShiftScrollCompensation(_ref) {
     initialRect,
     config = true
   } = _ref;
-  const initialized = useRef2(false);
+  const initialized = (0, react_esm_exports.useRef)(false);
   const {
     x,
     y
@@ -2734,7 +2759,7 @@ function useLayoutShiftScrollCompensation(_ref) {
     }
   }, [activeNode, x, y, initialRect, measure]);
 }
-var ActiveDraggableContext = /* @__PURE__ */ createContext({
+var ActiveDraggableContext = /* @__PURE__ */ (0, react_esm_exports.createContext)({
   ...defaultCoordinates,
   scaleX: 1,
   scaleY: 1
@@ -2745,7 +2770,7 @@ var Status;
   Status2[Status2["Initializing"] = 1] = "Initializing";
   Status2[Status2["Initialized"] = 2] = "Initialized";
 })(Status || (Status = {}));
-var DndContext = /* @__PURE__ */ memo(function DndContext2(_ref) {
+var DndContext = /* @__PURE__ */ (0, react_esm_exports.memo)(function DndContext2(_ref) {
   var _sensorContext$curren, _dragOverlay$nodeRef$, _dragOverlay$rect, _over$rect;
   let {
     id,
@@ -2758,10 +2783,10 @@ var DndContext = /* @__PURE__ */ memo(function DndContext2(_ref) {
     modifiers,
     ...props
   } = _ref;
-  const store = useReducer(reducer, void 0, getInitialState);
+  const store = (0, react_esm_exports.useReducer)(reducer, void 0, getInitialState);
   const [state, dispatch] = store;
   const [dispatchMonitorEvent, registerMonitorListener] = useDndMonitorProvider();
-  const [status, setStatus] = useState2(Status.Uninitialized);
+  const [status, setStatus] = (0, react_esm_exports.useState)(Status.Uninitialized);
   const isInitialized = status === Status.Initialized;
   const {
     draggable: {
@@ -2774,11 +2799,11 @@ var DndContext = /* @__PURE__ */ memo(function DndContext2(_ref) {
     }
   } = state;
   const node = activeId != null ? draggableNodes.get(activeId) : null;
-  const activeRects = useRef2({
+  const activeRects = (0, react_esm_exports.useRef)({
     initial: null,
     translated: null
   });
-  const active = useMemo2(() => {
+  const active = (0, react_esm_exports.useMemo)(() => {
     var _node$data;
     return activeId != null ? {
       id: activeId,
@@ -2787,12 +2812,12 @@ var DndContext = /* @__PURE__ */ memo(function DndContext2(_ref) {
       rect: activeRects
     } : null;
   }, [activeId, node]);
-  const activeRef = useRef2(null);
-  const [activeSensor, setActiveSensor] = useState2(null);
-  const [activatorEvent, setActivatorEvent] = useState2(null);
+  const activeRef = (0, react_esm_exports.useRef)(null);
+  const [activeSensor, setActiveSensor] = (0, react_esm_exports.useState)(null);
+  const [activatorEvent, setActivatorEvent] = (0, react_esm_exports.useState)(null);
   const latestProps = useLatestValue(props, Object.values(props));
   const draggableDescribedById = useUniqueId("DndDescribedBy", id);
-  const enabledDroppableContainers = useMemo2(() => droppableContainers.getEnabled(), [droppableContainers]);
+  const enabledDroppableContainers = (0, react_esm_exports.useMemo)(() => droppableContainers.getEnabled(), [droppableContainers]);
   const measuringConfiguration = useMeasuringConfiguration(measuring);
   const {
     droppableRects,
@@ -2804,7 +2829,7 @@ var DndContext = /* @__PURE__ */ memo(function DndContext2(_ref) {
     config: measuringConfiguration.droppable
   });
   const activeNode = useCachedNode(draggableNodes, activeId);
-  const activationCoordinates = useMemo2(() => activatorEvent ? getEventCoordinates(activatorEvent) : null, [activatorEvent]);
+  const activationCoordinates = (0, react_esm_exports.useMemo)(() => activatorEvent ? getEventCoordinates(activatorEvent) : null, [activatorEvent]);
   const autoScrollOptions = getAutoScrollerOptions();
   const initialActiveNodeRect = useInitialRect(activeNode, measuringConfiguration.draggable.measure);
   useLayoutShiftScrollCompensation({
@@ -2815,7 +2840,7 @@ var DndContext = /* @__PURE__ */ memo(function DndContext2(_ref) {
   });
   const activeNodeRect = useRect(activeNode, measuringConfiguration.draggable.measure, initialActiveNodeRect);
   const containerNodeRect = useRect(activeNode ? activeNode.parentElement : null);
-  const sensorContext = useRef2({
+  const sensorContext = (0, react_esm_exports.useRef)({
     activatorEvent: null,
     active: null,
     activeNode,
@@ -2873,11 +2898,11 @@ var DndContext = /* @__PURE__ */ memo(function DndContext2(_ref) {
     pointerCoordinates
   }) : null;
   const overId = getFirstCollision(collisions, "id");
-  const [over, setOver] = useState2(null);
+  const [over, setOver] = (0, react_esm_exports.useState)(null);
   const appliedTranslate = usesDragOverlay ? modifiedTranslate : add(modifiedTranslate, activeNodeScrollDelta);
   const transform = adjustScale(appliedTranslate, (_over$rect = over == null ? void 0 : over.rect) != null ? _over$rect : null, activeNodeRect);
-  const activeSensorRef = useRef2(null);
-  const instantiateSensor = useCallback3(
+  const activeSensorRef = (0, react_esm_exports.useRef)(null);
+  const instantiateSensor = (0, react_esm_exports.useCallback)(
     (event, _ref2) => {
       let {
         sensor: Sensor,
@@ -3035,7 +3060,7 @@ var DndContext = /* @__PURE__ */ memo(function DndContext2(_ref) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [draggableNodes]
   );
-  const bindActivatorToSensorInstantiator = useCallback3((handler, sensor) => {
+  const bindActivatorToSensorInstantiator = (0, react_esm_exports.useCallback)((handler, sensor) => {
     return (event, active2) => {
       const nativeEvent = event.nativeEvent;
       const activeDraggableNode = draggableNodes.get(active2);
@@ -3067,7 +3092,7 @@ var DndContext = /* @__PURE__ */ memo(function DndContext2(_ref) {
       setStatus(Status.Initialized);
     }
   }, [activeNodeRect, status]);
-  useEffect2(
+  (0, react_esm_exports.useEffect)(
     () => {
       const {
         onDragMove
@@ -3102,7 +3127,7 @@ var DndContext = /* @__PURE__ */ memo(function DndContext2(_ref) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [scrollAdjustedTranslate.x, scrollAdjustedTranslate.y]
   );
-  useEffect2(
+  (0, react_esm_exports.useEffect)(
     () => {
       const {
         active: active2,
@@ -3175,7 +3200,7 @@ var DndContext = /* @__PURE__ */ memo(function DndContext2(_ref) {
     scrollableAncestors,
     scrollableAncestorRects
   });
-  const publicContext = useMemo2(() => {
+  const publicContext = (0, react_esm_exports.useMemo)(() => {
     const context = {
       active,
       activeNode,
@@ -3197,7 +3222,7 @@ var DndContext = /* @__PURE__ */ memo(function DndContext2(_ref) {
     };
     return context;
   }, [active, activeNode, activeNodeRect, activatorEvent, collisions, containerNodeRect, dragOverlay, draggableNodes, droppableContainers, droppableRects, over, measureDroppableContainers, scrollableAncestors, scrollableAncestorRects, measuringConfiguration, measuringScheduled, windowRect]);
-  const internalContext = useMemo2(() => {
+  const internalContext = (0, react_esm_exports.useMemo)(() => {
     const context = {
       activatorEvent,
       activators,
@@ -3213,17 +3238,17 @@ var DndContext = /* @__PURE__ */ memo(function DndContext2(_ref) {
     };
     return context;
   }, [activatorEvent, activators, active, activeNodeRect, dispatch, draggableDescribedById, draggableNodes, over, measureDroppableContainers]);
-  return React2.createElement(DndMonitorContext.Provider, {
+  return react_esm_default.createElement(DndMonitorContext.Provider, {
     value: registerMonitorListener
-  }, React2.createElement(InternalContext.Provider, {
+  }, react_esm_default.createElement(InternalContext.Provider, {
     value: internalContext
-  }, React2.createElement(PublicContext.Provider, {
+  }, react_esm_default.createElement(PublicContext.Provider, {
     value: publicContext
-  }, React2.createElement(ActiveDraggableContext.Provider, {
+  }, react_esm_default.createElement(ActiveDraggableContext.Provider, {
     value: transform
-  }, children)), React2.createElement(RestoreFocus, {
+  }, children)), react_esm_default.createElement(RestoreFocus, {
     disabled: (accessibility == null ? void 0 : accessibility.restoreFocus) === false
-  })), React2.createElement(Accessibility, {
+  })), react_esm_default.createElement(Accessibility, {
     ...accessibility,
     hiddenTextDescribedById: draggableDescribedById
   }));
@@ -3242,7 +3267,7 @@ var DndContext = /* @__PURE__ */ memo(function DndContext2(_ref) {
     };
   }
 });
-var NullContext = /* @__PURE__ */ createContext(null);
+var NullContext = /* @__PURE__ */ (0, react_esm_exports.createContext)(null);
 var defaultRole = "button";
 var ID_PREFIX = "Draggable";
 function useDraggable(_ref) {
@@ -3261,14 +3286,14 @@ function useDraggable(_ref) {
     ariaDescribedById,
     draggableNodes,
     over
-  } = useContext(InternalContext);
+  } = (0, react_esm_exports.useContext)(InternalContext);
   const {
     role = defaultRole,
     roleDescription = "draggable",
     tabIndex = 0
   } = attributes != null ? attributes : {};
   const isDragging = (active == null ? void 0 : active.id) === id;
-  const transform = useContext(isDragging ? ActiveDraggableContext : NullContext);
+  const transform = (0, react_esm_exports.useContext)(isDragging ? ActiveDraggableContext : NullContext);
   const [node, setNodeRef] = useNodeRef();
   const [activatorNode, setActivatorNodeRef] = useNodeRef();
   const listeners = useSyntheticListeners(activators, id);
@@ -3292,7 +3317,7 @@ function useDraggable(_ref) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [draggableNodes, id]
   );
-  const memoizedAttributes = useMemo2(() => ({
+  const memoizedAttributes = (0, react_esm_exports.useMemo)(() => ({
     role,
     tabIndex,
     "aria-disabled": disabled,
@@ -3315,7 +3340,7 @@ function useDraggable(_ref) {
   };
 }
 function useDndContext() {
-  return useContext(PublicContext);
+  return (0, react_esm_exports.useContext)(PublicContext);
 }
 var ID_PREFIX$1 = "Droppable";
 var defaultResizeObserverConfig = {
@@ -3334,13 +3359,13 @@ function useDroppable(_ref) {
     dispatch,
     over,
     measureDroppableContainers
-  } = useContext(InternalContext);
-  const previous = useRef2({
+  } = (0, react_esm_exports.useContext)(InternalContext);
+  const previous = (0, react_esm_exports.useRef)({
     disabled
   });
-  const resizeObserverConnected = useRef2(false);
-  const rect = useRef2(null);
-  const callbackId = useRef2(null);
+  const resizeObserverConnected = (0, react_esm_exports.useRef)(false);
+  const rect = (0, react_esm_exports.useRef)(null);
+  const callbackId = (0, react_esm_exports.useRef)(null);
   const {
     disabled: resizeObserverDisabled,
     updateMeasurementsFor,
@@ -3350,7 +3375,7 @@ function useDroppable(_ref) {
     ...resizeObserverConfig
   };
   const ids2 = useLatestValue(updateMeasurementsFor != null ? updateMeasurementsFor : id);
-  const handleResize = useCallback3(
+  const handleResize = (0, react_esm_exports.useCallback)(
     () => {
       if (!resizeObserverConnected.current) {
         resizeObserverConnected.current = true;
@@ -3371,7 +3396,7 @@ function useDroppable(_ref) {
     callback: handleResize,
     disabled: resizeObserverDisabled || !active
   });
-  const handleNodeChange = useCallback3((newElement, previousElement) => {
+  const handleNodeChange = (0, react_esm_exports.useCallback)((newElement, previousElement) => {
     if (!resizeObserver) {
       return;
     }
@@ -3385,7 +3410,7 @@ function useDroppable(_ref) {
   }, [resizeObserver]);
   const [nodeRef, setNodeRef] = useNodeRef(handleNodeChange);
   const dataRef = useLatestValue(data);
-  useEffect2(() => {
+  (0, react_esm_exports.useEffect)(() => {
     if (!resizeObserver || !nodeRef.current) {
       return;
     }
@@ -3393,7 +3418,7 @@ function useDroppable(_ref) {
     resizeObserverConnected.current = false;
     resizeObserver.observe(nodeRef.current);
   }, [nodeRef, resizeObserver]);
-  useEffect2(
+  (0, react_esm_exports.useEffect)(
     () => {
       dispatch({
         type: Action.RegisterDroppable,
@@ -3415,7 +3440,7 @@ function useDroppable(_ref) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [id]
   );
-  useEffect2(() => {
+  (0, react_esm_exports.useEffect)(() => {
     if (disabled !== previous.current.disabled) {
       dispatch({
         type: Action.SetDroppableDisabled,
@@ -3440,8 +3465,8 @@ function AnimationManager(_ref) {
     animation,
     children
   } = _ref;
-  const [clonedChildren, setClonedChildren] = useState2(null);
-  const [element, setElement] = useState2(null);
+  const [clonedChildren, setClonedChildren] = (0, react_esm_exports.useState)(null);
+  const [element, setElement] = (0, react_esm_exports.useState)(null);
   const previousChildren = usePrevious(children);
   if (!children && !clonedChildren && previousChildren) {
     setClonedChildren(previousChildren);
@@ -3460,7 +3485,7 @@ function AnimationManager(_ref) {
       setClonedChildren(null);
     });
   }, [animation, clonedChildren, element]);
-  return React2.createElement(React2.Fragment, null, children, clonedChildren ? cloneElement(clonedChildren, {
+  return react_esm_default.createElement(react_esm_default.Fragment, null, children, clonedChildren ? (0, react_esm_exports.cloneElement)(clonedChildren, {
     ref: setElement
   }) : null);
 }
@@ -3474,9 +3499,9 @@ function NullifiedContextProvider(_ref) {
   let {
     children
   } = _ref;
-  return React2.createElement(InternalContext.Provider, {
+  return react_esm_default.createElement(InternalContext.Provider, {
     value: defaultInternalContext
-  }, React2.createElement(ActiveDraggableContext.Provider, {
+  }, react_esm_default.createElement(ActiveDraggableContext.Provider, {
     value: defaultTransform
   }, children));
 }
@@ -3488,7 +3513,7 @@ var defaultTransition = (activatorEvent) => {
   const isKeyboardActivator = isKeyboardEvent(activatorEvent);
   return isKeyboardActivator ? "transform 250ms ease" : void 0;
 };
-var PositionedOverlay = /* @__PURE__ */ forwardRef((_ref, ref) => {
+var PositionedOverlay = /* @__PURE__ */ (0, react_esm_exports.forwardRef)((_ref, ref) => {
   let {
     as,
     activatorEvent,
@@ -3519,7 +3544,7 @@ var PositionedOverlay = /* @__PURE__ */ forwardRef((_ref, ref) => {
     transition: typeof transition === "function" ? transition(activatorEvent) : transition,
     ...style
   };
-  return React2.createElement(as, {
+  return react_esm_default.createElement(as, {
     className,
     style: styles,
     ref
@@ -3709,7 +3734,7 @@ function createDefaultDropAnimation(options) {
 }
 var key = 0;
 function useKey(id) {
-  return useMemo2(() => {
+  return (0, react_esm_exports.useMemo)(() => {
     if (id == null) {
       return;
     }
@@ -3717,7 +3742,7 @@ function useKey(id) {
     return key;
   }, [id]);
 }
-var DragOverlay = /* @__PURE__ */ React2.memo((_ref) => {
+var DragOverlay = /* @__PURE__ */ react_esm_default.memo((_ref) => {
   let {
     adjustScale: adjustScale2 = false,
     children,
@@ -3743,7 +3768,7 @@ var DragOverlay = /* @__PURE__ */ React2.memo((_ref) => {
     scrollableAncestorRects,
     windowRect
   } = useDndContext();
-  const transform = useContext(ActiveDraggableContext);
+  const transform = (0, react_esm_exports.useContext)(ActiveDraggableContext);
   const key2 = useKey(active == null ? void 0 : active.id);
   const modifiedTransform = applyModifiers(modifiers, {
     activatorEvent,
@@ -3766,9 +3791,9 @@ var DragOverlay = /* @__PURE__ */ React2.memo((_ref) => {
     measuringConfiguration
   });
   const ref = initialRect ? dragOverlay.setRef : void 0;
-  return React2.createElement(NullifiedContextProvider, null, React2.createElement(AnimationManager, {
+  return react_esm_default.createElement(NullifiedContextProvider, null, react_esm_default.createElement(AnimationManager, {
     animation: dropAnimation
-  }, active && key2 ? React2.createElement(PositionedOverlay, {
+  }, active && key2 ? react_esm_default.createElement(PositionedOverlay, {
     key: key2,
     id: active.id,
     ref,

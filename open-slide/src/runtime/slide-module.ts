@@ -12,6 +12,7 @@
 
 import { transform } from 'sucrase'
 import * as React from 'react'
+import * as JsxRuntime from 'react/jsx-runtime'
 
 export type CompiledModule = Record<string, unknown> & { default?: unknown }
 
@@ -20,7 +21,12 @@ export type CompiledModule = Record<string, unknown> & { default?: unknown }
  *  second one (two Reacts break hooks). */
 const RESOLVABLE: Record<string, unknown> = {
   react: React,
-  'react/jsx-runtime': React,
+  // The automatic JSX runtime compiles `<div/>` into `jsx(...)` imported from
+  // `react/jsx-runtime` — a different module from `react`, and the one that
+  // actually exports `jsx`/`jsxs`/`Fragment`. Handing back the React namespace
+  // here fails at the first element with "jsx is not a function".
+  'react/jsx-runtime': JsxRuntime,
+  'react/jsx-dev-runtime': JsxRuntime,
 }
 
 function requireShim(specifier: string): unknown {

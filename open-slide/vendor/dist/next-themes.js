@@ -1,5 +1,32 @@
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
+
+// vendor/shims/react-esm.js
+var react_esm_exports = {};
+__export(react_esm_exports, {
+  default: () => react_esm_default
+});
+__reExport(react_esm_exports, react_star);
+import * as React from "react";
+import * as react_star from "react";
+var react_esm_default = React.default ?? React;
+
 // node_modules/.pnpm/next-themes@0.4.6_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/next-themes/dist/index.mjs
-import * as t from "react";
 var M = (e, i, s, u, m, a, l, h) => {
   let d = document.documentElement, w = ["light", "dark"];
   function p(n) {
@@ -24,17 +51,17 @@ var M = (e, i, s, u, m, a, l, h) => {
 var b = ["light", "dark"];
 var I = "(prefers-color-scheme: dark)";
 var O = typeof window == "undefined";
-var x = t.createContext(void 0);
+var x = react_esm_exports.createContext(void 0);
 var U = { setTheme: (e) => {
 }, themes: [] };
 var z = () => {
   var e;
-  return (e = t.useContext(x)) != null ? e : U;
+  return (e = react_esm_exports.useContext(x)) != null ? e : U;
 };
-var J = (e) => t.useContext(x) ? t.createElement(t.Fragment, null, e.children) : t.createElement(V, { ...e });
+var J = (e) => react_esm_exports.useContext(x) ? react_esm_exports.createElement(react_esm_exports.Fragment, null, e.children) : react_esm_exports.createElement(V, { ...e });
 var N = ["light", "dark"];
 var V = ({ forcedTheme: e, disableTransitionOnChange: i = false, enableSystem: s = true, enableColorScheme: u = true, storageKey: m = "theme", themes: a = N, defaultTheme: l = s ? "system" : "light", attribute: h = "data-theme", value: d, children: w, nonce: p, scriptProps: R }) => {
-  let [c, n] = t.useState(() => H(m, l)), [T, y] = t.useState(() => c === "system" ? E() : c), k = d ? Object.values(d) : a, S = t.useCallback((o) => {
+  let [c, n] = react_esm_exports.useState(() => H(m, l)), [T, y] = react_esm_exports.useState(() => c === "system" ? E() : c), k = d ? Object.values(d) : a, S = react_esm_exports.useCallback((o) => {
     let r = o;
     if (!r) return;
     o === "system" && s && (r = E());
@@ -46,34 +73,34 @@ var V = ({ forcedTheme: e, disableTransitionOnChange: i = false, enableSystem: s
       P.style.colorScheme = D;
     }
     C == null || C();
-  }, [p]), f = t.useCallback((o) => {
+  }, [p]), f = react_esm_exports.useCallback((o) => {
     let r = typeof o == "function" ? o(c) : o;
     n(r);
     try {
       localStorage.setItem(m, r);
     } catch (v) {
     }
-  }, [c]), A = t.useCallback((o) => {
+  }, [c]), A = react_esm_exports.useCallback((o) => {
     let r = E(o);
     y(r), c === "system" && s && !e && S("system");
   }, [c, e]);
-  t.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     let o = window.matchMedia(I);
     return o.addListener(A), A(o), () => o.removeListener(A);
-  }, [A]), t.useEffect(() => {
+  }, [A]), react_esm_exports.useEffect(() => {
     let o = (r) => {
       r.key === m && (r.newValue ? n(r.newValue) : f(l));
     };
     return window.addEventListener("storage", o), () => window.removeEventListener("storage", o);
-  }, [f]), t.useEffect(() => {
+  }, [f]), react_esm_exports.useEffect(() => {
     S(e != null ? e : c);
   }, [e, c]);
-  let Q = t.useMemo(() => ({ theme: c, setTheme: f, forcedTheme: e, resolvedTheme: c === "system" ? T : c, themes: s ? [...a, "system"] : a, systemTheme: s ? T : void 0 }), [c, f, e, T, s, a]);
-  return t.createElement(x.Provider, { value: Q }, t.createElement(_, { forcedTheme: e, storageKey: m, attribute: h, enableSystem: s, enableColorScheme: u, defaultTheme: l, value: d, themes: a, nonce: p, scriptProps: R }), w);
+  let Q = react_esm_exports.useMemo(() => ({ theme: c, setTheme: f, forcedTheme: e, resolvedTheme: c === "system" ? T : c, themes: s ? [...a, "system"] : a, systemTheme: s ? T : void 0 }), [c, f, e, T, s, a]);
+  return react_esm_exports.createElement(x.Provider, { value: Q }, react_esm_exports.createElement(_, { forcedTheme: e, storageKey: m, attribute: h, enableSystem: s, enableColorScheme: u, defaultTheme: l, value: d, themes: a, nonce: p, scriptProps: R }), w);
 };
-var _ = t.memo(({ forcedTheme: e, storageKey: i, attribute: s, enableSystem: u, enableColorScheme: m, defaultTheme: a, value: l, themes: h, nonce: d, scriptProps: w }) => {
+var _ = react_esm_exports.memo(({ forcedTheme: e, storageKey: i, attribute: s, enableSystem: u, enableColorScheme: m, defaultTheme: a, value: l, themes: h, nonce: d, scriptProps: w }) => {
   let p = JSON.stringify([s, i, a, e, h, l, u, m]).slice(1, -1);
-  return t.createElement("script", { ...w, suppressHydrationWarning: true, nonce: typeof window == "undefined" ? d : "", dangerouslySetInnerHTML: { __html: `(${M.toString()})(${p})` } });
+  return react_esm_exports.createElement("script", { ...w, suppressHydrationWarning: true, nonce: typeof window == "undefined" ? d : "", dangerouslySetInnerHTML: { __html: `(${M.toString()})(${p})` } });
 });
 var H = (e, i) => {
   if (O) return;

@@ -1,18 +1,7 @@
-var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
-}) : x)(function(x) {
-  if (typeof require !== "undefined") return require.apply(this, arguments);
-  throw Error('Dynamic require of "' + x + '" is not supported');
-});
-var __commonJS = (cb, mod) => function __require2() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
@@ -25,160 +14,7 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-
-// node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.production.js
-var require_use_sync_external_store_shim_production = __commonJS({
-  "node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.production.js"(exports) {
-    "use strict";
-    var React57 = __require("react");
-    function is(x, y) {
-      return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
-    }
-    var objectIs = "function" === typeof Object.is ? Object.is : is;
-    var useState13 = React57.useState;
-    var useEffect13 = React57.useEffect;
-    var useLayoutEffect3 = React57.useLayoutEffect;
-    var useDebugValue2 = React57.useDebugValue;
-    function useSyncExternalStore$2(subscribe, getSnapshot) {
-      var value = getSnapshot(), _useState = useState13({ inst: { value, getSnapshot } }), inst = _useState[0].inst, forceUpdate = _useState[1];
-      useLayoutEffect3(
-        function() {
-          inst.value = value;
-          inst.getSnapshot = getSnapshot;
-          checkIfSnapshotChanged(inst) && forceUpdate({ inst });
-        },
-        [subscribe, value, getSnapshot]
-      );
-      useEffect13(
-        function() {
-          checkIfSnapshotChanged(inst) && forceUpdate({ inst });
-          return subscribe(function() {
-            checkIfSnapshotChanged(inst) && forceUpdate({ inst });
-          });
-        },
-        [subscribe]
-      );
-      useDebugValue2(value);
-      return value;
-    }
-    function checkIfSnapshotChanged(inst) {
-      var latestGetSnapshot = inst.getSnapshot;
-      inst = inst.value;
-      try {
-        var nextValue = latestGetSnapshot();
-        return !objectIs(inst, nextValue);
-      } catch (error) {
-        return true;
-      }
-    }
-    function useSyncExternalStore$1(subscribe, getSnapshot) {
-      return getSnapshot();
-    }
-    var shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
-    exports.useSyncExternalStore = void 0 !== React57.useSyncExternalStore ? React57.useSyncExternalStore : shim;
-  }
-});
-
-// node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/shim/index.js
-var require_shim = __commonJS({
-  "node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/shim/index.js"(exports, module) {
-    "use strict";
-    if (true) {
-      module.exports = require_use_sync_external_store_shim_production();
-    } else {
-      module.exports = null;
-    }
-  }
-});
-
-// node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.production.js
-var require_with_selector_production = __commonJS({
-  "node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.production.js"(exports) {
-    "use strict";
-    var React57 = __require("react");
-    var shim = require_shim();
-    function is(x, y) {
-      return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
-    }
-    var objectIs = "function" === typeof Object.is ? Object.is : is;
-    var useSyncExternalStore2 = shim.useSyncExternalStore;
-    var useRef21 = React57.useRef;
-    var useEffect13 = React57.useEffect;
-    var useMemo14 = React57.useMemo;
-    var useDebugValue2 = React57.useDebugValue;
-    exports.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
-      var instRef = useRef21(null);
-      if (null === instRef.current) {
-        var inst = { hasValue: false, value: null };
-        instRef.current = inst;
-      } else inst = instRef.current;
-      instRef = useMemo14(
-        function() {
-          function memoizedSelector(nextSnapshot) {
-            if (!hasMemo) {
-              hasMemo = true;
-              memoizedSnapshot = nextSnapshot;
-              nextSnapshot = selector(nextSnapshot);
-              if (void 0 !== isEqual && inst.hasValue) {
-                var currentSelection = inst.value;
-                if (isEqual(currentSelection, nextSnapshot))
-                  return memoizedSelection = currentSelection;
-              }
-              return memoizedSelection = nextSnapshot;
-            }
-            currentSelection = memoizedSelection;
-            if (objectIs(memoizedSnapshot, nextSnapshot)) return currentSelection;
-            var nextSelection = selector(nextSnapshot);
-            if (void 0 !== isEqual && isEqual(currentSelection, nextSelection))
-              return memoizedSnapshot = nextSnapshot, currentSelection;
-            memoizedSnapshot = nextSnapshot;
-            return memoizedSelection = nextSelection;
-          }
-          var hasMemo = false, memoizedSnapshot, memoizedSelection, maybeGetServerSnapshot = void 0 === getServerSnapshot ? null : getServerSnapshot;
-          return [
-            function() {
-              return memoizedSelector(getSnapshot());
-            },
-            null === maybeGetServerSnapshot ? void 0 : function() {
-              return memoizedSelector(maybeGetServerSnapshot());
-            }
-          ];
-        },
-        [getSnapshot, getServerSnapshot, selector, isEqual]
-      );
-      var value = useSyncExternalStore2(subscribe, instRef[0], instRef[1]);
-      useEffect13(
-        function() {
-          inst.hasValue = true;
-          inst.value = value;
-        },
-        [value]
-      );
-      useDebugValue2(value);
-      return value;
-    };
-  }
-});
-
-// node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/shim/with-selector.js
-var require_with_selector = __commonJS({
-  "node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/shim/with-selector.js"(exports, module) {
-    "use strict";
-    if (true) {
-      module.exports = require_with_selector_production();
-    } else {
-      module.exports = null;
-    }
-  }
-});
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/index.parts.mjs
 var index_parts_exports = {};
@@ -198,8 +34,15 @@ __export(index_parts_exports, {
   createHandle: () => createPopoverHandle
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/root/PopoverRoot.mjs
-import * as React29 from "react";
+// vendor/shims/react-esm.js
+var react_esm_exports = {};
+__export(react_esm_exports, {
+  default: () => react_esm_default
+});
+__reExport(react_esm_exports, react_star);
+import * as React from "react";
+import * as react_star from "react";
+var react_esm_default = React.default ?? React;
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/empty.mjs
 function NOOP() {
@@ -208,10 +51,9 @@ var EMPTY_ARRAY = Object.freeze([]);
 var EMPTY_OBJECT = Object.freeze({});
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useRefWithInit.mjs
-import * as React from "react";
 var UNINITIALIZED = {};
 function useRefWithInit(init, initArg) {
-  const ref = React.useRef(UNINITIALIZED);
+  const ref = react_esm_exports.useRef(UNINITIALIZED);
   if (ref.current === UNINITIALIZED) {
     ref.current = init(initArg);
   }
@@ -219,10 +61,9 @@ function useRefWithInit(init, initArg) {
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useOnMount.mjs
-import * as React2 from "react";
 var EMPTY = [];
 function useOnMount(fn) {
-  React2.useEffect(fn, EMPTY);
+  react_esm_exports.useEffect(fn, EMPTY);
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useTimeout.mjs
@@ -262,10 +103,9 @@ function useTimeout() {
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useIsoLayoutEffect.mjs
-import * as React3 from "react";
 var noop = () => {
 };
-var useIsoLayoutEffect = typeof document !== "undefined" ? React3.useLayoutEffect : noop;
+var useIsoLayoutEffect = typeof document !== "undefined" ? react_esm_exports.useLayoutEffect : noop;
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/platform/parts.mjs
 var parts_exports = {};
@@ -766,9 +606,6 @@ function createChangeEventDetails(reason, event, trigger, customProperties) {
   return details;
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingFocusManager.mjs
-import * as React12 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/addEventListener.mjs
 function addEventListener(target, type, listener, options) {
   target.addEventListener(type, listener, options);
@@ -897,9 +734,8 @@ function createLatestRef(value) {
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/safeReact.mjs
-import * as React4 from "react";
 var SafeReact = {
-  ...React4
+  ...react_esm_exports
 };
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useStableCallback.mjs
@@ -1028,9 +864,6 @@ function ownerDocument(node) {
   return node?.ownerDocument || document;
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/FocusGuard.mjs
-import * as React5 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/visuallyHidden.mjs
 var visuallyHiddenBase = {
   clipPath: "inset(50%)",
@@ -1055,8 +888,8 @@ var visuallyHiddenInput = {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/FocusGuard.mjs
 import { jsx as _jsx } from "react/jsx-runtime";
-var FocusGuard = /* @__PURE__ */ React5.forwardRef(function FocusGuard2(props, ref) {
-  const [role, setRole] = React5.useState();
+var FocusGuard = /* @__PURE__ */ react_esm_exports.forwardRef(function FocusGuard2(props, ref) {
+  const [role, setRole] = react_esm_exports.useState();
   useIsoLayoutEffect(() => {
     if (parts_exports.screenReader.voiceOver && parts_exports.engine.webkit) {
       setRole("button");
@@ -1624,16 +1457,14 @@ function markOthers(avoidElements, options = {}) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingPortal.mjs
-import * as React10 from "react";
 import * as ReactDOM from "react-dom";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useId.mjs
-import * as React6 from "react";
 var globalId = 0;
 function useGlobalId(idOverride, prefix = "mui") {
-  const [defaultId, setDefaultId] = React6.useState(idOverride);
+  const [defaultId, setDefaultId] = react_esm_exports.useState(idOverride);
   const id = idOverride || defaultId;
-  React6.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (defaultId == null) {
       globalId += 1;
       setDefaultId(`${prefix}-${globalId}`);
@@ -1662,22 +1493,15 @@ function createFormatErrorMessage(baseUrl, prefix) {
 var formatErrorMessage = createFormatErrorMessage("https://base-ui.com/production-error", "Base UI");
 var formatErrorMessage_default = formatErrorMessage;
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
-import * as React9 from "react";
-
-// node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
-import * as React8 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/reactVersion.mjs
-import * as React7 from "react";
-var majorVersion = parseInt(React7.version, 10);
+var majorVersion = parseInt(react_esm_exports.version, 10);
 function isReactVersionAtLeast(reactVersionToCheck) {
   return majorVersion >= reactVersionToCheck;
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
 function getReactElementRef(element) {
-  if (!/* @__PURE__ */ React8.isValidElement(element)) {
+  if (!/* @__PURE__ */ react_esm_exports.isValidElement(element)) {
     return null;
   }
   const reactElement = element;
@@ -1889,7 +1713,6 @@ function isSyntheticEvent(event) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
-import { createElement as _createElement } from "react";
 function useRenderElement(element, componentProps, params = {}) {
   const renderProp = componentProps.render;
   const outProps = useRenderElementProps(componentProps, params);
@@ -1956,15 +1779,15 @@ function evaluateRenderProp(element, render, props, state) {
     mergedProps.ref = props.ref;
     let newElement = render;
     if (newElement?.$$typeof === REACT_LAZY_TYPE) {
-      const children = React9.Children.toArray(render);
+      const children = react_esm_exports.Children.toArray(render);
       newElement = children[0];
     }
     if (false) {
-      if (!/* @__PURE__ */ React9.isValidElement(newElement)) {
+      if (!/* @__PURE__ */ react_esm_exports.isValidElement(newElement)) {
         throw new Error(["Base UI: The `render` prop was provided an invalid React element as `React.isValidElement(render)` is `false`.", "A valid React element must be provided to the `render` prop because it is cloned with props to replace the default element.", "https://base-ui.com/r/invalid-render-prop"].join("\n"));
       }
     }
-    return /* @__PURE__ */ React9.cloneElement(newElement, mergedProps);
+    return /* @__PURE__ */ react_esm_exports.cloneElement(newElement, mergedProps);
   }
   if (element) {
     if (typeof element === "string") {
@@ -1975,20 +1798,20 @@ function evaluateRenderProp(element, render, props, state) {
 }
 function renderTag(Tag, props) {
   if (Tag === "button") {
-    return /* @__PURE__ */ _createElement("button", {
+    return /* @__PURE__ */ (0, react_esm_exports.createElement)("button", {
       type: "button",
       ...props,
       key: props.key
     });
   }
   if (Tag === "img") {
-    return /* @__PURE__ */ _createElement("img", {
+    return /* @__PURE__ */ (0, react_esm_exports.createElement)("img", {
       alt: "",
       ...props,
       key: props.key
     });
   }
-  return /* @__PURE__ */ React9.createElement(Tag, props);
+  return /* @__PURE__ */ react_esm_exports.createElement(Tag, props);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/constants.mjs
@@ -2015,9 +1838,9 @@ var ownerVisuallyHidden = {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingPortal.mjs
 import { jsx as _jsx2, jsxs as _jsxs } from "react/jsx-runtime";
-var PortalContext = /* @__PURE__ */ React10.createContext(null);
+var PortalContext = /* @__PURE__ */ react_esm_exports.createContext(null);
 if (false) PortalContext.displayName = "PortalContext";
-var usePortalContext = () => React10.useContext(PortalContext);
+var usePortalContext = () => react_esm_exports.useContext(PortalContext);
 var attr = createAttribute("portal");
 function useFloatingPortalNode(props = {}) {
   const {
@@ -2029,14 +1852,14 @@ function useFloatingPortalNode(props = {}) {
   const uniqueId = useId();
   const portalContext = usePortalContext();
   const parentPortalNode = portalContext?.portalNode;
-  const [containerElement, setContainerElement] = React10.useState(null);
-  const [portalNode, setPortalNode] = React10.useState(null);
+  const [containerElement, setContainerElement] = react_esm_exports.useState(null);
+  const [portalNode, setPortalNode] = react_esm_exports.useState(null);
   const setPortalNodeRef = useStableCallback((node) => {
     if (node !== null) {
       setPortalNode(node);
     }
   });
-  const containerRef = React10.useRef(null);
+  const containerRef = react_esm_exports.useRef(null);
   useIsoLayoutEffect(() => {
     if (containerProp === null) {
       if (containerRef.current) {
@@ -2077,7 +1900,7 @@ function useFloatingPortalNode(props = {}) {
     portalSubtree
   };
 }
-var FloatingPortal = /* @__PURE__ */ React10.forwardRef(function FloatingPortal2(componentProps, forwardedRef) {
+var FloatingPortal = /* @__PURE__ */ react_esm_exports.forwardRef(function FloatingPortal2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -2096,16 +1919,16 @@ var FloatingPortal = /* @__PURE__ */ React10.forwardRef(function FloatingPortal2
     componentProps,
     elementProps
   });
-  const beforeOutsideRef = React10.useRef(null);
-  const afterOutsideRef = React10.useRef(null);
-  const beforeInsideRef = React10.useRef(null);
-  const afterInsideRef = React10.useRef(null);
-  const [focusManagerState, setFocusManagerState] = React10.useState(null);
-  const focusInsideDisabledRef = React10.useRef(false);
+  const beforeOutsideRef = react_esm_exports.useRef(null);
+  const afterOutsideRef = react_esm_exports.useRef(null);
+  const beforeInsideRef = react_esm_exports.useRef(null);
+  const afterInsideRef = react_esm_exports.useRef(null);
+  const [focusManagerState, setFocusManagerState] = react_esm_exports.useState(null);
+  const focusInsideDisabledRef = react_esm_exports.useRef(false);
   const modal = focusManagerState?.modal;
   const open = focusManagerState?.open;
   const shouldRenderGuards = typeof renderGuards === "boolean" ? renderGuards : !!focusManagerState && !focusManagerState.modal && focusManagerState.open && !!portalNode;
-  React10.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!portalNode || modal) {
       return void 0;
     }
@@ -2131,7 +1954,7 @@ var FloatingPortal = /* @__PURE__ */ React10.forwardRef(function FloatingPortal2
     enableFocusInside(portalNode);
     focusInsideDisabledRef.current = false;
   }, [open, portalNode]);
-  const portalContextValue = React10.useMemo(() => ({
+  const portalContextValue = react_esm_exports.useMemo(() => ({
     beforeOutsideRef,
     afterOutsideRef,
     beforeInsideRef,
@@ -2139,7 +1962,7 @@ var FloatingPortal = /* @__PURE__ */ React10.forwardRef(function FloatingPortal2
     portalNode,
     setFocusManagerState
   }), [portalNode]);
-  return /* @__PURE__ */ _jsxs(React10.Fragment, {
+  return /* @__PURE__ */ _jsxs(react_esm_exports.Fragment, {
     children: [portalSubtree, /* @__PURE__ */ _jsxs(PortalContext.Provider, {
       value: portalContextValue,
       children: [shouldRenderGuards && portalNode && /* @__PURE__ */ _jsx2(FocusGuard, {
@@ -2177,9 +2000,6 @@ var FloatingPortal = /* @__PURE__ */ React10.forwardRef(function FloatingPortal2
   });
 });
 if (false) FloatingPortal.displayName = "FloatingPortal";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingTree.mjs
-import * as React11 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/utils/createEventEmitter.mjs
 function createEventEmitter() {
@@ -2219,13 +2039,13 @@ var FloatingTreeStore = class {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingTree.mjs
 import { jsx as _jsx3 } from "react/jsx-runtime";
-var FloatingNodeContext = /* @__PURE__ */ React11.createContext(null);
+var FloatingNodeContext = /* @__PURE__ */ react_esm_exports.createContext(null);
 if (false) FloatingNodeContext.displayName = "FloatingNodeContext";
-var FloatingTreeContext = /* @__PURE__ */ React11.createContext(null);
+var FloatingTreeContext = /* @__PURE__ */ react_esm_exports.createContext(null);
 if (false) FloatingTreeContext.displayName = "FloatingTreeContext";
-var useFloatingParentNodeId = () => React11.useContext(FloatingNodeContext)?.id || null;
+var useFloatingParentNodeId = () => react_esm_exports.useContext(FloatingNodeContext)?.id || null;
 var useFloatingTree = (externalTree) => {
-  const contextTree = React11.useContext(FloatingTreeContext);
+  const contextTree = react_esm_exports.useContext(FloatingTreeContext);
   return externalTree ?? contextTree;
 };
 function useFloatingNodeId(externalTree) {
@@ -2254,7 +2074,7 @@ function FloatingNode(props) {
   } = props;
   const parentId = useFloatingParentNodeId();
   return /* @__PURE__ */ _jsx3(FloatingNodeContext.Provider, {
-    value: React11.useMemo(() => ({
+    value: react_esm_exports.useMemo(() => ({
       id,
       parentId
     }), [id, parentId]),
@@ -2388,14 +2208,14 @@ function FloatingFocusManager(props) {
   const openRef = useValueAsRef(open);
   const tree = useFloatingTree(externalTree);
   const portalContext = usePortalContext();
-  const preventReturnFocusRef = React12.useRef(false);
-  const isPointerDownRef = React12.useRef(false);
-  const pointerDownOutsideRef = React12.useRef(false);
-  const lastFocusedTabbableRef = React12.useRef(null);
-  const closeTypeRef = React12.useRef("");
-  const lastInteractionTypeRef = React12.useRef("");
-  const beforeGuardRef = React12.useRef(null);
-  const afterGuardRef = React12.useRef(null);
+  const preventReturnFocusRef = react_esm_exports.useRef(false);
+  const isPointerDownRef = react_esm_exports.useRef(false);
+  const pointerDownOutsideRef = react_esm_exports.useRef(false);
+  const lastFocusedTabbableRef = react_esm_exports.useRef(null);
+  const closeTypeRef = react_esm_exports.useRef("");
+  const lastInteractionTypeRef = react_esm_exports.useRef("");
+  const beforeGuardRef = react_esm_exports.useRef(null);
+  const afterGuardRef = react_esm_exports.useRef(null);
   const mergedBeforeGuardRef = useMergedRefs(beforeGuardRef, beforeContentFocusGuardRef, portalContext?.beforeInsideRef);
   const mergedAfterGuardRef = useMergedRefs(afterGuardRef, portalContext?.afterInsideRef);
   const blurTimeout = useTimeout();
@@ -2407,7 +2227,7 @@ function FloatingFocusManager(props) {
     return container ? tabbable(container) : [];
   });
   const getResolvedInsideElements = useStableCallback(() => getInsideElements?.().filter((element) => element != null) ?? []);
-  React12.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (disabled2 || !modal) {
       return void 0;
     }
@@ -2421,7 +2241,7 @@ function FloatingFocusManager(props) {
     const doc = ownerDocument(floatingFocusElement);
     return addEventListener(doc, "keydown", onKeyDown);
   }, [disabled2, floatingFocusElement, modal, isUntrappedTypeableCombobox, getTabbableContent]);
-  React12.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (disabled2 || !open) {
       return void 0;
     }
@@ -2455,7 +2275,7 @@ function FloatingFocusManager(props) {
       clearPointerDownOutside
     );
   }, [disabled2, floating, domReference, floatingFocusElement, open, portalContext, pointerDownTimeout, getResolvedInsideElements]);
-  React12.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (disabled2 || !closeOnFocusOut) {
       return void 0;
     }
@@ -2537,7 +2357,7 @@ function FloatingFocusManager(props) {
     }
     return mergeCleanups(domReferenceElement && addEventListener(domReferenceElement, "focusout", handleFocusOutside), domReferenceElement && addEventListener(domReferenceElement, "pointerdown", handlePointerDown), floating && addEventListener(floating, "focusin", handleFocusIn), floating && addEventListener(floating, "focusout", handleFocusOutside), floating && portalContext && addEventListener(floating, "focusout", markInsideReactTree, true));
   }, [disabled2, domReference, floating, floatingFocusElement, modal, tree, portalContext, store, closeOnFocusOut, restoreFocus, getTabbableContent, isUntrappedTypeableCombobox, getNodeId, dataRef, blurTimeout, pointerDownTimeout, restoreFocusFrame, nextFocusableElement, previousFocusableElement, getResolvedInsideElements]);
-  React12.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (disabled2 || !floating || !open) {
       return void 0;
     }
@@ -2721,7 +2541,7 @@ function FloatingFocusManager(props) {
     };
   }, [disabled2, floatingFocusElement]);
   const shouldRenderGuards = !disabled2 && (modal ? !isUntrappedTypeableCombobox : true) && (isInsidePortal || modal);
-  return /* @__PURE__ */ _jsxs2(React12.Fragment, {
+  return /* @__PURE__ */ _jsxs2(react_esm_exports.Fragment, {
     children: [shouldRenderGuards && /* @__PURE__ */ _jsx4(FocusGuard, {
       "data-type": "inside",
       ref: mergedBeforeGuardRef,
@@ -2762,7 +2582,6 @@ function FloatingFocusManager(props) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useClick.mjs
-import * as React13 from "react";
 function useClick(context, props = {}) {
   const {
     enabled = true,
@@ -2775,10 +2594,10 @@ function useClick(context, props = {}) {
   } = props;
   const store = "rootStore" in context ? context.rootStore : context;
   const dataRef = store.context.dataRef;
-  const pointerTypeRef = React13.useRef(void 0);
+  const pointerTypeRef = react_esm_exports.useRef(void 0);
   const frame = useAnimationFrame();
   const touchOpenTimeout = useTimeout();
-  const reference = React13.useMemo(() => {
+  const reference = react_esm_exports.useMemo(() => {
     function setOpenWithTouchDelay(nextOpen, nativeEvent, target, pointerType) {
       const details = createChangeEventDetails(reason, nativeEvent, target);
       if (nextOpen && pointerType === "touch" && touchOpenDelay > 0) {
@@ -2849,13 +2668,12 @@ function useClick(context, props = {}) {
       }
     };
   }, [dataRef, eventOption, ignoreMouse, reason, store, stickIfOpen, toggle, frame, touchOpenTimeout, touchOpenDelay]);
-  return React13.useMemo(() => enabled ? {
+  return react_esm_exports.useMemo(() => enabled ? {
     reference
   } : EMPTY_OBJECT, [enabled, reference]);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useDismiss.mjs
-import * as React14 from "react";
 function alwaysFalse() {
   return false;
 }
@@ -2890,12 +2708,12 @@ function useDismiss(context, props = {}) {
     escapeKey: escapeKeyBubbles,
     outsidePress: outsidePressBubbles
   } = normalizeProp(bubbles);
-  const pressStartedInsideRef = React14.useRef(false);
-  const pressStartPreventedRef = React14.useRef(false);
-  const suppressNextOutsideClickRef = React14.useRef(false);
-  const isComposingRef = React14.useRef(false);
-  const currentPointerTypeRef = React14.useRef("");
-  const touchStateRef = React14.useRef(null);
+  const pressStartedInsideRef = react_esm_exports.useRef(false);
+  const pressStartPreventedRef = react_esm_exports.useRef(false);
+  const suppressNextOutsideClickRef = react_esm_exports.useRef(false);
+  const isComposingRef = react_esm_exports.useRef(false);
+  const currentPointerTypeRef = react_esm_exports.useRef("");
+  const touchStateRef = react_esm_exports.useRef(null);
   const cancelDismissOnEndTimeout = useTimeout();
   const clearInsideReactTreeTimeout = useTimeout();
   const clearInsideReactTree = useStableCallback(() => {
@@ -2964,7 +2782,7 @@ function useDismiss(context, props = {}) {
       pressStartPreventedRef.current = true;
     }
   });
-  React14.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!open || !enabled) {
       return void 0;
     }
@@ -3214,13 +3032,13 @@ function useDismiss(context, props = {}) {
       suppressNextOutsideClickRef.current = false;
     };
   }, [dataRef, floatingElement, escapeKey2, outsidePressEnabled, outsidePress2, open, enabled, escapeKeyBubbles, outsidePressBubbles, closeOnEscapeKeyDown, clearInsideReactTree, getOutsidePressEventProp, hasBlockingChild, isEventWithinOwnElements, tree, store, cancelDismissOnEndTimeout]);
-  React14.useEffect(clearInsideReactTree, [outsidePress2, clearInsideReactTree]);
-  const reference = React14.useMemo(() => ({
+  react_esm_exports.useEffect(clearInsideReactTree, [outsidePress2, clearInsideReactTree]);
+  const reference = react_esm_exports.useMemo(() => ({
     onKeyDown: closeOnEscapeKeyDown,
     onPointerDown: closeOnReferencePress,
     onClick: closeOnReferencePress
   }), [closeOnEscapeKeyDown, closeOnReferencePress]);
-  const floating = React14.useMemo(() => ({
+  const floating = react_esm_exports.useMemo(() => ({
     onKeyDown: closeOnEscapeKeyDown,
     // `onMouseDown` may be blocked if `event.preventDefault()` is called in
     // `onPointerDown`, such as with <NumberField.ScrubArea>.
@@ -3240,15 +3058,12 @@ function useDismiss(context, props = {}) {
     onTouchEndCapture: markInsideReactTree,
     onTouchMoveCapture: markInsideReactTree
   }), [closeOnEscapeKeyDown, markInsideReactTree, markPressStartedInsideReactTree, markInsidePressStartPrevented]);
-  return React14.useMemo(() => enabled ? {
+  return react_esm_exports.useMemo(() => enabled ? {
     reference,
     floating,
     trigger: reference
   } : {}, [enabled, reference, floating]);
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useFloating.mjs
-import * as React24 from "react";
 
 // node_modules/.pnpm/@floating-ui+core@1.8.0/node_modules/@floating-ui/core/dist/floating-ui.core.mjs
 function computeCoordsFromPlacement(_ref, placement, rtl) {
@@ -4496,13 +4311,11 @@ var computePosition2 = (reference, floating, options) => {
 };
 
 // node_modules/.pnpm/@floating-ui+react-dom@2.1.9_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
-import * as React15 from "react";
-import { useLayoutEffect as useLayoutEffect2 } from "react";
 import * as ReactDOM2 from "react-dom";
 var isClient = typeof document !== "undefined";
 var noop2 = function noop3() {
 };
-var index = isClient ? useLayoutEffect2 : noop2;
+var index = isClient ? react_esm_exports.useLayoutEffect : noop2;
 function deepEqual(a, b) {
   if (a === b) {
     return true;
@@ -4562,7 +4375,7 @@ function roundByDPR(element, value) {
   return Math.round(value * dpr) / dpr;
 }
 function useLatestRef(value) {
-  const ref = React15.useRef(value);
+  const ref = react_esm_exports.useRef(value);
   index(() => {
     ref.current = value;
   });
@@ -4585,7 +4398,7 @@ function useFloating(options) {
     whileElementsMounted,
     open
   } = options;
-  const [data, setData] = React15.useState({
+  const [data, setData] = react_esm_exports.useState({
     x: 0,
     y: 0,
     strategy,
@@ -4593,19 +4406,19 @@ function useFloating(options) {
     middlewareData: {},
     isPositioned: false
   });
-  const [latestMiddleware, setLatestMiddleware] = React15.useState(middleware);
+  const [latestMiddleware, setLatestMiddleware] = react_esm_exports.useState(middleware);
   if (!deepEqual(latestMiddleware, middleware)) {
     setLatestMiddleware(middleware);
   }
-  const [_reference, _setReference] = React15.useState(null);
-  const [_floating, _setFloating] = React15.useState(null);
-  const setReference = React15.useCallback((node) => {
+  const [_reference, _setReference] = react_esm_exports.useState(null);
+  const [_floating, _setFloating] = react_esm_exports.useState(null);
+  const setReference = react_esm_exports.useCallback((node) => {
     if (node !== referenceRef.current) {
       referenceRef.current = node;
       _setReference(node);
     }
   }, []);
-  const setFloating = React15.useCallback((node) => {
+  const setFloating = react_esm_exports.useCallback((node) => {
     if (node !== floatingRef.current) {
       floatingRef.current = node;
       _setFloating(node);
@@ -4613,14 +4426,14 @@ function useFloating(options) {
   }, []);
   const referenceEl = externalReference || _reference;
   const floatingEl = externalFloating || _floating;
-  const referenceRef = React15.useRef(null);
-  const floatingRef = React15.useRef(null);
-  const dataRef = React15.useRef(data);
+  const referenceRef = react_esm_exports.useRef(null);
+  const floatingRef = react_esm_exports.useRef(null);
+  const dataRef = react_esm_exports.useRef(data);
   const hasWhileElementsMounted = whileElementsMounted != null;
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
   const platformRef = useLatestRef(platform3);
   const openRef = useLatestRef(open);
-  const update2 = React15.useCallback(() => {
+  const update2 = react_esm_exports.useCallback(() => {
     if (!referenceRef.current || !floatingRef.current) {
       return;
     }
@@ -4658,7 +4471,7 @@ function useFloating(options) {
       }));
     }
   }, [open]);
-  const isMountedRef = React15.useRef(false);
+  const isMountedRef = react_esm_exports.useRef(false);
   index(() => {
     isMountedRef.current = true;
     return () => {
@@ -4675,17 +4488,17 @@ function useFloating(options) {
       update2();
     }
   }, [referenceEl, floatingEl, update2, whileElementsMountedRef, hasWhileElementsMounted]);
-  const refs = React15.useMemo(() => ({
+  const refs = react_esm_exports.useMemo(() => ({
     reference: referenceRef,
     floating: floatingRef,
     setReference,
     setFloating
   }), [setReference, setFloating]);
-  const elements = React15.useMemo(() => ({
+  const elements = react_esm_exports.useMemo(() => ({
     reference: referenceEl,
     floating: floatingEl
   }), [referenceEl, floatingEl]);
-  const floatingStyles = React15.useMemo(() => {
+  const floatingStyles = react_esm_exports.useMemo(() => {
     const initialStyles = {
       position: strategy,
       left: 0,
@@ -4711,7 +4524,7 @@ function useFloating(options) {
       top: y
     };
   }, [strategy, transform, elements.floating, data.x, data.y]);
-  return React15.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     ...data,
     update: update2,
     refs,
@@ -4768,21 +4581,16 @@ var hide3 = (options, deps) => {
 };
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/popups/popupStoreUtils.mjs
-import * as React23 from "react";
 import * as ReactDOM4 from "react-dom";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useOnFirstRender.mjs
-import * as React16 from "react";
 function useOnFirstRender(fn) {
-  const ref = React16.useRef(true);
+  const ref = react_esm_exports.useRef(true);
   if (ref.current) {
     ref.current = false;
     fn();
   }
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useSyncedFloatingRootContext.mjs
-import * as React20 from "react";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/store/createSelector.mjs
 var createSelector = (a, b, c, d, e, f, ...other) => {
@@ -4836,13 +4644,50 @@ var createSelector = (a, b, c, d, e, f, ...other) => {
   return selector;
 };
 
-// node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/store/useStore.mjs
-var import_shim = __toESM(require_shim(), 1);
-var import_with_selector = __toESM(require_with_selector(), 1);
-import * as React18 from "react";
+// vendor/shims/use-sync-external-store-with-selector.js
+function useSyncExternalStoreWithSelector(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
+  const instRef = (0, react_esm_exports.useRef)(null);
+  const inst = instRef.current ?? { hasValue: false, value: null };
+  if (instRef.current === null) instRef.current = inst;
+  const [getSelection, getServerSelection] = (0, react_esm_exports.useMemo)(() => {
+    let hasMemo = false;
+    let memoizedSnapshot;
+    let memoizedSelection;
+    const memoizedSelector = (nextSnapshot) => {
+      if (!hasMemo) {
+        hasMemo = true;
+        memoizedSnapshot = nextSnapshot;
+        const nextSelection2 = selector(nextSnapshot);
+        if (isEqual !== void 0 && inst.hasValue && isEqual(inst.value, nextSelection2)) {
+          memoizedSelection = inst.value;
+          return inst.value;
+        }
+        memoizedSelection = nextSelection2;
+        return nextSelection2;
+      }
+      if (Object.is(memoizedSnapshot, nextSnapshot)) return memoizedSelection;
+      const nextSelection = selector(nextSnapshot);
+      if (isEqual !== void 0 && isEqual(memoizedSelection, nextSelection)) {
+        memoizedSnapshot = nextSnapshot;
+        return memoizedSelection;
+      }
+      memoizedSnapshot = nextSnapshot;
+      memoizedSelection = nextSelection;
+      return nextSelection;
+    };
+    const getSnapshotWithSelector = () => memoizedSelector(getSnapshot());
+    const getServerSnapshotWithSelector = getServerSnapshot === void 0 ? void 0 : () => memoizedSelector(getServerSnapshot());
+    return [getSnapshotWithSelector, getServerSnapshotWithSelector];
+  }, [getSnapshot, getServerSnapshot, selector, isEqual]);
+  const value = (0, react_esm_exports.useSyncExternalStore)(subscribe, getSelection, getServerSelection);
+  (0, react_esm_exports.useEffect)(() => {
+    inst.hasValue = true;
+    inst.value = value;
+  }, [value]);
+  return value;
+}
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/fastHooks.mjs
-import * as React17 from "react";
 var hooks = [];
 var currentInstance = void 0;
 function getInstance() {
@@ -4859,8 +4704,8 @@ function useStore(store, selector, a1, a2, a3) {
   return useStoreImplementation(store, selector, a1, a2, a3);
 }
 function useStoreR19(store, selector, a1, a2, a3) {
-  const getSelection = React18.useCallback(() => selector(store.getSnapshot(), a1, a2, a3), [store, selector, a1, a2, a3]);
-  return (0, import_shim.useSyncExternalStore)(store.subscribe, getSelection, getSelection);
+  const getSelection = react_esm_exports.useCallback(() => selector(store.getSnapshot(), a1, a2, a3), [store, selector, a1, a2, a3]);
+  return (0, react_esm_exports.useSyncExternalStore)(store.subscribe, getSelection, getSelection);
 }
 register({
   before(instance) {
@@ -4906,7 +4751,7 @@ register({
           };
         };
       }
-      (0, import_shim.useSyncExternalStore)(instance.subscribe, instance.getSnapshot, instance.getSnapshot);
+      (0, react_esm_exports.useSyncExternalStore)(instance.subscribe, instance.getSnapshot, instance.getSnapshot);
     }
   }
 });
@@ -4945,7 +4790,7 @@ function useStoreFast(store, selector, a1, a2, a3) {
   return hook.value;
 }
 function useStoreLegacy(store, selector, a1, a2, a3) {
-  return (0, import_with_selector.useSyncExternalStoreWithSelector)(store.subscribe, store.getSnapshot, store.getSnapshot, (state) => selector(state, a1, a2, a3));
+  return useSyncExternalStoreWithSelector(store.subscribe, store.getSnapshot, store.getSnapshot, (state) => selector(state, a1, a2, a3));
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/store/Store.mjs
@@ -5046,7 +4891,6 @@ var Store = class {
 };
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/store/ReactStore.mjs
-import * as React19 from "react";
 var ReactStore = class extends Store {
   /**
    * Creates a new ReactStore instance.
@@ -5070,7 +4914,7 @@ var ReactStore = class extends Store {
    * by `useState` is updated before the next render (similarly to React's `useState`).
    */
   useSyncedValue(key, value) {
-    React19.useDebugValue(key);
+    react_esm_exports.useDebugValue(key);
     const store = this;
     useIsoLayoutEffect(() => {
       if (store.state[key] !== value) {
@@ -5105,8 +4949,8 @@ var ReactStore = class extends Store {
   useSyncedValues(statePart) {
     const store = this;
     if (false) {
-      React19.useDebugValue(statePart, (p) => Object.keys(p));
-      const keys = React19.useRef(Object.keys(statePart)).current;
+      react_esm_exports.useDebugValue(statePart, (p) => Object.keys(p));
+      const keys = react_esm_exports.useRef(Object.keys(statePart)).current;
       const nextKeys = Object.keys(statePart);
       if (keys.length !== nextKeys.length || keys.some((key, index2) => key !== nextKeys[index2])) {
         console.error("ReactStore.useSyncedValues expects the same prop keys on every render. Keys should be stable.");
@@ -5122,7 +4966,7 @@ var ReactStore = class extends Store {
    * is non-undefined, the store's state at `key` is updated to match `controlled`.
    */
   useControlledProp(key, controlled) {
-    React19.useDebugValue(key);
+    react_esm_exports.useDebugValue(key);
     const store = this;
     const isControlled = controlled !== void 0;
     useIsoLayoutEffect(() => {
@@ -5160,7 +5004,7 @@ var ReactStore = class extends Store {
    * @param key Key of the selector to use.
    */
   useState(key, a1, a2, a3) {
-    React19.useDebugValue(key);
+    react_esm_exports.useDebugValue(key);
     return useStore(this, this.selectors[key], a1, a2, a3);
   }
   /**
@@ -5171,7 +5015,7 @@ var ReactStore = class extends Store {
    * @param fn Function to assign.
    */
   useContextCallback(key, fn) {
-    React19.useDebugValue(key);
+    react_esm_exports.useDebugValue(key);
     const stableFunction = useStableCallback(fn ?? NOOP);
     this.context[key] = stableFunction;
   }
@@ -5182,7 +5026,7 @@ var ReactStore = class extends Store {
    * @param key Key of the state to set.
    */
   useStateSetter(key) {
-    const ref = React19.useRef(void 0);
+    const ref = react_esm_exports.useRef(void 0);
     if (ref.current === void 0) {
       ref.current = (value) => {
         this.set(key, value);
@@ -5304,7 +5148,7 @@ function useSyncedFloatingRootContext(options) {
   const floatingElement = popupStore.useState(treatPopupAsFloatingElement ? "popupElement" : "positionerElement");
   const triggerElements = popupStore.context.triggerElements;
   const handleOpenChange = onOpenChange;
-  const internalStoreRef = React20.useRef(null);
+  const internalStoreRef = react_esm_exports.useRef(null);
   if (floatingRootContextProp === void 0 && internalStoreRef.current === null) {
     internalStoreRef.current = new FloatingRootStore({
       open,
@@ -5341,10 +5185,9 @@ function useSyncedFloatingRootContext(options) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useTransitionStatus.mjs
-import * as React21 from "react";
 function useTransitionStatus(open, enableIdleState = false, deferEndingState = false) {
-  const [transitionStatus, setTransitionStatus] = React21.useState(open && enableIdleState ? "idle" : void 0);
-  const [mounted, setMounted] = React21.useState(open);
+  const [transitionStatus, setTransitionStatus] = react_esm_exports.useState(open && enableIdleState ? "idle" : void 0);
+  const [mounted, setMounted] = react_esm_exports.useState(open);
   if (open && !mounted) {
     setMounted(true);
     setTransitionStatus("starting");
@@ -5397,9 +5240,6 @@ function useTransitionStatus(open, enableIdleState = false, deferEndingState = f
     transitionStatus
   };
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useOpenChangeComplete.mjs
-import * as React22 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useAnimationsFinished.mjs
 import * as ReactDOM3 from "react-dom";
@@ -5498,7 +5338,7 @@ function useOpenChangeComplete(parameters) {
   } = parameters;
   const onComplete = useStableCallback(onCompleteParam);
   const runOnceAnimationsFinish = useAnimationsFinished(ref, open, false);
-  React22.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!enabled) {
       return void 0;
     }
@@ -5521,7 +5361,7 @@ function createDefaultInitialFocus(popupRef) {
 function usePopupStore(externalStore, createStore, treatPopupAsFloatingElement = false) {
   const floatingId = useId();
   const nested = useFloatingParentNodeId() != null;
-  const internalStoreRef = React23.useRef(null);
+  const internalStoreRef = react_esm_exports.useRef(null);
   if (externalStore === void 0 && internalStoreRef.current === null) {
     internalStoreRef.current = createStore(floatingId, nested);
   }
@@ -5540,9 +5380,9 @@ function usePopupStore(externalStore, createStore, treatPopupAsFloatingElement =
   };
 }
 function useTriggerRegistration(id, store) {
-  const registeredElementIdRef = React23.useRef(null);
-  const registeredElementRef = React23.useRef(null);
-  return React23.useCallback((element) => {
+  const registeredElementIdRef = react_esm_exports.useRef(null);
+  const registeredElementRef = react_esm_exports.useRef(null);
+  return react_esm_exports.useCallback((element) => {
     if (id === void 0) {
       return;
     }
@@ -5996,12 +5836,12 @@ function useFloating2(options = {}) {
   const domReferenceElement = store.useState("domReferenceElement");
   const open = store.useState("open");
   const floatingId = store.useState("floatingId");
-  const [positionReference, setPositionReferenceRaw] = React24.useState(null);
-  const [localDomReference, setLocalDomReference] = React24.useState(void 0);
-  const [localFloatingElement, setLocalFloatingElement] = React24.useState(void 0);
-  const domReferenceRef = React24.useRef(null);
+  const [positionReference, setPositionReferenceRaw] = react_esm_exports.useState(null);
+  const [localDomReference, setLocalDomReference] = react_esm_exports.useState(void 0);
+  const [localFloatingElement, setLocalFloatingElement] = react_esm_exports.useState(void 0);
+  const domReferenceRef = react_esm_exports.useRef(null);
   const tree = useFloatingTree(externalTree);
-  const storeElements = React24.useMemo(() => ({
+  const storeElements = react_esm_exports.useMemo(() => ({
     reference: referenceElement,
     floating: floatingElement,
     domReference: domReferenceElement
@@ -6020,7 +5860,7 @@ function useFloating2(options = {}) {
   store.useSyncedValue("referenceElement", localDomReference ?? null);
   store.useSyncedValue("domReferenceElement", localDomReference === void 0 ? domReferenceElement : localDomReferenceElement);
   store.useSyncedValue("floatingElement", syncedFloatingElement);
-  const setPositionReference = React24.useCallback((node) => {
+  const setPositionReference = react_esm_exports.useCallback((node) => {
     const computedPositionReference = isElement(node) ? {
       getBoundingClientRect: () => node.getBoundingClientRect(),
       getClientRects: () => node.getClientRects(),
@@ -6029,7 +5869,7 @@ function useFloating2(options = {}) {
     setPositionReferenceRaw(computedPositionReference);
     position.refs.setReference(computedPositionReference);
   }, [position.refs]);
-  const setReference = React24.useCallback((node) => {
+  const setReference = react_esm_exports.useCallback((node) => {
     if (isElement(node) || node === null) {
       domReferenceRef.current = node;
       setLocalDomReference(node);
@@ -6041,22 +5881,22 @@ function useFloating2(options = {}) {
       position.refs.setReference(node);
     }
   }, [position.refs, setLocalDomReference]);
-  const setFloating = React24.useCallback((node) => {
+  const setFloating = react_esm_exports.useCallback((node) => {
     setLocalFloatingElement(node);
     position.refs.setFloating(node);
   }, [position.refs]);
-  const refs = React24.useMemo(() => ({
+  const refs = react_esm_exports.useMemo(() => ({
     ...position.refs,
     setReference,
     setFloating,
     setPositionReference,
     domReference: domReferenceRef
   }), [position.refs, setReference, setFloating, setPositionReference]);
-  const elements = React24.useMemo(() => ({
+  const elements = react_esm_exports.useMemo(() => ({
     ...position.elements,
     domReference: domReferenceElement
   }), [position.elements, domReferenceElement]);
-  const context = React24.useMemo(() => ({
+  const context = react_esm_exports.useMemo(() => ({
     ...position,
     dataRef: store.context.dataRef,
     open,
@@ -6080,7 +5920,7 @@ function useFloating2(options = {}) {
       node.context = context;
     }
   });
-  return React24.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     ...position,
     context,
     refs,
@@ -6088,9 +5928,6 @@ function useFloating2(options = {}) {
     rootStore: store
   }), [position, refs, elements, context, store]);
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useHoverFloatingInteraction.mjs
-import * as React25 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useHoverInteractionSharedState.mjs
 var HoverInteraction = class _HoverInteraction {
@@ -6201,7 +6038,7 @@ function useHoverFloatingInteraction(context, parameters = {}) {
       clearPointerEvents();
     }
   }, [open, instance, clearPointerEvents]);
-  React25.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     return clearPointerEvents;
   }, [clearPointerEvents]);
   useIsoLayoutEffect(() => {
@@ -6230,7 +6067,7 @@ function useHoverFloatingInteraction(context, parameters = {}) {
     }
     return void 0;
   }, [enabled, open, domReferenceElement, floatingElement, instance, isHoverOpen, tree, parentId, clearPointerEvents]);
-  React25.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!enabled) {
       return void 0;
     }
@@ -6305,7 +6142,6 @@ function useHoverFloatingInteraction(context, parameters = {}) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useHoverReferenceInteraction.mjs
-import * as React26 from "react";
 import * as ReactDOM5 from "react-dom";
 var EMPTY_REF = {
   current: null
@@ -6332,7 +6168,7 @@ function useHoverReferenceInteraction(context, props = {}) {
   } = store.context;
   const tree = useFloatingTree(externalTree);
   const instance = useHoverInteractionSharedState(store);
-  const isHoverCloseActiveRef = React26.useRef(false);
+  const isHoverCloseActiveRef = react_esm_exports.useRef(false);
   const handleCloseRef = useValueAsRef(handleClose);
   const delayRef = useValueAsRef(delay);
   const restMsRef = useValueAsRef(restMs);
@@ -6370,8 +6206,8 @@ function useHoverReferenceInteraction(context, props = {}) {
   if (isActiveTrigger) {
     instance.handleCloseOptions = handleCloseRef.current?.__options;
   }
-  React26.useEffect(() => cleanupMouseMoveHandler, [cleanupMouseMoveHandler]);
-  React26.useEffect(() => {
+  react_esm_exports.useEffect(() => cleanupMouseMoveHandler, [cleanupMouseMoveHandler]);
+  react_esm_exports.useEffect(() => {
     if (!enabled) {
       return void 0;
     }
@@ -6392,7 +6228,7 @@ function useHoverReferenceInteraction(context, props = {}) {
       events.off("openchange", onOpenChangeLocal);
     };
   }, [enabled, events, instance, cleanupMouseMoveHandler]);
-  React26.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!enabled) {
       return void 0;
     }
@@ -6513,7 +6349,7 @@ function useHoverReferenceInteraction(context, props = {}) {
     }
     return mergeCleanups(addEventListener(trigger, "mouseenter", onMouseEnter), addEventListener(trigger, "mouseleave", onMouseLeave));
   }, [cleanupMouseMoveHandler, clearPointerEvents, dataRef, delayRef, store, enabled, handleCloseRef, instance, isActiveTrigger, isOverInactiveTrigger, isClickLikeOpenEvent2, mouseOnly, move, restMsRef, triggerElementRef, tree, enabledRef, getHandleCloseContext, isClosingRef, checkShouldOpen]);
-  return React26.useMemo(() => {
+  return react_esm_exports.useMemo(() => {
     if (!enabled) {
       return void 0;
     }
@@ -6795,11 +6631,10 @@ function safePolygon(options = {}) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/root/PopoverRootContext.mjs
-import * as React27 from "react";
-var PopoverRootContext = /* @__PURE__ */ React27.createContext(void 0);
+var PopoverRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) PopoverRootContext.displayName = "PopoverRootContext";
 function usePopoverRootContext(optional) {
-  const context = React27.useContext(PopoverRootContext);
+  const context = react_esm_exports.useContext(PopoverRootContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: PopoverRootContext is missing. Popover parts must be placed within <Popover.Root>." : formatErrorMessage_default(47));
   }
@@ -6807,7 +6642,6 @@ function usePopoverRootContext(optional) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/store/PopoverStore.mjs
-import * as React28 from "react";
 import * as ReactDOM6 from "react-dom";
 function createInitialState() {
   return {
@@ -6854,13 +6688,13 @@ var PopoverStore = class _PopoverStore extends ReactStore {
     }
     initial2.floatingRootContext = createPopupFloatingRootContext(triggerElements, floatingId, nested);
     super(initial2, {
-      popupRef: /* @__PURE__ */ React28.createRef(),
-      backdropRef: /* @__PURE__ */ React28.createRef(),
-      internalBackdropRef: /* @__PURE__ */ React28.createRef(),
+      popupRef: /* @__PURE__ */ react_esm_exports.createRef(),
+      backdropRef: /* @__PURE__ */ react_esm_exports.createRef(),
+      internalBackdropRef: /* @__PURE__ */ react_esm_exports.createRef(),
       onOpenChange: void 0,
       onOpenChangeComplete: void 0,
-      triggerFocusTargetRef: /* @__PURE__ */ React28.createRef(),
-      beforeContentFocusGuardRef: /* @__PURE__ */ React28.createRef(),
+      triggerFocusTargetRef: /* @__PURE__ */ react_esm_exports.createRef(),
+      beforeContentFocusGuardRef: /* @__PURE__ */ react_esm_exports.createRef(),
       stickIfOpenTimeout: new Timeout(),
       triggerElements
     }, selectors2);
@@ -6909,7 +6743,7 @@ var PopoverStore = class _PopoverStore extends ReactStore {
       store,
       internalStore
     } = usePopupStore(externalStore, (floatingId, nested) => new _PopoverStore(initialState, floatingId, nested));
-    React28.useEffect(() => internalStore?.disposeEffect(), [internalStore]);
+    react_esm_exports.useEffect(() => internalStore?.disposeEffect(), [internalStore]);
     return store;
   }
   disposeEffect = () => {
@@ -6963,20 +6797,20 @@ function PopoverRootComponent({
     modal,
     nested
   });
-  React29.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!open) {
       store.context.stickIfOpenTimeout.clear();
     }
   }, [store, open]);
-  const handleImperativeClose = React29.useCallback(() => {
+  const handleImperativeClose = react_esm_exports.useCallback(() => {
     store.setOpen(false, createChangeEventDetails(reason_parts_exports.imperativeAction));
   }, [store]);
-  React29.useImperativeHandle(props.actionsRef, () => ({
+  react_esm_exports.useImperativeHandle(props.actionsRef, () => ({
     unmount: forceUnmount,
     close: handleImperativeClose
   }), [forceUnmount, handleImperativeClose]);
   const shouldRenderInteractions = open || mounted;
-  const popoverContext = React29.useMemo(() => ({
+  const popoverContext = react_esm_exports.useMemo(() => ({
     store
   }), [store]);
   return /* @__PURE__ */ _jsxs3(PopoverRootContext.Provider, {
@@ -7016,7 +6850,7 @@ function PopoverInteractions({
   });
   const activeTriggerProps = dismiss.reference ?? EMPTY_OBJECT;
   const inactiveTriggerProps = dismiss.trigger ?? EMPTY_OBJECT;
-  const popupProps = React29.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, dismiss.floating), [dismiss.floating]);
+  const popupProps = react_esm_exports.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, dismiss.floating), [dismiss.floating]);
   usePopupInteractionProps(store, {
     activeTriggerProps,
     inactiveTriggerProps,
@@ -7025,18 +6859,11 @@ function PopoverInteractions({
   return null;
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/trigger/PopoverTrigger.mjs
-import * as React36 from "react";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/use-button/useButton.mjs
-import * as React32 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/root/CompositeRootContext.mjs
-import * as React30 from "react";
-var CompositeRootContext = /* @__PURE__ */ React30.createContext(void 0);
+var CompositeRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) CompositeRootContext.displayName = "CompositeRootContext";
 function useCompositeRootContext(optional = false) {
-  const context = React30.useContext(CompositeRootContext);
+  const context = react_esm_exports.useContext(CompositeRootContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: CompositeRootContext is missing. Composite parts must be placed within <Composite.Root>." : formatErrorMessage_default(16));
   }
@@ -7044,7 +6871,6 @@ function useCompositeRootContext(optional = false) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useFocusableWhenDisabled.mjs
-import * as React31 from "react";
 function useFocusableWhenDisabled(parameters) {
   const {
     focusableWhenDisabled,
@@ -7055,7 +6881,7 @@ function useFocusableWhenDisabled(parameters) {
   } = parameters;
   const isFocusableComposite = composite && focusableWhenDisabled !== false;
   const isNonFocusableComposite = composite && focusableWhenDisabled === false;
-  const props = React31.useMemo(() => {
+  const props = react_esm_exports.useMemo(() => {
     const additionalProps = {
       // allow Tabbing away from focusableWhenDisabled elements
       onKeyDown(event) {
@@ -7092,7 +6918,7 @@ function useButton(parameters = {}) {
     native: isNativeButton = true,
     composite: compositeProp
   } = parameters;
-  const elementRef = React32.useRef(null);
+  const elementRef = react_esm_exports.useRef(null);
   const compositeRootContext = useCompositeRootContext(true);
   const isCompositeItem = compositeProp ?? compositeRootContext !== void 0;
   const {
@@ -7105,7 +6931,7 @@ function useButton(parameters = {}) {
     isNativeButton
   });
   if (false) {
-    React32.useEffect(() => {
+    react_esm_exports.useEffect(() => {
       if (!elementRef.current) {
         return;
       }
@@ -7123,7 +6949,7 @@ function useButton(parameters = {}) {
       }
     }, [isNativeButton]);
   }
-  const updateDisabled = React32.useCallback(() => {
+  const updateDisabled = react_esm_exports.useCallback(() => {
     const element = elementRef.current;
     if (!isButtonElement(element)) {
       return;
@@ -7133,7 +6959,7 @@ function useButton(parameters = {}) {
     }
   }, [disabled2, focusableWhenDisabledProps.disabled, isCompositeItem]);
   useIsoLayoutEffect(updateDisabled, [updateDisabled]);
-  const getButtonProps = React32.useCallback((externalProps = {}) => {
+  const getButtonProps = react_esm_exports.useCallback((externalProps = {}) => {
     const {
       onClick: externalOnClick,
       onMouseDown: externalOnMouseDown,
@@ -7314,10 +7140,9 @@ function useBaseUiId(idOverride) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/popups/useTriggerFocusGuards.mjs
-import * as React33 from "react";
 import * as ReactDOM7 from "react-dom";
 function useTriggerFocusGuards(store, triggerElementRef) {
-  const preFocusGuardRef = React33.useRef(null);
+  const preFocusGuardRef = react_esm_exports.useRef(null);
   function handlePreFocusGuardFocus(event) {
     ReactDOM7.flushSync(() => {
       store.setOpen(false, createChangeEventDetails(reason_parts_exports.focusOut, event.nativeEvent, event.currentTarget));
@@ -7351,21 +7176,17 @@ function useTriggerFocusGuards(store, triggerElementRef) {
   };
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useOpenInteractionType.mjs
-import * as React35 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useEnhancedClickHandler.mjs
-import * as React34 from "react";
 function useEnhancedClickHandler(handler) {
-  const lastClickInteractionTypeRef = React34.useRef("");
-  const handlePointerDown = React34.useCallback((event) => {
+  const lastClickInteractionTypeRef = react_esm_exports.useRef("");
+  const handlePointerDown = react_esm_exports.useCallback((event) => {
     if (event.defaultPrevented) {
       return;
     }
     lastClickInteractionTypeRef.current = event.pointerType;
     handler(event, event.pointerType);
   }, [handler]);
-  const handleClick = React34.useCallback((event) => {
+  const handleClick = react_esm_exports.useCallback((event) => {
     if (event.detail === 0) {
       handler(event, "keyboard");
       return;
@@ -7398,7 +7219,7 @@ function useOpenMethodTriggerProps(open, setOpenMethod) {
     onClick,
     onPointerDown
   } = useEnhancedClickHandler(handleTriggerClick);
-  return React35.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     onClick,
     onPointerDown
   }), [onClick, onPointerDown]);
@@ -7406,7 +7227,7 @@ function useOpenMethodTriggerProps(open, setOpenMethod) {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/trigger/PopoverTrigger.mjs
 import { jsx as _jsx6, jsxs as _jsxs4 } from "react/jsx-runtime";
-var PopoverTrigger = /* @__PURE__ */ React36.forwardRef(function PopoverTrigger2(componentProps, forwardedRef) {
+var PopoverTrigger = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverTrigger2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -7431,7 +7252,7 @@ var PopoverTrigger = /* @__PURE__ */ React36.forwardRef(function PopoverTrigger2
   const floatingContext = store.useState("floatingRootContext");
   const isOpenedByThisTrigger = store.useState("isOpenedByTrigger", thisTriggerId);
   const popupId = store.useState("triggerPopupId", thisTriggerId);
-  const triggerElementRef = React36.useRef(null);
+  const triggerElementRef = react_esm_exports.useRef(null);
   const {
     registerTrigger,
     isMountedByThisTrigger
@@ -7503,11 +7324,11 @@ var PopoverTrigger = /* @__PURE__ */ React36.forwardRef(function PopoverTrigger2
     stateAttributesMapping: stateAttributesMapping4
   });
   if (isMountedByThisTrigger && !focusManagerModal) {
-    return /* @__PURE__ */ _jsxs4(React36.Fragment, {
+    return /* @__PURE__ */ _jsxs4(react_esm_exports.Fragment, {
       children: [/* @__PURE__ */ _jsx6(FocusGuard, {
         ref: preFocusGuardRef,
         onFocus: handlePreFocusGuardFocus
-      }), /* @__PURE__ */ _jsx6(React36.Fragment, {
+      }), /* @__PURE__ */ _jsx6(react_esm_exports.Fragment, {
         children: element
       }, thisTriggerId), /* @__PURE__ */ _jsx6(FocusGuard, {
         ref: store.context.triggerFocusTargetRef,
@@ -7515,21 +7336,17 @@ var PopoverTrigger = /* @__PURE__ */ React36.forwardRef(function PopoverTrigger2
       })]
     });
   }
-  return /* @__PURE__ */ _jsx6(React36.Fragment, {
+  return /* @__PURE__ */ _jsx6(react_esm_exports.Fragment, {
     children: element
   }, thisTriggerId);
 });
 if (false) PopoverTrigger.displayName = "PopoverTrigger";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/portal/PopoverPortal.mjs
-import * as React38 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/portal/PopoverPortalContext.mjs
-import * as React37 from "react";
-var PopoverPortalContext = /* @__PURE__ */ React37.createContext(void 0);
+var PopoverPortalContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) PopoverPortalContext.displayName = "PopoverPortalContext";
 function usePopoverPortalContext() {
-  const value = React37.useContext(PopoverPortalContext);
+  const value = react_esm_exports.useContext(PopoverPortalContext);
   if (value === void 0) {
     throw new Error(false ? "Base UI: <Popover.Portal> is missing." : formatErrorMessage_default(45));
   }
@@ -7538,7 +7355,7 @@ function usePopoverPortalContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/portal/PopoverPortal.mjs
 import { jsx as _jsx7 } from "react/jsx-runtime";
-var PopoverPortal = /* @__PURE__ */ React38.forwardRef(function PopoverPortal2(props, forwardedRef) {
+var PopoverPortal = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverPortal2(props, forwardedRef) {
   const {
     keepMounted = false,
     ...portalProps
@@ -7561,9 +7378,6 @@ var PopoverPortal = /* @__PURE__ */ React38.forwardRef(function PopoverPortal2(p
 });
 if (false) PopoverPortal.displayName = "PopoverPortal";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/positioner/PopoverPositioner.mjs
-import * as React44 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/inertValue.mjs
 function inertValue(value) {
   if (isReactVersionAtLeast(19)) {
@@ -7573,26 +7387,21 @@ function inertValue(value) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/positioner/PopoverPositionerContext.mjs
-import * as React39 from "react";
-var PopoverPositionerContext = /* @__PURE__ */ React39.createContext(void 0);
+var PopoverPositionerContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) PopoverPositionerContext.displayName = "PopoverPositionerContext";
 function usePopoverPositionerContext() {
-  const context = React39.useContext(PopoverPositionerContext);
+  const context = react_esm_exports.useContext(PopoverPositionerContext);
   if (!context) {
     throw new Error(false ? "Base UI: PopoverPositionerContext is missing. PopoverPositioner parts must be placed within <Popover.Positioner>." : formatErrorMessage_default(46));
   }
   return context;
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useAnchorPositioning.mjs
-import * as React41 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/direction-context/DirectionContext.mjs
-import * as React40 from "react";
-var DirectionContext = /* @__PURE__ */ React40.createContext(void 0);
+var DirectionContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) DirectionContext.displayName = "DirectionContext";
 function useDirection() {
-  const context = React40.useContext(DirectionContext);
+  const context = react_esm_exports.useContext(DirectionContext);
   return context?.direction ?? "ltr";
 }
 
@@ -7815,7 +7624,7 @@ function useAnchorPositioning(params) {
     lazyFlip = false,
     externalTree
   } = params;
-  const [mountSide, setMountSide] = React41.useState(null);
+  const [mountSide, setMountSide] = react_esm_exports.useState(null);
   if (!mounted && mountSide !== null) {
     setMountSide(null);
   }
@@ -7863,7 +7672,7 @@ function useAnchorPositioning(params) {
     boundary: collisionBoundary === "clipping-ancestors" ? "clippingAncestors" : collisionBoundary,
     padding: collisionPadding
   };
-  const arrowRef = React41.useRef(null);
+  const arrowRef = react_esm_exports.useRef(null);
   const sideOffsetRef = useValueAsRef(sideOffset);
   const alignOffsetRef = useValueAsRef(alignOffset);
   const sideOffsetDep = typeof sideOffset !== "function" ? sideOffset : 0;
@@ -8012,7 +7821,7 @@ function useAnchorPositioning(params) {
       });
     }
   }, [mounted, floatingRootContext]);
-  const autoUpdateOptions = React41.useMemo(() => ({
+  const autoUpdateOptions = react_esm_exports.useMemo(() => ({
     elementResize: !disableAnchorTracking && typeof ResizeObserver !== "undefined",
     layoutShift: !disableAnchorTracking && typeof IntersectionObserver !== "undefined"
   }), [disableAnchorTracking]);
@@ -8042,7 +7851,7 @@ function useAnchorPositioning(params) {
     sideY
   } = middlewareData.adaptiveOrigin || DEFAULT_SIDES;
   const resolvedPosition = isPositioned ? positionMethod : "fixed";
-  const floatingStyles = React41.useMemo(() => {
+  const floatingStyles = react_esm_exports.useMemo(() => {
     const base = adaptiveOrigin2 ? {
       position: resolvedPosition,
       [sideX]: x,
@@ -8056,7 +7865,7 @@ function useAnchorPositioning(params) {
     }
     return base;
   }, [adaptiveOrigin2, resolvedPosition, sideX, x, sideY, y, originalFloatingStyles, isPositioned]);
-  const registeredPositionReferenceRef = React41.useRef(null);
+  const registeredPositionReferenceRef = react_esm_exports.useRef(null);
   useIsoLayoutEffect(() => {
     if (!mounted) {
       return;
@@ -8070,7 +7879,7 @@ function useAnchorPositioning(params) {
       registeredPositionReferenceRef.current = finalAnchor;
     }
   }, [mounted, refs, anchorDep, anchorValueRef]);
-  React41.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!mounted) {
       return;
     }
@@ -8083,7 +7892,7 @@ function useAnchorPositioning(params) {
       registeredPositionReferenceRef.current = anchorValue.current;
     }
   }, [mounted, refs, anchorDep, anchorValueRef]);
-  React41.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (keepMounted && mounted && elements.reference && elements.floating) {
       return autoUpdate(elements.reference, elements.floating, update2, autoUpdateOptions);
     }
@@ -8098,13 +7907,13 @@ function useAnchorPositioning(params) {
       setMountSide(renderedSide);
     }
   }, [lazyFlip, mounted, isPositioned, renderedSide]);
-  const arrowStyles = React41.useMemo(() => ({
+  const arrowStyles = react_esm_exports.useMemo(() => ({
     position: "absolute",
     top: middlewareData.arrow?.y,
     left: middlewareData.arrow?.x
   }), [middlewareData.arrow]);
   const arrowUncentered = middlewareData.arrow?.centerOffset !== 0;
-  return React41.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     positionerStyles: floatingStyles,
     arrowStyles,
     arrowRef,
@@ -8124,9 +7933,8 @@ function isRef(param) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/InternalBackdrop.mjs
-import * as React42 from "react";
 import { jsx as _jsx8 } from "react/jsx-runtime";
-var InternalBackdrop = /* @__PURE__ */ React42.forwardRef(function InternalBackdrop2(props, ref) {
+var InternalBackdrop = /* @__PURE__ */ react_esm_exports.forwardRef(function InternalBackdrop2(props, ref) {
   const {
     cutout,
     ...otherProps
@@ -8183,9 +7991,6 @@ function usePositioner(componentProps, state, {
     stateAttributesMapping: popupStateMapping
   });
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useAnchoredPopupScrollLock.mjs
-import * as React43 from "react";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useScrollLock.mjs
 var originalHtmlStyles = {};
@@ -8388,7 +8193,7 @@ function useScrollLock(enabled = true, referenceElement = null) {
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useAnchoredPopupScrollLock.mjs
 var VIEWPORT_WIDTH_TOLERANCE_PX = 20;
 function useAnchoredPopupScrollLock(enabled, touchOpen, positionerElement, referenceElement) {
-  const [touchOpenShouldLockScroll, setTouchOpenShouldLockScroll] = React43.useState(false);
+  const [touchOpenShouldLockScroll, setTouchOpenShouldLockScroll] = react_esm_exports.useState(false);
   useIsoLayoutEffect(() => {
     if (!enabled || !touchOpen || positionerElement == null) {
       setTouchOpenShouldLockScroll(false);
@@ -8403,7 +8208,7 @@ function useAnchoredPopupScrollLock(enabled, touchOpen, positionerElement, refer
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/positioner/PopoverPositioner.mjs
 import { jsx as _jsx9, jsxs as _jsxs5 } from "react/jsx-runtime";
-var PopoverPositioner = /* @__PURE__ */ React44.forwardRef(function PopoverPositioner2(componentProps, forwardedRef) {
+var PopoverPositioner = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverPositioner2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -8438,7 +8243,7 @@ var PopoverPositioner = /* @__PURE__ */ React44.forwardRef(function PopoverPosit
   const instantType = store.useState("instantType");
   const transitionStatus = store.useState("transitionStatus");
   const hasViewport = store.useState("hasViewport");
-  const prevTriggerElementRef = React44.useRef(null);
+  const prevTriggerElementRef = react_esm_exports.useRef(null);
   const runOnceAnimationsFinish = useAnimationsFinished(positionerElement, false, false);
   const positioning = useAnchorPositioning({
     anchor,
@@ -8479,7 +8284,7 @@ var PopoverPositioner = /* @__PURE__ */ React44.forwardRef(function PopoverPosit
     return void 0;
   }, [domReference, runOnceAnimationsFinish, store]);
   useAnchoredPopupScrollLock(open && modal === true && openReason !== reason_parts_exports.triggerHover, openMethod === "touch", positionerElement, triggerElement);
-  const setPositionerElement = React44.useCallback((element2) => {
+  const setPositionerElement = react_esm_exports.useCallback((element2) => {
     store.set("positionerElement", element2);
   }, [store]);
   const state = {
@@ -8511,9 +8316,6 @@ var PopoverPositioner = /* @__PURE__ */ React44.forwardRef(function PopoverPosit
 });
 if (false) PopoverPositioner.displayName = "PopoverPositioner";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/popup/PopoverPopup.mjs
-import * as React47 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/composite.mjs
 var ARROW_UP = "ArrowUp";
 var ARROW_DOWN = "ArrowDown";
@@ -8527,11 +8329,10 @@ var ARROW_KEYS = /* @__PURE__ */ new Set([...HORIZONTAL_KEYS, ...VERTICAL_KEYS])
 var COMPOSITE_KEYS = /* @__PURE__ */ new Set([...ARROW_KEYS, HOME, END]);
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toolbar/root/ToolbarRootContext.mjs
-import * as React45 from "react";
-var ToolbarRootContext = /* @__PURE__ */ React45.createContext(void 0);
+var ToolbarRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ToolbarRootContext.displayName = "ToolbarRootContext";
 function useToolbarRootContext(optional) {
-  const context = React45.useContext(ToolbarRootContext);
+  const context = react_esm_exports.useContext(ToolbarRootContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: ToolbarRootContext is missing. Toolbar parts must be placed within <Toolbar.Root>." : formatErrorMessage_default(69));
   }
@@ -8539,19 +8340,18 @@ function useToolbarRootContext(optional) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/closePart.mjs
-import * as React46 from "react";
 import { jsx as _jsx10 } from "react/jsx-runtime";
-var ClosePartContext = /* @__PURE__ */ React46.createContext(void 0);
+var ClosePartContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ClosePartContext.displayName = "ClosePartContext";
 function useClosePartCount() {
-  const [closePartCount, setClosePartCount] = React46.useState(0);
+  const [closePartCount, setClosePartCount] = react_esm_exports.useState(0);
   const register2 = useStableCallback(() => {
     setClosePartCount((count) => count + 1);
     return () => {
       setClosePartCount((count) => Math.max(0, count - 1));
     };
   });
-  const context = React46.useMemo(() => ({
+  const context = react_esm_exports.useMemo(() => ({
     register: register2
   }), [register2]);
   return {
@@ -8570,7 +8370,7 @@ function ClosePartProvider(props) {
   });
 }
 function useClosePartRegistration() {
-  const context = React46.useContext(ClosePartContext);
+  const context = react_esm_exports.useContext(ClosePartContext);
   useIsoLayoutEffect(() => {
     return context?.register();
   }, [context]);
@@ -8582,7 +8382,7 @@ var stateAttributesMapping = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var PopoverPopup = /* @__PURE__ */ React47.forwardRef(function PopoverPopup2(componentProps, forwardedRef) {
+var PopoverPopup = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverPopup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -8633,7 +8433,7 @@ var PopoverPopup = /* @__PURE__ */ React47.forwardRef(function PopoverPopup2(com
   const resolvedInitialFocus = initialFocus === void 0 ? createDefaultInitialFocus(store.context.popupRef) : initialFocus;
   const focusManagerModal = modal !== false && hasClosePart;
   store.useSyncedValue("focusManagerModal", focusManagerModal);
-  const setPopupElement = React47.useCallback((element2) => {
+  const setPopupElement = react_esm_exports.useCallback((element2) => {
     store.set("popupElement", element2);
   }, [store]);
   const state = {
@@ -8680,8 +8480,7 @@ var PopoverPopup = /* @__PURE__ */ React47.forwardRef(function PopoverPopup2(com
 if (false) PopoverPopup.displayName = "PopoverPopup";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/arrow/PopoverArrow.mjs
-import * as React48 from "react";
-var PopoverArrow = /* @__PURE__ */ React48.forwardRef(function PopoverArrow2(componentProps, forwardedRef) {
+var PopoverArrow = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverArrow2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -8719,12 +8518,11 @@ var PopoverArrow = /* @__PURE__ */ React48.forwardRef(function PopoverArrow2(com
 if (false) PopoverArrow.displayName = "PopoverArrow";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/backdrop/PopoverBackdrop.mjs
-import * as React49 from "react";
 var stateAttributesMapping2 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var PopoverBackdrop = /* @__PURE__ */ React49.forwardRef(function PopoverBackdrop2(props, forwardedRef) {
+var PopoverBackdrop = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverBackdrop2(props, forwardedRef) {
   const {
     render,
     className,
@@ -8761,8 +8559,7 @@ var PopoverBackdrop = /* @__PURE__ */ React49.forwardRef(function PopoverBackdro
 if (false) PopoverBackdrop.displayName = "PopoverBackdrop";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/title/PopoverTitle.mjs
-import * as React50 from "react";
-var PopoverTitle = /* @__PURE__ */ React50.forwardRef(function PopoverTitle2(componentProps, forwardedRef) {
+var PopoverTitle = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverTitle2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -8785,8 +8582,7 @@ var PopoverTitle = /* @__PURE__ */ React50.forwardRef(function PopoverTitle2(com
 if (false) PopoverTitle.displayName = "PopoverTitle";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/description/PopoverDescription.mjs
-import * as React51 from "react";
-var PopoverDescription = /* @__PURE__ */ React51.forwardRef(function PopoverDescription2(componentProps, forwardedRef) {
+var PopoverDescription = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverDescription2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -8809,8 +8605,7 @@ var PopoverDescription = /* @__PURE__ */ React51.forwardRef(function PopoverDesc
 if (false) PopoverDescription.displayName = "PopoverDescription";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/close/PopoverClose.mjs
-import * as React52 from "react";
-var PopoverClose = /* @__PURE__ */ React52.forwardRef(function PopoverClose2(componentProps, forwardedRef) {
+var PopoverClose = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverClose2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -8843,9 +8638,6 @@ var PopoverClose = /* @__PURE__ */ React52.forwardRef(function PopoverClose2(com
 });
 if (false) PopoverClose.displayName = "PopoverClose";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/viewport/PopoverViewport.mjs
-import * as React56 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/viewport/PopoverViewportCssVars.mjs
 var PopoverViewportCssVars = /* @__PURE__ */ (function(PopoverViewportCssVars2) {
   PopoverViewportCssVars2["popupWidth"] = "--popup-width";
@@ -8854,13 +8646,11 @@ var PopoverViewportCssVars = /* @__PURE__ */ (function(PopoverViewportCssVars2) 
 })({});
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/usePopupViewport.mjs
-import * as React55 from "react";
 import * as ReactDOM8 from "react-dom";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/usePreviousValue.mjs
-import * as React53 from "react";
 function usePreviousValue(value) {
-  const [state, setState] = React53.useState({
+  const [state, setState] = react_esm_exports.useState({
     current: value,
     previous: null
   });
@@ -8872,9 +8662,6 @@ function usePreviousValue(value) {
   }
   return state.previous;
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/usePopupAutoResize.mjs
-import * as React54 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/getCssDimensions.mjs
 function getCssDimensions2(element) {
@@ -8909,12 +8696,12 @@ function usePopupAutoResize(parameters) {
   } = parameters;
   const runOnceAnimationsFinish = useAnimationsFinished(popupElement, true, false);
   const animationFrame = useAnimationFrame();
-  const committedDimensionsRef = React54.useRef(null);
-  const isInitialRenderRef = React54.useRef(true);
-  const restoreAnchoringStylesRef = React54.useRef(NOOP);
+  const committedDimensionsRef = react_esm_exports.useRef(null);
+  const isInitialRenderRef = react_esm_exports.useRef(true);
+  const restoreAnchoringStylesRef = react_esm_exports.useRef(NOOP);
   const onMeasureLayout = useStableCallback(onMeasureLayoutParam);
   const onMeasureLayoutComplete = useStableCallback(onMeasureLayoutCompleteParam);
-  const anchoringStyles = React54.useMemo(() => {
+  const anchoringStyles = react_esm_exports.useMemo(() => {
     let isOriginSide = side === "top";
     let isPhysicalLeft = side === "left";
     if (direction === "rtl") {
@@ -9044,15 +8831,15 @@ function usePopupViewport(parameters) {
   const positionerElement = store.useState("positionerElement");
   const previousActiveTrigger = usePreviousValue(open ? activeTrigger : null);
   const currentContentKey = usePopupContentKey(activeTriggerId, payload);
-  const capturedNodeRef = React55.useRef(null);
-  const [previousContentNode, setPreviousContentNode] = React55.useState(null);
-  const [newTriggerOffset, setNewTriggerOffset] = React55.useState(null);
-  const currentContainerRef = React55.useRef(null);
-  const previousContainerRef = React55.useRef(null);
+  const capturedNodeRef = react_esm_exports.useRef(null);
+  const [previousContentNode, setPreviousContentNode] = react_esm_exports.useState(null);
+  const [newTriggerOffset, setNewTriggerOffset] = react_esm_exports.useState(null);
+  const currentContainerRef = react_esm_exports.useRef(null);
+  const previousContainerRef = react_esm_exports.useRef(null);
   const onAnimationsFinished = useAnimationsFinished(currentContainerRef, true, false);
   const cleanupFrame = useAnimationFrame();
-  const [previousContentDimensions, setPreviousContentDimensions] = React55.useState(null);
-  const [showStartingStyleAttribute, setShowStartingStyleAttribute] = React55.useState(false);
+  const [previousContentDimensions, setPreviousContentDimensions] = react_esm_exports.useState(null);
+  const [showStartingStyleAttribute, setShowStartingStyleAttribute] = react_esm_exports.useState(false);
   useIsoLayoutEffect(() => {
     store.set("hasViewport", true);
     return () => {
@@ -9072,7 +8859,7 @@ function usePopupViewport(parameters) {
       setPreviousContentDimensions(previousDimensions);
     }
   });
-  const lastHandledTriggerRef = React55.useRef(null);
+  const lastHandledTriggerRef = react_esm_exports.useRef(null);
   useIsoLayoutEffect(() => {
     if (!open || !mounted) {
       lastHandledTriggerRef.current = null;
@@ -9117,7 +8904,7 @@ function usePopupViewport(parameters) {
       children
     }, currentContentKey);
   } else {
-    childrenToRender = /* @__PURE__ */ _jsxs6(React55.Fragment, {
+    childrenToRender = /* @__PURE__ */ _jsxs6(react_esm_exports.Fragment, {
       children: [/* @__PURE__ */ _jsx12("div", {
         "data-previous": true,
         inert: inertValue(true),
@@ -9196,10 +8983,10 @@ function calculateRelativePosition(from, to) {
   };
 }
 function usePopupContentKey(activeTriggerId, payload) {
-  const [contentKey, setContentKey] = React55.useState(0);
-  const previousActiveTriggerIdRef = React55.useRef(activeTriggerId);
-  const previousPayloadRef = React55.useRef(payload);
-  const pendingPayloadUpdateRef = React55.useRef(false);
+  const [contentKey, setContentKey] = react_esm_exports.useState(0);
+  const previousActiveTriggerIdRef = react_esm_exports.useRef(activeTriggerId);
+  const previousPayloadRef = react_esm_exports.useRef(payload);
+  const pendingPayloadUpdateRef = react_esm_exports.useRef(false);
   useIsoLayoutEffect(() => {
     const previousActiveTriggerId = previousActiveTriggerIdRef.current;
     const previousPayload = previousPayloadRef.current;
@@ -9224,7 +9011,7 @@ var stateAttributesMapping3 = {
     "data-activation-direction": value
   } : null
 };
-var PopoverViewport = /* @__PURE__ */ React56.forwardRef(function PopoverViewport2(componentProps, forwardedRef) {
+var PopoverViewport = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverViewport2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -9305,27 +9092,3 @@ function createPopoverHandle() {
 export {
   index_parts_exports as Popover
 };
-/*! Bundled license information:
-
-use-sync-external-store/cjs/use-sync-external-store-shim.production.js:
-  (**
-   * @license React
-   * use-sync-external-store-shim.production.js
-   *
-   * Copyright (c) Meta Platforms, Inc. and affiliates.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE file in the root directory of this source tree.
-   *)
-
-use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.production.js:
-  (**
-   * @license React
-   * use-sync-external-store-shim/with-selector.production.js
-   *
-   * Copyright (c) Meta Platforms, Inc. and affiliates.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE file in the root directory of this source tree.
-   *)
-*/

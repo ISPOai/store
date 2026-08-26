@@ -51,7 +51,16 @@ export async function loadSlide(id: string): Promise<SlideModule> {
   if (cached) return cached
   const source = await readSlideSource(id)
   if (source === null) throw new Error(`Slide not found: ${id}`)
-  const compiled = compileSlideModule(source, slideSourcePath(id)) as unknown as SlideModule
+  let compiled: SlideModule
+  try {
+    compiled = compileSlideModule(source, slideSourcePath(id)) as unknown as SlideModule
+  } catch (err) {
+    // A slide is compiled at runtime here, so a bad slide is a *data* error the
+    // user can fix — it must be visible rather than leaving a thumbnail
+    // spinning forever.
+    console.error(`[open-slide] ${id} failed to load:`, err)
+    throw err
+  }
   if (!Array.isArray(compiled.default)) {
     throw new Error(`Slide ${id} must default-export an array of page components`)
   }

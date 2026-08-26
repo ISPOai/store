@@ -1,17 +1,40 @@
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toggle-group/ToggleGroup.mjs
-import * as React17 from "react";
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
+
+// vendor/shims/react-esm.js
+var react_esm_exports = {};
+__export(react_esm_exports, {
+  default: () => react_esm_default
+});
+__reExport(react_esm_exports, react_star);
+import * as React from "react";
+import * as react_star from "react";
+var react_esm_default = React.default ?? React;
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/safeReact.mjs
-import * as React from "react";
 var SafeReact = {
-  ...React
+  ...react_esm_exports
 };
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useRefWithInit.mjs
-import * as React2 from "react";
 var UNINITIALIZED = {};
 function useRefWithInit(init, initArg) {
-  const ref = React2.useRef(UNINITIALIZED);
+  const ref = react_esm_exports.useRef(UNINITIALIZED);
   if (ref.current === UNINITIALIZED) {
     ref.current = init(initArg);
   }
@@ -52,7 +75,6 @@ function assertNotCalled() {
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useControlled.mjs
-import * as React3 from "react";
 function useControlled({
   controlled,
   default: defaultProp,
@@ -61,25 +83,25 @@ function useControlled({
 }) {
   const {
     current: isControlled
-  } = React3.useRef(controlled !== void 0);
-  const [valueState, setValue] = React3.useState(defaultProp);
+  } = react_esm_exports.useRef(controlled !== void 0);
+  const [valueState, setValue] = react_esm_exports.useState(defaultProp);
   const value = isControlled ? controlled : valueState;
   if (false) {
-    React3.useEffect(() => {
+    react_esm_exports.useEffect(() => {
       if (isControlled !== (controlled !== void 0)) {
         error([`A component is changing the ${isControlled ? "" : "un"}controlled ${state} state of ${name} to be ${isControlled ? "un" : ""}controlled.`, "Elements should not switch from uncontrolled to controlled (or vice versa).", `Decide between using a controlled or uncontrolled ${name} element for the lifetime of the component.`, "The nature of the state is determined during the first render. It's considered controlled if the value is not `undefined`.", "More info: https://fb.me/react-controlled-components"].join("\n"));
       }
     }, [state, name, controlled]);
     const {
       current: defaultValue
-    } = React3.useRef(defaultProp);
-    React3.useEffect(() => {
+    } = react_esm_exports.useRef(defaultProp);
+    react_esm_exports.useEffect(() => {
       if (!isControlled && serializeToDevModeString(defaultValue) !== serializeToDevModeString(defaultProp)) {
         error([`A component is changing the default ${state} state of an uncontrolled ${name} after being initialized. To suppress this warning opt to use a controlled ${name}.`].join("\n"));
       }
     }, [defaultProp]);
   }
-  const setValueIfUncontrolled = React3.useCallback((newValue) => {
+  const setValueIfUncontrolled = react_esm_exports.useCallback((newValue) => {
     if (!isControlled) {
       setValue(newValue);
     }
@@ -102,9 +124,6 @@ function createFormatErrorMessage(baseUrl, prefix) {
 }
 var formatErrorMessage = createFormatErrorMessage("https://base-ui.com/production-error", "Base UI");
 var formatErrorMessage_default = formatErrorMessage;
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
-import * as React6 from "react";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useMergedRefs.mjs
 function useMergedRefs(a, b, c, d) {
@@ -195,19 +214,15 @@ function update(forkRef, refs) {
   };
 }
 
-// node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
-import * as React5 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/reactVersion.mjs
-import * as React4 from "react";
-var majorVersion = parseInt(React4.version, 10);
+var majorVersion = parseInt(react_esm_exports.version, 10);
 function isReactVersionAtLeast(reactVersionToCheck) {
   return majorVersion >= reactVersionToCheck;
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
 function getReactElementRef(element) {
-  if (!/* @__PURE__ */ React5.isValidElement(element)) {
+  if (!/* @__PURE__ */ react_esm_exports.isValidElement(element)) {
     return null;
   }
   const reactElement = element;
@@ -419,7 +434,6 @@ function isSyntheticEvent(event) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
-import { createElement as _createElement } from "react";
 function useRenderElement(element, componentProps, params = {}) {
   const renderProp = componentProps.render;
   const outProps = useRenderElementProps(componentProps, params);
@@ -486,15 +500,15 @@ function evaluateRenderProp(element, render, props, state) {
     mergedProps.ref = props.ref;
     let newElement = render;
     if (newElement?.$$typeof === REACT_LAZY_TYPE) {
-      const children = React6.Children.toArray(render);
+      const children = react_esm_exports.Children.toArray(render);
       newElement = children[0];
     }
     if (false) {
-      if (!/* @__PURE__ */ React6.isValidElement(newElement)) {
+      if (!/* @__PURE__ */ react_esm_exports.isValidElement(newElement)) {
         throw new Error(["Base UI: The `render` prop was provided an invalid React element as `React.isValidElement(render)` is `false`.", "A valid React element must be provided to the `render` prop because it is cloned with props to replace the default element.", "https://base-ui.com/r/invalid-render-prop"].join("\n"));
       }
     }
-    return /* @__PURE__ */ React6.cloneElement(newElement, mergedProps);
+    return /* @__PURE__ */ react_esm_exports.cloneElement(newElement, mergedProps);
   }
   if (element) {
     if (typeof element === "string") {
@@ -505,37 +519,29 @@ function evaluateRenderProp(element, render, props, state) {
 }
 function renderTag(Tag, props) {
   if (Tag === "button") {
-    return /* @__PURE__ */ _createElement("button", {
+    return /* @__PURE__ */ (0, react_esm_exports.createElement)("button", {
       type: "button",
       ...props,
       key: props.key
     });
   }
   if (Tag === "img") {
-    return /* @__PURE__ */ _createElement("img", {
+    return /* @__PURE__ */ (0, react_esm_exports.createElement)("img", {
       alt: "",
       ...props,
       key: props.key
     });
   }
-  return /* @__PURE__ */ React6.createElement(Tag, props);
+  return /* @__PURE__ */ react_esm_exports.createElement(Tag, props);
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/root/CompositeRoot.mjs
-import * as React13 from "react";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/CompositeList.mjs
-import * as React9 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useIsoLayoutEffect.mjs
-import * as React7 from "react";
 var noop = () => {
 };
-var useIsoLayoutEffect = typeof document !== "undefined" ? React7.useLayoutEffect : noop;
+var useIsoLayoutEffect = typeof document !== "undefined" ? react_esm_exports.useLayoutEffect : noop;
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/CompositeListContext.mjs
-import * as React8 from "react";
-var CompositeListContext = /* @__PURE__ */ React8.createContext({
+var CompositeListContext = /* @__PURE__ */ react_esm_exports.createContext({
   register: () => {
   },
   unregister: () => {
@@ -563,11 +569,11 @@ function CompositeList(props) {
     onMapChange: onMapChangeProp
   } = props;
   const onMapChange = useStableCallback(onMapChangeProp);
-  const nextIndexRef = React9.useRef(0);
+  const nextIndexRef = react_esm_exports.useRef(0);
   const listeners = useRefWithInit(createListeners).current;
   const map = useRefWithInit(createMap).current;
-  const [mapTick, setMapTick] = React9.useState(0);
-  const lastTickRef = React9.useRef(mapTick);
+  const [mapTick, setMapTick] = react_esm_exports.useState(0);
+  const lastTickRef = react_esm_exports.useRef(mapTick);
   const register = useStableCallback((node, metadata) => {
     map.set(node, metadata ?? null);
     lastTickRef.current += 1;
@@ -578,7 +584,7 @@ function CompositeList(props) {
     lastTickRef.current += 1;
     setMapTick(lastTickRef.current);
   });
-  const sortedMap = React9.useMemo(() => {
+  const sortedMap = react_esm_exports.useMemo(() => {
     disableEslintWarning(mapTick);
     const newMap = /* @__PURE__ */ new Map();
     const sortedNodes = Array.from(map.keys()).filter((node) => node.isConnected).sort(sortByDocumentPosition);
@@ -652,7 +658,7 @@ function CompositeList(props) {
   useIsoLayoutEffect(() => {
     listeners.forEach((l) => l(sortedMap));
   }, [listeners, sortedMap]);
-  const contextValue = React9.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     register,
     unregister,
     subscribeMapChange,
@@ -683,9 +689,6 @@ function sortByDocumentPosition(a, b) {
 }
 function disableEslintWarning(_) {
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/root/useCompositeRoot.mjs
-import * as React10 from "react";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/isElementDisabled.mjs
 function isElementDisabled(element) {
@@ -892,12 +895,12 @@ function useCompositeRoot(params) {
     disabledIndices,
     modifierKeys = EMPTY_ARRAY2
   } = params;
-  const [internalHighlightedIndex, internalSetHighlightedIndex] = React10.useState(0);
+  const [internalHighlightedIndex, internalSetHighlightedIndex] = react_esm_exports.useState(0);
   const isGrid = grid != null;
-  const rootRef = React10.useRef(null);
+  const rootRef = react_esm_exports.useRef(null);
   const mergedRef = useMergedRefs(rootRef, externalRef);
-  const elementsRef = React10.useRef([]);
-  const hasSetDefaultIndexRef = React10.useRef(false);
+  const elementsRef = react_esm_exports.useRef([]);
+  const hasSetDefaultIndexRef = react_esm_exports.useRef(false);
   const highlightedIndex = externalHighlightedIndex ?? internalHighlightedIndex;
   const onHighlightedIndexChange = useStableCallback((index, shouldScrollIntoView = false) => {
     (externalSetHighlightedIndex ?? internalSetHighlightedIndex)(index);
@@ -1092,16 +1095,14 @@ function isModifierKeySet(event, ignoredModifierKeys) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/root/CompositeRootContext.mjs
-import * as React11 from "react";
-var CompositeRootContext = /* @__PURE__ */ React11.createContext(void 0);
+var CompositeRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) CompositeRootContext.displayName = "CompositeRootContext";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/direction-context/DirectionContext.mjs
-import * as React12 from "react";
-var DirectionContext = /* @__PURE__ */ React12.createContext(void 0);
+var DirectionContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) DirectionContext.displayName = "DirectionContext";
 function useDirection() {
-  const context = React12.useContext(DirectionContext);
+  const context = react_esm_exports.useContext(DirectionContext);
   return context?.direction ?? "ltr";
 }
 
@@ -1160,7 +1161,7 @@ function CompositeRoot(componentProps) {
     props: [defaultProps, ...props, elementProps],
     stateAttributesMapping: stateAttributesMapping2
   });
-  const contextValue = React13.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     highlightedIndex,
     onHighlightedIndexChange,
     highlightItemOnHover,
@@ -1180,11 +1181,10 @@ function CompositeRoot(componentProps) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toolbar/root/ToolbarRootContext.mjs
-import * as React14 from "react";
-var ToolbarRootContext = /* @__PURE__ */ React14.createContext(void 0);
+var ToolbarRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ToolbarRootContext.displayName = "ToolbarRootContext";
 function useToolbarRootContext(optional) {
-  const context = React14.useContext(ToolbarRootContext);
+  const context = react_esm_exports.useContext(ToolbarRootContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: ToolbarRootContext is missing. Toolbar parts must be placed within <Toolbar.Root>." : formatErrorMessage_default(69));
   }
@@ -1192,11 +1192,10 @@ function useToolbarRootContext(optional) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toolbar/group/ToolbarGroupContext.mjs
-import * as React15 from "react";
-var ToolbarGroupContext = /* @__PURE__ */ React15.createContext(void 0);
+var ToolbarGroupContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ToolbarGroupContext.displayName = "ToolbarGroupContext";
 function useToolbarGroupContext(optional) {
-  const context = React15.useContext(ToolbarGroupContext);
+  const context = react_esm_exports.useContext(ToolbarGroupContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: ToolbarGroupContext is missing. ToolbarGroup parts must be placed within <Toolbar.Group>." : formatErrorMessage_default(68));
   }
@@ -1204,8 +1203,7 @@ function useToolbarGroupContext(optional) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toggle-group/ToggleGroupContext.mjs
-import * as React16 from "react";
-var ToggleGroupContext = /* @__PURE__ */ React16.createContext(void 0);
+var ToggleGroupContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ToggleGroupContext.displayName = "ToggleGroupContext";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toggle-group/ToggleGroupDataAttributes.mjs
@@ -1228,7 +1226,7 @@ var stateAttributesMapping = {
     return null;
   }
 };
-var ToggleGroup = /* @__PURE__ */ React17.forwardRef(function ToggleGroup2(componentProps, forwardedRef) {
+var ToggleGroup = /* @__PURE__ */ react_esm_exports.forwardRef(function ToggleGroup2(componentProps, forwardedRef) {
   const {
     defaultValue: defaultValueProp,
     disabled: disabledProp = false,
@@ -1244,7 +1242,7 @@ var ToggleGroup = /* @__PURE__ */ React17.forwardRef(function ToggleGroup2(compo
   } = componentProps;
   const toolbarContext = useToolbarRootContext(true);
   const toolbarGroupContext = useToolbarGroupContext(true);
-  const isValueInitialized = React17.useMemo(() => valueProp !== void 0 || defaultValueProp !== void 0, [valueProp, defaultValueProp]);
+  const isValueInitialized = react_esm_exports.useMemo(() => valueProp !== void 0 || defaultValueProp !== void 0, [valueProp, defaultValueProp]);
   const disabled = (toolbarContext?.disabled ?? false) || (toolbarGroupContext?.disabled ?? false) || disabledProp;
   const [groupValue, setValueState] = useControlled({
     controlled: valueProp,
@@ -1275,7 +1273,7 @@ var ToggleGroup = /* @__PURE__ */ React17.forwardRef(function ToggleGroup2(compo
     multiple,
     orientation
   };
-  const contextValue = React17.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     disabled,
     orientation,
     setGroupValue,

@@ -1,18 +1,7 @@
-var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
-}) : x)(function(x) {
-  if (typeof require !== "undefined") return require.apply(this, arguments);
-  throw Error('Dynamic require of "' + x + '" is not supported');
-});
-var __commonJS = (cb, mod) => function __require2() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
@@ -25,160 +14,7 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-
-// node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.production.js
-var require_use_sync_external_store_shim_production = __commonJS({
-  "node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/cjs/use-sync-external-store-shim.production.js"(exports) {
-    "use strict";
-    var React379 = __require("react");
-    function is(x, y) {
-      return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
-    }
-    var objectIs = "function" === typeof Object.is ? Object.is : is;
-    var useState73 = React379.useState;
-    var useEffect56 = React379.useEffect;
-    var useLayoutEffect3 = React379.useLayoutEffect;
-    var useDebugValue2 = React379.useDebugValue;
-    function useSyncExternalStore$2(subscribe2, getSnapshot2) {
-      var value = getSnapshot2(), _useState = useState73({ inst: { value, getSnapshot: getSnapshot2 } }), inst = _useState[0].inst, forceUpdate = _useState[1];
-      useLayoutEffect3(
-        function() {
-          inst.value = value;
-          inst.getSnapshot = getSnapshot2;
-          checkIfSnapshotChanged(inst) && forceUpdate({ inst });
-        },
-        [subscribe2, value, getSnapshot2]
-      );
-      useEffect56(
-        function() {
-          checkIfSnapshotChanged(inst) && forceUpdate({ inst });
-          return subscribe2(function() {
-            checkIfSnapshotChanged(inst) && forceUpdate({ inst });
-          });
-        },
-        [subscribe2]
-      );
-      useDebugValue2(value);
-      return value;
-    }
-    function checkIfSnapshotChanged(inst) {
-      var latestGetSnapshot = inst.getSnapshot;
-      inst = inst.value;
-      try {
-        var nextValue = latestGetSnapshot();
-        return !objectIs(inst, nextValue);
-      } catch (error) {
-        return true;
-      }
-    }
-    function useSyncExternalStore$1(subscribe2, getSnapshot2) {
-      return getSnapshot2();
-    }
-    var shim = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
-    exports.useSyncExternalStore = void 0 !== React379.useSyncExternalStore ? React379.useSyncExternalStore : shim;
-  }
-});
-
-// node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/shim/index.js
-var require_shim = __commonJS({
-  "node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/shim/index.js"(exports, module) {
-    "use strict";
-    if (true) {
-      module.exports = require_use_sync_external_store_shim_production();
-    } else {
-      module.exports = null;
-    }
-  }
-});
-
-// node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.production.js
-var require_with_selector_production = __commonJS({
-  "node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.production.js"(exports) {
-    "use strict";
-    var React379 = __require("react");
-    var shim = require_shim();
-    function is(x, y) {
-      return x === y && (0 !== x || 1 / x === 1 / y) || x !== x && y !== y;
-    }
-    var objectIs = "function" === typeof Object.is ? Object.is : is;
-    var useSyncExternalStore3 = shim.useSyncExternalStore;
-    var useRef111 = React379.useRef;
-    var useEffect56 = React379.useEffect;
-    var useMemo107 = React379.useMemo;
-    var useDebugValue2 = React379.useDebugValue;
-    exports.useSyncExternalStoreWithSelector = function(subscribe2, getSnapshot2, getServerSnapshot2, selector, isEqual) {
-      var instRef = useRef111(null);
-      if (null === instRef.current) {
-        var inst = { hasValue: false, value: null };
-        instRef.current = inst;
-      } else inst = instRef.current;
-      instRef = useMemo107(
-        function() {
-          function memoizedSelector(nextSnapshot) {
-            if (!hasMemo) {
-              hasMemo = true;
-              memoizedSnapshot = nextSnapshot;
-              nextSnapshot = selector(nextSnapshot);
-              if (void 0 !== isEqual && inst.hasValue) {
-                var currentSelection = inst.value;
-                if (isEqual(currentSelection, nextSnapshot))
-                  return memoizedSelection = currentSelection;
-              }
-              return memoizedSelection = nextSnapshot;
-            }
-            currentSelection = memoizedSelection;
-            if (objectIs(memoizedSnapshot, nextSnapshot)) return currentSelection;
-            var nextSelection = selector(nextSnapshot);
-            if (void 0 !== isEqual && isEqual(currentSelection, nextSelection))
-              return memoizedSnapshot = nextSnapshot, currentSelection;
-            memoizedSnapshot = nextSnapshot;
-            return memoizedSelection = nextSelection;
-          }
-          var hasMemo = false, memoizedSnapshot, memoizedSelection, maybeGetServerSnapshot = void 0 === getServerSnapshot2 ? null : getServerSnapshot2;
-          return [
-            function() {
-              return memoizedSelector(getSnapshot2());
-            },
-            null === maybeGetServerSnapshot ? void 0 : function() {
-              return memoizedSelector(maybeGetServerSnapshot());
-            }
-          ];
-        },
-        [getSnapshot2, getServerSnapshot2, selector, isEqual]
-      );
-      var value = useSyncExternalStore3(subscribe2, instRef[0], instRef[1]);
-      useEffect56(
-        function() {
-          inst.hasValue = true;
-          inst.value = value;
-        },
-        [value]
-      );
-      useDebugValue2(value);
-      return value;
-    };
-  }
-});
-
-// node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/shim/with-selector.js
-var require_with_selector = __commonJS({
-  "node_modules/.pnpm/use-sync-external-store@1.6.0_react@19.2.8/node_modules/use-sync-external-store/shim/with-selector.js"(exports, module) {
-    "use strict";
-    if (true) {
-      module.exports = require_with_selector_production();
-    } else {
-      module.exports = null;
-    }
-  }
-});
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/index.parts.mjs
 var index_parts_exports = {};
@@ -190,11 +26,17 @@ __export(index_parts_exports, {
   Trigger: () => AccordionTrigger
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/root/AccordionRoot.mjs
-import * as React12 from "react";
+// vendor/shims/react-esm.js
+var react_esm_exports = {};
+__export(react_esm_exports, {
+  default: () => react_esm_default
+});
+__reExport(react_esm_exports, react_star);
+import * as React from "react";
+import * as react_star from "react";
+var react_esm_default = React.default ?? React;
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useControlled.mjs
-import * as React from "react";
 function useControlled({
   controlled,
   default: defaultProp,
@@ -203,25 +45,25 @@ function useControlled({
 }) {
   const {
     current: isControlled
-  } = React.useRef(controlled !== void 0);
-  const [valueState, setValue] = React.useState(defaultProp);
+  } = react_esm_exports.useRef(controlled !== void 0);
+  const [valueState, setValue] = react_esm_exports.useState(defaultProp);
   const value = isControlled ? controlled : valueState;
   if (false) {
-    React.useEffect(() => {
+    react_esm_exports.useEffect(() => {
       if (isControlled !== (controlled !== void 0)) {
         error([`A component is changing the ${isControlled ? "" : "un"}controlled ${state} state of ${name} to be ${isControlled ? "un" : ""}controlled.`, "Elements should not switch from uncontrolled to controlled (or vice versa).", `Decide between using a controlled or uncontrolled ${name} element for the lifetime of the component.`, "The nature of the state is determined during the first render. It's considered controlled if the value is not `undefined`.", "More info: https://fb.me/react-controlled-components"].join("\n"));
       }
     }, [state, name, controlled]);
     const {
       current: defaultValue
-    } = React.useRef(defaultProp);
-    React.useEffect(() => {
+    } = react_esm_exports.useRef(defaultProp);
+    react_esm_exports.useEffect(() => {
       if (!isControlled && serializeToDevModeString(defaultValue) !== serializeToDevModeString(defaultProp)) {
         error([`A component is changing the default ${state} state of an uncontrolled ${name} after being initialized. To suppress this warning opt to use a controlled ${name}.`].join("\n"));
       }
     }, [defaultProp]);
   }
-  const setValueIfUncontrolled = React.useCallback((newValue) => {
+  const setValueIfUncontrolled = react_esm_exports.useCallback((newValue) => {
     if (!isControlled) {
       setValue(newValue);
     }
@@ -230,16 +72,14 @@ function useControlled({
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/safeReact.mjs
-import * as React2 from "react";
 var SafeReact = {
-  ...React2
+  ...react_esm_exports
 };
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useRefWithInit.mjs
-import * as React3 from "react";
 var UNINITIALIZED = {};
 function useRefWithInit(init, initArg) {
-  const ref = React3.useRef(UNINITIALIZED);
+  const ref = react_esm_exports.useRef(UNINITIALIZED);
   if (ref.current === UNINITIALIZED) {
     ref.current = init(initArg);
   }
@@ -280,17 +120,12 @@ function assertNotCalled() {
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useIsoLayoutEffect.mjs
-import * as React4 from "react";
 var noop = () => {
 };
-var useIsoLayoutEffect = typeof document !== "undefined" ? React4.useLayoutEffect : noop;
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/CompositeList.mjs
-import * as React6 from "react";
+var useIsoLayoutEffect = typeof document !== "undefined" ? react_esm_exports.useLayoutEffect : noop;
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/CompositeListContext.mjs
-import * as React5 from "react";
-var CompositeListContext = /* @__PURE__ */ React5.createContext({
+var CompositeListContext = /* @__PURE__ */ react_esm_exports.createContext({
   register: () => {
   },
   unregister: () => {
@@ -308,7 +143,7 @@ var CompositeListContext = /* @__PURE__ */ React5.createContext({
 });
 if (false) CompositeListContext.displayName = "CompositeListContext";
 function useCompositeListContext() {
-  return React5.useContext(CompositeListContext);
+  return react_esm_exports.useContext(CompositeListContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/CompositeList.mjs
@@ -321,11 +156,11 @@ function CompositeList(props) {
     onMapChange: onMapChangeProp
   } = props;
   const onMapChange = useStableCallback(onMapChangeProp);
-  const nextIndexRef = React6.useRef(0);
+  const nextIndexRef = react_esm_exports.useRef(0);
   const listeners = useRefWithInit(createListeners).current;
   const map = useRefWithInit(createMap).current;
-  const [mapTick, setMapTick] = React6.useState(0);
-  const lastTickRef = React6.useRef(mapTick);
+  const [mapTick, setMapTick] = react_esm_exports.useState(0);
+  const lastTickRef = react_esm_exports.useRef(mapTick);
   const register2 = useStableCallback((node, metadata) => {
     map.set(node, metadata ?? null);
     lastTickRef.current += 1;
@@ -336,7 +171,7 @@ function CompositeList(props) {
     lastTickRef.current += 1;
     setMapTick(lastTickRef.current);
   });
-  const sortedMap = React6.useMemo(() => {
+  const sortedMap = react_esm_exports.useMemo(() => {
     disableEslintWarning(mapTick);
     const newMap = /* @__PURE__ */ new Map();
     const sortedNodes = Array.from(map.keys()).filter((node) => node.isConnected).sort(sortByDocumentPosition);
@@ -410,7 +245,7 @@ function CompositeList(props) {
   useIsoLayoutEffect(() => {
     listeners.forEach((l) => l(sortedMap));
   }, [listeners, sortedMap]);
-  const contextValue = React6.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     register: register2,
     unregister,
     subscribeMapChange,
@@ -443,11 +278,10 @@ function disableEslintWarning(_) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/direction-context/DirectionContext.mjs
-import * as React7 from "react";
-var DirectionContext = /* @__PURE__ */ React7.createContext(void 0);
+var DirectionContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) DirectionContext.displayName = "DirectionContext";
 function useDirection() {
-  const context = React7.useContext(DirectionContext);
+  const context = react_esm_exports.useContext(DirectionContext);
   return context?.direction ?? "ltr";
 }
 
@@ -464,19 +298,15 @@ var formatErrorMessage = createFormatErrorMessage("https://base-ui.com/productio
 var formatErrorMessage_default = formatErrorMessage;
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/root/AccordionRootContext.mjs
-import * as React8 from "react";
-var AccordionRootContext = /* @__PURE__ */ React8.createContext(void 0);
+var AccordionRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) AccordionRootContext.displayName = "AccordionRootContext";
 function useAccordionRootContext() {
-  const context = React8.useContext(AccordionRootContext);
+  const context = react_esm_exports.useContext(AccordionRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: AccordionRootContext is missing. Accordion parts must be placed within <Accordion.Root>." : formatErrorMessage_default(10));
   }
   return context;
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
-import * as React11 from "react";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useMergedRefs.mjs
 function useMergedRefs(a, b, c, d) {
@@ -567,19 +397,15 @@ function update(forkRef, refs) {
   };
 }
 
-// node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
-import * as React10 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/reactVersion.mjs
-import * as React9 from "react";
-var majorVersion = parseInt(React9.version, 10);
+var majorVersion = parseInt(react_esm_exports.version, 10);
 function isReactVersionAtLeast(reactVersionToCheck) {
   return majorVersion >= reactVersionToCheck;
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getReactElementRef.mjs
 function getReactElementRef(element) {
-  if (!/* @__PURE__ */ React10.isValidElement(element)) {
+  if (!/* @__PURE__ */ react_esm_exports.isValidElement(element)) {
     return null;
   }
   const reactElement = element;
@@ -797,7 +623,6 @@ function isSyntheticEvent(event) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useRenderElement.mjs
-import { createElement as _createElement } from "react";
 function useRenderElement(element, componentProps, params = {}) {
   const renderProp = componentProps.render;
   const outProps = useRenderElementProps(componentProps, params);
@@ -864,15 +689,15 @@ function evaluateRenderProp(element, render, props, state) {
     mergedProps.ref = props.ref;
     let newElement = render;
     if (newElement?.$$typeof === REACT_LAZY_TYPE) {
-      const children = React11.Children.toArray(render);
+      const children = react_esm_exports.Children.toArray(render);
       newElement = children[0];
     }
     if (false) {
-      if (!/* @__PURE__ */ React11.isValidElement(newElement)) {
+      if (!/* @__PURE__ */ react_esm_exports.isValidElement(newElement)) {
         throw new Error(["Base UI: The `render` prop was provided an invalid React element as `React.isValidElement(render)` is `false`.", "A valid React element must be provided to the `render` prop because it is cloned with props to replace the default element.", "https://base-ui.com/r/invalid-render-prop"].join("\n"));
       }
     }
-    return /* @__PURE__ */ React11.cloneElement(newElement, mergedProps);
+    return /* @__PURE__ */ react_esm_exports.cloneElement(newElement, mergedProps);
   }
   if (element) {
     if (typeof element === "string") {
@@ -883,20 +708,20 @@ function evaluateRenderProp(element, render, props, state) {
 }
 function renderTag(Tag, props) {
   if (Tag === "button") {
-    return /* @__PURE__ */ _createElement("button", {
+    return /* @__PURE__ */ (0, react_esm_exports.createElement)("button", {
       type: "button",
       ...props,
       key: props.key
     });
   }
   if (Tag === "img") {
-    return /* @__PURE__ */ _createElement("img", {
+    return /* @__PURE__ */ (0, react_esm_exports.createElement)("img", {
       alt: "",
       ...props,
       key: props.key
     });
   }
-  return /* @__PURE__ */ React11.createElement(Tag, props);
+  return /* @__PURE__ */ react_esm_exports.createElement(Tag, props);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/root/AccordionRoot.mjs
@@ -904,7 +729,7 @@ import { jsx as _jsx2 } from "react/jsx-runtime";
 var rootStateAttributesMapping = {
   value: () => null
 };
-var AccordionRoot = /* @__PURE__ */ React12.forwardRef(function AccordionRoot2(componentProps, forwardedRef) {
+var AccordionRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function AccordionRoot2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -928,13 +753,13 @@ var AccordionRoot = /* @__PURE__ */ React12.forwardRef(function AccordionRoot2(c
       }
     }, [hiddenUntilFoundProp, keepMountedProp]);
   }
-  const defaultValue = React12.useMemo(() => {
+  const defaultValue = react_esm_exports.useMemo(() => {
     if (valueProp === void 0) {
       return defaultValueProp ?? [];
     }
     return void 0;
   }, [valueProp, defaultValueProp]);
-  const accordionItemRefs = React12.useRef([]);
+  const accordionItemRefs = react_esm_exports.useRef([]);
   const [value, setValue] = useControlled({
     controlled: valueProp,
     default: defaultValue,
@@ -966,12 +791,12 @@ var AccordionRoot = /* @__PURE__ */ React12.forwardRef(function AccordionRoot2(c
       setValue(nextOpenValues);
     }
   });
-  const state = React12.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     value,
     disabled: disabled2,
     orientation
   }), [value, disabled2, orientation]);
-  const contextValue = React12.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     disabled: disabled2,
     handleValueChange,
     hiddenUntilFound: hiddenUntilFoundProp ?? false,
@@ -997,16 +822,12 @@ var AccordionRoot = /* @__PURE__ */ React12.forwardRef(function AccordionRoot2(c
 });
 if (false) AccordionRoot.displayName = "AccordionRoot";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/item/AccordionItem.mjs
-import * as React20 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useId.mjs
-import * as React13 from "react";
 var globalId = 0;
 function useGlobalId(idOverride, prefix = "mui") {
-  const [defaultId, setDefaultId] = React13.useState(idOverride);
+  const [defaultId, setDefaultId] = react_esm_exports.useState(idOverride);
   const id = idOverride || defaultId;
-  React13.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (defaultId == null) {
       globalId += 1;
       setDefaultId(`${prefix}-${globalId}`);
@@ -1027,9 +848,6 @@ function useId(idOverride, prefix) {
 function useBaseUiId(idOverride) {
   return useId(idOverride, "base-ui");
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/root/useCollapsibleRoot.mjs
-import * as React16 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/reason-parts.mjs
 var reason_parts_exports = {};
@@ -1141,14 +959,10 @@ function createGenericEventDetails(reason, event, customProperties) {
   return details;
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useTransitionStatus.mjs
-import * as React15 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useOnMount.mjs
-import * as React14 from "react";
 var EMPTY = [];
 function useOnMount(fn) {
-  React14.useEffect(fn, EMPTY);
+  react_esm_exports.useEffect(fn, EMPTY);
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useAnimationFrame.mjs
@@ -1241,8 +1055,8 @@ function useAnimationFrame() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useTransitionStatus.mjs
 function useTransitionStatus(open, enableIdleState = false, deferEndingState = false) {
-  const [transitionStatus, setTransitionStatus] = React15.useState(open && enableIdleState ? "idle" : void 0);
-  const [mounted, setMounted] = React15.useState(open);
+  const [transitionStatus, setTransitionStatus] = react_esm_exports.useState(open && enableIdleState ? "idle" : void 0);
+  const [mounted, setMounted] = react_esm_exports.useState(open);
   if (open && !mounted) {
     setMounted(true);
     setTransitionStatus("starting");
@@ -1316,7 +1130,7 @@ function useCollapsibleRoot(parameters) {
     transitionStatus
   } = useTransitionStatus(open, true, true);
   const defaultPanelId = useBaseUiId();
-  const [panelIdState, setPanelIdState] = React16.useState();
+  const [panelIdState, setPanelIdState] = react_esm_exports.useState();
   const panelId = panelIdState ?? defaultPanelId;
   const handleTrigger = useStableCallback((event) => {
     const nextOpen = !open;
@@ -1327,7 +1141,7 @@ function useCollapsibleRoot(parameters) {
     }
     setOpen(nextOpen);
   });
-  return React16.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     disabled: disabled2,
     handleTrigger,
     mounted,
@@ -1341,11 +1155,10 @@ function useCollapsibleRoot(parameters) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/root/CollapsibleRootContext.mjs
-import * as React17 from "react";
-var CollapsibleRootContext = /* @__PURE__ */ React17.createContext(void 0);
+var CollapsibleRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) CollapsibleRootContext.displayName = "CollapsibleRootContext";
 function useCollapsibleRootContext() {
-  const context = React17.useContext(CollapsibleRootContext);
+  const context = react_esm_exports.useContext(CollapsibleRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: CollapsibleRootContext is missing. Collapsible parts must be placed within <Collapsible.Root>." : formatErrorMessage_default(15));
   }
@@ -1353,7 +1166,6 @@ function useCollapsibleRootContext() {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/list/useCompositeListItem.mjs
-import * as React18 from "react";
 var IndexGuessBehavior = /* @__PURE__ */ (function(IndexGuessBehavior2) {
   IndexGuessBehavior2[IndexGuessBehavior2["None"] = 0] = "None";
   IndexGuessBehavior2[IndexGuessBehavior2["GuessFromOrder"] = 1] = "GuessFromOrder";
@@ -1375,8 +1187,8 @@ function useCompositeListItem(params = {}) {
     labelsRef,
     nextIndexRef
   } = useCompositeListContext();
-  const indexRef = React18.useRef(-1);
-  const [index2, setIndex] = React18.useState(externalIndex ?? (indexGuessBehavior === IndexGuessBehavior.GuessFromOrder ? () => {
+  const indexRef = react_esm_exports.useRef(-1);
+  const [index2, setIndex] = react_esm_exports.useState(externalIndex ?? (indexGuessBehavior === IndexGuessBehavior.GuessFromOrder ? () => {
     if (indexRef.current === -1) {
       const newIndex = nextIndexRef.current;
       nextIndexRef.current += 1;
@@ -1384,8 +1196,8 @@ function useCompositeListItem(params = {}) {
     }
     return indexRef.current;
   } : -1));
-  const componentRef = React18.useRef(null);
-  const ref = React18.useCallback((node) => {
+  const componentRef = react_esm_exports.useRef(null);
+  const ref = react_esm_exports.useCallback((node) => {
     componentRef.current = node;
     if (index2 !== -1 && node !== null) {
       elementsRef.current[index2] = node;
@@ -1426,11 +1238,10 @@ function useCompositeListItem(params = {}) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/item/AccordionItemContext.mjs
-import * as React19 from "react";
-var AccordionItemContext = /* @__PURE__ */ React19.createContext(void 0);
+var AccordionItemContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) AccordionItemContext.displayName = "AccordionItemContext";
 function useAccordionItemContext() {
-  const context = React19.useContext(AccordionItemContext);
+  const context = react_esm_exports.useContext(AccordionItemContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: AccordionItemContext is missing. Accordion parts must be placed within <Accordion.Item>." : formatErrorMessage_default(9));
   }
@@ -1524,7 +1335,7 @@ var accordionStateAttributesMapping = {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/item/AccordionItem.mjs
 import { jsx as _jsx3 } from "react/jsx-runtime";
-var AccordionItem = /* @__PURE__ */ React20.forwardRef(function AccordionItem2(componentProps, forwardedRef) {
+var AccordionItem = /* @__PURE__ */ react_esm_exports.forwardRef(function AccordionItem2(componentProps, forwardedRef) {
   const {
     className,
     disabled: disabledProp = false,
@@ -1548,7 +1359,7 @@ var AccordionItem = /* @__PURE__ */ React20.forwardRef(function AccordionItem2(c
   const fallbackValue = useBaseUiId();
   const value = valueProp ?? fallbackValue;
   const disabled2 = disabledProp || contextDisabled;
-  const isOpen = React20.useMemo(() => {
+  const isOpen = react_esm_exports.useMemo(() => {
     if (!openValues) {
       return false;
     }
@@ -1571,17 +1382,17 @@ var AccordionItem = /* @__PURE__ */ React20.forwardRef(function AccordionItem2(c
     onOpenChange,
     disabled: disabled2
   });
-  const collapsibleState = React20.useMemo(() => ({
+  const collapsibleState = react_esm_exports.useMemo(() => ({
     open: collapsible.open,
     disabled: collapsible.disabled,
     transitionStatus: collapsible.transitionStatus
   }), [collapsible.open, collapsible.disabled, collapsible.transitionStatus]);
-  const collapsibleContext = React20.useMemo(() => ({
+  const collapsibleContext = react_esm_exports.useMemo(() => ({
     ...collapsible,
     onOpenChange,
     state: collapsibleState
   }), [collapsible, collapsibleState, onOpenChange]);
-  const state = React20.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     ...rootState,
     hidden: !isOpen && !collapsible.mounted,
     index: index2,
@@ -1589,8 +1400,8 @@ var AccordionItem = /* @__PURE__ */ React20.forwardRef(function AccordionItem2(c
     open: isOpen
   }), [collapsible.mounted, disabled2, index2, isOpen, rootState]);
   const defaultTriggerId = useBaseUiId();
-  const [triggerId, setTriggerId] = React20.useState();
-  const accordionItemContext = React20.useMemo(() => ({
+  const [triggerId, setTriggerId] = react_esm_exports.useState();
+  const accordionItemContext = react_esm_exports.useMemo(() => ({
     open: isOpen,
     state,
     setTriggerId,
@@ -1613,8 +1424,7 @@ var AccordionItem = /* @__PURE__ */ React20.forwardRef(function AccordionItem2(c
 if (false) AccordionItem.displayName = "AccordionItem";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/header/AccordionHeader.mjs
-import * as React21 from "react";
-var AccordionHeader = /* @__PURE__ */ React21.forwardRef(function AccordionHeader2(componentProps, forwardedRef) {
+var AccordionHeader = /* @__PURE__ */ react_esm_exports.forwardRef(function AccordionHeader2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -1633,12 +1443,6 @@ var AccordionHeader = /* @__PURE__ */ React21.forwardRef(function AccordionHeade
   return element;
 });
 if (false) AccordionHeader.displayName = "AccordionHeader";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/trigger/AccordionTrigger.mjs
-import * as React25 from "react";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/use-button/useButton.mjs
-import * as React24 from "react";
 
 // node_modules/.pnpm/@floating-ui+utils@0.2.12/node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
 function hasWindow() {
@@ -1797,11 +1601,10 @@ function getFrameElement(win) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/root/CompositeRootContext.mjs
-import * as React22 from "react";
-var CompositeRootContext = /* @__PURE__ */ React22.createContext(void 0);
+var CompositeRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) CompositeRootContext.displayName = "CompositeRootContext";
 function useCompositeRootContext(optional = false) {
-  const context = React22.useContext(CompositeRootContext);
+  const context = react_esm_exports.useContext(CompositeRootContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: CompositeRootContext is missing. Composite parts must be placed within <Composite.Root>." : formatErrorMessage_default(16));
   }
@@ -1809,7 +1612,6 @@ function useCompositeRootContext(optional = false) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useFocusableWhenDisabled.mjs
-import * as React23 from "react";
 function useFocusableWhenDisabled(parameters) {
   const {
     focusableWhenDisabled,
@@ -1820,7 +1622,7 @@ function useFocusableWhenDisabled(parameters) {
   } = parameters;
   const isFocusableComposite = composite && focusableWhenDisabled !== false;
   const isNonFocusableComposite = composite && focusableWhenDisabled === false;
-  const props = React23.useMemo(() => {
+  const props = react_esm_exports.useMemo(() => {
     const additionalProps = {
       // allow Tabbing away from focusableWhenDisabled elements
       onKeyDown(event) {
@@ -1857,7 +1659,7 @@ function useButton(parameters = {}) {
     native: isNativeButton = true,
     composite: compositeProp
   } = parameters;
-  const elementRef = React24.useRef(null);
+  const elementRef = react_esm_exports.useRef(null);
   const compositeRootContext = useCompositeRootContext(true);
   const isCompositeItem = compositeProp ?? compositeRootContext !== void 0;
   const {
@@ -1870,7 +1672,7 @@ function useButton(parameters = {}) {
     isNativeButton
   });
   if (false) {
-    React24.useEffect(() => {
+    react_esm_exports.useEffect(() => {
       if (!elementRef.current) {
         return;
       }
@@ -1888,7 +1690,7 @@ function useButton(parameters = {}) {
       }
     }, [isNativeButton]);
   }
-  const updateDisabled = React24.useCallback(() => {
+  const updateDisabled = react_esm_exports.useCallback(() => {
     const element = elementRef.current;
     if (!isButtonElement(element)) {
       return;
@@ -1898,7 +1700,7 @@ function useButton(parameters = {}) {
     }
   }, [disabled2, focusableWhenDisabledProps.disabled, isCompositeItem]);
   useIsoLayoutEffect(updateDisabled, [updateDisabled]);
-  const getButtonProps = React24.useCallback((externalProps = {}) => {
+  const getButtonProps = react_esm_exports.useCallback((externalProps = {}) => {
     const {
       onClick: externalOnClick,
       onMouseDown: externalOnMouseDown,
@@ -2008,7 +1810,7 @@ function isValidLinkElement(elem) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/trigger/AccordionTrigger.mjs
-var AccordionTrigger = /* @__PURE__ */ React25.forwardRef(function AccordionTrigger2(componentProps, forwardedRef) {
+var AccordionTrigger = /* @__PURE__ */ react_esm_exports.forwardRef(function AccordionTrigger2(componentProps, forwardedRef) {
   const {
     disabled: disabledProp,
     className,
@@ -2062,12 +1864,6 @@ var AccordionTrigger = /* @__PURE__ */ React25.forwardRef(function AccordionTrig
 });
 if (false) AccordionTrigger.displayName = "AccordionTrigger";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/panel/AccordionPanel.mjs
-import * as React28 from "react";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/panel/useCollapsiblePanel.mjs
-import * as React27 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/addEventListener.mjs
 function addEventListener(target, type, listener, options) {
   target.addEventListener(type, listener, options);
@@ -2098,9 +1894,6 @@ function createLatestRef(value) {
 function ownerDocument(node) {
   return node?.ownerDocument || document;
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useOpenChangeComplete.mjs
-import * as React26 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useAnimationsFinished.mjs
 import * as ReactDOM from "react-dom";
@@ -2183,7 +1976,7 @@ function useOpenChangeComplete(parameters) {
   } = parameters;
   const onComplete = useStableCallback(onCompleteParam);
   const runOnceAnimationsFinish = useAnimationsFinished(ref, open, false);
-  React26.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!enabled) {
       return void 0;
     }
@@ -2213,15 +2006,15 @@ function useCollapsiblePanel(parameters) {
     setOpen,
     transitionStatus
   } = parameters;
-  const panelRef = React27.useRef(null);
-  const animationTypeRef = React27.useRef(null);
-  const [dimensions, setDimensionsUnwrapped] = React27.useState(EMPTY_DIMENSIONS);
-  const lastMeasuredDimensionsRef = React27.useRef(EMPTY_DIMENSIONS);
-  const shouldSkipNextOpenRef = React27.useRef(false);
-  const shouldPreventMountAnimationRef = React27.useRef(open);
-  const shouldPreventActivityResumeAnimationRef = React27.useRef(false);
-  const [forcePanelIdle, setForcePanelIdle] = React27.useState(false);
-  const pendingTemporaryStyleRestoreRef = React27.useRef(null);
+  const panelRef = react_esm_exports.useRef(null);
+  const animationTypeRef = react_esm_exports.useRef(null);
+  const [dimensions, setDimensionsUnwrapped] = react_esm_exports.useState(EMPTY_DIMENSIONS);
+  const lastMeasuredDimensionsRef = react_esm_exports.useRef(EMPTY_DIMENSIONS);
+  const shouldSkipNextOpenRef = react_esm_exports.useRef(false);
+  const shouldPreventMountAnimationRef = react_esm_exports.useRef(open);
+  const shouldPreventActivityResumeAnimationRef = react_esm_exports.useRef(false);
+  const [forcePanelIdle, setForcePanelIdle] = react_esm_exports.useState(false);
+  const pendingTemporaryStyleRestoreRef = react_esm_exports.useRef(null);
   const mergedPanelRef = useMergedRefs(externalRef, panelRef);
   const latestStateRef = useValueAsRef({
     mounted,
@@ -2267,7 +2060,7 @@ function useCollapsiblePanel(parameters) {
     }
     setForcePanelIdle(false);
   }, [forcePanelIdle, transitionStatus]);
-  React27.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     return () => {
       markActivityResumeAnimationSuppressed();
       restorePendingTemporaryStyle();
@@ -2363,7 +2156,7 @@ function useCollapsiblePanel(parameters) {
       setDimensions(EMPTY_DIMENSIONS, false);
     }
   });
-  React27.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (open || !mounted || panelTransitionStatus !== "ending") {
       return void 0;
     }
@@ -2397,7 +2190,7 @@ function useCollapsiblePanel(parameters) {
     }
     panel.setAttribute("hidden", "until-found");
   }, [hidden, hiddenUntilFound]);
-  React27.useEffect(function registerBeforeMatchListener() {
+  react_esm_exports.useEffect(function registerBeforeMatchListener() {
     const panel = panelRef.current;
     if (!panel) {
       return void 0;
@@ -2503,7 +2296,7 @@ var AccordionPanelCssVars = /* @__PURE__ */ (function(AccordionPanelCssVars2) {
 })({});
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/accordion/panel/AccordionPanel.mjs
-var AccordionPanel = /* @__PURE__ */ React28.forwardRef(function AccordionPanel2(componentProps, forwardedRef) {
+var AccordionPanel = /* @__PURE__ */ react_esm_exports.forwardRef(function AccordionPanel2(componentProps, forwardedRef) {
   const {
     className,
     hiddenUntilFound: hiddenUntilFoundProp,
@@ -2627,21 +2420,14 @@ __export(index_parts_exports2, {
   createHandle: () => createAlertDialogHandle
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/root/useRenderDialogRoot.mjs
-import * as React54 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useOnFirstRender.mjs
-import * as React29 from "react";
 function useOnFirstRender(fn) {
-  const ref = React29.useRef(true);
+  const ref = react_esm_exports.useRef(true);
   if (ref.current) {
     ref.current = false;
     fn();
   }
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/root/useDialogRoot.mjs
-import * as React51 from "react";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/platform/parts.mjs
 var parts_exports = {};
@@ -2967,9 +2753,6 @@ function useScrollLock(enabled = true, referenceElement = null) {
   }, [enabled, referenceElement]);
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingDelayGroup.mjs
-import * as React30 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/utils/event.mjs
 function stopEvent(event) {
   event.preventDefault();
@@ -3138,7 +2921,7 @@ function isHoverOpenEvent(openEventType) {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingDelayGroup.mjs
 import { jsx as _jsx4 } from "react/jsx-runtime";
-var FloatingDelayGroupContext = /* @__PURE__ */ React30.createContext({
+var FloatingDelayGroupContext = /* @__PURE__ */ react_esm_exports.createContext({
   hasProvider: false,
   timeoutMs: 0,
   delayRef: {
@@ -3165,10 +2948,10 @@ function FloatingDelayGroup(props) {
     delay,
     timeoutMs = 0
   } = props;
-  const delayRef = React30.useRef(delay);
-  const initialDelayRef = React30.useRef(delay);
-  const currentIdRef = React30.useRef(null);
-  const currentContextRef = React30.useRef(null);
+  const delayRef = react_esm_exports.useRef(delay);
+  const initialDelayRef = react_esm_exports.useRef(delay);
+  const currentIdRef = react_esm_exports.useRef(null);
+  const currentContextRef = react_esm_exports.useRef(null);
   const timeout = useTimeout();
   useIsoLayoutEffect(() => {
     initialDelayRef.current = delay;
@@ -3182,7 +2965,7 @@ function FloatingDelayGroup(props) {
     };
   }, [delay, currentIdRef, delayRef, initialDelayRef]);
   return /* @__PURE__ */ _jsx4(FloatingDelayGroupContext.Provider, {
-    value: React30.useMemo(() => ({
+    value: react_esm_exports.useMemo(() => ({
       hasProvider: true,
       delayRef,
       initialDelayRef,
@@ -3202,7 +2985,7 @@ function useDelayGroup(context, options = {
   } = options;
   const store = "rootStore" in context ? context.rootStore : context;
   const floatingId = store.useState("floatingId");
-  const groupContext = React30.useContext(FloatingDelayGroupContext);
+  const groupContext = react_esm_exports.useContext(FloatingDelayGroupContext);
   const {
     currentIdRef,
     delayRef,
@@ -3212,9 +2995,9 @@ function useDelayGroup(context, options = {
     hasProvider,
     timeout
   } = groupContext;
-  const [isInstantPhase, setIsInstantPhase] = React30.useState(false);
-  const openRef = React30.useRef(open);
-  const isUnmountedRef = React30.useRef(false);
+  const [isInstantPhase, setIsInstantPhase] = react_esm_exports.useState(false);
+  const openRef = react_esm_exports.useRef(open);
+  const isUnmountedRef = react_esm_exports.useRef(false);
   useIsoLayoutEffect(() => {
     openRef.current = open;
   }, [open]);
@@ -3295,15 +3078,12 @@ function useDelayGroup(context, options = {
       }
     };
   }, [currentContextRef, currentIdRef, delayRef, floatingId, initialDelayRef, timeout]);
-  return React30.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     hasProvider,
     delayRef,
     isInstantPhase
   }), [hasProvider, delayRef, isInstantPhase]);
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingFocusManager.mjs
-import * as React34 from "react";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/mergeCleanups.mjs
 function mergeCleanups(...cleanups) {
@@ -3316,9 +3096,6 @@ function mergeCleanups(...cleanups) {
     }
   };
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/FocusGuard.mjs
-import * as React31 from "react";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/visuallyHidden.mjs
 var visuallyHiddenBase = {
@@ -3344,8 +3121,8 @@ var visuallyHiddenInput = {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/FocusGuard.mjs
 import { jsx as _jsx5 } from "react/jsx-runtime";
-var FocusGuard = /* @__PURE__ */ React31.forwardRef(function FocusGuard2(props, ref) {
-  const [role, setRole] = React31.useState();
+var FocusGuard = /* @__PURE__ */ react_esm_exports.forwardRef(function FocusGuard2(props, ref) {
+  const [role, setRole] = react_esm_exports.useState();
   useIsoLayoutEffect(() => {
     if (parts_exports.screenReader.voiceOver && parts_exports.engine.webkit) {
       setRole("button");
@@ -4204,7 +3981,6 @@ function markOthers(avoidElements, options = {}) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingPortal.mjs
-import * as React32 from "react";
 import * as ReactDOM2 from "react-dom";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/constants.mjs
@@ -4235,9 +4011,9 @@ var ownerVisuallyHidden = {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingPortal.mjs
 import { jsx as _jsx6, jsxs as _jsxs } from "react/jsx-runtime";
-var PortalContext = /* @__PURE__ */ React32.createContext(null);
+var PortalContext = /* @__PURE__ */ react_esm_exports.createContext(null);
 if (false) PortalContext.displayName = "PortalContext";
-var usePortalContext = () => React32.useContext(PortalContext);
+var usePortalContext = () => react_esm_exports.useContext(PortalContext);
 var attr = createAttribute("portal");
 function useFloatingPortalNode(props = {}) {
   const {
@@ -4249,14 +4025,14 @@ function useFloatingPortalNode(props = {}) {
   const uniqueId = useId();
   const portalContext = usePortalContext();
   const parentPortalNode = portalContext?.portalNode;
-  const [containerElement, setContainerElement] = React32.useState(null);
-  const [portalNode, setPortalNode] = React32.useState(null);
+  const [containerElement, setContainerElement] = react_esm_exports.useState(null);
+  const [portalNode, setPortalNode] = react_esm_exports.useState(null);
   const setPortalNodeRef = useStableCallback((node) => {
     if (node !== null) {
       setPortalNode(node);
     }
   });
-  const containerRef = React32.useRef(null);
+  const containerRef = react_esm_exports.useRef(null);
   useIsoLayoutEffect(() => {
     if (containerProp === null) {
       if (containerRef.current) {
@@ -4297,7 +4073,7 @@ function useFloatingPortalNode(props = {}) {
     portalSubtree
   };
 }
-var FloatingPortal = /* @__PURE__ */ React32.forwardRef(function FloatingPortal2(componentProps, forwardedRef) {
+var FloatingPortal = /* @__PURE__ */ react_esm_exports.forwardRef(function FloatingPortal2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -4316,16 +4092,16 @@ var FloatingPortal = /* @__PURE__ */ React32.forwardRef(function FloatingPortal2
     componentProps,
     elementProps
   });
-  const beforeOutsideRef = React32.useRef(null);
-  const afterOutsideRef = React32.useRef(null);
-  const beforeInsideRef = React32.useRef(null);
-  const afterInsideRef = React32.useRef(null);
-  const [focusManagerState, setFocusManagerState] = React32.useState(null);
-  const focusInsideDisabledRef = React32.useRef(false);
+  const beforeOutsideRef = react_esm_exports.useRef(null);
+  const afterOutsideRef = react_esm_exports.useRef(null);
+  const beforeInsideRef = react_esm_exports.useRef(null);
+  const afterInsideRef = react_esm_exports.useRef(null);
+  const [focusManagerState, setFocusManagerState] = react_esm_exports.useState(null);
+  const focusInsideDisabledRef = react_esm_exports.useRef(false);
   const modal = focusManagerState?.modal;
   const open = focusManagerState?.open;
   const shouldRenderGuards = typeof renderGuards === "boolean" ? renderGuards : !!focusManagerState && !focusManagerState.modal && focusManagerState.open && !!portalNode;
-  React32.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!portalNode || modal) {
       return void 0;
     }
@@ -4351,7 +4127,7 @@ var FloatingPortal = /* @__PURE__ */ React32.forwardRef(function FloatingPortal2
     enableFocusInside(portalNode);
     focusInsideDisabledRef.current = false;
   }, [open, portalNode]);
-  const portalContextValue = React32.useMemo(() => ({
+  const portalContextValue = react_esm_exports.useMemo(() => ({
     beforeOutsideRef,
     afterOutsideRef,
     beforeInsideRef,
@@ -4359,7 +4135,7 @@ var FloatingPortal = /* @__PURE__ */ React32.forwardRef(function FloatingPortal2
     portalNode,
     setFocusManagerState
   }), [portalNode]);
-  return /* @__PURE__ */ _jsxs(React32.Fragment, {
+  return /* @__PURE__ */ _jsxs(react_esm_exports.Fragment, {
     children: [portalSubtree, /* @__PURE__ */ _jsxs(PortalContext.Provider, {
       value: portalContextValue,
       children: [shouldRenderGuards && portalNode && /* @__PURE__ */ _jsx6(FocusGuard, {
@@ -4397,9 +4173,6 @@ var FloatingPortal = /* @__PURE__ */ React32.forwardRef(function FloatingPortal2
   });
 });
 if (false) FloatingPortal.displayName = "FloatingPortal";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingTree.mjs
-import * as React33 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/utils/createEventEmitter.mjs
 function createEventEmitter() {
@@ -4439,13 +4212,13 @@ var FloatingTreeStore = class {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/components/FloatingTree.mjs
 import { jsx as _jsx7 } from "react/jsx-runtime";
-var FloatingNodeContext = /* @__PURE__ */ React33.createContext(null);
+var FloatingNodeContext = /* @__PURE__ */ react_esm_exports.createContext(null);
 if (false) FloatingNodeContext.displayName = "FloatingNodeContext";
-var FloatingTreeContext = /* @__PURE__ */ React33.createContext(null);
+var FloatingTreeContext = /* @__PURE__ */ react_esm_exports.createContext(null);
 if (false) FloatingTreeContext.displayName = "FloatingTreeContext";
-var useFloatingParentNodeId = () => React33.useContext(FloatingNodeContext)?.id || null;
+var useFloatingParentNodeId = () => react_esm_exports.useContext(FloatingNodeContext)?.id || null;
 var useFloatingTree = (externalTree) => {
-  const contextTree = React33.useContext(FloatingTreeContext);
+  const contextTree = react_esm_exports.useContext(FloatingTreeContext);
   return externalTree ?? contextTree;
 };
 function useFloatingNodeId(externalTree) {
@@ -4474,7 +4247,7 @@ function FloatingNode(props) {
   } = props;
   const parentId = useFloatingParentNodeId();
   return /* @__PURE__ */ _jsx7(FloatingNodeContext.Provider, {
-    value: React33.useMemo(() => ({
+    value: react_esm_exports.useMemo(() => ({
       id,
       parentId
     }), [id, parentId]),
@@ -4600,14 +4373,14 @@ function FloatingFocusManager(props) {
   const openRef = useValueAsRef(open);
   const tree = useFloatingTree(externalTree);
   const portalContext = usePortalContext();
-  const preventReturnFocusRef = React34.useRef(false);
-  const isPointerDownRef = React34.useRef(false);
-  const pointerDownOutsideRef = React34.useRef(false);
-  const lastFocusedTabbableRef = React34.useRef(null);
-  const closeTypeRef = React34.useRef("");
-  const lastInteractionTypeRef = React34.useRef("");
-  const beforeGuardRef = React34.useRef(null);
-  const afterGuardRef = React34.useRef(null);
+  const preventReturnFocusRef = react_esm_exports.useRef(false);
+  const isPointerDownRef = react_esm_exports.useRef(false);
+  const pointerDownOutsideRef = react_esm_exports.useRef(false);
+  const lastFocusedTabbableRef = react_esm_exports.useRef(null);
+  const closeTypeRef = react_esm_exports.useRef("");
+  const lastInteractionTypeRef = react_esm_exports.useRef("");
+  const beforeGuardRef = react_esm_exports.useRef(null);
+  const afterGuardRef = react_esm_exports.useRef(null);
   const mergedBeforeGuardRef = useMergedRefs(beforeGuardRef, beforeContentFocusGuardRef, portalContext?.beforeInsideRef);
   const mergedAfterGuardRef = useMergedRefs(afterGuardRef, portalContext?.afterInsideRef);
   const blurTimeout = useTimeout();
@@ -4619,7 +4392,7 @@ function FloatingFocusManager(props) {
     return container ? tabbable(container) : [];
   });
   const getResolvedInsideElements = useStableCallback(() => getInsideElements?.().filter((element) => element != null) ?? []);
-  React34.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (disabled2 || !modal) {
       return void 0;
     }
@@ -4633,7 +4406,7 @@ function FloatingFocusManager(props) {
     const doc = ownerDocument(floatingFocusElement);
     return addEventListener(doc, "keydown", onKeyDown);
   }, [disabled2, floatingFocusElement, modal, isUntrappedTypeableCombobox, getTabbableContent]);
-  React34.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (disabled2 || !open) {
       return void 0;
     }
@@ -4667,7 +4440,7 @@ function FloatingFocusManager(props) {
       clearPointerDownOutside
     );
   }, [disabled2, floating, domReference, floatingFocusElement, open, portalContext, pointerDownTimeout, getResolvedInsideElements]);
-  React34.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (disabled2 || !closeOnFocusOut) {
       return void 0;
     }
@@ -4749,7 +4522,7 @@ function FloatingFocusManager(props) {
     }
     return mergeCleanups(domReferenceElement && addEventListener(domReferenceElement, "focusout", handleFocusOutside), domReferenceElement && addEventListener(domReferenceElement, "pointerdown", handlePointerDown), floating && addEventListener(floating, "focusin", handleFocusIn), floating && addEventListener(floating, "focusout", handleFocusOutside), floating && portalContext && addEventListener(floating, "focusout", markInsideReactTree, true));
   }, [disabled2, domReference, floating, floatingFocusElement, modal, tree, portalContext, store, closeOnFocusOut, restoreFocus, getTabbableContent, isUntrappedTypeableCombobox, getNodeId, dataRef, blurTimeout, pointerDownTimeout, restoreFocusFrame, nextFocusableElement, previousFocusableElement, getResolvedInsideElements]);
-  React34.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (disabled2 || !floating || !open) {
       return void 0;
     }
@@ -4933,7 +4706,7 @@ function FloatingFocusManager(props) {
     };
   }, [disabled2, floatingFocusElement]);
   const shouldRenderGuards = !disabled2 && (modal ? !isUntrappedTypeableCombobox : true) && (isInsidePortal || modal);
-  return /* @__PURE__ */ _jsxs2(React34.Fragment, {
+  return /* @__PURE__ */ _jsxs2(react_esm_exports.Fragment, {
     children: [shouldRenderGuards && /* @__PURE__ */ _jsx8(FocusGuard, {
       "data-type": "inside",
       ref: mergedBeforeGuardRef,
@@ -4974,7 +4747,6 @@ function FloatingFocusManager(props) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useClick.mjs
-import * as React35 from "react";
 function useClick(context, props = {}) {
   const {
     enabled = true,
@@ -4987,10 +4759,10 @@ function useClick(context, props = {}) {
   } = props;
   const store = "rootStore" in context ? context.rootStore : context;
   const dataRef = store.context.dataRef;
-  const pointerTypeRef = React35.useRef(void 0);
+  const pointerTypeRef = react_esm_exports.useRef(void 0);
   const frame = useAnimationFrame();
   const touchOpenTimeout = useTimeout();
-  const reference = React35.useMemo(() => {
+  const reference = react_esm_exports.useMemo(() => {
     function setOpenWithTouchDelay(nextOpen, nativeEvent, target, pointerType) {
       const details = createChangeEventDetails(reason, nativeEvent, target);
       if (nextOpen && pointerType === "touch" && touchOpenDelay > 0) {
@@ -5061,13 +4833,12 @@ function useClick(context, props = {}) {
       }
     };
   }, [dataRef, eventOption, ignoreMouse, reason, store, stickIfOpen, toggle, frame, touchOpenTimeout, touchOpenDelay]);
-  return React35.useMemo(() => enabled ? {
+  return react_esm_exports.useMemo(() => enabled ? {
     reference
   } : EMPTY_OBJECT, [enabled, reference]);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useClientPoint.mjs
-import * as React36 from "react";
 function createVirtualElement(domElement, data) {
   let offsetX = null;
   let offsetY = null;
@@ -5134,10 +4905,10 @@ function useClientPoint(context, props = {}) {
   const floating = store.useState("floatingElement");
   const domReference = store.useState("domReferenceElement");
   const dataRef = store.context.dataRef;
-  const initialRef = React36.useRef(false);
-  const cleanupListenerRef = React36.useRef(null);
-  const [pointerType, setPointerType] = React36.useState();
-  const [reactive, setReactive] = React36.useState([]);
+  const initialRef = react_esm_exports.useRef(false);
+  const cleanupListenerRef = react_esm_exports.useRef(null);
+  const [pointerType, setPointerType] = react_esm_exports.useState();
+  const [reactive, setReactive] = react_esm_exports.useState([]);
   const resetReference = useStableCallback((reference2) => {
     store.set("positionReference", reference2);
   });
@@ -5165,7 +4936,7 @@ function useClientPoint(context, props = {}) {
     }
   });
   const openCheck = isMouseLikePointerType(pointerType) ? floating : open;
-  React36.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!enabled) {
       resetReference(domReference);
       return void 0;
@@ -5193,20 +4964,20 @@ function useClientPoint(context, props = {}) {
     }
     return cleanupListener;
   }, [openCheck, enabled, floating, dataRef, domReference, store, setReference, resetReference, reactive]);
-  React36.useEffect(() => () => {
+  react_esm_exports.useEffect(() => () => {
     store.set("positionReference", null);
   }, [store]);
-  React36.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (enabled && !floating) {
       initialRef.current = false;
     }
   }, [enabled, floating]);
-  React36.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!enabled && open) {
       initialRef.current = true;
     }
   }, [enabled, open]);
-  const reference = React36.useMemo(() => {
+  const reference = react_esm_exports.useMemo(() => {
     function setPointerTypeRef(event) {
       setPointerType(event.pointerType);
     }
@@ -5217,14 +4988,13 @@ function useClientPoint(context, props = {}) {
       onMouseEnter: handleReferenceEnterOrMove
     };
   }, [handleReferenceEnterOrMove]);
-  return React36.useMemo(() => enabled ? {
+  return react_esm_exports.useMemo(() => enabled ? {
     reference,
     trigger: reference
   } : {}, [enabled, reference]);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useDismiss.mjs
-import * as React37 from "react";
 function alwaysFalse() {
   return false;
 }
@@ -5259,12 +5029,12 @@ function useDismiss(context, props = {}) {
     escapeKey: escapeKeyBubbles,
     outsidePress: outsidePressBubbles
   } = normalizeProp(bubbles);
-  const pressStartedInsideRef = React37.useRef(false);
-  const pressStartPreventedRef = React37.useRef(false);
-  const suppressNextOutsideClickRef = React37.useRef(false);
-  const isComposingRef = React37.useRef(false);
-  const currentPointerTypeRef = React37.useRef("");
-  const touchStateRef = React37.useRef(null);
+  const pressStartedInsideRef = react_esm_exports.useRef(false);
+  const pressStartPreventedRef = react_esm_exports.useRef(false);
+  const suppressNextOutsideClickRef = react_esm_exports.useRef(false);
+  const isComposingRef = react_esm_exports.useRef(false);
+  const currentPointerTypeRef = react_esm_exports.useRef("");
+  const touchStateRef = react_esm_exports.useRef(null);
   const cancelDismissOnEndTimeout = useTimeout();
   const clearInsideReactTreeTimeout = useTimeout();
   const clearInsideReactTree = useStableCallback(() => {
@@ -5333,7 +5103,7 @@ function useDismiss(context, props = {}) {
       pressStartPreventedRef.current = true;
     }
   });
-  React37.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!open || !enabled) {
       return void 0;
     }
@@ -5583,13 +5353,13 @@ function useDismiss(context, props = {}) {
       suppressNextOutsideClickRef.current = false;
     };
   }, [dataRef, floatingElement, escapeKey2, outsidePressEnabled, outsidePress2, open, enabled, escapeKeyBubbles, outsidePressBubbles, closeOnEscapeKeyDown, clearInsideReactTree, getOutsidePressEventProp, hasBlockingChild, isEventWithinOwnElements, tree, store, cancelDismissOnEndTimeout]);
-  React37.useEffect(clearInsideReactTree, [outsidePress2, clearInsideReactTree]);
-  const reference = React37.useMemo(() => ({
+  react_esm_exports.useEffect(clearInsideReactTree, [outsidePress2, clearInsideReactTree]);
+  const reference = react_esm_exports.useMemo(() => ({
     onKeyDown: closeOnEscapeKeyDown,
     onPointerDown: closeOnReferencePress,
     onClick: closeOnReferencePress
   }), [closeOnEscapeKeyDown, closeOnReferencePress]);
-  const floating = React37.useMemo(() => ({
+  const floating = react_esm_exports.useMemo(() => ({
     onKeyDown: closeOnEscapeKeyDown,
     // `onMouseDown` may be blocked if `event.preventDefault()` is called in
     // `onPointerDown`, such as with <NumberField.ScrubArea>.
@@ -5609,15 +5379,12 @@ function useDismiss(context, props = {}) {
     onTouchEndCapture: markInsideReactTree,
     onTouchMoveCapture: markInsideReactTree
   }), [closeOnEscapeKeyDown, markInsideReactTree, markPressStartedInsideReactTree, markInsidePressStartPrevented]);
-  return React37.useMemo(() => enabled ? {
+  return react_esm_exports.useMemo(() => enabled ? {
     reference,
     floating,
     trigger: reference
   } : {}, [enabled, reference, floating]);
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useFloating.mjs
-import * as React45 from "react";
 
 // node_modules/.pnpm/@floating-ui+core@1.8.0/node_modules/@floating-ui/core/dist/floating-ui.core.mjs
 function computeCoordsFromPlacement(_ref, placement, rtl) {
@@ -6865,13 +6632,11 @@ var computePosition2 = (reference, floating, options) => {
 };
 
 // node_modules/.pnpm/@floating-ui+react-dom@2.1.9_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
-import * as React38 from "react";
-import { useLayoutEffect as useLayoutEffect2 } from "react";
 import * as ReactDOM3 from "react-dom";
 var isClient = typeof document !== "undefined";
 var noop2 = function noop3() {
 };
-var index = isClient ? useLayoutEffect2 : noop2;
+var index = isClient ? react_esm_exports.useLayoutEffect : noop2;
 function deepEqual(a, b) {
   if (a === b) {
     return true;
@@ -6931,7 +6696,7 @@ function roundByDPR(element, value) {
   return Math.round(value * dpr) / dpr;
 }
 function useLatestRef(value) {
-  const ref = React38.useRef(value);
+  const ref = react_esm_exports.useRef(value);
   index(() => {
     ref.current = value;
   });
@@ -6954,7 +6719,7 @@ function useFloating(options) {
     whileElementsMounted,
     open
   } = options;
-  const [data, setData] = React38.useState({
+  const [data, setData] = react_esm_exports.useState({
     x: 0,
     y: 0,
     strategy,
@@ -6962,19 +6727,19 @@ function useFloating(options) {
     middlewareData: {},
     isPositioned: false
   });
-  const [latestMiddleware, setLatestMiddleware] = React38.useState(middleware);
+  const [latestMiddleware, setLatestMiddleware] = react_esm_exports.useState(middleware);
   if (!deepEqual(latestMiddleware, middleware)) {
     setLatestMiddleware(middleware);
   }
-  const [_reference, _setReference] = React38.useState(null);
-  const [_floating, _setFloating] = React38.useState(null);
-  const setReference = React38.useCallback((node) => {
+  const [_reference, _setReference] = react_esm_exports.useState(null);
+  const [_floating, _setFloating] = react_esm_exports.useState(null);
+  const setReference = react_esm_exports.useCallback((node) => {
     if (node !== referenceRef.current) {
       referenceRef.current = node;
       _setReference(node);
     }
   }, []);
-  const setFloating = React38.useCallback((node) => {
+  const setFloating = react_esm_exports.useCallback((node) => {
     if (node !== floatingRef.current) {
       floatingRef.current = node;
       _setFloating(node);
@@ -6982,14 +6747,14 @@ function useFloating(options) {
   }, []);
   const referenceEl = externalReference || _reference;
   const floatingEl = externalFloating || _floating;
-  const referenceRef = React38.useRef(null);
-  const floatingRef = React38.useRef(null);
-  const dataRef = React38.useRef(data);
+  const referenceRef = react_esm_exports.useRef(null);
+  const floatingRef = react_esm_exports.useRef(null);
+  const dataRef = react_esm_exports.useRef(data);
   const hasWhileElementsMounted = whileElementsMounted != null;
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
   const platformRef = useLatestRef(platform3);
   const openRef = useLatestRef(open);
-  const update2 = React38.useCallback(() => {
+  const update2 = react_esm_exports.useCallback(() => {
     if (!referenceRef.current || !floatingRef.current) {
       return;
     }
@@ -7027,7 +6792,7 @@ function useFloating(options) {
       }));
     }
   }, [open]);
-  const isMountedRef = React38.useRef(false);
+  const isMountedRef = react_esm_exports.useRef(false);
   index(() => {
     isMountedRef.current = true;
     return () => {
@@ -7044,17 +6809,17 @@ function useFloating(options) {
       update2();
     }
   }, [referenceEl, floatingEl, update2, whileElementsMountedRef, hasWhileElementsMounted]);
-  const refs = React38.useMemo(() => ({
+  const refs = react_esm_exports.useMemo(() => ({
     reference: referenceRef,
     floating: floatingRef,
     setReference,
     setFloating
   }), [setReference, setFloating]);
-  const elements = React38.useMemo(() => ({
+  const elements = react_esm_exports.useMemo(() => ({
     reference: referenceEl,
     floating: floatingEl
   }), [referenceEl, floatingEl]);
-  const floatingStyles = React38.useMemo(() => {
+  const floatingStyles = react_esm_exports.useMemo(() => {
     const initialStyles = {
       position: strategy,
       left: 0,
@@ -7080,7 +6845,7 @@ function useFloating(options) {
       top: y
     };
   }, [strategy, transform, elements.floating, data.x, data.y]);
-  return React38.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     ...data,
     update: update2,
     refs,
@@ -7324,11 +7089,7 @@ function createInlineMiddleware(coordsRef) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/popups/popupStoreUtils.mjs
-import * as React44 from "react";
 import * as ReactDOM4 from "react-dom";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useSyncedFloatingRootContext.mjs
-import * as React43 from "react";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/store/createSelector.mjs
 var createSelector = (a, b, c, d, e, f, ...other) => {
@@ -7382,13 +7143,50 @@ var createSelector = (a, b, c, d, e, f, ...other) => {
   return selector;
 };
 
-// node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/store/useStore.mjs
-var import_shim = __toESM(require_shim(), 1);
-var import_with_selector = __toESM(require_with_selector(), 1);
-import * as React40 from "react";
+// vendor/shims/use-sync-external-store-with-selector.js
+function useSyncExternalStoreWithSelector(subscribe2, getSnapshot2, getServerSnapshot2, selector, isEqual) {
+  const instRef = (0, react_esm_exports.useRef)(null);
+  const inst = instRef.current ?? { hasValue: false, value: null };
+  if (instRef.current === null) instRef.current = inst;
+  const [getSelection, getServerSelection] = (0, react_esm_exports.useMemo)(() => {
+    let hasMemo = false;
+    let memoizedSnapshot;
+    let memoizedSelection;
+    const memoizedSelector = (nextSnapshot) => {
+      if (!hasMemo) {
+        hasMemo = true;
+        memoizedSnapshot = nextSnapshot;
+        const nextSelection2 = selector(nextSnapshot);
+        if (isEqual !== void 0 && inst.hasValue && isEqual(inst.value, nextSelection2)) {
+          memoizedSelection = inst.value;
+          return inst.value;
+        }
+        memoizedSelection = nextSelection2;
+        return nextSelection2;
+      }
+      if (Object.is(memoizedSnapshot, nextSnapshot)) return memoizedSelection;
+      const nextSelection = selector(nextSnapshot);
+      if (isEqual !== void 0 && isEqual(memoizedSelection, nextSelection)) {
+        memoizedSnapshot = nextSnapshot;
+        return memoizedSelection;
+      }
+      memoizedSnapshot = nextSnapshot;
+      memoizedSelection = nextSelection;
+      return nextSelection;
+    };
+    const getSnapshotWithSelector = () => memoizedSelector(getSnapshot2());
+    const getServerSnapshotWithSelector = getServerSnapshot2 === void 0 ? void 0 : () => memoizedSelector(getServerSnapshot2());
+    return [getSnapshotWithSelector, getServerSnapshotWithSelector];
+  }, [getSnapshot2, getServerSnapshot2, selector, isEqual]);
+  const value = (0, react_esm_exports.useSyncExternalStore)(subscribe2, getSelection, getServerSelection);
+  (0, react_esm_exports.useEffect)(() => {
+    inst.hasValue = true;
+    inst.value = value;
+  }, [value]);
+  return value;
+}
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/fastHooks.mjs
-import * as React39 from "react";
 var hooks = [];
 var currentInstance = void 0;
 function getInstance() {
@@ -7420,7 +7218,7 @@ function fastComponent(fn) {
   return FastComponent;
 }
 function fastComponentRef(fn) {
-  return /* @__PURE__ */ React39.forwardRef(fastComponent(fn));
+  return /* @__PURE__ */ react_esm_exports.forwardRef(fastComponent(fn));
 }
 function createInstance() {
   return {
@@ -7435,8 +7233,8 @@ function useStore(store, selector, a1, a2, a3) {
   return useStoreImplementation(store, selector, a1, a2, a3);
 }
 function useStoreR19(store, selector, a1, a2, a3) {
-  const getSelection = React40.useCallback(() => selector(store.getSnapshot(), a1, a2, a3), [store, selector, a1, a2, a3]);
-  return (0, import_shim.useSyncExternalStore)(store.subscribe, getSelection, getSelection);
+  const getSelection = react_esm_exports.useCallback(() => selector(store.getSnapshot(), a1, a2, a3), [store, selector, a1, a2, a3]);
+  return (0, react_esm_exports.useSyncExternalStore)(store.subscribe, getSelection, getSelection);
 }
 register({
   before(instance) {
@@ -7482,7 +7280,7 @@ register({
           };
         };
       }
-      (0, import_shim.useSyncExternalStore)(instance.subscribe, instance.getSnapshot, instance.getSnapshot);
+      (0, react_esm_exports.useSyncExternalStore)(instance.subscribe, instance.getSnapshot, instance.getSnapshot);
     }
   }
 });
@@ -7521,7 +7319,7 @@ function useStoreFast(store, selector, a1, a2, a3) {
   return hook.value;
 }
 function useStoreLegacy(store, selector, a1, a2, a3) {
-  return (0, import_with_selector.useSyncExternalStoreWithSelector)(store.subscribe, store.getSnapshot, store.getSnapshot, (state) => selector(state, a1, a2, a3));
+  return useSyncExternalStoreWithSelector(store.subscribe, store.getSnapshot, store.getSnapshot, (state) => selector(state, a1, a2, a3));
 }
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/store/Store.mjs
@@ -7622,7 +7420,6 @@ var Store = class {
 };
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/store/ReactStore.mjs
-import * as React41 from "react";
 var ReactStore = class extends Store {
   /**
    * Creates a new ReactStore instance.
@@ -7646,7 +7443,7 @@ var ReactStore = class extends Store {
    * by `useState` is updated before the next render (similarly to React's `useState`).
    */
   useSyncedValue(key, value) {
-    React41.useDebugValue(key);
+    react_esm_exports.useDebugValue(key);
     const store = this;
     useIsoLayoutEffect(() => {
       if (store.state[key] !== value) {
@@ -7681,8 +7478,8 @@ var ReactStore = class extends Store {
   useSyncedValues(statePart) {
     const store = this;
     if (false) {
-      React41.useDebugValue(statePart, (p) => Object.keys(p));
-      const keys = React41.useRef(Object.keys(statePart)).current;
+      react_esm_exports.useDebugValue(statePart, (p) => Object.keys(p));
+      const keys = react_esm_exports.useRef(Object.keys(statePart)).current;
       const nextKeys = Object.keys(statePart);
       if (keys.length !== nextKeys.length || keys.some((key, index2) => key !== nextKeys[index2])) {
         console.error("ReactStore.useSyncedValues expects the same prop keys on every render. Keys should be stable.");
@@ -7698,7 +7495,7 @@ var ReactStore = class extends Store {
    * is non-undefined, the store's state at `key` is updated to match `controlled`.
    */
   useControlledProp(key, controlled) {
-    React41.useDebugValue(key);
+    react_esm_exports.useDebugValue(key);
     const store = this;
     const isControlled = controlled !== void 0;
     useIsoLayoutEffect(() => {
@@ -7736,7 +7533,7 @@ var ReactStore = class extends Store {
    * @param key Key of the selector to use.
    */
   useState(key, a1, a2, a3) {
-    React41.useDebugValue(key);
+    react_esm_exports.useDebugValue(key);
     return useStore(this, this.selectors[key], a1, a2, a3);
   }
   /**
@@ -7747,7 +7544,7 @@ var ReactStore = class extends Store {
    * @param fn Function to assign.
    */
   useContextCallback(key, fn) {
-    React41.useDebugValue(key);
+    react_esm_exports.useDebugValue(key);
     const stableFunction = useStableCallback(fn ?? NOOP);
     this.context[key] = stableFunction;
   }
@@ -7758,7 +7555,7 @@ var ReactStore = class extends Store {
    * @param key Key of the state to set.
    */
   useStateSetter(key) {
-    const ref = React41.useRef(void 0);
+    const ref = react_esm_exports.useRef(void 0);
     if (ref.current === void 0) {
       ref.current = (value) => {
         this.set(key, value);
@@ -7793,10 +7590,9 @@ var ReactStore = class extends Store {
 };
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useForcedRerendering.mjs
-import * as React42 from "react";
 function useForcedRerendering() {
-  const [, setState] = React42.useState({});
-  return React42.useCallback(() => {
+  const [, setState] = react_esm_exports.useState({});
+  return react_esm_exports.useCallback(() => {
     setState({});
   }, []);
 }
@@ -7889,7 +7685,7 @@ function useSyncedFloatingRootContext(options) {
   const floatingElement = popupStore.useState(treatPopupAsFloatingElement ? "popupElement" : "positionerElement");
   const triggerElements = popupStore.context.triggerElements;
   const handleOpenChange = onOpenChange;
-  const internalStoreRef = React43.useRef(null);
+  const internalStoreRef = react_esm_exports.useRef(null);
   if (floatingRootContextProp === void 0 && internalStoreRef.current === null) {
     internalStoreRef.current = new FloatingRootStore({
       open,
@@ -7936,7 +7732,7 @@ function createDefaultInitialFocus(popupRef) {
 function usePopupStore(externalStore, createStore, treatPopupAsFloatingElement = false) {
   const floatingId = useId();
   const nested = useFloatingParentNodeId() != null;
-  const internalStoreRef = React44.useRef(null);
+  const internalStoreRef = react_esm_exports.useRef(null);
   if (externalStore === void 0 && internalStoreRef.current === null) {
     internalStoreRef.current = createStore(floatingId, nested);
   }
@@ -7955,9 +7751,9 @@ function usePopupStore(externalStore, createStore, treatPopupAsFloatingElement =
   };
 }
 function useTriggerRegistration(id, store) {
-  const registeredElementIdRef = React44.useRef(null);
-  const registeredElementRef = React44.useRef(null);
-  return React44.useCallback((element) => {
+  const registeredElementIdRef = react_esm_exports.useRef(null);
+  const registeredElementRef = react_esm_exports.useRef(null);
+  return react_esm_exports.useCallback((element) => {
     if (id === void 0) {
       return;
     }
@@ -8444,12 +8240,12 @@ function useFloating2(options = {}) {
   const domReferenceElement = store.useState("domReferenceElement");
   const open = store.useState("open");
   const floatingId = store.useState("floatingId");
-  const [positionReference, setPositionReferenceRaw] = React45.useState(null);
-  const [localDomReference, setLocalDomReference] = React45.useState(void 0);
-  const [localFloatingElement, setLocalFloatingElement] = React45.useState(void 0);
-  const domReferenceRef = React45.useRef(null);
+  const [positionReference, setPositionReferenceRaw] = react_esm_exports.useState(null);
+  const [localDomReference, setLocalDomReference] = react_esm_exports.useState(void 0);
+  const [localFloatingElement, setLocalFloatingElement] = react_esm_exports.useState(void 0);
+  const domReferenceRef = react_esm_exports.useRef(null);
   const tree = useFloatingTree(externalTree);
-  const storeElements = React45.useMemo(() => ({
+  const storeElements = react_esm_exports.useMemo(() => ({
     reference: referenceElement,
     floating: floatingElement,
     domReference: domReferenceElement
@@ -8468,7 +8264,7 @@ function useFloating2(options = {}) {
   store.useSyncedValue("referenceElement", localDomReference ?? null);
   store.useSyncedValue("domReferenceElement", localDomReference === void 0 ? domReferenceElement : localDomReferenceElement);
   store.useSyncedValue("floatingElement", syncedFloatingElement);
-  const setPositionReference = React45.useCallback((node) => {
+  const setPositionReference = react_esm_exports.useCallback((node) => {
     const computedPositionReference = isElement(node) ? {
       getBoundingClientRect: () => node.getBoundingClientRect(),
       getClientRects: () => node.getClientRects(),
@@ -8477,7 +8273,7 @@ function useFloating2(options = {}) {
     setPositionReferenceRaw(computedPositionReference);
     position.refs.setReference(computedPositionReference);
   }, [position.refs]);
-  const setReference = React45.useCallback((node) => {
+  const setReference = react_esm_exports.useCallback((node) => {
     if (isElement(node) || node === null) {
       domReferenceRef.current = node;
       setLocalDomReference(node);
@@ -8489,22 +8285,22 @@ function useFloating2(options = {}) {
       position.refs.setReference(node);
     }
   }, [position.refs, setLocalDomReference]);
-  const setFloating = React45.useCallback((node) => {
+  const setFloating = react_esm_exports.useCallback((node) => {
     setLocalFloatingElement(node);
     position.refs.setFloating(node);
   }, [position.refs]);
-  const refs = React45.useMemo(() => ({
+  const refs = react_esm_exports.useMemo(() => ({
     ...position.refs,
     setReference,
     setFloating,
     setPositionReference,
     domReference: domReferenceRef
   }), [position.refs, setReference, setFloating, setPositionReference]);
-  const elements = React45.useMemo(() => ({
+  const elements = react_esm_exports.useMemo(() => ({
     ...position.elements,
     domReference: domReferenceElement
   }), [position.elements, domReferenceElement]);
-  const context = React45.useMemo(() => ({
+  const context = react_esm_exports.useMemo(() => ({
     ...position,
     dataRef: store.context.dataRef,
     open,
@@ -8528,7 +8324,7 @@ function useFloating2(options = {}) {
       node.context = context;
     }
   });
-  return React45.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     ...position,
     context,
     refs,
@@ -8538,7 +8334,6 @@ function useFloating2(options = {}) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useFocus.mjs
-import * as React46 from "react";
 var isMacSafari = parts_exports.os.mac && parts_exports.engine.webkit;
 function useFocus(context, props = {}) {
   const {
@@ -8550,11 +8345,11 @@ function useFocus(context, props = {}) {
     events,
     dataRef
   } = store.context;
-  const blockFocusRef = React46.useRef(false);
-  const blockedReferenceRef = React46.useRef(null);
-  const keyboardModalityRef = React46.useRef(true);
+  const blockFocusRef = react_esm_exports.useRef(false);
+  const blockedReferenceRef = react_esm_exports.useRef(null);
+  const keyboardModalityRef = react_esm_exports.useRef(true);
   const timeout = useTimeout();
-  React46.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     const domReference = store.select("domReferenceElement");
     if (!enabled) {
       return void 0;
@@ -8574,7 +8369,7 @@ function useFocus(context, props = {}) {
     }
     return mergeCleanups(addEventListener(win, "blur", onBlur), isMacSafari && addEventListener(win, "keydown", onKeyDown, true), isMacSafari && addEventListener(win, "pointerdown", onPointerDown, true));
   }, [store, enabled]);
-  React46.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!enabled) {
       return void 0;
     }
@@ -8592,7 +8387,7 @@ function useFocus(context, props = {}) {
       events.off("openchange", onOpenChangeLocal);
     };
   }, [events, enabled, store]);
-  const reference = React46.useMemo(() => {
+  const reference = react_esm_exports.useMemo(() => {
     function resetBlockedFocus() {
       blockFocusRef.current = false;
       blockedReferenceRef.current = null;
@@ -8659,14 +8454,11 @@ function useFocus(context, props = {}) {
       }
     };
   }, [dataRef, delay, store, timeout]);
-  return React46.useMemo(() => enabled ? {
+  return react_esm_exports.useMemo(() => enabled ? {
     reference,
     trigger: reference
   } : {}, [enabled, reference]);
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useHoverFloatingInteraction.mjs
-import * as React47 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useHoverInteractionSharedState.mjs
 var HoverInteraction = class _HoverInteraction {
@@ -8777,7 +8569,7 @@ function useHoverFloatingInteraction(context, parameters = {}) {
       clearPointerEvents();
     }
   }, [open, instance, clearPointerEvents]);
-  React47.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     return clearPointerEvents;
   }, [clearPointerEvents]);
   useIsoLayoutEffect(() => {
@@ -8806,7 +8598,7 @@ function useHoverFloatingInteraction(context, parameters = {}) {
     }
     return void 0;
   }, [enabled, open, domReferenceElement, floatingElement, instance, isHoverOpen, tree, parentId, clearPointerEvents]);
-  React47.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!enabled) {
       return void 0;
     }
@@ -8881,7 +8673,6 @@ function useHoverFloatingInteraction(context, parameters = {}) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useHoverReferenceInteraction.mjs
-import * as React48 from "react";
 import * as ReactDOM5 from "react-dom";
 var EMPTY_REF = {
   current: null
@@ -8908,7 +8699,7 @@ function useHoverReferenceInteraction(context, props = {}) {
   } = store.context;
   const tree = useFloatingTree(externalTree);
   const instance = useHoverInteractionSharedState(store);
-  const isHoverCloseActiveRef = React48.useRef(false);
+  const isHoverCloseActiveRef = react_esm_exports.useRef(false);
   const handleCloseRef = useValueAsRef(handleClose);
   const delayRef = useValueAsRef(delay);
   const restMsRef = useValueAsRef(restMs);
@@ -8946,8 +8737,8 @@ function useHoverReferenceInteraction(context, props = {}) {
   if (isActiveTrigger) {
     instance.handleCloseOptions = handleCloseRef.current?.__options;
   }
-  React48.useEffect(() => cleanupMouseMoveHandler, [cleanupMouseMoveHandler]);
-  React48.useEffect(() => {
+  react_esm_exports.useEffect(() => cleanupMouseMoveHandler, [cleanupMouseMoveHandler]);
+  react_esm_exports.useEffect(() => {
     if (!enabled) {
       return void 0;
     }
@@ -8968,7 +8759,7 @@ function useHoverReferenceInteraction(context, props = {}) {
       events.off("openchange", onOpenChangeLocal);
     };
   }, [enabled, events, instance, cleanupMouseMoveHandler]);
-  React48.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!enabled) {
       return void 0;
     }
@@ -9089,7 +8880,7 @@ function useHoverReferenceInteraction(context, props = {}) {
     }
     return mergeCleanups(addEventListener(trigger, "mouseenter", onMouseEnter), addEventListener(trigger, "mouseleave", onMouseLeave));
   }, [cleanupMouseMoveHandler, clearPointerEvents, dataRef, delayRef, store, enabled, handleCloseRef, instance, isActiveTrigger, isOverInactiveTrigger, isClickLikeOpenEvent2, mouseOnly, move, restMsRef, triggerElementRef, tree, enabledRef, getHandleCloseContext2, isClosingRef, checkShouldOpen]);
-  return React48.useMemo(() => {
+  return react_esm_exports.useMemo(() => {
     if (!enabled) {
       return void 0;
     }
@@ -9155,7 +8946,6 @@ function useHoverReferenceInteraction(context, props = {}) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useListNavigation.mjs
-import * as React49 from "react";
 var ESCAPE = "Escape";
 function doSwitch(orientation, vertical, horizontal) {
   switch (orientation) {
@@ -9238,18 +9028,18 @@ function useListNavigation(context, props) {
   const floatingFocusElementRef = useValueAsRef(floatingFocusElement);
   const parentId = useFloatingParentNodeId();
   const tree = useFloatingTree(externalTree);
-  const focusItemOnOpenRef = React49.useRef(focusItemOnOpen);
-  const indexRef = React49.useRef(selectedIndex ?? -1);
-  const keyRef = React49.useRef(null);
-  const isPointerModalityRef = React49.useRef(true);
+  const focusItemOnOpenRef = react_esm_exports.useRef(focusItemOnOpen);
+  const indexRef = react_esm_exports.useRef(selectedIndex ?? -1);
+  const keyRef = react_esm_exports.useRef(null);
+  const isPointerModalityRef = react_esm_exports.useRef(true);
   const onNavigate = useStableCallback((event) => {
     onNavigateProp(indexRef.current === -1 ? null : indexRef.current, event);
   });
-  const previousMountedRef = React49.useRef(!!floatingElement);
-  const previousOpenRef = React49.useRef(open);
-  const forceSyncFocusRef = React49.useRef(false);
-  const forceScrollIntoViewRef = React49.useRef(false);
-  const cancelQueuedFocusRef = React49.useRef(null);
+  const previousMountedRef = react_esm_exports.useRef(!!floatingElement);
+  const previousOpenRef = react_esm_exports.useRef(open);
+  const forceSyncFocusRef = react_esm_exports.useRef(false);
+  const forceScrollIntoViewRef = react_esm_exports.useRef(false);
+  const cancelQueuedFocusRef = react_esm_exports.useRef(null);
   const disabledIndicesRef = useValueAsRef(disabledIndices);
   const latestOpenRef = useValueAsRef(open);
   const selectedIndexRef = useValueAsRef(selectedIndex);
@@ -9499,7 +9289,7 @@ function useListNavigation(context, props) {
       onNavigate(event);
     }
   });
-  const item = React49.useMemo(() => {
+  const item = react_esm_exports.useMemo(() => {
     const itemProps = {
       onFocus(event) {
         forceSyncFocusRef.current = true;
@@ -9547,12 +9337,12 @@ function useListNavigation(context, props) {
     };
     return itemProps;
   }, [syncCurrentTarget, latestOpenRef, floatingFocusElementRef, focusItemOnHover, listRef, onNavigate, resetOnPointerLeaveRef, virtual]);
-  const ariaActiveDescendantProp = React49.useMemo(() => {
+  const ariaActiveDescendantProp = react_esm_exports.useMemo(() => {
     return virtual && open && hasActiveIndex && {
       "aria-activedescendant": `${id}-${activeIndex}`
     };
   }, [virtual, open, hasActiveIndex, id, activeIndex]);
-  const floating = React49.useMemo(() => {
+  const floating = react_esm_exports.useMemo(() => {
     return {
       "aria-orientation": orientation === "both" ? void 0 : orientation,
       ...!typeableComboboxReference ? ariaActiveDescendantProp : {},
@@ -9576,7 +9366,7 @@ function useListNavigation(context, props) {
       }
     };
   }, [ariaActiveDescendantProp, commonOnKeyDown, floatingFocusElementRef, orientation, typeableComboboxReference, store, open, virtual, domReferenceElement]);
-  const trigger = React49.useMemo(() => {
+  const trigger = react_esm_exports.useMemo(() => {
     function openOnNavigationKeyDown(event) {
       store.setOpen(true, createChangeEventDetails(reason_parts_exports.listNavigation, event.nativeEvent, event.currentTarget));
     }
@@ -9649,13 +9439,13 @@ function useListNavigation(context, props) {
       onClick: checkVirtualMouse
     };
   }, [commonOnKeyDown, focusItemOnOpen, getMinEnabledIndex, nested, onNavigate, store, openOnArrowKeyDown, orientation, getParentOrientation, rtl, selectedIndexRef, virtual]);
-  const reference = React49.useMemo(() => {
+  const reference = react_esm_exports.useMemo(() => {
     return {
       ...ariaActiveDescendantProp,
       ...trigger
     };
   }, [ariaActiveDescendantProp, trigger]);
-  return React49.useMemo(() => enabled ? {
+  return react_esm_exports.useMemo(() => enabled ? {
     reference,
     floating,
     item,
@@ -9664,7 +9454,6 @@ function useListNavigation(context, props) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/useTypeahead.mjs
-import * as React50 from "react";
 function useTypeahead(context, props) {
   const {
     listRef,
@@ -9680,9 +9469,9 @@ function useTypeahead(context, props) {
   const store = "rootStore" in context ? context.rootStore : context;
   const open = store.useState("open");
   const timeout = useTimeout();
-  const stringRef = React50.useRef("");
-  const prevIndexRef = React50.useRef(selectedIndex ?? activeIndex ?? -1);
-  const matchIndexRef = React50.useRef(null);
+  const stringRef = react_esm_exports.useRef("");
+  const prevIndexRef = react_esm_exports.useRef(selectedIndex ?? activeIndex ?? -1);
+  const matchIndexRef = react_esm_exports.useRef(null);
   const onKeyDown = useStableCallback((event) => {
     function isVisible(index3) {
       const element = elementsRef?.current[index3];
@@ -9783,11 +9572,11 @@ function useTypeahead(context, props) {
       prevIndexRef.current = selectedIndex ?? activeIndex ?? -1;
     }
   }, [open, selectedIndex, activeIndex]);
-  const sharedProps = React50.useMemo(() => ({
+  const sharedProps = react_esm_exports.useMemo(() => ({
     onKeyDown,
     onBlur
   }), [onKeyDown, onBlur]);
-  return React50.useMemo(() => enabled ? {
+  return react_esm_exports.useMemo(() => enabled ? {
     reference: sharedProps,
     floating: sharedProps
   } : {}, [enabled, sharedProps]);
@@ -10021,10 +9810,10 @@ function useDialogRoot(params) {
   const {
     forceUnmount
   } = useOpenStateTransitions(open, store);
-  const handleImperativeClose = React51.useCallback(() => {
+  const handleImperativeClose = react_esm_exports.useCallback(() => {
     store.setOpen(false, createChangeEventDetails(reason_parts_exports.imperativeAction));
   }, [store]);
-  React51.useImperativeHandle(actionsRef, () => ({
+  react_esm_exports.useImperativeHandle(actionsRef, () => ({
     unmount: forceUnmount,
     close: handleImperativeClose
   }), [forceUnmount, handleImperativeClose]);
@@ -10039,8 +9828,8 @@ function DialogInteractions({
   const modal = store.useState("modal");
   const popupElement = store.useState("popupElement");
   const floatingRootContext = store.useState("floatingRootContext");
-  const [ownNestedOpenDialogs, setOwnNestedOpenDialogs] = React51.useState(0);
-  const [ownNestedOpenDrawers, setOwnNestedOpenDrawers] = React51.useState(0);
+  const [ownNestedOpenDialogs, setOwnNestedOpenDialogs] = react_esm_exports.useState(0);
+  const [ownNestedOpenDrawers, setOwnNestedOpenDrawers] = react_esm_exports.useState(0);
   const isTopmost = ownNestedOpenDialogs === 0;
   const dismiss = useDismiss(floatingRootContext, {
     outsidePressEvent() {
@@ -10082,7 +9871,7 @@ function DialogInteractions({
     setOwnNestedOpenDialogs(0);
     setOwnNestedOpenDrawers(0);
   });
-  React51.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (parentContext?.onNestedDialogOpen && open) {
       parentContext.onNestedDialogOpen(ownNestedOpenDialogs + 1, ownNestedOpenDrawers + (isDrawer ? 1 : 0));
     }
@@ -10109,13 +9898,12 @@ function DialogInteractions({
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/root/DialogRootContext.mjs
-import * as React52 from "react";
-var IsDrawerContext = /* @__PURE__ */ React52.createContext(false);
+var IsDrawerContext = /* @__PURE__ */ react_esm_exports.createContext(false);
 if (false) IsDrawerContext.displayName = "IsDrawerContext";
-var DialogRootContext = /* @__PURE__ */ React52.createContext(void 0);
+var DialogRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) DialogRootContext.displayName = "DialogRootContext";
 function useDialogRootContext(optional) {
-  const dialogRootContext = React52.useContext(DialogRootContext);
+  const dialogRootContext = react_esm_exports.useContext(DialogRootContext);
   if (optional === false && dialogRootContext === void 0) {
     throw new Error(false ? "Base UI: DialogRootContext is missing. Dialog parts must be placed within <Dialog.Root>." : formatErrorMessage_default(27));
   }
@@ -10123,7 +9911,6 @@ function useDialogRootContext(optional) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/store/DialogStore.mjs
-import * as React53 from "react";
 var selectors2 = {
   ...popupStoreSelectors,
   modal: createSelector((state) => state.modal),
@@ -10143,9 +9930,9 @@ var DialogStore = class _DialogStore extends ReactStore {
     const state = createInitialState(initialState);
     state.floatingRootContext = createPopupFloatingRootContext(triggerElements, floatingId, nested);
     super(state, {
-      popupRef: /* @__PURE__ */ React53.createRef(),
-      backdropRef: /* @__PURE__ */ React53.createRef(),
-      internalBackdropRef: /* @__PURE__ */ React53.createRef(),
+      popupRef: /* @__PURE__ */ react_esm_exports.createRef(),
+      backdropRef: /* @__PURE__ */ react_esm_exports.createRef(),
+      internalBackdropRef: /* @__PURE__ */ react_esm_exports.createRef(),
       outsidePressEnabledRef: {
         current: true
       },
@@ -10258,7 +10045,7 @@ function useRenderDialogRoot(props, mode = "dialog") {
     actionsRef
   });
   const shouldRenderInteractions = open || mounted;
-  const contextValue = React54.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     store
   }), [store]);
   return /* @__PURE__ */ _jsx9(IsDrawerContext.Provider, {
@@ -10280,9 +10067,6 @@ function useRenderDialogRoot(props, mode = "dialog") {
 function AlertDialogRoot(props) {
   return useRenderDialogRoot(props, "alert-dialog");
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/backdrop/DialogBackdrop.mjs
-import * as React55 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/popupStateMapping.mjs
 var CommonPopupDataAttributes = (function(CommonPopupDataAttributes2) {
@@ -10352,7 +10136,7 @@ var stateAttributesMapping = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var DialogBackdrop = /* @__PURE__ */ React55.forwardRef(function DialogBackdrop2(componentProps, forwardedRef) {
+var DialogBackdrop = /* @__PURE__ */ react_esm_exports.forwardRef(function DialogBackdrop2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -10389,8 +10173,7 @@ var DialogBackdrop = /* @__PURE__ */ React55.forwardRef(function DialogBackdrop2
 if (false) DialogBackdrop.displayName = "DialogBackdrop";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/close/DialogClose.mjs
-import * as React56 from "react";
-var DialogClose = /* @__PURE__ */ React56.forwardRef(function DialogClose2(componentProps, forwardedRef) {
+var DialogClose = /* @__PURE__ */ react_esm_exports.forwardRef(function DialogClose2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -10429,8 +10212,7 @@ var DialogClose = /* @__PURE__ */ React56.forwardRef(function DialogClose2(compo
 if (false) DialogClose.displayName = "DialogClose";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/description/DialogDescription.mjs
-import * as React57 from "react";
-var DialogDescription = /* @__PURE__ */ React57.forwardRef(function DialogDescription2(componentProps, forwardedRef) {
+var DialogDescription = /* @__PURE__ */ react_esm_exports.forwardRef(function DialogDescription2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -10452,9 +10234,6 @@ var DialogDescription = /* @__PURE__ */ React57.forwardRef(function DialogDescri
 });
 if (false) DialogDescription.displayName = "DialogDescription";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/popup/DialogPopup.mjs
-import * as React59 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/popup/DialogPopupCssVars.mjs
 var DialogPopupCssVars = /* @__PURE__ */ (function(DialogPopupCssVars2) {
   DialogPopupCssVars2["nestedDialogs"] = "--nested-dialogs";
@@ -10473,11 +10252,10 @@ var DialogPopupDataAttributes = (function(DialogPopupDataAttributes2) {
 })({});
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/portal/DialogPortalContext.mjs
-import * as React58 from "react";
-var DialogPortalContext = /* @__PURE__ */ React58.createContext(void 0);
+var DialogPortalContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) DialogPortalContext.displayName = "DialogPortalContext";
 function useDialogPortalContext() {
-  const value = React58.useContext(DialogPortalContext);
+  const value = react_esm_exports.useContext(DialogPortalContext);
   if (value === void 0) {
     throw new Error(false ? "Base UI: <Dialog.Portal> is missing." : formatErrorMessage_default(26));
   }
@@ -10596,7 +10374,7 @@ var stateAttributesMapping2 = {
     } : null;
   }
 };
-var DialogPopup = /* @__PURE__ */ React59.forwardRef(function DialogPopup2(componentProps, forwardedRef) {
+var DialogPopup = /* @__PURE__ */ react_esm_exports.forwardRef(function DialogPopup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -10677,9 +10455,6 @@ var DialogPopup = /* @__PURE__ */ React59.forwardRef(function DialogPopup2(compo
 });
 if (false) DialogPopup.displayName = "DialogPopup";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/portal/DialogPortal.mjs
-import * as React61 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/inertValue.mjs
 function inertValue(value) {
   if (isReactVersionAtLeast(19)) {
@@ -10689,9 +10464,8 @@ function inertValue(value) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/InternalBackdrop.mjs
-import * as React60 from "react";
 import { jsx as _jsx11 } from "react/jsx-runtime";
-var InternalBackdrop = /* @__PURE__ */ React60.forwardRef(function InternalBackdrop2(props, ref) {
+var InternalBackdrop = /* @__PURE__ */ react_esm_exports.forwardRef(function InternalBackdrop2(props, ref) {
   const {
     cutout,
     ...otherProps
@@ -10719,7 +10493,7 @@ if (false) InternalBackdrop.displayName = "InternalBackdrop";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/portal/DialogPortal.mjs
 import { jsx as _jsx12, jsxs as _jsxs4 } from "react/jsx-runtime";
-var DialogPortal = /* @__PURE__ */ React61.forwardRef(function DialogPortal2(props, forwardedRef) {
+var DialogPortal = /* @__PURE__ */ react_esm_exports.forwardRef(function DialogPortal2(props, forwardedRef) {
   const {
     keepMounted = false,
     ...portalProps
@@ -10749,8 +10523,7 @@ var DialogPortal = /* @__PURE__ */ React61.forwardRef(function DialogPortal2(pro
 if (false) DialogPortal.displayName = "DialogPortal";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/title/DialogTitle.mjs
-import * as React62 from "react";
-var DialogTitle = /* @__PURE__ */ React62.forwardRef(function DialogTitle2(componentProps, forwardedRef) {
+var DialogTitle = /* @__PURE__ */ react_esm_exports.forwardRef(function DialogTitle2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -10772,24 +10545,17 @@ var DialogTitle = /* @__PURE__ */ React62.forwardRef(function DialogTitle2(compo
 });
 if (false) DialogTitle.displayName = "DialogTitle";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/trigger/DialogTrigger.mjs
-import * as React66 from "react";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useOpenInteractionType.mjs
-import * as React65 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useEnhancedClickHandler.mjs
-import * as React63 from "react";
 function useEnhancedClickHandler(handler) {
-  const lastClickInteractionTypeRef = React63.useRef("");
-  const handlePointerDown = React63.useCallback((event) => {
+  const lastClickInteractionTypeRef = react_esm_exports.useRef("");
+  const handlePointerDown = react_esm_exports.useCallback((event) => {
     if (event.defaultPrevented) {
       return;
     }
     lastClickInteractionTypeRef.current = event.pointerType;
     handler(event, event.pointerType);
   }, [handler]);
-  const handleClick = React63.useCallback((event) => {
+  const handleClick = react_esm_exports.useCallback((event) => {
     if (event.detail === 0) {
       handler(event, "keyboard");
       return;
@@ -10808,9 +10574,8 @@ function useEnhancedClickHandler(handler) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/useValueChanged.mjs
-import * as React64 from "react";
 function useValueChanged(value, onChange) {
-  const valueRef = React64.useRef(value);
+  const valueRef = react_esm_exports.useRef(value);
   const onChangeCallback = useStableCallback(onChange);
   useIsoLayoutEffect(() => {
     if (valueRef.current === value) {
@@ -10838,27 +10603,27 @@ function useOpenMethodTriggerProps(open, setOpenMethod) {
     onClick,
     onPointerDown
   } = useEnhancedClickHandler(handleTriggerClick);
-  return React65.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     onClick,
     onPointerDown
   }), [onClick, onPointerDown]);
 }
 function useOpenInteractionType(open) {
-  const [openMethod, setOpenMethod] = React65.useState(null);
+  const [openMethod, setOpenMethod] = react_esm_exports.useState(null);
   const triggerProps = useOpenMethodTriggerProps(open, setOpenMethod);
   useValueChanged(open, (previousOpen) => {
     if (previousOpen && !open) {
       setOpenMethod(null);
     }
   });
-  return React65.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     openMethod,
     triggerProps
   }), [openMethod, triggerProps]);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/trigger/DialogTrigger.mjs
-var DialogTrigger = /* @__PURE__ */ React66.forwardRef(function DialogTrigger2(componentProps, forwardedRef) {
+var DialogTrigger = /* @__PURE__ */ react_esm_exports.forwardRef(function DialogTrigger2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -10879,7 +10644,7 @@ var DialogTrigger = /* @__PURE__ */ React66.forwardRef(function DialogTrigger2(c
   const floatingContext = store.useState("floatingRootContext");
   const isOpenedByThisTrigger = store.useState("isOpenedByTrigger", thisTriggerId);
   const popupId = store.useState("triggerPopupId", thisTriggerId);
-  const triggerElementRef = React66.useRef(null);
+  const triggerElementRef = react_esm_exports.useRef(null);
   const {
     registerTrigger,
     isMountedByThisTrigger
@@ -10922,9 +10687,6 @@ if (false) DialogTrigger.displayName = "DialogTrigger";
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/alert-dialog/trigger/AlertDialogTrigger.mjs
 var AlertDialogTrigger = DialogTrigger;
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/viewport/DialogViewport.mjs
-import * as React67 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/viewport/DialogViewportDataAttributes.mjs
 var DialogViewportDataAttributes = (function(DialogViewportDataAttributes2) {
   DialogViewportDataAttributes2[DialogViewportDataAttributes2["open"] = CommonPopupDataAttributes.open] = "open";
@@ -10951,7 +10713,7 @@ var stateAttributesMapping3 = {
     } : null;
   }
 };
-var DialogViewport = /* @__PURE__ */ React67.forwardRef(function DialogViewport2(componentProps, forwardedRef) {
+var DialogViewport = /* @__PURE__ */ react_esm_exports.forwardRef(function DialogViewport2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -11094,12 +10856,6 @@ __export(index_parts_exports3, {
   useFilteredItems: () => useFilteredItems
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/autocomplete/root/AutocompleteRoot.mjs
-import * as React77 from "react";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/root/AriaCombobox.mjs
-import * as React76 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/hooks/gridNavigation.mjs
 function gridNavigation(event, prevIndex, listRef, orientation, loopFocus, rtl, disabledIndices, minIndex, maxIndex, cols = 2) {
   const nextIndex = getGridNavigatedIndex(listRef.current, {
@@ -11119,43 +10875,42 @@ function gridNavigation(event, prevIndex, listRef, orientation, loopFocus, rtl, 
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/root/ComboboxRootContext.mjs
-import * as React68 from "react";
-var ComboboxRootContext = /* @__PURE__ */ React68.createContext(void 0);
+var ComboboxRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ComboboxRootContext.displayName = "ComboboxRootContext";
-var ComboboxFloatingContext = /* @__PURE__ */ React68.createContext(void 0);
+var ComboboxFloatingContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ComboboxFloatingContext.displayName = "ComboboxFloatingContext";
-var ComboboxDerivedItemsContext = /* @__PURE__ */ React68.createContext(void 0);
+var ComboboxDerivedItemsContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ComboboxDerivedItemsContext.displayName = "ComboboxDerivedItemsContext";
-var ComboboxHasItemsContext = /* @__PURE__ */ React68.createContext(false);
+var ComboboxHasItemsContext = /* @__PURE__ */ react_esm_exports.createContext(false);
 if (false) ComboboxHasItemsContext.displayName = "ComboboxHasItemsContext";
-var ComboboxInputValueContext = /* @__PURE__ */ React68.createContext("");
+var ComboboxInputValueContext = /* @__PURE__ */ react_esm_exports.createContext("");
 if (false) ComboboxInputValueContext.displayName = "ComboboxInputValueContext";
 function useComboboxRootContext() {
-  const context = React68.useContext(ComboboxRootContext);
+  const context = react_esm_exports.useContext(ComboboxRootContext);
   if (!context) {
     throw new Error(false ? "Base UI: ComboboxRootContext is missing. Combobox parts must be placed within <Combobox.Root>." : formatErrorMessage_default(22));
   }
   return context;
 }
 function useComboboxFloatingContext() {
-  const context = React68.useContext(ComboboxFloatingContext);
+  const context = react_esm_exports.useContext(ComboboxFloatingContext);
   if (!context) {
     throw new Error(false ? "Base UI: ComboboxFloatingContext is missing. Combobox parts must be placed within <Combobox.Root>." : formatErrorMessage_default(23));
   }
   return context;
 }
 function useComboboxDerivedItemsContext() {
-  const context = React68.useContext(ComboboxDerivedItemsContext);
+  const context = react_esm_exports.useContext(ComboboxDerivedItemsContext);
   if (!context) {
     throw new Error(false ? "Base UI: ComboboxItemsContext is missing. Combobox parts must be placed within <Combobox.Root>." : formatErrorMessage_default(24));
   }
   return context;
 }
 function useComboboxInputValueContext() {
-  return React68.useContext(ComboboxInputValueContext);
+  return react_esm_exports.useContext(ComboboxInputValueContext);
 }
 function useComboboxHasItemsContext() {
-  return React68.useContext(ComboboxHasItemsContext);
+  return react_esm_exports.useContext(ComboboxHasItemsContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/itemEquality.mjs
@@ -11191,9 +10946,6 @@ function findItemIndex(itemValues, selectedValue, comparer) {
 function removeItem(selectedValues, itemValue, comparer) {
   return selectedValues.filter((selectedValue) => !compareItemEquality(itemValue, selectedValue, comparer));
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/resolveValueLabel.mjs
-import * as React69 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/serializeValue.mjs
 function serializeValue(value) {
@@ -11297,7 +11049,7 @@ function resolveMultipleLabels(values, items, itemToStringLabel) {
     if (index2 > 0) {
       acc.push(", ");
     }
-    acc.push(/* @__PURE__ */ _jsx13(React69.Fragment, {
+    acc.push(/* @__PURE__ */ _jsx13(react_esm_exports.Fragment, {
       children: resolveSelectedLabel(value, items, itemToStringLabel)
     }, index2));
     return acc;
@@ -11374,9 +11126,6 @@ var selectors3 = {
   autoHighlight: createSelector((state) => state.autoHighlight),
   submitOnItemClick: createSelector((state) => state.submitOnItemClick)
 };
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/field-root-context/FieldRootContext.mjs
-import * as React70 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/field/control/FieldControlDataAttributes.mjs
 var FieldControlDataAttributes = /* @__PURE__ */ (function(FieldControlDataAttributes2) {
@@ -11472,10 +11221,10 @@ var DEFAULT_FIELD_ROOT_CONTEXT = {
     change: NOOP
   }
 };
-var FieldRootContext = /* @__PURE__ */ React70.createContext(DEFAULT_FIELD_ROOT_CONTEXT);
+var FieldRootContext = /* @__PURE__ */ react_esm_exports.createContext(DEFAULT_FIELD_ROOT_CONTEXT);
 if (false) FieldRootContext.displayName = "FieldRootContext";
 function useFieldRootContext(optional = true) {
-  const context = React70.useContext(FieldRootContext);
+  const context = react_esm_exports.useContext(FieldRootContext);
   if (context.setValidityData === NOOP && !optional) {
     throw new Error(false ? "Base UI: FieldRootContext is missing. Field parts must be placed within <Field.Root>." : formatErrorMessage_default(28));
   }
@@ -11483,12 +11232,11 @@ function useFieldRootContext(optional = true) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/field-register-control/useRegisterFieldControl.mjs
-import * as React71 from "react";
 function useRegisterFieldControl(controlRef, id, value, getFormValueOverride, enabled = true, name) {
   const {
     registerFieldControl
   } = useFieldRootContext();
-  const sourceRef = React71.useRef(null);
+  const sourceRef = react_esm_exports.useRef(null);
   if (!sourceRef.current) {
     sourceRef.current = Symbol();
   }
@@ -11512,8 +11260,7 @@ function useRegisterFieldControl(controlRef, id, value, getFormValueOverride, en
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/form-context/FormContext.mjs
-import * as React72 from "react";
-var FormContext = /* @__PURE__ */ React72.createContext({
+var FormContext = /* @__PURE__ */ react_esm_exports.createContext({
   formRef: {
     current: {
       fields: /* @__PURE__ */ new Map()
@@ -11528,15 +11275,11 @@ var FormContext = /* @__PURE__ */ React72.createContext({
 });
 if (false) FormContext.displayName = "FormContext";
 function useFormContext() {
-  return React72.useContext(FormContext);
+  return react_esm_exports.useContext(FormContext);
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/labelable-provider/useLabelableId.mjs
-import * as React74 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/labelable-provider/LabelableContext.mjs
-import * as React73 from "react";
-var LabelableContext = /* @__PURE__ */ React73.createContext({
+var LabelableContext = /* @__PURE__ */ react_esm_exports.createContext({
   controlId: void 0,
   registerControlId: NOOP,
   labelId: void 0,
@@ -11547,7 +11290,7 @@ var LabelableContext = /* @__PURE__ */ React73.createContext({
 });
 if (false) LabelableContext.displayName = "LabelableContext";
 function useLabelableContext() {
-  return React73.useContext(LabelableContext);
+  return react_esm_exports.useContext(LabelableContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/labelable-provider/useLabelableId.mjs
@@ -11564,8 +11307,8 @@ function useLabelableId(params = {}) {
   const defaultId = useBaseUiId(id);
   const controlIdForEffect = implicit ? controlId : void 0;
   const controlSourceRef = useRefWithInit(() => Symbol("labelable-control"));
-  const hasRegisteredRef = React74.useRef(false);
-  const hadExplicitIdRef = React74.useRef(id != null);
+  const hasRegisteredRef = react_esm_exports.useRef(false);
+  const hadExplicitIdRef = react_esm_exports.useRef(id != null);
   const unregisterControlId = useStableCallback(() => {
     if (!hasRegisteredRef.current || registerControlId === NOOP) {
       return;
@@ -11602,7 +11345,7 @@ function useLabelableId(params = {}) {
     registerControlId(controlSourceRef.current, nextId);
     return void 0;
   }, [id, controlRef, controlIdForEffect, registerControlId, implicit, defaultId, controlSourceRef, unregisterControlId]);
-  React74.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     return unregisterControlId;
   }, [unregisterControlId]);
   return controlId ?? defaultId;
@@ -11637,9 +11380,6 @@ function createSingleSelectionCollatorFilter(collatorFilter, itemToStringLabel, 
     return collatorFilter.contains(itemString, query);
   };
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/root/utils/useFilter.mjs
-import * as React75 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/stringifyLocale.mjs
 function stringifyLocale(locale) {
@@ -11709,13 +11449,13 @@ function useComboboxFilter(options = {}) {
     ...collatorOptions
   } = options;
   const coreFilter = getFilter(collatorOptions);
-  const contains2 = React75.useCallback((item, query, itemToString) => {
+  const contains2 = react_esm_exports.useCallback((item, query, itemToString) => {
     if (multiple) {
       return createCollatorItemFilter(coreFilter, itemToString)(item, query);
     }
     return createSingleSelectionCollatorFilter(coreFilter, itemToString, value)(item, query);
   }, [coreFilter, value, multiple]);
-  return React75.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     contains: contains2,
     startsWith: coreFilter.startsWith,
     endsWith: coreFilter.endsWith
@@ -11798,24 +11538,24 @@ function AriaCombobox(props) {
   const collatorFilter = useCoreFilter({
     locale
   });
-  const [queryChangedAfterOpen, setQueryChangedAfterOpen] = React76.useState(false);
-  const [closeQuery, setCloseQuery] = React76.useState(null);
-  const listRef = React76.useRef([]);
-  const labelsRef = React76.useRef([]);
-  const popupRef = React76.useRef(null);
-  const inputRef = React76.useRef(null);
-  const startDismissRef = React76.useRef(null);
-  const endDismissRef = React76.useRef(null);
-  const emptyRef = React76.useRef(null);
-  const keyboardActiveRef = React76.useRef(true);
-  const hadInputClearRef = React76.useRef(false);
-  const chipsContainerRef = React76.useRef(null);
-  const clearRef = React76.useRef(null);
-  const selectionEventRef = React76.useRef(null);
-  const lastHighlightRef = React76.useRef(INITIAL_LAST_HIGHLIGHT);
-  const pendingQueryHighlightRef = React76.useRef(null);
-  const valuesRef = React76.useRef([]);
-  const allValuesRef = React76.useRef([]);
+  const [queryChangedAfterOpen, setQueryChangedAfterOpen] = react_esm_exports.useState(false);
+  const [closeQuery, setCloseQuery] = react_esm_exports.useState(null);
+  const listRef = react_esm_exports.useRef([]);
+  const labelsRef = react_esm_exports.useRef([]);
+  const popupRef = react_esm_exports.useRef(null);
+  const inputRef = react_esm_exports.useRef(null);
+  const startDismissRef = react_esm_exports.useRef(null);
+  const endDismissRef = react_esm_exports.useRef(null);
+  const emptyRef = react_esm_exports.useRef(null);
+  const keyboardActiveRef = react_esm_exports.useRef(true);
+  const hadInputClearRef = react_esm_exports.useRef(false);
+  const chipsContainerRef = react_esm_exports.useRef(null);
+  const clearRef = react_esm_exports.useRef(null);
+  const selectionEventRef = react_esm_exports.useRef(null);
+  const lastHighlightRef = react_esm_exports.useRef(INITIAL_LAST_HIGHLIGHT);
+  const pendingQueryHighlightRef = react_esm_exports.useRef(null);
+  const valuesRef = react_esm_exports.useRef([]);
+  const allValuesRef = react_esm_exports.useRef([]);
   const disabled2 = fieldDisabled || disabledProp;
   const name = fieldName ?? nameProp;
   const multiple = selectionMode === "multiple";
@@ -11835,7 +11575,7 @@ function AriaCombobox(props) {
     name: "Combobox",
     state: "selectedValue"
   });
-  const filter = React76.useMemo(() => {
+  const filter = react_esm_exports.useMemo(() => {
     if (filterProp === null) {
       return () => true;
     }
@@ -11874,7 +11614,7 @@ function AriaCombobox(props) {
   const shouldBypassFiltering = single && !queryChangedAfterOpen && query !== "" && selectedLabelString !== "" && selectedLabelString.length === query.length && collatorFilter.contains(selectedLabelString, query);
   const filterQuery = shouldBypassFiltering ? "" : query;
   const shouldIgnoreExternalFiltering = hasItems && hasFilteredItemsProp && shouldBypassFiltering;
-  const flatItems = React76.useMemo(() => {
+  const flatItems = react_esm_exports.useMemo(() => {
     if (!items) {
       return EMPTY_ARRAY;
     }
@@ -11883,7 +11623,7 @@ function AriaCombobox(props) {
     }
     return items;
   }, [items, isGrouped]);
-  const filteredItems = React76.useMemo(() => {
+  const filteredItems = react_esm_exports.useMemo(() => {
     if (filteredItemsProp && !shouldIgnoreExternalFiltering) {
       return filteredItemsProp;
     }
@@ -11937,7 +11677,7 @@ function AriaCombobox(props) {
     }
     return limitedItems;
   }, [filteredItemsProp, shouldIgnoreExternalFiltering, items, isGrouped, filterQuery, limit, filter, itemToStringLabel, flatItems]);
-  const flatFilteredItems = React76.useMemo(() => {
+  const flatFilteredItems = react_esm_exports.useMemo(() => {
     if (isGrouped) {
       const groups = filteredItems;
       return groups.flatMap((g) => g.items);
@@ -12015,7 +11755,7 @@ function AriaCombobox(props) {
     requestSubmit: NOOP
   })).current;
   const fieldRawValue = selectionMode === "none" ? inputValue : selectedValue;
-  const fieldStringValue = React76.useMemo(() => {
+  const fieldStringValue = react_esm_exports.useMemo(() => {
     if (selectionMode === "none") {
       return fieldRawValue;
     }
@@ -12055,7 +11795,7 @@ function AriaCombobox(props) {
       store.set("forceMounted", true);
     }
   });
-  const initialSelectedValueRef = React76.useRef(selectedValue);
+  const initialSelectedValueRef = react_esm_exports.useRef(selectedValue);
   useIsoLayoutEffect(() => {
     if (selectedValue !== initialSelectedValueRef.current) {
       forceMount();
@@ -12259,7 +11999,7 @@ function AriaCombobox(props) {
       }
     }
   });
-  const resolvedPopupRef = React76.useMemo(() => {
+  const resolvedPopupRef = react_esm_exports.useMemo(() => {
     if (inline4 && positionerElement) {
       return {
         current: positionerElement.closest('[role="dialog"]')
@@ -12277,7 +12017,7 @@ function AriaCombobox(props) {
       }
     }
   });
-  React76.useImperativeHandle(props.actionsRef, () => ({
+  react_esm_exports.useImperativeHandle(props.actionsRef, () => ({
     unmount: handleUnmount
   }), [handleUnmount]);
   useIsoLayoutEffect(function syncSelectedIndex() {
@@ -12366,7 +12106,7 @@ function AriaCombobox(props) {
     }
     setFilled(multiple ? Array.isArray(selectedValue) && selectedValue.length > 0 : selectedValue != null);
   }, [setFilled, selectionMode, inputValue, selectedValue, multiple]);
-  React76.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (hasItems && autoHighlightMode && flatFilteredItems.length === 0) {
       setIndices({
         activeIndex: null
@@ -12431,7 +12171,7 @@ function AriaCombobox(props) {
     ariaHasPopup = grid ? "grid" : "listbox";
     ariaExpanded = open ? "true" : "false";
   }
-  const role = React76.useMemo(() => {
+  const role = react_esm_exports.useMemo(() => {
     const isPlainInput = inputElement?.tagName === "INPUT";
     const shouldTreatAsInput = inputElement == null || isPlainInput;
     const shouldApplyAria = shouldTreatAsInput || open;
@@ -12512,15 +12252,15 @@ function AriaCombobox(props) {
       }
     }
   });
-  const inputProps = React76.useMemo(() => mergeProps(listNavigation2.reference, {
+  const inputProps = react_esm_exports.useMemo(() => mergeProps(listNavigation2.reference, {
     onKeyDown(event) {
       if (grid && store.state.activeIndex == null && (event.key === "ArrowLeft" || event.key === "ArrowRight")) {
         event.preventBaseUIHandler();
       }
     }
   }, dismiss.reference, click.reference, role.reference), [listNavigation2.reference, dismiss.reference, click.reference, role.reference, grid, store]);
-  const popupProps = React76.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, listNavigation2.floating, dismiss.floating, role.floating), [listNavigation2.floating, dismiss.floating, role.floating]);
-  const itemProps = React76.useMemo(() => {
+  const popupProps = react_esm_exports.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, listNavigation2.floating, dismiss.floating, role.floating), [listNavigation2.floating, dismiss.floating, role.floating]);
+  const itemProps = react_esm_exports.useMemo(() => {
     const listNavigationItemProps = listNavigation2.item;
     if (!listNavigationItemProps) {
       return EMPTY_OBJECT;
@@ -12583,13 +12323,13 @@ function AriaCombobox(props) {
     });
   }, [store, id, selectedValue, open, mounted, transitionStatus, items, popupProps, inputProps, itemProps, openMethod, triggerProps, selectionMode, name, disabled2, readOnly, required, validation, grid, isGrouped, virtualized, onOpenChangeComplete, openOnInputClick, itemToStringLabel, modal, isItemEqualToValue, submitOnItemClick, hasInputValue, inlineProp, requestSubmit, autoHighlightMode, form]);
   const hiddenInputRef = useMergedRefs(inputRefProp, validation.inputRef);
-  const itemsContextValue = React76.useMemo(() => ({
+  const itemsContextValue = react_esm_exports.useMemo(() => ({
     query,
     hasItems,
     filteredItems,
     flatFilteredItems
   }), [query, hasItems, filteredItems, flatFilteredItems]);
-  const serializedValue = React76.useMemo(() => {
+  const serializedValue = react_esm_exports.useMemo(() => {
     if (Array.isArray(fieldRawValue)) {
       return "";
     }
@@ -12597,7 +12337,7 @@ function AriaCombobox(props) {
   }, [fieldRawValue, itemToStringValue]);
   const hasMultipleSelection = multiple && Array.isArray(selectedValue) && selectedValue.length > 0;
   const hiddenInputName = multiple || selectionMode === "none" && inputOwnsFormValue ? void 0 : name;
-  const hiddenInputs = React76.useMemo(() => {
+  const hiddenInputs = react_esm_exports.useMemo(() => {
     if (!multiple || !Array.isArray(selectedValue) || !name) {
       return null;
     }
@@ -12612,7 +12352,7 @@ function AriaCombobox(props) {
       }, currentSerializedValue);
     });
   }, [multiple, selectedValue, form, name, itemToStringValue, disabled2]);
-  const children = /* @__PURE__ */ _jsxs5(React76.Fragment, {
+  const children = /* @__PURE__ */ _jsxs5(react_esm_exports.Fragment, {
     children: [props.children, /* @__PURE__ */ _jsx14("input", {
       ...validation.getValidationProps(disabled2, {
         // Move focus when the hidden input is focused.
@@ -12709,9 +12449,9 @@ function AutocompleteRoot(props) {
   const enableInline = mode === "inline" || mode === "both";
   const staticItems = mode === "inline" || mode === "none";
   const isControlled = value !== void 0;
-  const [internalValue, setInternalValue] = React77.useState(defaultValue ?? "");
-  const [inlineInputValue, setInlineInputValue] = React77.useState("");
-  React77.useEffect(() => {
+  const [internalValue, setInternalValue] = react_esm_exports.useState(defaultValue ?? "");
+  const [inlineInputValue, setInlineInputValue] = react_esm_exports.useState("");
+  react_esm_exports.useEffect(() => {
     if (isControlled) {
       setInlineInputValue("");
     }
@@ -12725,14 +12465,14 @@ function AutocompleteRoot(props) {
     resolvedInputValue = internalValue;
   }
   const collator = useCoreFilter();
-  const baseFilter = React77.useMemo(() => {
+  const baseFilter = react_esm_exports.useMemo(() => {
     if (other.filter !== void 0) {
       return other.filter;
     }
     return collator.contains;
   }, [other.filter, collator]);
   const resolvedQuery = String(isControlled ? value : internalValue).trim();
-  const resolvedFilter = React77.useMemo(() => {
+  const resolvedFilter = react_esm_exports.useMemo(() => {
     if (mode !== "both") {
       return staticItems ? null : baseFilter;
     }
@@ -12781,7 +12521,6 @@ function AutocompleteRoot(props) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/autocomplete/value/AutocompleteValue.mjs
-import * as React78 from "react";
 import { jsx as _jsx16 } from "react/jsx-runtime";
 function AutocompleteValue(props) {
   const {
@@ -12796,13 +12535,10 @@ function AutocompleteValue(props) {
   } else {
     returnValue = inputValue;
   }
-  return /* @__PURE__ */ _jsx16(React78.Fragment, {
+  return /* @__PURE__ */ _jsx16(react_esm_exports.Fragment, {
     children: returnValue
   });
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/trigger/ComboboxTrigger.mjs
-import * as React79 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/utils/stateAttributesMapping.mjs
 var triggerStateAttributesMapping = {
@@ -12855,7 +12591,7 @@ function resolveAriaLabelledBy(fieldLabelId, localLabelId) {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/trigger/ComboboxTrigger.mjs
 var BOUNDARY_OFFSET = 2;
-var ComboboxTrigger = /* @__PURE__ */ React79.forwardRef(function ComboboxTrigger2(componentProps, forwardedRef) {
+var ComboboxTrigger = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxTrigger2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -12916,12 +12652,12 @@ var ComboboxTrigger = /* @__PURE__ */ React79.forwardRef(function ComboboxTrigge
   } else if (open) {
     ariaControls = listElement?.id;
   }
-  const currentPointerTypeRef = React79.useRef("");
+  const currentPointerTypeRef = react_esm_exports.useRef("");
   function trackPointerType(event) {
     currentPointerTypeRef.current = event.pointerType;
   }
   const domReference = floatingRootContext.useState("domReferenceElement");
-  React79.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!inputInsidePopup) {
       return;
     }
@@ -13061,23 +12797,18 @@ if (false) ComboboxTrigger.displayName = "ComboboxTrigger";
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/autocomplete/trigger/AutocompleteTrigger.mjs
 var AutocompleteTrigger = ComboboxTrigger;
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/input/ComboboxInput.mjs
-import * as React83 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/chips/ComboboxChipsContext.mjs
-import * as React80 from "react";
-var ComboboxChipsContext = /* @__PURE__ */ React80.createContext(void 0);
+var ComboboxChipsContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ComboboxChipsContext.displayName = "ComboboxChipsContext";
 function useComboboxChipsContext() {
-  return React80.useContext(ComboboxChipsContext);
+  return react_esm_exports.useContext(ComboboxChipsContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/positioner/ComboboxPositionerContext.mjs
-import * as React81 from "react";
-var ComboboxPositionerContext = /* @__PURE__ */ React81.createContext(void 0);
+var ComboboxPositionerContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ComboboxPositionerContext.displayName = "ComboboxPositionerContext";
 function useComboboxPositionerContext(optional) {
-  const context = React81.useContext(ComboboxPositionerContext);
+  const context = react_esm_exports.useContext(ComboboxPositionerContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: <Combobox.Popup> and <Combobox.Arrow> must be used within the <Combobox.Positioner> component" : formatErrorMessage_default(21));
   }
@@ -13085,9 +12816,8 @@ function useComboboxPositionerContext(optional) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/utils/ComboboxInternalDismissButton.mjs
-import * as React82 from "react";
 import { jsx as _jsx17 } from "react/jsx-runtime";
-var ComboboxInternalDismissButton = /* @__PURE__ */ React82.forwardRef(function ComboboxInternalDismissButton2(_, forwardedRef) {
+var ComboboxInternalDismissButton = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxInternalDismissButton2(_, forwardedRef) {
   const store = useComboboxRootContext();
   const {
     buttonRef,
@@ -13114,7 +12844,7 @@ if (false) ComboboxInternalDismissButton.displayName = "ComboboxInternalDismissB
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/input/ComboboxInput.mjs
 import { jsx as _jsx18, jsxs as _jsxs6 } from "react/jsx-runtime";
-var ComboboxInput = /* @__PURE__ */ React83.forwardRef(function ComboboxInput2(componentProps, forwardedRef) {
+var ComboboxInput = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxInput2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -13169,10 +12899,10 @@ var ComboboxInput = /* @__PURE__ */ React83.forwardRef(function ComboboxInput2(c
   const id = useBaseUiId(idProp ?? (!isInsidePopup ? rootId : void 0));
   const ariaLabelledBy = resolveAriaLabelledBy(fieldLabelId, void 0);
   const fieldStateForInput = hasPositionerParent ? DEFAULT_FIELD_STATE_ATTRIBUTES : fieldState;
-  const [composingValue, setComposingValue] = React83.useState(null);
-  const isComposingRef = React83.useRef(false);
-  const lastActiveIndexRef = React83.useRef(null);
-  const shouldRestoreActiveIndexRef = React83.useRef(false);
+  const [composingValue, setComposingValue] = react_esm_exports.useState(null);
+  const isComposingRef = react_esm_exports.useRef(false);
+  const lastActiveIndexRef = react_esm_exports.useRef(null);
+  const shouldRestoreActiveIndexRef = react_esm_exports.useRef(false);
   const inputOwnsFormValue = selectionMode === "none" && !hasPositionerParent;
   const setInputElement = useStableCallback((element2) => {
     const nextIsInsidePopup = hasPositionerParent || store.state.inline;
@@ -13467,16 +13197,13 @@ var ComboboxInput = /* @__PURE__ */ React83.forwardRef(function ComboboxInput2(c
     value: DEFAULT_FIELD_ROOT_CONTEXT,
     children: element
   }) : element;
-  return /* @__PURE__ */ _jsxs6(React83.Fragment, {
+  return /* @__PURE__ */ _jsxs6(react_esm_exports.Fragment, {
     children: [open && focusManagerModal && /* @__PURE__ */ _jsx18(ComboboxInternalDismissButton, {
       ref: store.state.startDismissRef
     }), renderedInput]
   });
 });
 if (false) ComboboxInput.displayName = "ComboboxInput";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/input-group/ComboboxInputGroup.mjs
-import * as React84 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/utils/handleInputPress.mjs
 function handleInputPress(event, store, disabled2, readOnly, shouldIgnoreTarget) {
@@ -13499,7 +13226,7 @@ function handleInputPress(event, store, disabled2, readOnly, shouldIgnoreTarget)
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/input-group/ComboboxInputGroup.mjs
-var ComboboxInputGroup = /* @__PURE__ */ React84.forwardRef(function ComboboxInputGroup2(componentProps, forwardedRef) {
+var ComboboxInputGroup = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxInputGroup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -13557,8 +13284,7 @@ if (false) ComboboxInputGroup.displayName = "ComboboxInputGroup";
 var AutocompleteInputGroup = ComboboxInputGroup;
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/icon/ComboboxIcon.mjs
-import * as React85 from "react";
-var ComboboxIcon = /* @__PURE__ */ React85.forwardRef(function ComboboxIcon2(componentProps, forwardedRef) {
+var ComboboxIcon = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxIcon2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -13577,12 +13303,11 @@ var ComboboxIcon = /* @__PURE__ */ React85.forwardRef(function ComboboxIcon2(com
 if (false) ComboboxIcon.displayName = "ComboboxIcon";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/clear/ComboboxClear.mjs
-import * as React86 from "react";
 var stateAttributesMapping4 = {
   ...transitionStatusMapping,
   ...triggerOpenStateMapping2
 };
-var ComboboxClear = /* @__PURE__ */ React86.forwardRef(function ComboboxClear2(componentProps, forwardedRef) {
+var ComboboxClear = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxClear2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -13681,26 +13406,19 @@ var ComboboxClear = /* @__PURE__ */ React86.forwardRef(function ComboboxClear2(c
 });
 if (false) ComboboxClear.displayName = "ComboboxClear";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/list/ComboboxList.mjs
-import * as React89 from "react";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/collection/ComboboxCollection.mjs
-import * as React88 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/collection/GroupCollectionContext.mjs
-import * as React87 from "react";
 import { jsx as _jsx19 } from "react/jsx-runtime";
-var GroupCollectionContext = /* @__PURE__ */ React87.createContext(null);
+var GroupCollectionContext = /* @__PURE__ */ react_esm_exports.createContext(null);
 if (false) GroupCollectionContext.displayName = "GroupCollectionContext";
 function useGroupCollectionContext() {
-  return React87.useContext(GroupCollectionContext);
+  return react_esm_exports.useContext(GroupCollectionContext);
 }
 function GroupCollectionProvider(props) {
   const {
     children,
     items
   } = props;
-  const contextValue = React87.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     items
   }), [items]);
   return /* @__PURE__ */ _jsx19(GroupCollectionContext.Provider, {
@@ -13723,14 +13441,14 @@ function ComboboxCollection(props) {
   if (!itemsToRender) {
     return null;
   }
-  return /* @__PURE__ */ _jsx20(React88.Fragment, {
+  return /* @__PURE__ */ _jsx20(react_esm_exports.Fragment, {
     children: itemsToRender.map(children)
   });
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/list/ComboboxList.mjs
 import { jsx as _jsx21 } from "react/jsx-runtime";
-var ComboboxList = /* @__PURE__ */ React89.forwardRef(function ComboboxList2(componentProps, forwardedRef) {
+var ComboboxList = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxList2(componentProps, forwardedRef) {
   var _ComboboxCollection;
   const {
     render,
@@ -13759,7 +13477,7 @@ var ComboboxList = /* @__PURE__ */ React89.forwardRef(function ComboboxList2(com
   const setListElement = useStableCallback((element2) => {
     store.set("listElement", element2);
   });
-  const resolvedChildren = React89.useMemo(() => {
+  const resolvedChildren = react_esm_exports.useMemo(() => {
     if (typeof children === "function") {
       return _ComboboxCollection || (_ComboboxCollection = /* @__PURE__ */ _jsx21(ComboboxCollection, {
         children
@@ -13819,11 +13537,7 @@ var ComboboxList = /* @__PURE__ */ React89.forwardRef(function ComboboxList2(com
 });
 if (false) ComboboxList.displayName = "ComboboxList";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/status/ComboboxStatus.mjs
-import * as React91 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/utils/useInitialLiveRegionTextMutation.mjs
-import * as React90 from "react";
 var LIVE_REGION_MARKER = "\u2060";
 var INITIAL_LIVE_REGION_TEXT_MUTATION_RESET_DELAY = 200;
 function findLastTextNode(root) {
@@ -13839,8 +13553,8 @@ function findLastTextNode(root) {
 }
 function useInitialLiveRegionTextMutation() {
   const timeout = useTimeout();
-  const rootRef = React90.useRef(null);
-  React90.useEffect(() => {
+  const rootRef = react_esm_exports.useRef(null);
+  react_esm_exports.useEffect(() => {
     if (parts_exports.os.ios) {
       return void 0;
     }
@@ -13871,7 +13585,7 @@ function useInitialLiveRegionTextMutation() {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/status/ComboboxStatus.mjs
-var ComboboxStatus = /* @__PURE__ */ React91.forwardRef(function ComboboxStatus2(componentProps, forwardedRef) {
+var ComboboxStatus = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxStatus2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -13892,15 +13606,11 @@ var ComboboxStatus = /* @__PURE__ */ React91.forwardRef(function ComboboxStatus2
 });
 if (false) ComboboxStatus.displayName = "ComboboxStatus";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/portal/ComboboxPortal.mjs
-import * as React93 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/portal/ComboboxPortalContext.mjs
-import * as React92 from "react";
-var ComboboxPortalContext = /* @__PURE__ */ React92.createContext(void 0);
+var ComboboxPortalContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ComboboxPortalContext.displayName = "ComboboxPortalContext";
 function useComboboxPortalContext() {
-  const context = React92.useContext(ComboboxPortalContext);
+  const context = react_esm_exports.useContext(ComboboxPortalContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: <Combobox.Portal> is missing." : formatErrorMessage_default(20));
   }
@@ -13909,7 +13619,7 @@ function useComboboxPortalContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/portal/ComboboxPortal.mjs
 import { jsx as _jsx22 } from "react/jsx-runtime";
-var ComboboxPortal = /* @__PURE__ */ React93.forwardRef(function ComboboxPortal2(props, forwardedRef) {
+var ComboboxPortal = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxPortal2(props, forwardedRef) {
   const {
     keepMounted = false,
     ...portalProps
@@ -13932,12 +13642,11 @@ var ComboboxPortal = /* @__PURE__ */ React93.forwardRef(function ComboboxPortal2
 if (false) ComboboxPortal.displayName = "ComboboxPortal";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/backdrop/ComboboxBackdrop.mjs
-import * as React94 from "react";
 var stateAttributesMapping5 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var ComboboxBackdrop = /* @__PURE__ */ React94.forwardRef(function ComboboxBackdrop2(componentProps, forwardedRef) {
+var ComboboxBackdrop = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxBackdrop2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -13967,12 +13676,6 @@ var ComboboxBackdrop = /* @__PURE__ */ React94.forwardRef(function ComboboxBackd
   });
 });
 if (false) ComboboxBackdrop.displayName = "ComboboxBackdrop";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/positioner/ComboboxPositioner.mjs
-import * as React97 from "react";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useAnchorPositioning.mjs
-import * as React95 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/floating-ui-react/middleware/arrow.mjs
 var baseArrow = (options) => ({
@@ -14193,7 +13896,7 @@ function useAnchorPositioning(params) {
     lazyFlip = false,
     externalTree
   } = params;
-  const [mountSide, setMountSide] = React95.useState(null);
+  const [mountSide, setMountSide] = react_esm_exports.useState(null);
   if (!mounted && mountSide !== null) {
     setMountSide(null);
   }
@@ -14241,7 +13944,7 @@ function useAnchorPositioning(params) {
     boundary: collisionBoundary === "clipping-ancestors" ? "clippingAncestors" : collisionBoundary,
     padding: collisionPadding
   };
-  const arrowRef = React95.useRef(null);
+  const arrowRef = react_esm_exports.useRef(null);
   const sideOffsetRef = useValueAsRef(sideOffset);
   const alignOffsetRef = useValueAsRef(alignOffset);
   const sideOffsetDep = typeof sideOffset !== "function" ? sideOffset : 0;
@@ -14390,7 +14093,7 @@ function useAnchorPositioning(params) {
       });
     }
   }, [mounted, floatingRootContext]);
-  const autoUpdateOptions = React95.useMemo(() => ({
+  const autoUpdateOptions = react_esm_exports.useMemo(() => ({
     elementResize: !disableAnchorTracking && typeof ResizeObserver !== "undefined",
     layoutShift: !disableAnchorTracking && typeof IntersectionObserver !== "undefined"
   }), [disableAnchorTracking]);
@@ -14420,7 +14123,7 @@ function useAnchorPositioning(params) {
     sideY
   } = middlewareData.adaptiveOrigin || DEFAULT_SIDES;
   const resolvedPosition = isPositioned ? positionMethod : "fixed";
-  const floatingStyles = React95.useMemo(() => {
+  const floatingStyles = react_esm_exports.useMemo(() => {
     const base = adaptiveOrigin2 ? {
       position: resolvedPosition,
       [sideX]: x,
@@ -14434,7 +14137,7 @@ function useAnchorPositioning(params) {
     }
     return base;
   }, [adaptiveOrigin2, resolvedPosition, sideX, x, sideY, y, originalFloatingStyles, isPositioned]);
-  const registeredPositionReferenceRef = React95.useRef(null);
+  const registeredPositionReferenceRef = react_esm_exports.useRef(null);
   useIsoLayoutEffect(() => {
     if (!mounted) {
       return;
@@ -14448,7 +14151,7 @@ function useAnchorPositioning(params) {
       registeredPositionReferenceRef.current = finalAnchor;
     }
   }, [mounted, refs, anchorDep, anchorValueRef]);
-  React95.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!mounted) {
       return;
     }
@@ -14461,7 +14164,7 @@ function useAnchorPositioning(params) {
       registeredPositionReferenceRef.current = anchorValue.current;
     }
   }, [mounted, refs, anchorDep, anchorValueRef]);
-  React95.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (keepMounted && mounted && elements.reference && elements.floating) {
       return autoUpdate(elements.reference, elements.floating, update2, autoUpdateOptions);
     }
@@ -14476,13 +14179,13 @@ function useAnchorPositioning(params) {
       setMountSide(renderedSide);
     }
   }, [lazyFlip, mounted, isPositioned, renderedSide]);
-  const arrowStyles = React95.useMemo(() => ({
+  const arrowStyles = react_esm_exports.useMemo(() => ({
     position: "absolute",
     top: middlewareData.arrow?.y,
     left: middlewareData.arrow?.x
   }), [middlewareData.arrow]);
   const arrowUncentered = middlewareData.arrow?.centerOffset !== 0;
-  return React95.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     positionerStyles: floatingStyles,
     arrowStyles,
     arrowRef,
@@ -14534,10 +14237,9 @@ function usePositioner(componentProps, state, {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useAnchoredPopupScrollLock.mjs
-import * as React96 from "react";
 var VIEWPORT_WIDTH_TOLERANCE_PX = 20;
 function useAnchoredPopupScrollLock(enabled, touchOpen, positionerElement, referenceElement) {
-  const [touchOpenShouldLockScroll, setTouchOpenShouldLockScroll] = React96.useState(false);
+  const [touchOpenShouldLockScroll, setTouchOpenShouldLockScroll] = react_esm_exports.useState(false);
   useIsoLayoutEffect(() => {
     if (!enabled || !touchOpen || positionerElement == null) {
       setTouchOpenShouldLockScroll(false);
@@ -14552,7 +14254,7 @@ function useAnchoredPopupScrollLock(enabled, touchOpen, positionerElement, refer
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/positioner/ComboboxPositioner.mjs
 import { jsx as _jsx23, jsxs as _jsxs7 } from "react/jsx-runtime";
-var ComboboxPositioner = /* @__PURE__ */ React97.forwardRef(function ComboboxPositioner2(componentProps, forwardedRef) {
+var ComboboxPositioner = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxPositioner2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -14640,13 +14342,12 @@ var ComboboxPositioner = /* @__PURE__ */ React97.forwardRef(function ComboboxPos
 if (false) ComboboxPositioner.displayName = "ComboboxPositioner";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/popup/ComboboxPopup.mjs
-import * as React98 from "react";
 import { jsx as _jsx24, jsxs as _jsxs8 } from "react/jsx-runtime";
 var stateAttributesMapping6 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var ComboboxPopup = /* @__PURE__ */ React98.forwardRef(function ComboboxPopup2(componentProps, forwardedRef) {
+var ComboboxPopup = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxPopup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -14727,7 +14428,7 @@ var ComboboxPopup = /* @__PURE__ */ React98.forwardRef(function ComboboxPopup2(c
     initialFocus: resolvedInitialFocus,
     returnFocus: resolvedFinalFocus,
     getInsideElements: () => [store.state.startDismissRef.current, store.state.endDismissRef.current],
-    children: /* @__PURE__ */ _jsxs8(React98.Fragment, {
+    children: /* @__PURE__ */ _jsxs8(react_esm_exports.Fragment, {
       children: [element, focusManagerModal && /* @__PURE__ */ _jsx24(ComboboxInternalDismissButton, {
         ref: store.state.endDismissRef
       })]
@@ -14737,8 +14438,7 @@ var ComboboxPopup = /* @__PURE__ */ React98.forwardRef(function ComboboxPopup2(c
 if (false) ComboboxPopup.displayName = "ComboboxPopup";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/arrow/ComboboxArrow.mjs
-import * as React99 from "react";
-var ComboboxArrow = /* @__PURE__ */ React99.forwardRef(function ComboboxArrow2(componentProps, forwardedRef) {
+var ComboboxArrow = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxArrow2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -14773,15 +14473,11 @@ var ComboboxArrow = /* @__PURE__ */ React99.forwardRef(function ComboboxArrow2(c
 });
 if (false) ComboboxArrow.displayName = "ComboboxArrow";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/group/ComboboxGroup.mjs
-import * as React101 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/group/ComboboxGroupContext.mjs
-import * as React100 from "react";
-var ComboboxGroupContext = /* @__PURE__ */ React100.createContext(void 0);
+var ComboboxGroupContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ComboboxGroupContext.displayName = "ComboboxGroupContext";
 function useComboboxGroupContext() {
-  const context = React100.useContext(ComboboxGroupContext);
+  const context = react_esm_exports.useContext(ComboboxGroupContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: ComboboxGroupContext is missing. ComboboxGroup parts must be placed within <Combobox.Group>." : formatErrorMessage_default(18));
   }
@@ -14790,7 +14486,7 @@ function useComboboxGroupContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/group/ComboboxGroup.mjs
 import { jsx as _jsx25 } from "react/jsx-runtime";
-var ComboboxGroup = /* @__PURE__ */ React101.forwardRef(function ComboboxGroup2(componentProps, forwardedRef) {
+var ComboboxGroup = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxGroup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -14798,8 +14494,8 @@ var ComboboxGroup = /* @__PURE__ */ React101.forwardRef(function ComboboxGroup2(
     items,
     ...elementProps
   } = componentProps;
-  const [labelId, setLabelId] = React101.useState();
-  const contextValue = React101.useMemo(() => ({
+  const [labelId, setLabelId] = react_esm_exports.useState();
+  const contextValue = react_esm_exports.useMemo(() => ({
     labelId,
     setLabelId,
     items
@@ -14826,8 +14522,7 @@ var ComboboxGroup = /* @__PURE__ */ React101.forwardRef(function ComboboxGroup2(
 if (false) ComboboxGroup.displayName = "ComboboxGroup";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/group-label/ComboboxGroupLabel.mjs
-import * as React102 from "react";
-var ComboboxGroupLabel = /* @__PURE__ */ React102.forwardRef(function ComboboxGroupLabel2(componentProps, forwardedRef) {
+var ComboboxGroupLabel = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxGroupLabel2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -14856,15 +14551,13 @@ var ComboboxGroupLabel = /* @__PURE__ */ React102.forwardRef(function ComboboxGr
 if (false) ComboboxGroupLabel.displayName = "ComboboxGroupLabel";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/item/ComboboxItem.mjs
-import * as React105 from "react";
 import * as ReactDOM6 from "react-dom";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/item/ComboboxItemContext.mjs
-import * as React103 from "react";
-var ComboboxItemContext = /* @__PURE__ */ React103.createContext(void 0);
+var ComboboxItemContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ComboboxItemContext.displayName = "ComboboxItemContext";
 function useComboboxItemContext() {
-  const context = React103.useContext(ComboboxItemContext);
+  const context = react_esm_exports.useContext(ComboboxItemContext);
   if (!context) {
     throw new Error(false ? "Base UI: ComboboxItemContext is missing. ComboboxItem parts must be placed within <Combobox.Item>." : formatErrorMessage_default(19));
   }
@@ -14872,11 +14565,10 @@ function useComboboxItemContext() {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/row/ComboboxRowContext.mjs
-import * as React104 from "react";
-var ComboboxRowContext = /* @__PURE__ */ React104.createContext(false);
+var ComboboxRowContext = /* @__PURE__ */ react_esm_exports.createContext(false);
 if (false) ComboboxRowContext.displayName = "ComboboxRowContext";
 function useComboboxRowContext() {
-  return React104.useContext(ComboboxRowContext);
+  return react_esm_exports.useContext(ComboboxRowContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/item/ComboboxItem.mjs
@@ -14898,8 +14590,8 @@ function ComboboxItemInner(props) {
     nativeButton = false,
     ...elementProps
   } = componentProps;
-  const didPointerDownRef = React105.useRef(false);
-  const textRef = React105.useRef(null);
+  const didPointerDownRef = react_esm_exports.useRef(false);
+  const textRef = react_esm_exports.useRef(null);
   const listItem = useCompositeListItem({
     index: indexProp,
     textRef,
@@ -14919,7 +14611,7 @@ function ComboboxItemInner(props) {
   const highlighted = useStore(store, selectors3.isActive, index2);
   const matchesSelectedValue = useStore(store, selectors3.isSelected, itemValue);
   const itemProps = useStore(store, selectors3.itemProps);
-  const itemRef = React105.useRef(null);
+  const itemRef = react_esm_exports.useRef(null);
   const id = rootId != null && hasRegistered ? `${rootId}-${index2}` : void 0;
   const selected = matchesSelectedValue && selectable;
   useIsoLayoutEffect(() => {
@@ -15020,7 +14712,7 @@ function ComboboxItemInner(props) {
     state,
     props: [itemProps, defaultProps, elementProps, getButtonProps]
   });
-  const contextValue = React105.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     selected,
     textRef
   }), [selected, textRef]);
@@ -15047,7 +14739,7 @@ function ComboboxItemVirtualizedIndex(props) {
     indexFromFilter
   });
 }
-var ComboboxItem = /* @__PURE__ */ React105.memo(/* @__PURE__ */ React105.forwardRef(function ComboboxItem2(componentProps, forwardedRef) {
+var ComboboxItem = /* @__PURE__ */ react_esm_exports.memo(/* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxItem2(componentProps, forwardedRef) {
   const store = useComboboxRootContext();
   const virtualized = useStore(store, selectors3.virtualized);
   if (virtualized && componentProps.index == null) {
@@ -15069,9 +14761,8 @@ if (false) ComboboxItem.displayName = "ComboboxItem";
 var AutocompleteItem = ComboboxItem;
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/row/ComboboxRow.mjs
-import * as React106 from "react";
 import { jsx as _jsx27 } from "react/jsx-runtime";
-var ComboboxRow = /* @__PURE__ */ React106.forwardRef(function ComboboxRow2(componentProps, forwardedRef) {
+var ComboboxRow = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxRow2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -15092,8 +14783,7 @@ var ComboboxRow = /* @__PURE__ */ React106.forwardRef(function ComboboxRow2(comp
 if (false) ComboboxRow.displayName = "ComboboxRow";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/empty/ComboboxEmpty.mjs
-import * as React107 from "react";
-var ComboboxEmpty = /* @__PURE__ */ React107.forwardRef(function ComboboxEmpty2(componentProps, forwardedRef) {
+var ComboboxEmpty = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxEmpty2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -15120,8 +14810,7 @@ var ComboboxEmpty = /* @__PURE__ */ React107.forwardRef(function ComboboxEmpty2(
 if (false) ComboboxEmpty.displayName = "ComboboxEmpty";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/separator/Separator.mjs
-import * as React108 from "react";
-var Separator = /* @__PURE__ */ React108.forwardRef(function SeparatorComponent(componentProps, forwardedRef) {
+var Separator = /* @__PURE__ */ react_esm_exports.forwardRef(function SeparatorComponent(componentProps, forwardedRef) {
   const {
     className,
     render,
@@ -15158,15 +14847,11 @@ __export(index_parts_exports4, {
   Root: () => AvatarRoot
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/avatar/root/AvatarRoot.mjs
-import * as React110 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/avatar/root/AvatarRootContext.mjs
-import * as React109 from "react";
-var AvatarRootContext = /* @__PURE__ */ React109.createContext(void 0);
+var AvatarRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) AvatarRootContext.displayName = "AvatarRootContext";
 function useAvatarRootContext() {
-  const context = React109.useContext(AvatarRootContext);
+  const context = react_esm_exports.useContext(AvatarRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: AvatarRootContext is missing. Avatar parts must be placed within <Avatar.Root>." : formatErrorMessage_default(13));
   }
@@ -15180,18 +14865,18 @@ var avatarStateAttributesMapping = {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/avatar/root/AvatarRoot.mjs
 import { jsx as _jsx28 } from "react/jsx-runtime";
-var AvatarRoot = /* @__PURE__ */ React110.forwardRef(function AvatarRoot2(componentProps, forwardedRef) {
+var AvatarRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function AvatarRoot2(componentProps, forwardedRef) {
   const {
     className,
     render,
     style,
     ...elementProps
   } = componentProps;
-  const [imageLoadingStatus, setImageLoadingStatus] = React110.useState("idle");
+  const [imageLoadingStatus, setImageLoadingStatus] = react_esm_exports.useState("idle");
   const state = {
     imageLoadingStatus
   };
-  const contextValue = React110.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     imageLoadingStatus,
     setImageLoadingStatus
   }), [imageLoadingStatus, setImageLoadingStatus]);
@@ -15208,18 +14893,14 @@ var AvatarRoot = /* @__PURE__ */ React110.forwardRef(function AvatarRoot2(compon
 });
 if (false) AvatarRoot.displayName = "AvatarRoot";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/avatar/image/AvatarImage.mjs
-import * as React112 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/avatar/image/useImageLoadingStatus.mjs
-import * as React111 from "react";
 function useImageLoadingStatus(src, {
   referrerPolicy,
   crossOrigin,
   sizes,
   srcSet
 }) {
-  const [loadingStatus, setLoadingStatus] = React111.useState("idle");
+  const [loadingStatus, setLoadingStatus] = react_esm_exports.useState("idle");
   useIsoLayoutEffect(() => {
     if (!src && !srcSet) {
       setLoadingStatus("error");
@@ -15264,7 +14945,7 @@ var stateAttributesMapping7 = {
   ...avatarStateAttributesMapping,
   ...transitionStatusMapping
 };
-var AvatarImage = /* @__PURE__ */ React112.forwardRef(function AvatarImage2(componentProps, forwardedRef) {
+var AvatarImage = /* @__PURE__ */ react_esm_exports.forwardRef(function AvatarImage2(componentProps, forwardedRef) {
   const {
     className,
     render,
@@ -15282,7 +14963,7 @@ var AvatarImage = /* @__PURE__ */ React112.forwardRef(function AvatarImage2(comp
     transitionStatus,
     setMounted
   } = useTransitionStatus(isVisible);
-  const imageRef = React112.useRef(null);
+  const imageRef = react_esm_exports.useRef(null);
   const handleLoadingStatusChange = useStableCallback((status) => {
     onLoadingStatusChangeProp?.(status);
     setImageLoadingStatus(status);
@@ -15323,8 +15004,7 @@ var AvatarImage = /* @__PURE__ */ React112.forwardRef(function AvatarImage2(comp
 if (false) AvatarImage.displayName = "AvatarImage";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/avatar/fallback/AvatarFallback.mjs
-import * as React113 from "react";
-var AvatarFallback = /* @__PURE__ */ React113.forwardRef(function AvatarFallback2(componentProps, forwardedRef) {
+var AvatarFallback = /* @__PURE__ */ react_esm_exports.forwardRef(function AvatarFallback2(componentProps, forwardedRef) {
   const {
     className,
     render,
@@ -15335,9 +15015,9 @@ var AvatarFallback = /* @__PURE__ */ React113.forwardRef(function AvatarFallback
   const {
     imageLoadingStatus
   } = useAvatarRootContext();
-  const [delayPassed, setDelayPassed] = React113.useState(delay === void 0);
+  const [delayPassed, setDelayPassed] = react_esm_exports.useState(delay === void 0);
   const timeout = useTimeout();
-  React113.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (delay !== void 0) {
       timeout.start(delay, () => setDelayPassed(true));
     } else {
@@ -15360,8 +15040,7 @@ var AvatarFallback = /* @__PURE__ */ React113.forwardRef(function AvatarFallback
 if (false) AvatarFallback.displayName = "AvatarFallback";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/button/Button.mjs
-import * as React114 from "react";
-var Button = /* @__PURE__ */ React114.forwardRef(function Button2(componentProps, forwardedRef) {
+var Button = /* @__PURE__ */ react_esm_exports.forwardRef(function Button2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -15397,9 +15076,6 @@ __export(index_parts_exports5, {
   Root: () => CheckboxRoot
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/checkbox/root/CheckboxRoot.mjs
-import * as React120 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/getDefaultFormSubmitter.mjs
 function getDefaultFormSubmitter(form) {
   if (!form) {
@@ -15416,9 +15092,6 @@ function getDefaultFormSubmitter(form) {
   }
   return null;
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/checkbox/utils/useStateAttributesMapping.mjs
-import * as React115 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/checkbox/root/CheckboxRootDataAttributes.mjs
 var CheckboxRootDataAttributes = /* @__PURE__ */ (function(CheckboxRootDataAttributes2) {
@@ -15439,7 +15112,7 @@ var CheckboxRootDataAttributes = /* @__PURE__ */ (function(CheckboxRootDataAttri
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/checkbox/utils/useStateAttributesMapping.mjs
 function useStateAttributesMapping(state) {
-  return React115.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     checked(value) {
       if (state.indeterminate) {
         return {};
@@ -15458,20 +15131,18 @@ function useStateAttributesMapping(state) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/field/item/FieldItemContext.mjs
-import * as React116 from "react";
-var FieldItemContext = /* @__PURE__ */ React116.createContext({
+var FieldItemContext = /* @__PURE__ */ react_esm_exports.createContext({
   disabled: false
 });
 if (false) FieldItemContext.displayName = "FieldItemContext";
 function useFieldItemContext() {
-  const context = React116.useContext(FieldItemContext);
+  const context = react_esm_exports.useContext(FieldItemContext);
   return context;
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/labelable-provider/useAriaLabelledBy.mjs
-import * as React117 from "react";
 function useAriaLabelledBy(explicitAriaLabelledBy, labelId, labelSourceRef, enableFallback = true, labelSourceId) {
-  const [fallbackAriaLabelledBy, setFallbackAriaLabelledBy] = React117.useState();
+  const [fallbackAriaLabelledBy, setFallbackAriaLabelledBy] = react_esm_exports.useState();
   const generatedLabelId = useBaseUiId(labelSourceId ? `${labelSourceId}-label` : void 0);
   const ariaLabelledBy = explicitAriaLabelledBy ?? labelId ?? fallbackAriaLabelledBy;
   useIsoLayoutEffect(() => {
@@ -15512,11 +15183,10 @@ function findAssociatedLabel(labelSource) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/checkbox-group/CheckboxGroupContext.mjs
-import * as React118 from "react";
-var CheckboxGroupContext = /* @__PURE__ */ React118.createContext(void 0);
+var CheckboxGroupContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) CheckboxGroupContext.displayName = "CheckboxGroupContext";
 function useCheckboxGroupContext(optional = true) {
-  const context = React118.useContext(CheckboxGroupContext);
+  const context = react_esm_exports.useContext(CheckboxGroupContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: CheckboxGroupContext is missing. CheckboxGroup parts must be placed within <CheckboxGroup>." : formatErrorMessage_default(3));
   }
@@ -15524,11 +15194,10 @@ function useCheckboxGroupContext(optional = true) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/checkbox/root/CheckboxRootContext.mjs
-import * as React119 from "react";
-var CheckboxRootContext = /* @__PURE__ */ React119.createContext(void 0);
+var CheckboxRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) CheckboxRootContext.displayName = "CheckboxRootContext";
 function useCheckboxRootContext() {
-  const context = React119.useContext(CheckboxRootContext);
+  const context = react_esm_exports.useContext(CheckboxRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: CheckboxRootContext is missing. Checkbox parts must be placed within <Checkbox.Root>." : formatErrorMessage_default(14));
   }
@@ -15538,7 +15207,7 @@ function useCheckboxRootContext() {
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/checkbox/root/CheckboxRoot.mjs
 import { jsx as _jsx29, jsxs as _jsxs9 } from "react/jsx-runtime";
 var PARENT_CHECKBOX = "data-parent";
-var CheckboxRoot = /* @__PURE__ */ React120.forwardRef(function CheckboxRoot2(componentProps, forwardedRef) {
+var CheckboxRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function CheckboxRoot2(componentProps, forwardedRef) {
   const {
     checked: checkedProp,
     className,
@@ -15614,9 +15283,9 @@ var CheckboxRoot = /* @__PURE__ */ React120.forwardRef(function CheckboxRoot2(co
   const groupValue = groupContext?.value;
   const setGroupValue = groupContext?.setValue;
   const defaultGroupValue = groupContext?.defaultValue;
-  const controlRef = React120.useRef(null);
+  const controlRef = react_esm_exports.useRef(null);
   const controlSourceRef = useRefWithInit(() => Symbol("checkbox-control"));
-  const hasRegisteredRef = React120.useRef(false);
+  const hasRegisteredRef = react_esm_exports.useRef(false);
   const {
     getButtonProps,
     buttonRef
@@ -15641,7 +15310,7 @@ var CheckboxRoot = /* @__PURE__ */ React120.forwardRef(function CheckboxRoot2(co
     registerControlId(controlSourceRef.current, inputId);
     return void 0;
   }, [inputId, registerControlId, controlSourceRef]);
-  React120.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     const controlSource = controlSourceRef.current;
     return () => {
       if (!hasRegisteredRef.current || registerControlId === NOOP) {
@@ -15652,7 +15321,7 @@ var CheckboxRoot = /* @__PURE__ */ React120.forwardRef(function CheckboxRoot2(co
     };
   }, [registerControlId, controlSourceRef]);
   useRegisterFieldControl(controlRef, id, checked, void 0, !groupContext && !disabled2, nameProp);
-  const inputRef = React120.useRef(null);
+  const inputRef = react_esm_exports.useRef(null);
   const mergedInputRef = useMergedRefs(inputRefProp, inputRef, validation.inputRef, validation.registerInput);
   const ariaLabelledBy = useAriaLabelledBy(ariaLabelledByProp, labelId, inputRef, !nativeButton, inputId ?? void 0);
   useIsoLayoutEffect(() => {
@@ -15724,7 +15393,7 @@ var CheckboxRoot = /* @__PURE__ */ React120.forwardRef(function CheckboxRoot2(co
     getDescriptionProps,
     (props) => validation.getValidationProps(disabled2, props)
   );
-  React120.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!parentContext || !value) {
       return void 0;
     }
@@ -15734,7 +15403,7 @@ var CheckboxRoot = /* @__PURE__ */ React120.forwardRef(function CheckboxRoot2(co
       disabledStates.delete(value);
     };
   }, [parentContext, disabled2, value]);
-  const state = React120.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     ...fieldState,
     checked: computedChecked,
     disabled: disabled2,
@@ -15838,8 +15507,7 @@ var CheckboxRoot = /* @__PURE__ */ React120.forwardRef(function CheckboxRoot2(co
 if (false) CheckboxRoot.displayName = "CheckboxRoot";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/checkbox/indicator/CheckboxIndicator.mjs
-import * as React121 from "react";
-var CheckboxIndicator = /* @__PURE__ */ React121.forwardRef(function CheckboxIndicator2(componentProps, forwardedRef) {
+var CheckboxIndicator = /* @__PURE__ */ react_esm_exports.forwardRef(function CheckboxIndicator2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -15854,7 +15522,7 @@ var CheckboxIndicator = /* @__PURE__ */ React121.forwardRef(function CheckboxInd
     transitionStatus,
     setMounted
   } = useTransitionStatus(rendered);
-  const indicatorRef = React121.useRef(null);
+  const indicatorRef = react_esm_exports.useRef(null);
   const state = {
     ...rootState,
     transitionStatus
@@ -15888,11 +15556,7 @@ var CheckboxIndicator = /* @__PURE__ */ React121.forwardRef(function CheckboxInd
 });
 if (false) CheckboxIndicator.displayName = "CheckboxIndicator";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/checkbox-group/CheckboxGroup.mjs
-import * as React123 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/checkbox-group/useCheckboxGroupParent.mjs
-import * as React122 from "react";
 var EMPTY4 = [];
 function useCheckboxGroupParent(params) {
   const {
@@ -15900,14 +15564,14 @@ function useCheckboxGroupParent(params) {
     value = EMPTY4,
     onValueChange: onValueChangeProp
   } = params;
-  const uncontrolledStateRef = React122.useRef(value);
-  const disabledStatesRef = React122.useRef(/* @__PURE__ */ new Map());
-  const [status, setStatus] = React122.useState("mixed");
+  const uncontrolledStateRef = react_esm_exports.useRef(value);
+  const disabledStatesRef = react_esm_exports.useRef(/* @__PURE__ */ new Map());
+  const [status, setStatus] = react_esm_exports.useState("mixed");
   const id = useBaseUiId();
   const checked = value.length === allValues.length;
   const indeterminate = value.length !== allValues.length && value.length > 0;
   const onValueChange = useStableCallback(onValueChangeProp);
-  const getParentProps = React122.useCallback(() => ({
+  const getParentProps = react_esm_exports.useCallback(() => ({
     id,
     indeterminate,
     checked,
@@ -15942,7 +15606,7 @@ function useCheckboxGroupParent(params) {
       }
     }
   }), [allValues, checked, id, indeterminate, onValueChange, status, value.length]);
-  const getChildProps = React122.useCallback((childValue) => ({
+  const getChildProps = react_esm_exports.useCallback((childValue) => ({
     checked: value.includes(childValue),
     onCheckedChange(nextChecked, eventDetails) {
       const newValue = value.slice();
@@ -15958,7 +15622,7 @@ function useCheckboxGroupParent(params) {
       }
     }
   }), [onValueChange, value]);
-  return React122.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     id,
     indeterminate,
     getParentProps,
@@ -15969,7 +15633,7 @@ function useCheckboxGroupParent(params) {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/checkbox-group/CheckboxGroup.mjs
 import { jsx as _jsx30 } from "react/jsx-runtime";
-var CheckboxGroup = /* @__PURE__ */ React123.forwardRef(function CheckboxGroup2(componentProps, forwardedRef) {
+var CheckboxGroup = /* @__PURE__ */ react_esm_exports.forwardRef(function CheckboxGroup2(componentProps, forwardedRef) {
   const {
     allValues,
     className,
@@ -15999,7 +15663,7 @@ var CheckboxGroup = /* @__PURE__ */ React123.forwardRef(function CheckboxGroup2(
     clearErrors
   } = useFormContext();
   const disabled2 = fieldDisabled || disabledProp;
-  const defaultValue = React123.useMemo(() => {
+  const defaultValue = react_esm_exports.useMemo(() => {
     if (externalValue === void 0) {
       return defaultValueProp ?? [];
     }
@@ -16024,8 +15688,8 @@ var CheckboxGroup = /* @__PURE__ */ React123.forwardRef(function CheckboxGroup2(
     onValueChange: setValue
   });
   const id = useBaseUiId(idProp);
-  const controlRef = React123.useRef(null);
-  const registerControlRef = React123.useCallback((element2) => {
+  const controlRef = react_esm_exports.useRef(null);
+  const registerControlRef = react_esm_exports.useCallback((element2) => {
     if (controlRef.current == null && element2 != null && !element2.hasAttribute(PARENT_CHECKBOX)) {
       controlRef.current = element2;
     }
@@ -16045,7 +15709,7 @@ var CheckboxGroup = /* @__PURE__ */ React123.forwardRef(function CheckboxGroup2(
     ...fieldState,
     disabled: disabled2
   };
-  const contextValue = React123.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     allValues,
     value,
     defaultValue,
@@ -16080,9 +15744,6 @@ __export(index_parts_exports6, {
   Trigger: () => CollapsibleTrigger
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/root/CollapsibleRoot.mjs
-import * as React124 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/root/stateAttributesMapping.mjs
 var collapsibleStateAttributesMapping = {
   ...collapsibleOpenStateMapping,
@@ -16091,7 +15752,7 @@ var collapsibleStateAttributesMapping = {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/root/CollapsibleRoot.mjs
 import { jsx as _jsx31 } from "react/jsx-runtime";
-var CollapsibleRoot = /* @__PURE__ */ React124.forwardRef(function CollapsibleRoot2(componentProps, forwardedRef) {
+var CollapsibleRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function CollapsibleRoot2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -16109,12 +15770,12 @@ var CollapsibleRoot = /* @__PURE__ */ React124.forwardRef(function CollapsibleRo
     onOpenChange,
     disabled: disabled2
   });
-  const state = React124.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     open: collapsible.open,
     disabled: collapsible.disabled,
     transitionStatus: collapsible.transitionStatus
   }), [collapsible.open, collapsible.disabled, collapsible.transitionStatus]);
-  const contextValue = React124.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     ...collapsible,
     onOpenChange,
     state
@@ -16133,12 +15794,11 @@ var CollapsibleRoot = /* @__PURE__ */ React124.forwardRef(function CollapsibleRo
 if (false) CollapsibleRoot.displayName = "CollapsibleRoot";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/trigger/CollapsibleTrigger.mjs
-import * as React125 from "react";
 var stateAttributesMapping8 = {
   ...triggerOpenStateMapping,
   ...transitionStatusMapping
 };
-var CollapsibleTrigger = /* @__PURE__ */ React125.forwardRef(function CollapsibleTrigger2(componentProps, forwardedRef) {
+var CollapsibleTrigger = /* @__PURE__ */ react_esm_exports.forwardRef(function CollapsibleTrigger2(componentProps, forwardedRef) {
   const {
     panelId,
     open,
@@ -16176,9 +15836,6 @@ var CollapsibleTrigger = /* @__PURE__ */ React125.forwardRef(function Collapsibl
 });
 if (false) CollapsibleTrigger.displayName = "CollapsibleTrigger";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/panel/CollapsiblePanel.mjs
-import * as React126 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/panel/CollapsiblePanelCssVars.mjs
 var CollapsiblePanelCssVars = /* @__PURE__ */ (function(CollapsiblePanelCssVars2) {
   CollapsiblePanelCssVars2["collapsiblePanelHeight"] = "--collapsible-panel-height";
@@ -16187,7 +15844,7 @@ var CollapsiblePanelCssVars = /* @__PURE__ */ (function(CollapsiblePanelCssVars2
 })({});
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/collapsible/panel/CollapsiblePanel.mjs
-var CollapsiblePanel = /* @__PURE__ */ React126.forwardRef(function CollapsiblePanel2(componentProps, forwardedRef) {
+var CollapsiblePanel = /* @__PURE__ */ react_esm_exports.forwardRef(function CollapsiblePanel2(componentProps, forwardedRef) {
   const {
     className,
     hiddenUntilFound: hiddenUntilFoundProp,
@@ -16320,7 +15977,6 @@ __export(index_parts_exports7, {
 });
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/root/ComboboxRoot.mjs
-import * as React127 from "react";
 import { jsx as _jsx32 } from "react/jsx-runtime";
 function ComboboxRoot(props) {
   const {
@@ -16340,9 +15996,6 @@ function ComboboxRoot(props) {
     formAutoComplete: autoComplete
   });
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/label/ComboboxLabel.mjs
-import * as React128 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useRegisteredLabelId.mjs
 function useRegisteredLabelId(idProp, setLabelId) {
@@ -16422,7 +16075,7 @@ function focusElementWithVisible(element) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/label/ComboboxLabel.mjs
-var ComboboxLabel = /* @__PURE__ */ React128.forwardRef(function ComboboxLabel2(componentProps, forwardedRef) {
+var ComboboxLabel = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxLabel2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -16440,7 +16093,7 @@ var ComboboxLabel = /* @__PURE__ */ React128.forwardRef(function ComboboxLabel2(
   const defaultLabelId = getDefaultLabelId(rootId);
   const localControlId = triggerElement?.id ?? (inputInsidePopup ? rootId : void 0);
   if (false) {
-    React128.useEffect(() => {
+    react_esm_exports.useEffect(() => {
       if (!inputElement || inputInsidePopup) {
         return;
       }
@@ -16466,7 +16119,6 @@ var ComboboxLabel = /* @__PURE__ */ React128.forwardRef(function ComboboxLabel2(
 if (false) ComboboxLabel.displayName = "ComboboxLabel";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/value/ComboboxValue.mjs
-import * as React129 from "react";
 import { jsx as _jsx33 } from "react/jsx-runtime";
 function ComboboxValue(props) {
   const {
@@ -16493,15 +16145,14 @@ function ComboboxValue(props) {
   } else {
     children = resolveSelectedLabel(selectedValue, items, itemToStringLabel);
   }
-  return /* @__PURE__ */ _jsx33(React129.Fragment, {
+  return /* @__PURE__ */ _jsx33(react_esm_exports.Fragment, {
     children
   });
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/item-indicator/ComboboxItemIndicator.mjs
-import * as React130 from "react";
 import { jsx as _jsx34 } from "react/jsx-runtime";
-var ComboboxItemIndicator = /* @__PURE__ */ React130.forwardRef(function ComboboxItemIndicator2(componentProps, forwardedRef) {
+var ComboboxItemIndicator = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxItemIndicator2(componentProps, forwardedRef) {
   const keepMounted = componentProps.keepMounted ?? false;
   const {
     selected
@@ -16516,7 +16167,7 @@ var ComboboxItemIndicator = /* @__PURE__ */ React130.forwardRef(function Combobo
   });
 });
 if (false) ComboboxItemIndicator.displayName = "ComboboxItemIndicator";
-var Inner = /* @__PURE__ */ React130.memo(/* @__PURE__ */ React130.forwardRef((componentProps, forwardedRef) => {
+var Inner = /* @__PURE__ */ react_esm_exports.memo(/* @__PURE__ */ react_esm_exports.forwardRef((componentProps, forwardedRef) => {
   const {
     render,
     className,
@@ -16527,7 +16178,7 @@ var Inner = /* @__PURE__ */ React130.memo(/* @__PURE__ */ React130.forwardRef((c
   const {
     selected
   } = useComboboxItemContext();
-  const indicatorRef = React130.useRef(null);
+  const indicatorRef = react_esm_exports.useRef(null);
   const {
     transitionStatus,
     setMounted
@@ -16559,9 +16210,8 @@ var Inner = /* @__PURE__ */ React130.memo(/* @__PURE__ */ React130.forwardRef((c
 if (false) Inner.displayName = "Inner";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/chips/ComboboxChips.mjs
-import * as React131 from "react";
 import { jsx as _jsx35 } from "react/jsx-runtime";
-var ComboboxChips = /* @__PURE__ */ React131.forwardRef(function ComboboxChips2(componentProps, forwardedRef) {
+var ComboboxChips = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxChips2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -16571,11 +16221,11 @@ var ComboboxChips = /* @__PURE__ */ React131.forwardRef(function ComboboxChips2(
   const store = useComboboxRootContext();
   const open = useStore(store, selectors3.open);
   const hasSelectionChips = useStore(store, selectors3.hasSelectionChips);
-  const [highlightedChipIndex, setHighlightedChipIndex] = React131.useState(void 0);
+  const [highlightedChipIndex, setHighlightedChipIndex] = react_esm_exports.useState(void 0);
   if (open && highlightedChipIndex !== void 0) {
     setHighlightedChipIndex(void 0);
   }
-  const chipsRef = React131.useRef([]);
+  const chipsRef = react_esm_exports.useRef([]);
   const element = useRenderElement("div", componentProps, {
     ref: [forwardedRef, store.state.chipsContainerRef],
     // NVDA enters browse mode instead of staying in focus mode when navigating with
@@ -16588,7 +16238,7 @@ var ComboboxChips = /* @__PURE__ */ React131.forwardRef(function ComboboxChips2(
       }
     }, elementProps]
   });
-  const contextValue = React131.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     highlightedChipIndex,
     setHighlightedChipIndex,
     chipsRef
@@ -16604,15 +16254,13 @@ var ComboboxChips = /* @__PURE__ */ React131.forwardRef(function ComboboxChips2(
 if (false) ComboboxChips.displayName = "ComboboxChips";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/chip/ComboboxChip.mjs
-import * as React133 from "react";
 import * as ReactDOM7 from "react-dom";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/chip/ComboboxChipContext.mjs
-import * as React132 from "react";
-var ComboboxChipContext = /* @__PURE__ */ React132.createContext(void 0);
+var ComboboxChipContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ComboboxChipContext.displayName = "ComboboxChipContext";
 function useComboboxChipContext() {
-  const context = React132.useContext(ComboboxChipContext);
+  const context = react_esm_exports.useContext(ComboboxChipContext);
   if (!context) {
     throw new Error(false ? "Base UI: ComboboxChipContext is missing. ComboboxChip parts must be placed within <Combobox.Chip>." : formatErrorMessage_default(17));
   }
@@ -16621,7 +16269,7 @@ function useComboboxChipContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/chip/ComboboxChip.mjs
 import { jsx as _jsx36 } from "react/jsx-runtime";
-var ComboboxChip = /* @__PURE__ */ React133.forwardRef(function ComboboxChip2(componentProps, forwardedRef) {
+var ComboboxChip = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxChip2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -16711,7 +16359,7 @@ var ComboboxChip = /* @__PURE__ */ React133.forwardRef(function ComboboxChip2(co
       }
     }, elementProps]
   });
-  const contextValue = React133.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     index: index2
   }), [index2]);
   return /* @__PURE__ */ _jsx36(ComboboxChipContext.Provider, {
@@ -16722,8 +16370,7 @@ var ComboboxChip = /* @__PURE__ */ React133.forwardRef(function ComboboxChip2(co
 if (false) ComboboxChip.displayName = "ComboboxChip";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/combobox/chip-remove/ComboboxChipRemove.mjs
-import * as React134 from "react";
-var ComboboxChipRemove = /* @__PURE__ */ React134.forwardRef(function ComboboxChipRemove2(componentProps, forwardedRef) {
+var ComboboxChipRemove = /* @__PURE__ */ react_esm_exports.forwardRef(function ComboboxChipRemove2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -16831,15 +16478,11 @@ __export(index_parts_exports9, {
   Trigger: () => ContextMenuTrigger
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/context-menu/root/ContextMenuRoot.mjs
-import * as React175 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/context-menu/root/ContextMenuRootContext.mjs
-import * as React135 from "react";
-var ContextMenuRootContext = /* @__PURE__ */ React135.createContext(void 0);
+var ContextMenuRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ContextMenuRootContext.displayName = "ContextMenuRootContext";
 function useContextMenuRootContext(optional = true) {
-  const context = React135.useContext(ContextMenuRootContext);
+  const context = react_esm_exports.useContext(ContextMenuRootContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: ContextMenuRootContext is missing. ContextMenu parts must be placed within <ContextMenu.Root>." : formatErrorMessage_default(25));
   }
@@ -16873,15 +16516,11 @@ __export(index_parts_exports8, {
   createHandle: () => createMenuHandle
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/arrow/MenuArrow.mjs
-import * as React138 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/positioner/MenuPositionerContext.mjs
-import * as React136 from "react";
-var MenuPositionerContext = /* @__PURE__ */ React136.createContext(void 0);
+var MenuPositionerContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) MenuPositionerContext.displayName = "MenuPositionerContext";
 function useMenuPositionerContext(optional) {
-  const context = React136.useContext(MenuPositionerContext);
+  const context = react_esm_exports.useContext(MenuPositionerContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: MenuPositionerContext is missing. MenuPositioner parts must be placed within <Menu.Positioner>." : formatErrorMessage_default(33));
   }
@@ -16889,11 +16528,10 @@ function useMenuPositionerContext(optional) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/root/MenuRootContext.mjs
-import * as React137 from "react";
-var MenuRootContext = /* @__PURE__ */ React137.createContext(void 0);
+var MenuRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) MenuRootContext.displayName = "MenuRootContext";
 function useMenuRootContext(optional) {
-  const context = React137.useContext(MenuRootContext);
+  const context = react_esm_exports.useContext(MenuRootContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: MenuRootContext is missing. Menu parts must be placed within <Menu.Root>." : formatErrorMessage_default(36));
   }
@@ -16901,7 +16539,7 @@ function useMenuRootContext(optional) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/arrow/MenuArrow.mjs
-var MenuArrow = /* @__PURE__ */ React138.forwardRef(function MenuArrow2(componentProps, forwardedRef) {
+var MenuArrow = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuArrow2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -16939,12 +16577,11 @@ var MenuArrow = /* @__PURE__ */ React138.forwardRef(function MenuArrow2(componen
 if (false) MenuArrow.displayName = "MenuArrow";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/backdrop/MenuBackdrop.mjs
-import * as React139 from "react";
 var stateAttributesMapping9 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var MenuBackdrop = /* @__PURE__ */ React139.forwardRef(function MenuBackdrop2(componentProps, forwardedRef) {
+var MenuBackdrop = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuBackdrop2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -16980,26 +16617,18 @@ var MenuBackdrop = /* @__PURE__ */ React139.forwardRef(function MenuBackdrop2(co
 });
 if (false) MenuBackdrop.displayName = "MenuBackdrop";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/checkbox-item/MenuCheckboxItem.mjs
-import * as React143 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/checkbox-item/MenuCheckboxItemContext.mjs
-import * as React140 from "react";
-var MenuCheckboxItemContext = /* @__PURE__ */ React140.createContext(void 0);
+var MenuCheckboxItemContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) MenuCheckboxItemContext.displayName = "MenuCheckboxItemContext";
 function useMenuCheckboxItemContext() {
-  const context = React140.useContext(MenuCheckboxItemContext);
+  const context = react_esm_exports.useContext(MenuCheckboxItemContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: MenuCheckboxItemContext is missing. MenuCheckboxItem parts must be placed within <Menu.CheckboxItem>." : formatErrorMessage_default(30));
   }
   return context;
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/item/useMenuItem.mjs
-import * as React142 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/item/useMenuItemCommonProps.mjs
-import * as React141 from "react";
 function useMenuItemCommonProps(params) {
   const {
     closeOnClick,
@@ -17017,7 +16646,7 @@ function useMenuItemCommonProps(params) {
   const open = store.useState("open");
   const contextMenuContext = useContextMenuRootContext(true);
   const isContextMenu = contextMenuContext !== void 0;
-  return React141.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     id,
     role: "menuitem",
     tabIndex: open && highlighted ? 0 : -1,
@@ -17081,7 +16710,7 @@ function useMenuItem(params) {
   } = params;
   const rootDisabled = store.useState("disabled");
   const disabled2 = disabledProp || rootDisabled;
-  const itemRef = React142.useRef(null);
+  const itemRef = react_esm_exports.useRef(null);
   const {
     getButtonProps,
     buttonRef
@@ -17101,7 +16730,7 @@ function useMenuItem(params) {
     itemRef,
     itemMetadata
   });
-  const getItemProps = React142.useCallback((externalProps) => {
+  const getItemProps = react_esm_exports.useCallback((externalProps) => {
     return mergeProps(commonProps, {
       onMouseEnter() {
         if (itemMetadata.type !== "submenu-trigger") {
@@ -17112,7 +16741,7 @@ function useMenuItem(params) {
     }, externalProps, getButtonProps);
   }, [commonProps, getButtonProps, itemMetadata]);
   const mergedRef = useMergedRefs(itemRef, buttonRef);
-  return React142.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     getItemProps,
     itemRef: mergedRef
   }), [getItemProps, mergedRef]);
@@ -17144,7 +16773,7 @@ var itemMapping = {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/checkbox-item/MenuCheckboxItem.mjs
 import { jsx as _jsx37 } from "react/jsx-runtime";
-var MenuCheckboxItem = /* @__PURE__ */ React143.forwardRef(function MenuCheckboxItem2(componentProps, forwardedRef) {
+var MenuCheckboxItem = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuCheckboxItem2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -17188,7 +16817,7 @@ var MenuCheckboxItem = /* @__PURE__ */ React143.forwardRef(function MenuCheckbox
     nodeId: menuPositionerContext?.context.nodeId,
     itemMetadata: REGULAR_ITEM
   });
-  const state = React143.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     disabled: disabled2,
     highlighted,
     checked
@@ -17222,8 +16851,7 @@ var MenuCheckboxItem = /* @__PURE__ */ React143.forwardRef(function MenuCheckbox
 if (false) MenuCheckboxItem.displayName = "MenuCheckboxItem";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/checkbox-item-indicator/MenuCheckboxItemIndicator.mjs
-import * as React144 from "react";
-var MenuCheckboxItemIndicator = /* @__PURE__ */ React144.forwardRef(function MenuCheckboxItemIndicator2(componentProps, forwardedRef) {
+var MenuCheckboxItemIndicator = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuCheckboxItemIndicator2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -17232,7 +16860,7 @@ var MenuCheckboxItemIndicator = /* @__PURE__ */ React144.forwardRef(function Men
     ...elementProps
   } = componentProps;
   const item = useMenuCheckboxItemContext();
-  const indicatorRef = React144.useRef(null);
+  const indicatorRef = react_esm_exports.useRef(null);
   const {
     transitionStatus,
     setMounted
@@ -17266,15 +16894,11 @@ var MenuCheckboxItemIndicator = /* @__PURE__ */ React144.forwardRef(function Men
 });
 if (false) MenuCheckboxItemIndicator.displayName = "MenuCheckboxItemIndicator";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/group/MenuGroup.mjs
-import * as React146 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/group/MenuGroupContext.mjs
-import * as React145 from "react";
-var MenuGroupContext = /* @__PURE__ */ React145.createContext(void 0);
+var MenuGroupContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) MenuGroupContext.displayName = "MenuGroupContext";
 function useMenuGroupRootContext() {
-  const context = React145.useContext(MenuGroupContext);
+  const context = react_esm_exports.useContext(MenuGroupContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: MenuGroupContext is missing. Menu group parts must be used within <Menu.Group> or <Menu.RadioGroup>." : formatErrorMessage_default(31));
   }
@@ -17283,14 +16907,14 @@ function useMenuGroupRootContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/group/MenuGroup.mjs
 import { jsx as _jsx38 } from "react/jsx-runtime";
-var MenuGroup = /* @__PURE__ */ React146.forwardRef(function MenuGroup2(componentProps, forwardedRef) {
+var MenuGroup = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuGroup2(componentProps, forwardedRef) {
   const {
     render,
     className,
     style,
     ...elementProps
   } = componentProps;
-  const [labelId, setLabelId] = React146.useState(void 0);
+  const [labelId, setLabelId] = react_esm_exports.useState(void 0);
   const element = useRenderElement("div", componentProps, {
     ref: forwardedRef,
     props: {
@@ -17307,8 +16931,7 @@ var MenuGroup = /* @__PURE__ */ React146.forwardRef(function MenuGroup2(componen
 if (false) MenuGroup.displayName = "MenuGroup";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/group-label/MenuGroupLabel.mjs
-import * as React147 from "react";
-var MenuGroupLabel = /* @__PURE__ */ React147.forwardRef(function MenuGroupLabel2(componentProps, forwardedRef) {
+var MenuGroupLabel = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuGroupLabel2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -17336,8 +16959,7 @@ var MenuGroupLabel = /* @__PURE__ */ React147.forwardRef(function MenuGroupLabel
 if (false) MenuGroupLabel.displayName = "MenuGroupLabel";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/item/MenuItem.mjs
-import * as React148 from "react";
-var MenuItem = /* @__PURE__ */ React148.forwardRef(function MenuItem2(componentProps, forwardedRef) {
+var MenuItem = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuItem2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -17385,8 +17007,7 @@ var MenuItem = /* @__PURE__ */ React148.forwardRef(function MenuItem2(componentP
 if (false) MenuItem.displayName = "MenuItem";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/link-item/MenuLinkItem.mjs
-import * as React149 from "react";
-var MenuLinkItem = /* @__PURE__ */ React149.forwardRef(function MenuLinkItem2(componentProps, forwardedRef) {
+var MenuLinkItem = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuLinkItem2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -17396,7 +17017,7 @@ var MenuLinkItem = /* @__PURE__ */ React149.forwardRef(function MenuLinkItem2(co
     style,
     ...elementProps
   } = componentProps;
-  const linkRef = React149.useRef(null);
+  const linkRef = react_esm_exports.useRef(null);
   const listItem = useCompositeListItem({
     label
   });
@@ -17439,15 +17060,11 @@ var MenuLinkItem = /* @__PURE__ */ React149.forwardRef(function MenuLinkItem2(co
 });
 if (false) MenuLinkItem.displayName = "MenuLinkItem";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/popup/MenuPopup.mjs
-import * as React151 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toolbar/root/ToolbarRootContext.mjs
-import * as React150 from "react";
-var ToolbarRootContext = /* @__PURE__ */ React150.createContext(void 0);
+var ToolbarRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ToolbarRootContext.displayName = "ToolbarRootContext";
 function useToolbarRootContext(optional) {
-  const context = React150.useContext(ToolbarRootContext);
+  const context = react_esm_exports.useContext(ToolbarRootContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: ToolbarRootContext is missing. Toolbar parts must be placed within <Toolbar.Root>." : formatErrorMessage_default(69));
   }
@@ -17460,7 +17077,7 @@ var stateAttributesMapping10 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var MenuPopup = /* @__PURE__ */ React151.forwardRef(function MenuPopup2(componentProps, forwardedRef) {
+var MenuPopup = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuPopup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -17502,7 +17119,7 @@ var MenuPopup = /* @__PURE__ */ React151.forwardRef(function MenuPopup2(componen
       }
     }
   });
-  React151.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     function handleClose(event) {
       store.setOpen(false, createChangeEventDetails(event.reason, event.domEvent));
     }
@@ -17515,7 +17132,7 @@ var MenuPopup = /* @__PURE__ */ React151.forwardRef(function MenuPopup2(componen
     enabled: hoverEnabled && !disabled2 && !isContextMenu && parent.type !== "menubar",
     closeDelay
   });
-  const setPopupElement = React151.useCallback((element2) => {
+  const setPopupElement = react_esm_exports.useCallback((element2) => {
     store.set("popupElement", element2);
   }, [store]);
   const state = {
@@ -17561,15 +17178,11 @@ var MenuPopup = /* @__PURE__ */ React151.forwardRef(function MenuPopup2(componen
 });
 if (false) MenuPopup.displayName = "MenuPopup";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/portal/MenuPortal.mjs
-import * as React153 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/portal/MenuPortalContext.mjs
-import * as React152 from "react";
-var MenuPortalContext = /* @__PURE__ */ React152.createContext(void 0);
+var MenuPortalContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) MenuPortalContext.displayName = "MenuPortalContext";
 function useMenuPortalContext() {
-  const value = React152.useContext(MenuPortalContext);
+  const value = react_esm_exports.useContext(MenuPortalContext);
   if (value === void 0) {
     throw new Error(false ? "Base UI: <Menu.Portal> is missing." : formatErrorMessage_default(32));
   }
@@ -17578,7 +17191,7 @@ function useMenuPortalContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/portal/MenuPortal.mjs
 import { jsx as _jsx40 } from "react/jsx-runtime";
-var MenuPortal = /* @__PURE__ */ React153.forwardRef(function MenuPortal2(props, forwardedRef) {
+var MenuPortal = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuPortal2(props, forwardedRef) {
   const {
     keepMounted = false,
     ...portalProps
@@ -17602,9 +17215,8 @@ var MenuPortal = /* @__PURE__ */ React153.forwardRef(function MenuPortal2(props,
 if (false) MenuPortal.displayName = "MenuPortal";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/positioner/MenuPositioner.mjs
-import * as React154 from "react";
 import { jsx as _jsx41, jsxs as _jsxs10 } from "react/jsx-runtime";
-var MenuPositioner = /* @__PURE__ */ React154.forwardRef(function MenuPositioner2(componentProps, forwardedRef) {
+var MenuPositioner = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuPositioner2(componentProps, forwardedRef) {
   const {
     anchor: anchorProp,
     positionMethod: positionMethodProp = "absolute",
@@ -17644,7 +17256,7 @@ var MenuPositioner = /* @__PURE__ */ React154.forwardRef(function MenuPositioner
   const floatingNodeId = store.useState("floatingNodeId");
   const floatingParentNodeId = store.useState("floatingParentNodeId");
   const domReference = floatingRootContext.useState("domReferenceElement");
-  const previousTriggerRef = React154.useRef(null);
+  const previousTriggerRef = react_esm_exports.useRef(null);
   const runOnceAnimationsFinish = useAnimationsFinished(positionerElement, false, false);
   let anchor = anchorProp;
   let sideOffset = sideOffsetProp;
@@ -17691,7 +17303,7 @@ var MenuPositioner = /* @__PURE__ */ React154.forwardRef(function MenuPositioner
     externalTree: floatingTreeRoot,
     adaptiveOrigin: hasViewport ? adaptiveOrigin : void 0
   });
-  React154.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     function onMenuOpenChange(details) {
       if (details.open) {
         if (details.parentNodeId === floatingNodeId) {
@@ -17707,7 +17319,7 @@ var MenuPositioner = /* @__PURE__ */ React154.forwardRef(function MenuPositioner
       floatingTreeRoot.events.off("menuopenchange", onMenuOpenChange);
     };
   }, [store, floatingTreeRoot.events, floatingNodeId]);
-  React154.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (store.select("floatingParentNodeId") == null) {
       return void 0;
     }
@@ -17724,12 +17336,12 @@ var MenuPositioner = /* @__PURE__ */ React154.forwardRef(function MenuPositioner
     };
   }, [floatingTreeRoot.events, store]);
   const closeTimeout = useTimeout();
-  React154.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!open) {
       closeTimeout.clear();
     }
   }, [open, closeTimeout]);
-  React154.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     function onItemHover(event) {
       if (!open || event.nodeId !== store.select("floatingParentNodeId")) {
         return;
@@ -17754,7 +17366,7 @@ var MenuPositioner = /* @__PURE__ */ React154.forwardRef(function MenuPositioner
       floatingTreeRoot.events.off("itemhover", onItemHover);
     };
   }, [floatingTreeRoot.events, open, triggerElement, store, closeTimeout]);
-  React154.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     const eventDetails = {
       open,
       nodeId: floatingNodeId,
@@ -17825,15 +17437,11 @@ var MenuPositioner = /* @__PURE__ */ React154.forwardRef(function MenuPositioner
 });
 if (false) MenuPositioner.displayName = "MenuPositioner";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/radio-group/MenuRadioGroup.mjs
-import * as React156 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/radio-group/MenuRadioGroupContext.mjs
-import * as React155 from "react";
-var MenuRadioGroupContext = /* @__PURE__ */ React155.createContext(void 0);
+var MenuRadioGroupContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) MenuRadioGroupContext.displayName = "MenuRadioGroupContext";
 function useMenuRadioGroupContext() {
-  const context = React155.useContext(MenuRadioGroupContext);
+  const context = react_esm_exports.useContext(MenuRadioGroupContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: MenuRadioGroupContext is missing. MenuRadioGroup parts must be placed within <Menu.RadioGroup>." : formatErrorMessage_default(34));
   }
@@ -17842,7 +17450,7 @@ function useMenuRadioGroupContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/radio-group/MenuRadioGroup.mjs
 import { jsx as _jsx42 } from "react/jsx-runtime";
-var MenuRadioGroup = /* @__PURE__ */ React156.memo(/* @__PURE__ */ React156.forwardRef(function MenuRadioGroup2(componentProps, forwardedRef) {
+var MenuRadioGroup = /* @__PURE__ */ react_esm_exports.memo(/* @__PURE__ */ react_esm_exports.forwardRef(function MenuRadioGroup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -17854,7 +17462,7 @@ var MenuRadioGroup = /* @__PURE__ */ React156.memo(/* @__PURE__ */ React156.forw
     "aria-labelledby": ariaLabelledByProp,
     ...elementProps
   } = componentProps;
-  const [labelId, setLabelId] = React156.useState(void 0);
+  const [labelId, setLabelId] = react_esm_exports.useState(void 0);
   const [value, setValueUnwrapped] = useControlled({
     controlled: valueProp,
     default: defaultValue,
@@ -17880,7 +17488,7 @@ var MenuRadioGroup = /* @__PURE__ */ React156.memo(/* @__PURE__ */ React156.forw
       ...elementProps
     }
   });
-  const context = React156.useMemo(() => ({
+  const context = react_esm_exports.useMemo(() => ({
     value,
     setValue,
     disabled: disabled2
@@ -17895,15 +17503,11 @@ var MenuRadioGroup = /* @__PURE__ */ React156.memo(/* @__PURE__ */ React156.forw
 }));
 if (false) MenuRadioGroup.displayName = "MenuRadioGroup";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/radio-item/MenuRadioItem.mjs
-import * as React158 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/radio-item/MenuRadioItemContext.mjs
-import * as React157 from "react";
-var MenuRadioItemContext = /* @__PURE__ */ React157.createContext(void 0);
+var MenuRadioItemContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) MenuRadioItemContext.displayName = "MenuRadioItemContext";
 function useMenuRadioItemContext() {
-  const context = React157.useContext(MenuRadioItemContext);
+  const context = react_esm_exports.useContext(MenuRadioItemContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: MenuRadioItemContext is missing. MenuRadioItem parts must be placed within <Menu.RadioItem>." : formatErrorMessage_default(35));
   }
@@ -17912,7 +17516,7 @@ function useMenuRadioItemContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/radio-item/MenuRadioItem.mjs
 import { jsx as _jsx43 } from "react/jsx-runtime";
-var MenuRadioItem = /* @__PURE__ */ React158.forwardRef(function MenuRadioItem2(componentProps, forwardedRef) {
+var MenuRadioItem = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuRadioItem2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -17955,7 +17559,7 @@ var MenuRadioItem = /* @__PURE__ */ React158.forwardRef(function MenuRadioItem2(
     nodeId: menuPositionerContext?.context.nodeId,
     itemMetadata: REGULAR_ITEM
   });
-  const state = React158.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     disabled: disabled2,
     highlighted,
     checked
@@ -17985,8 +17589,7 @@ var MenuRadioItem = /* @__PURE__ */ React158.forwardRef(function MenuRadioItem2(
 if (false) MenuRadioItem.displayName = "MenuRadioItem";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/radio-item-indicator/MenuRadioItemIndicator.mjs
-import * as React159 from "react";
-var MenuRadioItemIndicator = /* @__PURE__ */ React159.forwardRef(function MenuRadioItemIndicator2(componentProps, forwardedRef) {
+var MenuRadioItemIndicator = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuRadioItemIndicator2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -17995,7 +17598,7 @@ var MenuRadioItemIndicator = /* @__PURE__ */ React159.forwardRef(function MenuRa
     ...elementProps
   } = componentProps;
   const item = useMenuRadioItemContext();
-  const indicatorRef = React159.useRef(null);
+  const indicatorRef = react_esm_exports.useRef(null);
   const {
     transitionStatus,
     setMounted
@@ -18029,15 +17632,11 @@ var MenuRadioItemIndicator = /* @__PURE__ */ React159.forwardRef(function MenuRa
 });
 if (false) MenuRadioItemIndicator.displayName = "MenuRadioItemIndicator";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/root/MenuRoot.mjs
-import * as React163 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menubar/MenubarContext.mjs
-import * as React160 from "react";
-var MenubarContext = /* @__PURE__ */ React160.createContext(null);
+var MenubarContext = /* @__PURE__ */ react_esm_exports.createContext(null);
 if (false) MenubarContext.displayName = "MenubarContext";
 function useMenubarContext(optional) {
-  const context = React160.useContext(MenubarContext);
+  const context = react_esm_exports.useContext(MenubarContext);
   if (context === null && !optional) {
     throw new Error(false ? "Base UI: MenubarContext is missing. Menubar parts must be placed within <Menubar>." : formatErrorMessage_default(5));
   }
@@ -18045,7 +17644,6 @@ function useMenubarContext(optional) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/store/MenuStore.mjs
-import * as React161 from "react";
 var selectors4 = {
   ...popupStoreSelectors,
   disabled: createSelector((state) => state.parent.type === "menubar" ? state.parent.context.disabled || state.disabled : state.disabled),
@@ -18093,8 +17691,8 @@ var MenuStore = class _MenuStore extends ReactStore {
       ...createInitialState2(),
       ...initialState
     }, {
-      positionerRef: /* @__PURE__ */ React161.createRef(),
-      popupRef: /* @__PURE__ */ React161.createRef(),
+      positionerRef: /* @__PURE__ */ react_esm_exports.createRef(),
+      popupRef: /* @__PURE__ */ react_esm_exports.createRef(),
       typingRef: {
         current: false
       },
@@ -18107,8 +17705,8 @@ var MenuStore = class _MenuStore extends ReactStore {
       allowMouseUpTriggerRef: {
         current: false
       },
-      triggerFocusTargetRef: /* @__PURE__ */ React161.createRef(),
-      beforeContentFocusGuardRef: /* @__PURE__ */ React161.createRef(),
+      triggerFocusTargetRef: /* @__PURE__ */ react_esm_exports.createRef(),
+      beforeContentFocusGuardRef: /* @__PURE__ */ react_esm_exports.createRef(),
       onOpenChangeComplete: void 0,
       triggerElements: new PopupTriggerMap()
     }, selectors4);
@@ -18181,11 +17779,10 @@ function createInitialState2() {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/submenu-root/MenuSubmenuRootContext.mjs
-import * as React162 from "react";
-var MenuSubmenuRootContext = /* @__PURE__ */ React162.createContext(void 0);
+var MenuSubmenuRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) MenuSubmenuRootContext.displayName = "MenuSubmenuRootContext";
 function useMenuSubmenuRootContext() {
-  return React162.useContext(MenuSubmenuRootContext);
+  return react_esm_exports.useContext(MenuSubmenuRootContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/root/MenuRoot.mjs
@@ -18212,7 +17809,7 @@ var MenuRoot = fastComponent(function MenuRoot2(props) {
   const parentMenuRootContext = useMenuRootContext(true);
   const menubarContext = useMenubarContext(true);
   const isSubmenu = useMenuSubmenuRootContext();
-  const parentFromContext = React163.useMemo(() => {
+  const parentFromContext = react_esm_exports.useMemo(() => {
     if (isSubmenu && parentMenuRootContext) {
       return {
         type: "menu",
@@ -18261,10 +17858,10 @@ var MenuRoot = fastComponent(function MenuRoot2(props) {
   const activeIndex = store.useState("activeIndex");
   const payload = store.useState("payload");
   const floatingParentNodeId = store.useState("floatingParentNodeId");
-  const openEventRef = React163.useRef(null);
-  const allowOutsidePressDismissalRef = React163.useRef(parent.type !== "context-menu");
+  const openEventRef = react_esm_exports.useRef(null);
+  const allowOutsidePressDismissalRef = react_esm_exports.useRef(parent.type !== "context-menu");
   const allowOutsidePressDismissalTimeout = useTimeout();
-  const allowTouchToCloseRef = React163.useRef(true);
+  const allowTouchToCloseRef = react_esm_exports.useRef(true);
   const allowTouchToCloseTimeout = useTimeout();
   const nested = floatingParentNodeId != null;
   if (false) {
@@ -18309,7 +17906,7 @@ var MenuRoot = fastComponent(function MenuRoot2(props) {
       });
     }
   }, [contextMenuContext, parentMenuRootContext, floatingNodeIdFromContext, floatingParentNodeIdFromContext, store]);
-  React163.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!open) {
       openEventRef.current = null;
     }
@@ -18381,7 +17978,7 @@ var MenuRoot = fastComponent(function MenuRoot2(props) {
     onOpenChange: setOpen
   });
   const floatingEvents = floatingRootContext.context.events;
-  React163.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     const handleSetOpenEvent = ({
       open: nextOpen,
       eventDetails
@@ -18391,10 +17988,10 @@ var MenuRoot = fastComponent(function MenuRoot2(props) {
       floatingEvents?.off("setOpen", handleSetOpenEvent);
     };
   }, [floatingEvents, setOpen]);
-  const handleImperativeClose = React163.useCallback(() => {
+  const handleImperativeClose = react_esm_exports.useCallback(() => {
     store.setOpen(false, createChangeEventDetails(reason_parts_exports.imperativeAction));
   }, [store]);
-  React163.useImperativeHandle(actionsRef, () => ({
+  react_esm_exports.useImperativeHandle(actionsRef, () => ({
     unmount: forceUnmount,
     close: handleImperativeClose
   }), [forceUnmount, handleImperativeClose]);
@@ -18402,8 +17999,8 @@ var MenuRoot = fastComponent(function MenuRoot2(props) {
   if (parent.type === "context-menu") {
     ctx = parent.context;
   }
-  React163.useImperativeHandle(ctx?.positionerRef, () => positionerElement, [positionerElement]);
-  React163.useImperativeHandle(ctx?.actionsRef, () => ({
+  react_esm_exports.useImperativeHandle(ctx?.positionerRef, () => positionerElement, [positionerElement]);
+  react_esm_exports.useImperativeHandle(ctx?.actionsRef, () => ({
     setOpen
   }), [setOpen]);
   const dismiss = useDismiss(floatingRootContext, {
@@ -18420,7 +18017,7 @@ var MenuRoot = fastComponent(function MenuRoot2(props) {
     externalTree: nested ? floatingTreeRoot : void 0
   });
   const direction = useDirection();
-  const setActiveIndex = React163.useCallback((index2) => {
+  const setActiveIndex = react_esm_exports.useCallback((index2) => {
     if (store.select("activeIndex") === index2) {
       return;
     }
@@ -18441,7 +18038,7 @@ var MenuRoot = fastComponent(function MenuRoot2(props) {
     externalTree: nested ? floatingTreeRoot : void 0,
     focusItemOnHover: highlightItemOnHover
   });
-  const onTyping = React163.useCallback((nextTyping) => {
+  const onTyping = react_esm_exports.useCallback((nextTyping) => {
     store.context.typingRef.current = nextTyping;
   }, [store]);
   const typeahead = useTypeahead(floatingRootContext, {
@@ -18457,7 +18054,7 @@ var MenuRoot = fastComponent(function MenuRoot2(props) {
     },
     onTyping
   });
-  const activeTriggerProps = React163.useMemo(() => {
+  const activeTriggerProps = react_esm_exports.useMemo(() => {
     const mergedProps = mergeProps(typeahead.reference, listNavigation2.reference, dismiss.reference, {
       onMouseMove() {
         store.set("allowMouseEnter", true);
@@ -18467,13 +18064,13 @@ var MenuRoot = fastComponent(function MenuRoot2(props) {
     mergedProps["aria-expanded"] = open;
     return mergedProps;
   }, [store, typeahead.reference, listNavigation2.reference, dismiss.reference, interactionTypeProps, open]);
-  const inactiveTriggerProps = React163.useMemo(() => {
+  const inactiveTriggerProps = react_esm_exports.useMemo(() => {
     const mergedProps = mergeProps(listNavigation2.trigger, dismiss.trigger, interactionTypeProps);
     mergedProps["aria-haspopup"] = "menu";
     mergedProps["aria-expanded"] = false;
     return mergedProps;
   }, [listNavigation2.trigger, dismiss.trigger, interactionTypeProps]);
-  const popupProps = React163.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, {
+  const popupProps = react_esm_exports.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, {
     id: floatingId,
     role: "menu",
     "aria-labelledby": activeTriggerElement?.id,
@@ -18503,7 +18100,7 @@ var MenuRoot = fastComponent(function MenuRoot2(props) {
     popupProps,
     itemProps
   });
-  const context = React163.useMemo(() => ({
+  const context = react_esm_exports.useMemo(() => ({
     store,
     parent: parentFromContext
   }), [store, parentFromContext]);
@@ -18524,11 +18121,10 @@ var MenuRoot = fastComponent(function MenuRoot2(props) {
 if (false) MenuRoot.displayName = "MenuRoot";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/submenu-root/MenuSubmenuRoot.mjs
-import * as React164 from "react";
 import { jsx as _jsx45 } from "react/jsx-runtime";
 function MenuSubmenuRoot(props) {
   const parentMenu = useMenuRootContext().store;
-  const contextValue = React164.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     parentMenu
   }), [parentMenu]);
   return /* @__PURE__ */ _jsx45(MenuSubmenuRootContext.Provider, {
@@ -18539,11 +18135,7 @@ function MenuSubmenuRoot(props) {
   });
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/trigger/MenuTrigger.mjs
-import * as React168 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/item/useCompositeItem.mjs
-import * as React165 from "react";
 function useCompositeItem(params = {}) {
   const {
     highlightItemOnHover,
@@ -18555,7 +18147,7 @@ function useCompositeItem(params = {}) {
     index: index2
   } = useCompositeListItem(params);
   const isHighlighted = highlightedIndex === index2;
-  const itemRef = React165.useRef(null);
+  const itemRef = react_esm_exports.useRef(null);
   const mergedRef = useMergedRefs(ref, itemRef);
   const compositeProps = {
     tabIndex: isHighlighted ? 0 : -1,
@@ -18620,10 +18212,9 @@ function findRootOwnerId(node) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/popups/useTriggerFocusGuards.mjs
-import * as React166 from "react";
 import * as ReactDOM8 from "react-dom";
 function useTriggerFocusGuards(store, triggerElementRef) {
-  const preFocusGuardRef = React166.useRef(null);
+  const preFocusGuardRef = react_esm_exports.useRef(null);
   function handlePreFocusGuardFocus(event) {
     ReactDOM8.flushSync(() => {
       store.setOpen(false, createChangeEventDetails(reason_parts_exports.focusOut, event.nativeEvent, event.currentTarget));
@@ -18658,15 +18249,14 @@ function useTriggerFocusGuards(store, triggerElementRef) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useMixedToggleClickHandler.mjs
-import * as React167 from "react";
 function useMixedToggleClickHandler(params) {
   const {
     enabled = true,
     mouseDownAction,
     open
   } = params;
-  const ignoreClickRef = React167.useRef(false);
-  return React167.useMemo(() => {
+  const ignoreClickRef = react_esm_exports.useRef(false);
+  return react_esm_exports.useMemo(() => {
     if (!enabled) {
       return EMPTY_OBJECT;
     }
@@ -18719,11 +18309,11 @@ var MenuTrigger = fastComponentRef(function MenuTrigger2(componentProps, forward
   const floatingRootContext = store.useState("floatingRootContext");
   const isOpenedByThisTrigger = store.useState("isOpenedByTrigger", thisTriggerId);
   const popupId = store.useState("triggerPopupId", thisTriggerId);
-  const triggerElementRef = React168.useRef(null);
+  const triggerElementRef = react_esm_exports.useRef(null);
   const parent = useMenuParent();
   const compositeRootContext = useCompositeRootContext(true);
   const floatingTreeRootFromContext = useFloatingTree();
-  const floatingTreeRoot = React168.useMemo(() => {
+  const floatingTreeRoot = react_esm_exports.useMemo(() => {
     return floatingTreeRootFromContext ?? new FloatingTreeStore();
   }, [floatingTreeRootFromContext]);
   const floatingNodeId = useFloatingNodeId(floatingTreeRoot);
@@ -18750,12 +18340,12 @@ var MenuTrigger = fastComponentRef(function MenuTrigger2(componentProps, forward
     disabled: disabled2,
     native: nativeButton
   });
-  React168.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!isOpenedByThisTrigger && parent.type === void 0) {
       store.context.allowMouseUpTriggerRef.current = false;
     }
   }, [store, isOpenedByThisTrigger, parent.type]);
-  const triggerRef = React168.useRef(null);
+  const triggerRef = react_esm_exports.useRef(null);
   const allowMouseUpTriggerTimeout = useTimeout();
   const handleDocumentMouseUp = useStableCallback((mouseEvent) => {
     if (!triggerRef.current) {
@@ -18779,7 +18369,7 @@ var MenuTrigger = fastComponentRef(function MenuTrigger2(componentProps, forward
       reason: reason_parts_exports.cancelOpen
     });
   });
-  React168.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (isOpenedByThisTrigger && store.select("lastOpenChangeReason") === reason_parts_exports.triggerHover) {
       const doc = ownerDocument(triggerRef.current);
       doc.addEventListener("mouseup", handleDocumentMouseUp, {
@@ -18821,7 +18411,7 @@ var MenuTrigger = fastComponentRef(function MenuTrigger2(componentProps, forward
     enabled: isInMenubar,
     mouseDownAction: "open"
   });
-  const localInteractionProps = React168.useMemo(() => mergeProps(focus.reference, click.reference), [focus.reference, click.reference]);
+  const localInteractionProps = react_esm_exports.useMemo(() => mergeProps(focus.reference, click.reference), [focus.reference, click.reference]);
   const rootTriggerProps = store.useState("triggerProps", isMountedByThisTrigger);
   const {
     preFocusGuardRef,
@@ -18872,11 +18462,11 @@ var MenuTrigger = fastComponentRef(function MenuTrigger2(componentProps, forward
     });
   }
   if (isOpenedByThisTrigger) {
-    return /* @__PURE__ */ _jsxs11(React168.Fragment, {
+    return /* @__PURE__ */ _jsxs11(react_esm_exports.Fragment, {
       children: [/* @__PURE__ */ _jsx46(FocusGuard, {
         ref: preFocusGuardRef,
         onFocus: handlePreFocusGuardFocus
-      }, `${thisTriggerId}-pre-focus-guard`), /* @__PURE__ */ _jsx46(React168.Fragment, {
+      }, `${thisTriggerId}-pre-focus-guard`), /* @__PURE__ */ _jsx46(react_esm_exports.Fragment, {
         children: element
       }, thisTriggerId), /* @__PURE__ */ _jsx46(FocusGuard, {
         ref: store.context.triggerFocusTargetRef,
@@ -18884,14 +18474,14 @@ var MenuTrigger = fastComponentRef(function MenuTrigger2(componentProps, forward
       }, `${thisTriggerId}-post-focus-guard`)]
     });
   }
-  return /* @__PURE__ */ _jsx46(React168.Fragment, {
+  return /* @__PURE__ */ _jsx46(react_esm_exports.Fragment, {
     children: element
   }, thisTriggerId);
 });
 if (false) MenuTrigger.displayName = "MenuTrigger";
 function useStickIfOpen(open, openReason) {
   const stickIfOpenTimeout = useTimeout();
-  const [stickIfOpen, setStickIfOpen] = React168.useState(false);
+  const [stickIfOpen, setStickIfOpen] = react_esm_exports.useState(false);
   useIsoLayoutEffect(() => {
     if (open && openReason === "trigger-hover") {
       setStickIfOpen(true);
@@ -18909,7 +18499,7 @@ function useMenuParent() {
   const contextMenuContext = useContextMenuRootContext(true);
   const parentContext = useMenuRootContext(true);
   const menubarContext = useMenubarContext(true);
-  const parent = React168.useMemo(() => {
+  const parent = react_esm_exports.useMemo(() => {
     if (menubarContext) {
       return {
         type: "menubar",
@@ -18929,17 +18519,12 @@ function useMenuParent() {
   return parent;
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/viewport/MenuViewport.mjs
-import * as React173 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/usePopupViewport.mjs
-import * as React172 from "react";
 import * as ReactDOM9 from "react-dom";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/usePreviousValue.mjs
-import * as React169 from "react";
 function usePreviousValue(value) {
-  const [state, setState] = React169.useState({
+  const [state, setState] = react_esm_exports.useState({
     current: value,
     previous: null
   });
@@ -18951,9 +18536,6 @@ function usePreviousValue(value) {
   }
   return state.previous;
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/usePopupAutoResize.mjs
-import * as React170 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/getCssDimensions.mjs
 function getCssDimensions2(element) {
@@ -18988,12 +18570,12 @@ function usePopupAutoResize(parameters) {
   } = parameters;
   const runOnceAnimationsFinish = useAnimationsFinished(popupElement, true, false);
   const animationFrame = useAnimationFrame();
-  const committedDimensionsRef = React170.useRef(null);
-  const isInitialRenderRef = React170.useRef(true);
-  const restoreAnchoringStylesRef = React170.useRef(NOOP);
+  const committedDimensionsRef = react_esm_exports.useRef(null);
+  const isInitialRenderRef = react_esm_exports.useRef(true);
+  const restoreAnchoringStylesRef = react_esm_exports.useRef(NOOP);
   const onMeasureLayout = useStableCallback(onMeasureLayoutParam);
   const onMeasureLayoutComplete = useStableCallback(onMeasureLayoutCompleteParam);
-  const anchoringStyles = React170.useMemo(() => {
+  const anchoringStyles = react_esm_exports.useMemo(() => {
     let isOriginSide = side === "top";
     let isPhysicalLeft = side === "left";
     if (direction === "rtl") {
@@ -19105,13 +18687,12 @@ function setPositionerCssSize(positionerElement, size4) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/direction-provider/DirectionProvider.mjs
-import * as React171 from "react";
 import { jsx as _jsx47 } from "react/jsx-runtime";
 var DirectionProvider = function DirectionProvider2(props) {
   const {
     direction = "ltr"
   } = props;
-  const contextValue = React171.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     direction
   }), [direction]);
   return /* @__PURE__ */ _jsx47(DirectionContext.Provider, {
@@ -19140,15 +18721,15 @@ function usePopupViewport(parameters) {
   const positionerElement = store.useState("positionerElement");
   const previousActiveTrigger = usePreviousValue(open ? activeTrigger : null);
   const currentContentKey = usePopupContentKey(activeTriggerId, payload);
-  const capturedNodeRef = React172.useRef(null);
-  const [previousContentNode, setPreviousContentNode] = React172.useState(null);
-  const [newTriggerOffset, setNewTriggerOffset] = React172.useState(null);
-  const currentContainerRef = React172.useRef(null);
-  const previousContainerRef = React172.useRef(null);
+  const capturedNodeRef = react_esm_exports.useRef(null);
+  const [previousContentNode, setPreviousContentNode] = react_esm_exports.useState(null);
+  const [newTriggerOffset, setNewTriggerOffset] = react_esm_exports.useState(null);
+  const currentContainerRef = react_esm_exports.useRef(null);
+  const previousContainerRef = react_esm_exports.useRef(null);
   const onAnimationsFinished = useAnimationsFinished(currentContainerRef, true, false);
   const cleanupFrame = useAnimationFrame();
-  const [previousContentDimensions, setPreviousContentDimensions] = React172.useState(null);
-  const [showStartingStyleAttribute, setShowStartingStyleAttribute] = React172.useState(false);
+  const [previousContentDimensions, setPreviousContentDimensions] = react_esm_exports.useState(null);
+  const [showStartingStyleAttribute, setShowStartingStyleAttribute] = react_esm_exports.useState(false);
   useIsoLayoutEffect(() => {
     store.set("hasViewport", true);
     return () => {
@@ -19168,7 +18749,7 @@ function usePopupViewport(parameters) {
       setPreviousContentDimensions(previousDimensions);
     }
   });
-  const lastHandledTriggerRef = React172.useRef(null);
+  const lastHandledTriggerRef = react_esm_exports.useRef(null);
   useIsoLayoutEffect(() => {
     if (!open || !mounted) {
       lastHandledTriggerRef.current = null;
@@ -19213,7 +18794,7 @@ function usePopupViewport(parameters) {
       children
     }, currentContentKey);
   } else {
-    childrenToRender = /* @__PURE__ */ _jsxs12(React172.Fragment, {
+    childrenToRender = /* @__PURE__ */ _jsxs12(react_esm_exports.Fragment, {
       children: [/* @__PURE__ */ _jsx48("div", {
         "data-previous": true,
         inert: inertValue(true),
@@ -19292,10 +18873,10 @@ function calculateRelativePosition(from, to) {
   };
 }
 function usePopupContentKey(activeTriggerId, payload) {
-  const [contentKey, setContentKey] = React172.useState(0);
-  const previousActiveTriggerIdRef = React172.useRef(activeTriggerId);
-  const previousPayloadRef = React172.useRef(payload);
-  const pendingPayloadUpdateRef = React172.useRef(false);
+  const [contentKey, setContentKey] = react_esm_exports.useState(0);
+  const previousActiveTriggerIdRef = react_esm_exports.useRef(activeTriggerId);
+  const previousPayloadRef = react_esm_exports.useRef(payload);
+  const pendingPayloadUpdateRef = react_esm_exports.useRef(false);
   useIsoLayoutEffect(() => {
     const previousActiveTriggerId = previousActiveTriggerIdRef.current;
     const previousPayload = previousPayloadRef.current;
@@ -19327,7 +18908,7 @@ var stateAttributesMapping11 = {
     "data-activation-direction": value
   } : null
 };
-var MenuViewport = /* @__PURE__ */ React173.forwardRef(function MenuViewport2(componentProps, forwardedRef) {
+var MenuViewport = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuViewport2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -19367,16 +18948,13 @@ var MenuViewport = /* @__PURE__ */ React173.forwardRef(function MenuViewport2(co
 });
 if (false) MenuViewport.displayName = "MenuViewport";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/submenu-trigger/MenuSubmenuTrigger.mjs
-import * as React174 from "react";
-
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/isElementDisabled.mjs
 function isElementDisabled(element) {
   return element == null || element.hasAttribute("disabled") || element.getAttribute("aria-disabled") === "true";
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menu/submenu-trigger/MenuSubmenuTrigger.mjs
-var MenuSubmenuTrigger = /* @__PURE__ */ React174.forwardRef(function MenuSubmenuTrigger2(componentProps, forwardedRef) {
+var MenuSubmenuTrigger = /* @__PURE__ */ react_esm_exports.forwardRef(function MenuSubmenuTrigger2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -19403,7 +18981,7 @@ var MenuSubmenuTrigger = /* @__PURE__ */ React174.forwardRef(function MenuSubmen
   const floatingTreeRoot = store.useState("floatingTreeRoot");
   const popupId = store.useState("triggerPopupId", thisTriggerId);
   const baseRegisterTrigger = useTriggerRegistration(thisTriggerId, store);
-  const registerTrigger = React174.useCallback((element2) => {
+  const registerTrigger = react_esm_exports.useCallback((element2) => {
     const cleanup = baseRegisterTrigger(element2);
     if (element2 !== null && store.select("open") && store.select("activeTriggerId") == null) {
       store.update({
@@ -19414,8 +18992,8 @@ var MenuSubmenuTrigger = /* @__PURE__ */ React174.forwardRef(function MenuSubmen
     }
     return cleanup;
   }, [baseRegisterTrigger, closeDelay, store, thisTriggerId]);
-  const triggerElementRef = React174.useRef(null);
-  const handleTriggerElementRef = React174.useCallback((el) => {
+  const triggerElementRef = react_esm_exports.useRef(null);
+  const handleTriggerElementRef = react_esm_exports.useCallback((el) => {
     triggerElementRef.current = el;
     store.set("activeTriggerElement", el);
   }, [store]);
@@ -19439,7 +19017,7 @@ var MenuSubmenuTrigger = /* @__PURE__ */ React174.forwardRef(function MenuSubmen
   }
   const itemProps = parentMenuStore.useState("itemProps");
   const highlighted = parentMenuStore.useState("isActive", listItem.index);
-  const itemMetadata = React174.useMemo(() => ({
+  const itemMetadata = react_esm_exports.useMemo(() => ({
     type: "submenu-trigger",
     setActive() {
       if (parentMenuStore.select("highlightItemOnHover")) {
@@ -19554,7 +19132,7 @@ function createMenuHandle() {
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/context-menu/root/ContextMenuRoot.mjs
 import { jsx as _jsx49 } from "react/jsx-runtime";
 function ContextMenuRoot(props) {
-  const [anchor, setAnchor] = React175.useState({
+  const [anchor, setAnchor] = react_esm_exports.useState({
     getBoundingClientRect() {
       return DOMRect.fromRect({
         width: 0,
@@ -19564,14 +19142,14 @@ function ContextMenuRoot(props) {
       });
     }
   });
-  const backdropRef = React175.useRef(null);
-  const internalBackdropRef = React175.useRef(null);
-  const actionsRef = React175.useRef(null);
-  const positionerRef = React175.useRef(null);
-  const allowMouseUpTriggerRef = React175.useRef(true);
-  const initialCursorPointRef = React175.useRef(null);
+  const backdropRef = react_esm_exports.useRef(null);
+  const internalBackdropRef = react_esm_exports.useRef(null);
+  const actionsRef = react_esm_exports.useRef(null);
+  const positionerRef = react_esm_exports.useRef(null);
+  const allowMouseUpTriggerRef = react_esm_exports.useRef(true);
+  const initialCursorPointRef = react_esm_exports.useRef(null);
   const id = useId();
-  const contextValue = React175.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     anchor,
     setAnchor,
     actionsRef,
@@ -19594,9 +19172,8 @@ function ContextMenuRoot(props) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/context-menu/trigger/ContextMenuTrigger.mjs
-import * as React176 from "react";
 var LONG_PRESS_DELAY = 500;
-var ContextMenuTrigger = /* @__PURE__ */ React176.forwardRef(function ContextMenuTrigger2(componentProps, forwardedRef) {
+var ContextMenuTrigger = /* @__PURE__ */ react_esm_exports.forwardRef(function ContextMenuTrigger2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -19618,11 +19195,11 @@ var ContextMenuTrigger = /* @__PURE__ */ React176.forwardRef(function ContextMen
   } = useMenuRootContext(false);
   const open = store.useState("open");
   const disabled2 = store.useState("disabled");
-  const triggerRef = React176.useRef(null);
-  const touchPositionRef = React176.useRef(null);
+  const triggerRef = react_esm_exports.useRef(null);
+  const touchPositionRef = react_esm_exports.useRef(null);
   const longPressTimeout = useTimeout();
   const allowMouseUpTimeout = useTimeout();
-  const allowMouseUpRef = React176.useRef(false);
+  const allowMouseUpRef = react_esm_exports.useRef(false);
   function handleLongPress(x, y, event) {
     const isTouchEvent = event.type.startsWith("touch");
     initialCursorPointRef.current = {
@@ -19706,7 +19283,7 @@ var ContextMenuTrigger = /* @__PURE__ */ React176.forwardRef(function ContextMen
     longPressTimeout.clear();
     touchPositionRef.current = null;
   }
-  React176.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     function handleDocumentContextMenu(event) {
       if (disabled2) {
         return;
@@ -19742,18 +19319,14 @@ var ContextMenuTrigger = /* @__PURE__ */ React176.forwardRef(function ContextMen
 });
 if (false) ContextMenuTrigger.displayName = "ContextMenuTrigger";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/csp-provider/CSPProvider.mjs
-import * as React178 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/csp-context/CSPContext.mjs
-import * as React177 from "react";
-var CSPContext = /* @__PURE__ */ React177.createContext(void 0);
+var CSPContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) CSPContext.displayName = "CSPContext";
 var DEFAULT_CSP_CONTEXT_VALUE = {
   disableStyleElements: false
 };
 function useCSPContext() {
-  return React177.useContext(CSPContext) ?? DEFAULT_CSP_CONTEXT_VALUE;
+  return react_esm_exports.useContext(CSPContext) ?? DEFAULT_CSP_CONTEXT_VALUE;
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/csp-provider/CSPProvider.mjs
@@ -19764,7 +19337,7 @@ function CSPProvider(props) {
     nonce,
     disableStyleElements
   } = props;
-  const contextValue = React178.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     nonce,
     disableStyleElements
   }), [nonce, disableStyleElements]);
@@ -19791,9 +19364,8 @@ __export(index_parts_exports10, {
 });
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/dialog/root/DialogRoot.mjs
-import * as React179 from "react";
 function DialogRoot(props) {
-  const mode = React179.useContext(IsDrawerContext) ? "drawer" : "dialog";
+  const mode = react_esm_exports.useContext(IsDrawerContext) ? "drawer" : "dialog";
   return useRenderDialogRoot(props, mode);
 }
 
@@ -19819,9 +19391,6 @@ __export(index_parts_exports11, {
   createHandle: () => createDialogHandle
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/backdrop/DrawerBackdrop.mjs
-import * as React180 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/popup/DrawerPopupCssVars.mjs
 var DrawerPopupCssVars = /* @__PURE__ */ (function(DrawerPopupCssVars2) {
   DrawerPopupCssVars2["nestedDrawers"] = "--nested-drawers";
@@ -19845,7 +19414,7 @@ var stateAttributesMapping12 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var DrawerBackdrop = /* @__PURE__ */ React180.forwardRef(function DrawerBackdrop2(componentProps, forwardedRef) {
+var DrawerBackdrop = /* @__PURE__ */ react_esm_exports.forwardRef(function DrawerBackdrop2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -19887,14 +19456,11 @@ if (false) DrawerBackdrop.displayName = "DrawerBackdrop";
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/close/DrawerClose.mjs
 var DrawerClose = DialogClose;
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/content/DrawerContent.mjs
-import * as React181 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/content/DrawerContentDataAttributes.mjs
 var DRAWER_CONTENT_ATTRIBUTE = "data-drawer-content";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/content/DrawerContent.mjs
-var DrawerContent = /* @__PURE__ */ React181.forwardRef(function DrawerContent2(componentProps, forwardedRef) {
+var DrawerContent = /* @__PURE__ */ react_esm_exports.forwardRef(function DrawerContent2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -19914,15 +19480,11 @@ if (false) DrawerContent.displayName = "DrawerContent";
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/description/DrawerDescription.mjs
 var DrawerDescription = DialogDescription;
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/indent/DrawerIndent.mjs
-import * as React183 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/provider/DrawerProviderContext.mjs
-import * as React182 from "react";
-var DrawerProviderContext = /* @__PURE__ */ React182.createContext(void 0);
+var DrawerProviderContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) DrawerProviderContext.displayName = "DrawerProviderContext";
 function useDrawerProviderContext(optional) {
-  const context = React182.useContext(DrawerProviderContext);
+  const context = react_esm_exports.useContext(DrawerProviderContext);
   if (optional === false && context === void 0) {
     throw new Error(false ? "Base UI: DrawerProviderContext is missing. Use <Drawer.Provider>." : formatErrorMessage_default(91));
   }
@@ -19942,7 +19504,7 @@ var stateAttributesMapping13 = {
     };
   }
 };
-var DrawerIndent = /* @__PURE__ */ React183.forwardRef(function DrawerIndent2(componentProps, forwardedRef) {
+var DrawerIndent = /* @__PURE__ */ react_esm_exports.forwardRef(function DrawerIndent2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -19952,7 +19514,7 @@ var DrawerIndent = /* @__PURE__ */ React183.forwardRef(function DrawerIndent2(co
   const providerContext = useDrawerProviderContext(true);
   const active = providerContext?.active ?? false;
   const visualStateStore = providerContext?.visualStateStore;
-  const indentRef = React183.useRef(null);
+  const indentRef = react_esm_exports.useRef(null);
   useIsoLayoutEffect(() => {
     const element = indentRef.current;
     if (!element || !visualStateStore) {
@@ -19999,7 +19561,6 @@ var DrawerIndent = /* @__PURE__ */ React183.forwardRef(function DrawerIndent2(co
 if (false) DrawerIndent.displayName = "DrawerIndent";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/indent-background/DrawerIndentBackground.mjs
-import * as React184 from "react";
 var stateAttributesMapping14 = {
   active(value) {
     if (value) {
@@ -20012,7 +19573,7 @@ var stateAttributesMapping14 = {
     };
   }
 };
-var DrawerIndentBackground = /* @__PURE__ */ React184.forwardRef(function DrawerIndentBackground2(componentProps, forwardedRef) {
+var DrawerIndentBackground = /* @__PURE__ */ react_esm_exports.forwardRef(function DrawerIndentBackground2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -20033,9 +19594,6 @@ var DrawerIndentBackground = /* @__PURE__ */ React184.forwardRef(function Drawer
 });
 if (false) DrawerIndentBackground.displayName = "DrawerIndentBackground";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/popup/DrawerPopup.mjs
-import * as React188 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/popup/DrawerPopupDataAttributes.mjs
 var DrawerPopupDataAttributes = (function(DrawerPopupDataAttributes2) {
   DrawerPopupDataAttributes2[DrawerPopupDataAttributes2["open"] = CommonPopupDataAttributes.open] = "open";
@@ -20052,19 +19610,15 @@ var DrawerPopupDataAttributes = (function(DrawerPopupDataAttributes2) {
 })({});
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/root/DrawerRootContext.mjs
-import * as React185 from "react";
-var DrawerRootContext = /* @__PURE__ */ React185.createContext(void 0);
+var DrawerRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) DrawerRootContext.displayName = "DrawerRootContext";
 function useDrawerRootContext(optional) {
-  const drawerRootContext = React185.useContext(DrawerRootContext);
+  const drawerRootContext = react_esm_exports.useContext(DrawerRootContext);
   if (optional === false && drawerRootContext === void 0) {
     throw new Error(false ? "Base UI: DrawerRootContext is missing. Drawer parts must be placed within <Drawer.Root>." : formatErrorMessage_default(90));
   }
   return drawerRootContext;
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/root/useDrawerSnapPoints.mjs
-import * as React186 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/clamp.mjs
 function clamp2(val, min2 = Number.MIN_SAFE_INTEGER, max2 = Number.MAX_SAFE_INTEGER) {
@@ -20126,8 +19680,8 @@ function useDrawerSnapPoints() {
     popupHeight
   } = useDrawerRootContext();
   const viewportElement = store.useState("viewportElement");
-  const [viewportHeight, setViewportHeight] = React186.useState(0);
-  const [rootFontSize, setRootFontSize] = React186.useState(16);
+  const [viewportHeight, setViewportHeight] = react_esm_exports.useState(0);
+  const [rootFontSize, setRootFontSize] = react_esm_exports.useState(16);
   const measureViewportHeight = useStableCallback(() => {
     const doc = ownerDocument(viewportElement);
     const html = doc.documentElement;
@@ -20153,7 +19707,7 @@ function useDrawerSnapPoints() {
       resizeObserver.disconnect();
     };
   }, [measureViewportHeight, viewportElement]);
-  const resolvedSnapPoints = React186.useMemo(() => {
+  const resolvedSnapPoints = react_esm_exports.useMemo(() => {
     if (!snapPoints || snapPoints.length === 0 || viewportHeight <= 0 || popupHeight <= 0) {
       return [];
     }
@@ -20190,7 +19744,7 @@ function useDrawerSnapPoints() {
     deduped.reverse();
     return deduped;
   }, [popupHeight, rootFontSize, snapPoints, viewportHeight]);
-  const resolvedActiveSnapPoint = React186.useMemo(() => {
+  const resolvedActiveSnapPoint = react_esm_exports.useMemo(() => {
     if (activeSnapPoint === void 0) {
       return resolvedSnapPoints[0];
     }
@@ -20221,11 +19775,10 @@ function useDrawerSnapPoints() {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/viewport/DrawerViewportContext.mjs
-import * as React187 from "react";
-var DrawerViewportContext = /* @__PURE__ */ React187.createContext(null);
+var DrawerViewportContext = /* @__PURE__ */ react_esm_exports.createContext(null);
 if (false) DrawerViewportContext.displayName = "DrawerViewportContext";
 function useDrawerViewportContext(optional) {
-  const context = React187.useContext(DrawerViewportContext);
+  const context = react_esm_exports.useContext(DrawerViewportContext);
   if (optional === false && context === null) {
     throw new Error(false ? "Base UI: DrawerViewportContext is missing. Drawer parts must be placed within <Drawer.Viewport>." : formatErrorMessage_default(92));
   }
@@ -20303,7 +19856,7 @@ var stateAttributesMapping15 = {
     } : null;
   }
 };
-var DrawerPopup = /* @__PURE__ */ React188.forwardRef(function DrawerPopup2(componentProps, forwardedRef) {
+var DrawerPopup = /* @__PURE__ */ react_esm_exports.forwardRef(function DrawerPopup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -20351,10 +19904,10 @@ var DrawerPopup = /* @__PURE__ */ React188.forwardRef(function DrawerPopup2(comp
   const nestedDrawerOpen = nestedOpenDrawerCount > 0;
   const swiping = swipe2?.swiping ?? false;
   const swipeStrength = swipe2?.swipeStrength ?? null;
-  const [popupHeight, setPopupHeight] = React188.useState(0);
-  const popupHeightRef = React188.useRef(0);
+  const [popupHeight, setPopupHeight] = react_esm_exports.useState(0);
+  const popupHeightRef = react_esm_exports.useRef(0);
   if (false) {
-    React188.useEffect(() => {
+    react_esm_exports.useEffect(() => {
       if (swipe2) {
         return;
       }
@@ -20432,7 +19985,7 @@ var DrawerPopup = /* @__PURE__ */ React188.forwardRef(function DrawerPopup2(comp
       }
     };
   }, [nestedSwipeProgressStore, popupRef]);
-  React188.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!open) {
       return void 0;
     }
@@ -20441,7 +19994,7 @@ var DrawerPopup = /* @__PURE__ */ React188.forwardRef(function DrawerPopup2(comp
       notifyParentFrontmostHeight?.(0);
     };
   }, [frontmostHeight, open, notifyParentFrontmostHeight]);
-  React188.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!notifyParentHasNestedDrawer) {
       return void 0;
     }
@@ -20544,14 +20097,13 @@ if (false) DrawerPopup.displayName = "DrawerPopup";
 var DrawerPortal = DialogPortal;
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/provider/DrawerProvider.mjs
-import * as React189 from "react";
 import { jsx as _jsx52 } from "react/jsx-runtime";
 function DrawerProvider(props) {
   const {
     children
   } = props;
-  const [openById, setOpenById] = React189.useState(() => /* @__PURE__ */ new Map());
-  const [visualStateStore] = React189.useState(createVisualStateStore);
+  const [openById, setOpenById] = react_esm_exports.useState(() => /* @__PURE__ */ new Map());
+  const [visualStateStore] = react_esm_exports.useState(createVisualStateStore);
   const setDrawerOpen = useStableCallback((drawerId, open) => {
     setOpenById((prev) => {
       const prevOpen = prev.get(drawerId);
@@ -20573,7 +20125,7 @@ function DrawerProvider(props) {
       return next;
     });
   });
-  const active = React189.useMemo(() => {
+  const active = react_esm_exports.useMemo(() => {
     for (const open of openById.values()) {
       if (open) {
         return true;
@@ -20581,7 +20133,7 @@ function DrawerProvider(props) {
     }
     return false;
   }, [openById]);
-  const contextValue = React189.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     setDrawerOpen,
     removeDrawer,
     active,
@@ -20630,7 +20182,6 @@ function createVisualStateStore() {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/root/DrawerRoot.mjs
-import * as React190 from "react";
 import { jsx as _jsx53, jsxs as _jsxs13 } from "react/jsx-runtime";
 var _DrawerProviderReport;
 var _DrawerProviderReport2;
@@ -20659,11 +20210,11 @@ function DrawerRoot(props) {
   const notifyParentFrontmostHeight = parentDrawerRootContext?.onNestedFrontmostHeightChange;
   const notifyParentSwipingChange = parentDrawerRootContext?.onNestedSwipingChange;
   const notifyParentHasNestedDrawer = parentDrawerRootContext?.onNestedDrawerPresenceChange;
-  const [popupHeight, setPopupHeight] = React190.useState(0);
-  const [frontmostHeight, setFrontmostHeight] = React190.useState(0);
-  const [hasNestedDrawer, setHasNestedDrawer] = React190.useState(false);
-  const [nestedSwiping, setNestedSwiping] = React190.useState(false);
-  const [nestedSwipeProgressStore] = React190.useState(createNestedSwipeProgressStore);
+  const [popupHeight, setPopupHeight] = react_esm_exports.useState(0);
+  const [frontmostHeight, setFrontmostHeight] = react_esm_exports.useState(0);
+  const [hasNestedDrawer, setHasNestedDrawer] = react_esm_exports.useState(false);
+  const [nestedSwiping, setNestedSwiping] = react_esm_exports.useState(false);
+  const [nestedSwipeProgressStore] = react_esm_exports.useState(createNestedSwipeProgressStore);
   const resolvedDefaultSnapPoint = defaultSnapPoint !== void 0 ? defaultSnapPoint : snapPoints?.[0] ?? null;
   const isSnapPointControlled = snapPointProp !== void 0;
   const [activeSnapPoint, setActiveSnapPointUnwrapped] = useControlled({
@@ -20672,7 +20223,7 @@ function DrawerRoot(props) {
     name: "Drawer",
     state: "snapPoint"
   });
-  const isNestedDrawerOpenRef = React190.useRef(false);
+  const isNestedDrawerOpenRef = react_esm_exports.useRef(false);
   const setActiveSnapPoint = useStableCallback((nextSnapPoint, eventDetails) => {
     const resolvedEventDetails = eventDetails ?? createChangeEventDetails(reason_parts_exports.none);
     onSnapPointChange?.(nextSnapPoint, resolvedEventDetails);
@@ -20681,7 +20232,7 @@ function DrawerRoot(props) {
     }
     setActiveSnapPointUnwrapped(nextSnapPoint);
   });
-  const resolvedActiveSnapPoint = React190.useMemo(() => {
+  const resolvedActiveSnapPoint = react_esm_exports.useMemo(() => {
     if (isSnapPointControlled) {
       return activeSnapPoint;
     }
@@ -20730,7 +20281,7 @@ function DrawerRoot(props) {
       setActiveSnapPoint(resolvedDefaultSnapPoint, createChangeEventDetails(eventDetails.reason, eventDetails.event, eventDetails.trigger));
     }
   });
-  const contextValue = React190.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     swipeDirection,
     snapToSequentialPoints,
     snapPoints,
@@ -20751,9 +20302,9 @@ function DrawerRoot(props) {
     notifyParentSwipeProgressChange,
     notifyParentHasNestedDrawer
   }), [resolvedActiveSnapPoint, frontmostHeight, hasNestedDrawer, nestedSwiping, nestedSwipeProgressStore, notifyParentHasNestedDrawer, notifyParentSwipeProgressChange, notifyParentSwipingChange, notifyParentFrontmostHeight, onNestedDrawerPresenceChange, onNestedFrontmostHeightChange, onNestedSwipeProgressChange, onNestedSwipingChange, onPopupHeightChange, popupHeight, setActiveSnapPoint, snapPoints, snapToSequentialPoints, swipeDirection]);
-  const resolvedChildren = typeof children === "function" ? (payload) => /* @__PURE__ */ _jsxs13(React190.Fragment, {
+  const resolvedChildren = typeof children === "function" ? (payload) => /* @__PURE__ */ _jsxs13(react_esm_exports.Fragment, {
     children: [_DrawerProviderReport || (_DrawerProviderReport = /* @__PURE__ */ _jsx53(DrawerProviderReporter, {})), children(payload)]
-  }) : /* @__PURE__ */ _jsxs13(React190.Fragment, {
+  }) : /* @__PURE__ */ _jsxs13(react_esm_exports.Fragment, {
     children: [_DrawerProviderReport2 || (_DrawerProviderReport2 = /* @__PURE__ */ _jsx53(DrawerProviderReporter, {})), children]
   });
   return /* @__PURE__ */ _jsx53(DrawerRootContext.Provider, {
@@ -20809,7 +20360,7 @@ function DrawerProviderReporter() {
   const nestedOpenDialogCount = store.useState("nestedOpenDialogCount");
   const popupElement = store.useState("popupElement");
   const isTopmost = nestedOpenDialogCount === 0;
-  React190.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!providerContext || drawerId == null) {
       return void 0;
     }
@@ -20817,13 +20368,13 @@ function DrawerProviderReporter() {
       providerContext.removeDrawer(drawerId);
     };
   }, [drawerId, providerContext]);
-  React190.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (drawerId == null) {
       return;
     }
     providerContext?.setDrawerOpen(drawerId, open);
   }, [drawerId, open, providerContext]);
-  React190.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!open || !isTopmost || !parts_exports.os.android) {
       return void 0;
     }
@@ -20847,12 +20398,6 @@ function DrawerProviderReporter() {
   }, [store, isTopmost, open, popupElement]);
   return null;
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/swipe-area/DrawerSwipeArea.mjs
-import * as React192 from "react";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useSwipeDismiss.mjs
-import * as React191 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/scrollable.mjs
 function isScrollable(element, axis, allowOverflowIntent = false) {
@@ -20997,7 +20542,7 @@ function useSwipeDismiss(options) {
   const allowDown = directions.includes("down");
   const hasHorizontal = allowLeft || allowRight;
   const hasVertical = allowUp || allowDown;
-  const scrollAxes = React191.useMemo(() => {
+  const scrollAxes = react_esm_exports.useMemo(() => {
     const axes = [];
     if (hasVertical) {
       axes.push("vertical");
@@ -21007,51 +20552,51 @@ function useSwipeDismiss(options) {
     }
     return axes;
   }, [hasHorizontal, hasVertical]);
-  const [currentSwipeDirection, setCurrentSwipeDirection] = React191.useState(void 0);
-  const [isSwiping, setIsSwiping] = React191.useState(false);
-  const [dragDismissed, setDragDismissed] = React191.useState(false);
-  const dragStartPosRef = React191.useRef({
+  const [currentSwipeDirection, setCurrentSwipeDirection] = react_esm_exports.useState(void 0);
+  const [isSwiping, setIsSwiping] = react_esm_exports.useState(false);
+  const [dragDismissed, setDragDismissed] = react_esm_exports.useState(false);
+  const dragStartPosRef = react_esm_exports.useRef({
     x: 0,
     y: 0
   });
-  const dragOffsetRef = React191.useRef({
+  const dragOffsetRef = react_esm_exports.useRef({
     x: 0,
     y: 0
   });
-  const lastMovePosRef = React191.useRef(null);
-  const initialTransformRef = React191.useRef({
+  const lastMovePosRef = react_esm_exports.useRef(null);
+  const initialTransformRef = react_esm_exports.useRef({
     x: 0,
     y: 0,
     scale: 1
   });
-  const intendedSwipeDirectionRef = React191.useRef(void 0);
-  const maxSwipeDisplacementRef = React191.useRef(0);
-  const cancelledSwipeRef = React191.useRef(false);
-  const swipeCancelBaselineRef = React191.useRef({
+  const intendedSwipeDirectionRef = react_esm_exports.useRef(void 0);
+  const maxSwipeDisplacementRef = react_esm_exports.useRef(0);
+  const cancelledSwipeRef = react_esm_exports.useRef(false);
+  const swipeCancelBaselineRef = react_esm_exports.useRef({
     x: 0,
     y: 0
   });
-  const lockedDirectionRef = React191.useRef(null);
-  const isFirstPointerMoveRef = React191.useRef(false);
-  const pendingSwipeRef = React191.useRef(false);
-  const pendingSwipeStartPosRef = React191.useRef(null);
-  const swipeFromScrollableRef = React191.useRef(false);
-  const sawPrimaryButtonsOnMoveRef = React191.useRef(false);
-  const elementSizeRef = React191.useRef({
+  const lockedDirectionRef = react_esm_exports.useRef(null);
+  const isFirstPointerMoveRef = react_esm_exports.useRef(false);
+  const pendingSwipeRef = react_esm_exports.useRef(false);
+  const pendingSwipeStartPosRef = react_esm_exports.useRef(null);
+  const swipeFromScrollableRef = react_esm_exports.useRef(false);
+  const sawPrimaryButtonsOnMoveRef = react_esm_exports.useRef(false);
+  const elementSizeRef = react_esm_exports.useRef({
     width: 0,
     height: 0
   });
-  const swipeProgressRef = React191.useRef(0);
-  const swipeThresholdRef = React191.useRef(swipeThresholdDefault);
-  const swipeStartTimeRef = React191.useRef(null);
-  const lastDragSampleRef = React191.useRef(null);
-  const lastDragVelocityRef = React191.useRef({
+  const swipeProgressRef = react_esm_exports.useRef(0);
+  const swipeThresholdRef = react_esm_exports.useRef(swipeThresholdDefault);
+  const swipeStartTimeRef = react_esm_exports.useRef(null);
+  const lastDragSampleRef = react_esm_exports.useRef(null);
+  const lastDragVelocityRef = react_esm_exports.useRef({
     x: 0,
     y: 0
   });
-  const lastProgressDetailsRef = React191.useRef(null);
-  const isSwipingRef = React191.useRef(false);
-  const dragStyleSnapshotRef = React191.useRef(null);
+  const lastProgressDetailsRef = react_esm_exports.useRef(null);
+  const isSwipingRef = react_esm_exports.useRef(false);
+  const dragStyleSnapshotRef = react_esm_exports.useRef(null);
   const setSwiping = useStableCallback((nextSwiping) => {
     if (isSwipingRef.current === nextSwiping) {
       return;
@@ -21144,7 +20689,7 @@ function useSwipeDismiss(options) {
       time: timeStamp
     };
   }
-  const reset = React191.useCallback(() => {
+  const reset = react_esm_exports.useCallback(() => {
     setCurrentSwipeDirection(void 0);
     setSwiping(false);
     setDragDismissed(false);
@@ -21190,7 +20735,7 @@ function useSwipeDismiss(options) {
     lastProgressDetailsRef.current = null;
     syncDragStyles(false);
   }, [setSwiping, swipeThresholdDefault, syncDragStyles, updateSwipeProgress]);
-  React191.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (typeof swipeThresholdProp !== "function") {
       swipeThresholdRef.current = swipeThresholdDefault;
     }
@@ -21781,7 +21326,7 @@ function useSwipeDismiss(options) {
       timeStamp: nativeEvent.timeStamp
     });
   });
-  const getDragStyles = React191.useCallback(() => {
+  const getDragStyles = react_esm_exports.useCallback(() => {
     const dragOffset = dragOffsetRef.current;
     const initialTransform = initialTransformRef.current;
     const deltaX = dragOffset.x - initialTransform.x;
@@ -21801,7 +21346,7 @@ function useSwipeDismiss(options) {
       [movementCssVars.y]: `${deltaY}px`
     };
   }, [dragDismissed, isSwiping, movementCssVars]);
-  const getPointerProps = React191.useCallback(() => {
+  const getPointerProps = react_esm_exports.useCallback(() => {
     if (!enabled) {
       return {};
     }
@@ -21812,7 +21357,7 @@ function useSwipeDismiss(options) {
       onPointerCancel: handleEnd
     };
   }, [enabled, handleEnd, handleMove, handleStart]);
-  const getTouchProps = React191.useCallback(() => {
+  const getTouchProps = react_esm_exports.useCallback(() => {
     if (!enabled) {
       return {};
     }
@@ -21887,7 +21432,7 @@ var oppositeSwipeDirection = {
 function resolveTouchAction(direction) {
   return direction === "left" || direction === "right" ? "pan-y" : "pan-x";
 }
-var DrawerSwipeArea = /* @__PURE__ */ React192.forwardRef(function DrawerSwipeArea2(componentProps, forwardedRef) {
+var DrawerSwipeArea = /* @__PURE__ */ react_esm_exports.forwardRef(function DrawerSwipeArea2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -21904,18 +21449,18 @@ var DrawerSwipeArea = /* @__PURE__ */ React192.forwardRef(function DrawerSwipeAr
     frontmostHeight
   } = useDrawerRootContext();
   const providerContext = useDrawerProviderContext(true);
-  const [swipeActive, setSwipeActive] = React192.useState(false);
+  const [swipeActive, setSwipeActive] = react_esm_exports.useState(false);
   const releaseDismissTimeout = useTimeout();
-  const swipeAreaRef = React192.useRef(null);
-  const swipeStartEventRef = React192.useRef(null);
-  const openedBySwipeRef = React192.useRef(false);
-  const dragDeltaRef = React192.useRef({
+  const swipeAreaRef = react_esm_exports.useRef(null);
+  const swipeStartEventRef = react_esm_exports.useRef(null);
+  const openedBySwipeRef = react_esm_exports.useRef(false);
+  const dragDeltaRef = react_esm_exports.useRef({
     x: 0,
     y: 0
   });
-  const closedOffsetRef = React192.useRef(null);
-  const appliedSwipeStylesRef = React192.useRef(false);
-  const popupTransitionRef = React192.useRef(null);
+  const closedOffsetRef = react_esm_exports.useRef(null);
+  const appliedSwipeStylesRef = react_esm_exports.useRef(false);
+  const popupTransitionRef = react_esm_exports.useRef(null);
   const swipeAreaId = useBaseUiId(componentProps.id);
   const registerTrigger = useTriggerRegistration(swipeAreaId, store);
   const open = store.useState("open");
@@ -22141,7 +21686,7 @@ var DrawerSwipeArea = /* @__PURE__ */ React192.forwardRef(function DrawerSwipeAr
   const swipePointerProps = swipe2.getPointerProps();
   const swipeTouchProps = swipe2.getTouchProps();
   const resetSwipe = swipe2.reset;
-  React192.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!enabled) {
       resetSwipe();
       resetDragDelta();
@@ -22149,7 +21694,7 @@ var DrawerSwipeArea = /* @__PURE__ */ React192.forwardRef(function DrawerSwipeAr
       resetSwipeInteractionState();
     }
   }, [clearSwipeStyles, enabled, resetDragDelta, resetSwipe]);
-  React192.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     return () => {
       store.context.outsidePressEnabledRef.current = true;
     };
@@ -22212,15 +21757,13 @@ var DrawerTitle = DialogTitle;
 var DrawerTrigger = DialogTrigger;
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/viewport/DrawerViewport.mjs
-import * as React194 from "react";
 import * as ReactDOM10 from "react-dom";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/virtual-keyboard-provider/DrawerVirtualKeyboardContext.mjs
-import * as React193 from "react";
-var DrawerVirtualKeyboardContext = /* @__PURE__ */ React193.createContext(void 0);
+var DrawerVirtualKeyboardContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) DrawerVirtualKeyboardContext.displayName = "DrawerVirtualKeyboardContext";
 function useDrawerVirtualKeyboardContext() {
-  return React193.useContext(DrawerVirtualKeyboardContext);
+  return react_esm_exports.useContext(DrawerVirtualKeyboardContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/viewport/DrawerViewport.mjs
@@ -22237,7 +21780,7 @@ var MAX_SWIPE_RELEASE_DURATION_MS = 360;
 var MIN_SWIPE_RELEASE_SCALAR = 0.1;
 var MAX_SWIPE_RELEASE_SCALAR = 1;
 var DRAWER_CONTENT_SELECTOR = `[${DRAWER_CONTENT_ATTRIBUTE}]`;
-var DrawerViewport = /* @__PURE__ */ React194.forwardRef(function DrawerViewport2(props, forwardedRef) {
+var DrawerViewport = /* @__PURE__ */ react_esm_exports.forwardRef(function DrawerViewport2(props, forwardedRef) {
   const {
     render,
     className,
@@ -22277,18 +21820,18 @@ var DrawerViewport = /* @__PURE__ */ React194.forwardRef(function DrawerViewport
   const scrollAxis = swipeDirection === "left" || swipeDirection === "right" ? "horizontal" : "vertical";
   const isVerticalScrollAxis = scrollAxis === "vertical";
   const crossScrollAxis = isVerticalScrollAxis ? "horizontal" : "vertical";
-  const [swipeRelease, setSwipeRelease] = React194.useState(null);
-  const pendingSwipeCloseSnapPointRef = React194.useRef(void 0);
-  const resetSwipeRef = React194.useRef(null);
+  const [swipeRelease, setSwipeRelease] = react_esm_exports.useState(null);
+  const pendingSwipeCloseSnapPointRef = react_esm_exports.useRef(void 0);
+  const resetSwipeRef = react_esm_exports.useRef(null);
   const controlledDismissFrame = useAnimationFrame();
-  const swipingRef = React194.useRef(false);
-  const nestedSwipeActiveRef = React194.useRef(false);
-  const lastPointerTypeRef = React194.useRef("");
-  const ignoreNextTouchStartFromPenRef = React194.useRef(false);
-  const ignoreTouchSwipeRef = React194.useRef(false);
-  const touchScrollStateRef = React194.useRef(null);
+  const swipingRef = react_esm_exports.useRef(false);
+  const nestedSwipeActiveRef = react_esm_exports.useRef(false);
+  const lastPointerTypeRef = react_esm_exports.useRef("");
+  const ignoreNextTouchStartFromPenRef = react_esm_exports.useRef(false);
+  const ignoreTouchSwipeRef = react_esm_exports.useRef(false);
+  const touchScrollStateRef = react_esm_exports.useRef(null);
   const virtualKeyboard = useDrawerVirtualKeyboardContext();
-  const snapPointRange = React194.useMemo(() => {
+  const snapPointRange = react_esm_exports.useMemo(() => {
     if (!snapPoints || snapPoints.length < 2) {
       return null;
     }
@@ -22318,13 +21861,13 @@ var DrawerViewport = /* @__PURE__ */ React194.forwardRef(function DrawerViewport
       range
     };
   }, [resolvedSnapPoints, snapPoints, swipeDirection]);
-  const snapPointProgress = React194.useMemo(() => {
+  const snapPointProgress = react_esm_exports.useMemo(() => {
     if (!snapPointRange || activeSnapPointOffset === null) {
       return null;
     }
     return clamp2((activeSnapPointOffset - snapPointRange.minOffset) / snapPointRange.range, 0, 1);
   }, [activeSnapPointOffset, snapPointRange]);
-  const swipeDirections = React194.useMemo(() => {
+  const swipeDirections = react_esm_exports.useMemo(() => {
     if (snapPoints && snapPoints.length > 0 && (swipeDirection === "down" || swipeDirection === "up")) {
       return swipeDirection === "down" ? ["down", "up"] : ["up", "down"];
     }
@@ -22766,7 +22309,7 @@ var DrawerViewport = /* @__PURE__ */ React194.forwardRef(function DrawerViewport
     reset: resetSwipe
   } = swipe2;
   resetSwipeRef.current = resetSwipe;
-  React194.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     const rootElement = viewportElement ?? popupElementState;
     if (!rootElement) {
       return void 0;
@@ -22849,7 +22392,7 @@ var DrawerViewport = /* @__PURE__ */ React194.forwardRef(function DrawerViewport
       capture: true
     });
   }, [mounted, nestedDrawerOpen, open, popupElementState, isVerticalScrollAxis, scrollAxis, swipeDirection, moveSwipeNative, viewportElement, virtualKeyboard]);
-  React194.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!snapPointRange || swipe2.swiping) {
       return;
     }
@@ -22860,7 +22403,7 @@ var DrawerViewport = /* @__PURE__ */ React194.forwardRef(function DrawerViewport
       notifyParent: false
     });
   }, [applySwipeProgress, frontmostHeight, nested, notifyParentSwipeProgressChange, open, snapPointProgress, snapPointRange, swipe2.swiping, store, visualStateStore]);
-  React194.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!notifyParentSwipeProgressChange) {
       return void 0;
     }
@@ -22871,13 +22414,13 @@ var DrawerViewport = /* @__PURE__ */ React194.forwardRef(function DrawerViewport
       notifyParentSwipeProgressChange(0);
     };
   }, [notifyParentSwipeProgressChange, open]);
-  React194.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (open) {
       resetSwipe();
       clearSwipeRelease();
     }
   }, [clearSwipeRelease, open, resetSwipe]);
-  React194.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     const backdropElement = backdropRef.current;
     return () => {
       visualStateStore?.set({
@@ -22892,7 +22435,7 @@ var DrawerViewport = /* @__PURE__ */ React194.forwardRef(function DrawerViewport
       finishNestedSwipe();
     };
   }, [backdropRef, finishNestedSwipe, visualStateStore]);
-  const swipeProviderValue = React194.useMemo(() => ({
+  const swipeProviderValue = react_esm_exports.useMemo(() => ({
     swiping: swipe2.swiping,
     getDragStyles: swipe2.getDragStyles,
     swipeStrength: swipeRelease ?? null,
@@ -23186,9 +22729,6 @@ function shouldDismissFromStartEdge(direction, axis) {
   return null;
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/virtual-keyboard-provider/DrawerVirtualKeyboardProvider.mjs
-import * as React195 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/drawer/viewport/DrawerViewportCssVars.mjs
 var DrawerViewportCssVars = /* @__PURE__ */ (function(DrawerViewportCssVars2) {
   DrawerViewportCssVars2["keyboardInset"] = "--drawer-keyboard-inset";
@@ -23217,10 +22757,10 @@ function DrawerVirtualKeyboardProvider(props) {
   const viewportElement = store.useState("viewportElement");
   const rootElement = viewportElement;
   const nestedDrawerOpen = nestedOpenDialogCount > 0;
-  const pendingKeyboardFocusMovedRef = React195.useRef(false);
-  const keyboardTouchStartRef = React195.useRef(null);
-  const focusedKeyboardTargetRef = React195.useRef(null);
-  const keyboardScrollAdjustmentRef = React195.useRef(null);
+  const pendingKeyboardFocusMovedRef = react_esm_exports.useRef(false);
+  const keyboardTouchStartRef = react_esm_exports.useRef(null);
+  const focusedKeyboardTargetRef = react_esm_exports.useRef(null);
+  const keyboardScrollAdjustmentRef = react_esm_exports.useRef(null);
   const keyboardFocusFrame = useAnimationFrame();
   const restoreKeyboardScrollAdjustment = useStableCallback(() => {
     const adjustment = keyboardScrollAdjustmentRef.current;
@@ -23275,7 +22815,7 @@ function DrawerVirtualKeyboardProvider(props) {
     pendingKeyboardFocusMovedRef.current = false;
     keyboardTouchStartRef.current = null;
   });
-  React195.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!mounted || !open) {
       focusedKeyboardTargetRef.current = null;
       restoreKeyboardScrollAdjustment();
@@ -23455,7 +22995,7 @@ function DrawerVirtualKeyboardProvider(props) {
     }
     resetTouchTrackingState();
   });
-  const contextValue = React195.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     onTouchStart,
     onTouchMove,
     onTouchEnd,
@@ -23598,15 +23138,11 @@ __export(index_parts_exports12, {
   Validity: () => FieldValidity
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/field/root/FieldRoot.mjs
-import * as React200 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/fieldset/root/FieldsetRootContext.mjs
-import * as React196 from "react";
-var FieldsetRootContext = /* @__PURE__ */ React196.createContext(void 0);
+var FieldsetRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) FieldsetRootContext.displayName = "FieldsetRootContext";
 function useFieldsetRootContext(optional = false) {
-  const context = React196.useContext(FieldsetRootContext);
+  const context = react_esm_exports.useContext(FieldsetRootContext);
   if (!context && !optional) {
     throw new Error(false ? "Base UI: FieldsetRootContext is missing. Fieldset parts must be placed within <Fieldset.Root>." : formatErrorMessage_default(86));
   }
@@ -23614,14 +23150,13 @@ function useFieldsetRootContext(optional = false) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/labelable-provider/LabelableProvider.mjs
-import * as React197 from "react";
 import { jsx as _jsx56 } from "react/jsx-runtime";
 var LabelableProvider = function LabelableProvider2(props) {
   const defaultId = useBaseUiId();
   const initialControlId = props.controlId === void 0 ? defaultId : props.controlId;
-  const [controlId, setControlIdState] = React197.useState(initialControlId);
-  const [labelId, setLabelId] = React197.useState(props.labelId);
-  const [messageIds, setMessageIds] = React197.useState([]);
+  const [controlId, setControlIdState] = react_esm_exports.useState(initialControlId);
+  const [labelId, setLabelId] = react_esm_exports.useState(props.labelId);
+  const [messageIds, setMessageIds] = react_esm_exports.useState([]);
   const registrationsRef = useRefWithInit(() => /* @__PURE__ */ new Map());
   const {
     messageIds: parentMessageIds
@@ -23649,7 +23184,7 @@ var LabelableProvider = function LabelableProvider2(props) {
       return nextControlId;
     });
   });
-  const getDescriptionProps = React197.useCallback((externalProps) => {
+  const getDescriptionProps = react_esm_exports.useCallback((externalProps) => {
     const ids = externalProps["aria-describedby"] ? externalProps["aria-describedby"].split(" ") : [];
     ids.push(...parentMessageIds, ...messageIds);
     return {
@@ -23657,7 +23192,7 @@ var LabelableProvider = function LabelableProvider2(props) {
       "aria-describedby": Array.from(new Set(ids)).join(" ") || void 0
     };
   }, [parentMessageIds, messageIds]);
-  const contextValue = React197.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     controlId,
     registerControlId,
     labelId,
@@ -23672,9 +23207,6 @@ var LabelableProvider = function LabelableProvider2(props) {
   });
 };
 if (false) LabelableProvider.displayName = "LabelableProvider";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/field/root/useFieldValidation.mjs
-import * as React198 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/field/utils/getCombinedFieldValidityData.mjs
 function getCombinedFieldValidityData(validityData, invalid) {
@@ -23749,10 +23281,10 @@ function useFieldValidation(params) {
     getDescriptionProps
   } = useLabelableContext();
   const timeout = useTimeout();
-  const inputRef = React198.useRef(null);
+  const inputRef = react_esm_exports.useRef(null);
   const registeredInputs = useRefWithInit(() => /* @__PURE__ */ new Set()).current;
-  const validationCommitIdRef = React198.useRef(0);
-  const registerInput = React198.useCallback((element) => {
+  const validationCommitIdRef = react_esm_exports.useRef(0);
+  const registerInput = react_esm_exports.useCallback((element) => {
     if (!element) {
       return void 0;
     }
@@ -23902,10 +23434,10 @@ function useFieldValidation(params) {
       commit(value, !validateOnChange);
     }
   });
-  const getValidationProps = React198.useCallback((disabled2, externalProps = {}) => mergeProps(getDescriptionProps(externalProps), state.valid === false && !state.disabled && !disabled2 ? {
+  const getValidationProps = react_esm_exports.useCallback((disabled2, externalProps = {}) => mergeProps(getDescriptionProps(externalProps), state.valid === false && !state.disabled && !disabled2 ? {
     "aria-invalid": true
   } : EMPTY_OBJECT), [getDescriptionProps, state.disabled, state.valid]);
-  return React198.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     getValidationProps,
     inputRef,
     registerInput,
@@ -23915,7 +23447,6 @@ function useFieldValidation(params) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/field-register-control/useFieldControlRegistration.mjs
-import * as React199 from "react";
 function useFieldControlRegistration(params) {
   const {
     commit,
@@ -23930,9 +23461,9 @@ function useFieldControlRegistration(params) {
   const {
     formRef
   } = useFormContext();
-  const activeFieldControlSourceRef = React199.useRef(null);
-  const registrationRef = React199.useRef(null);
-  const fallbackControlRef = React199.useRef(null);
+  const activeFieldControlSourceRef = react_esm_exports.useRef(null);
+  const registrationRef = react_esm_exports.useRef(null);
+  const fallbackControlRef = react_esm_exports.useRef(null);
   const getValueForForm = useStableCallback(() => {
     const registration = registrationRef.current;
     if (!registration) {
@@ -24038,7 +23569,7 @@ function useFieldControlRegistration(params) {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/field/root/FieldRoot.mjs
 import { jsx as _jsx57 } from "react/jsx-runtime";
-var FieldRootInner = /* @__PURE__ */ React200.forwardRef(function FieldRootInner2(componentProps, forwardedRef) {
+var FieldRootInner = /* @__PURE__ */ react_esm_exports.forwardRef(function FieldRootInner2(componentProps, forwardedRef) {
   const {
     errors,
     validationMode: formValidationMode,
@@ -24062,23 +23593,23 @@ var FieldRootInner = /* @__PURE__ */ React200.forwardRef(function FieldRootInner
   const disabledFieldset = useFieldsetRootContext(true)?.disabled;
   const validate = useStableCallback(validateProp || (() => null));
   const disabled2 = disabledFieldset || disabledProp;
-  const [touchedState, setTouchedUnwrapped] = React200.useState(false);
-  const [dirtyState, setDirtyUnwrapped] = React200.useState(false);
-  const [filled, setFilled] = React200.useState(false);
-  const [focused, setFocused] = React200.useState(false);
+  const [touchedState, setTouchedUnwrapped] = react_esm_exports.useState(false);
+  const [dirtyState, setDirtyUnwrapped] = react_esm_exports.useState(false);
+  const [filled, setFilled] = react_esm_exports.useState(false);
+  const [focused, setFocused] = react_esm_exports.useState(false);
   const dirty = dirtyProp ?? dirtyState;
   const touched = touchedProp ?? touchedState;
-  const markedDirtyRef = React200.useRef(dirty);
-  const registeredFieldIdRef = React200.useRef(void 0);
-  const [registeredFieldName, setRegisteredFieldName] = React200.useState();
+  const markedDirtyRef = react_esm_exports.useRef(dirty);
+  const registeredFieldIdRef = react_esm_exports.useRef(void 0);
+  const [registeredFieldName, setRegisteredFieldName] = react_esm_exports.useState();
   const effectiveName = name ?? registeredFieldName;
   useIsoLayoutEffect(() => {
     if (dirtyProp !== void 0) {
       markedDirtyRef.current = dirtyProp;
     }
   }, [dirtyProp]);
-  const getRegisteredFieldId = React200.useCallback(() => registeredFieldIdRef.current, []);
-  const setRegisteredFieldId = React200.useCallback((id) => {
+  const getRegisteredFieldId = react_esm_exports.useCallback(() => registeredFieldIdRef.current, []);
+  const setRegisteredFieldId = react_esm_exports.useCallback((id) => {
     registeredFieldIdRef.current = id;
   }, []);
   const setDirty = useStableCallback((value) => {
@@ -24100,7 +23631,7 @@ var FieldRootInner = /* @__PURE__ */ React200.forwardRef(function FieldRootInner
   const formError = effectiveName && Object.hasOwn(errors, effectiveName) ? errors[effectiveName] : null;
   const hasFormError = !!(Array.isArray(formError) ? formError.length : formError);
   const invalid = invalidProp === true || hasFormError;
-  const [validityData, setValidityData] = React200.useState({
+  const [validityData, setValidityData] = react_esm_exports.useState({
     state: DEFAULT_VALIDITY_STATE,
     error: "",
     errors: [],
@@ -24108,7 +23639,7 @@ var FieldRootInner = /* @__PURE__ */ React200.forwardRef(function FieldRootInner
     initialValue: null
   });
   const valid = disabled2 ? null : !invalid && validityData.state.valid;
-  const state = React200.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     disabled: disabled2,
     touched,
     dirty,
@@ -24137,10 +23668,10 @@ var FieldRootInner = /* @__PURE__ */ React200.forwardRef(function FieldRootInner
     setValidityData,
     validityData
   });
-  React200.useImperativeHandle(actionsRef, () => ({
+  react_esm_exports.useImperativeHandle(actionsRef, () => ({
     validate: validateFieldControl
   }), [validateFieldControl]);
-  const contextValue = React200.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     invalid,
     name: effectiveName,
     validityData,
@@ -24175,7 +23706,7 @@ var FieldRootInner = /* @__PURE__ */ React200.forwardRef(function FieldRootInner
   });
 });
 if (false) FieldRootInner.displayName = "FieldRootInner";
-var FieldRoot = /* @__PURE__ */ React200.forwardRef(function FieldRoot2(componentProps, forwardedRef) {
+var FieldRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function FieldRoot2(componentProps, forwardedRef) {
   return /* @__PURE__ */ _jsx57(LabelableProvider, {
     children: /* @__PURE__ */ _jsx57(FieldRootInner, {
       ...componentProps,
@@ -24186,8 +23717,7 @@ var FieldRoot = /* @__PURE__ */ React200.forwardRef(function FieldRoot2(componen
 if (false) FieldRoot.displayName = "FieldRoot";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/field/label/FieldLabel.mjs
-import * as React201 from "react";
-var FieldLabel = /* @__PURE__ */ React201.forwardRef(function FieldLabel2(componentProps, forwardedRef) {
+var FieldLabel = /* @__PURE__ */ react_esm_exports.forwardRef(function FieldLabel2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -24205,13 +23735,13 @@ var FieldLabel = /* @__PURE__ */ React201.forwardRef(function FieldLabel2(compon
     ...fieldRootContext.state,
     disabled: fieldRootContext.disabled || fieldItemContext.disabled
   };
-  const labelRef = React201.useRef(null);
+  const labelRef = react_esm_exports.useRef(null);
   const labelProps = useLabel({
     id: labelId ?? idProp,
     native: nativeLabel
   });
   if (false) {
-    React201.useEffect(() => {
+    react_esm_exports.useEffect(() => {
       if (!labelRef.current) {
         return;
       }
@@ -24240,13 +23770,12 @@ var FieldLabel = /* @__PURE__ */ React201.forwardRef(function FieldLabel2(compon
 if (false) FieldLabel.displayName = "FieldLabel";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/field/error/FieldError.mjs
-import * as React202 from "react";
 import { jsx as _jsx58 } from "react/jsx-runtime";
 var stateAttributesMapping17 = {
   ...fieldValidityMapping,
   ...transitionStatusMapping
 };
-var FieldError = /* @__PURE__ */ React202.forwardRef(function FieldError2(componentProps, forwardedRef) {
+var FieldError = /* @__PURE__ */ react_esm_exports.forwardRef(function FieldError2(componentProps, forwardedRef) {
   const {
     render,
     id: idProp,
@@ -24294,9 +23823,9 @@ var FieldError = /* @__PURE__ */ React202.forwardRef(function FieldError2(compon
       setMessageIds((v) => v.filter((item) => item !== id));
     };
   }, [rendered, id, setMessageIds]);
-  const errorRef = React202.useRef(null);
-  const [lastRenderedMessage, setLastRenderedMessage] = React202.useState(null);
-  const [lastRenderedMessageKey, setLastRenderedMessageKey] = React202.useState(null);
+  const errorRef = react_esm_exports.useRef(null);
+  const [lastRenderedMessage, setLastRenderedMessage] = react_esm_exports.useState(null);
+  const [lastRenderedMessageKey, setLastRenderedMessageKey] = react_esm_exports.useState(null);
   let error = validityData.error;
   if (!hasSpecificMatch && hasFormError) {
     error = formError;
@@ -24347,8 +23876,7 @@ var FieldError = /* @__PURE__ */ React202.forwardRef(function FieldError2(compon
 if (false) FieldError.displayName = "FieldError";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/field/description/FieldDescription.mjs
-import * as React203 from "react";
-var FieldDescription = /* @__PURE__ */ React203.forwardRef(function FieldDescription2(componentProps, forwardedRef) {
+var FieldDescription = /* @__PURE__ */ react_esm_exports.forwardRef(function FieldDescription2(componentProps, forwardedRef) {
   const {
     render,
     id: idProp,
@@ -24388,8 +23916,7 @@ var FieldDescription = /* @__PURE__ */ React203.forwardRef(function FieldDescrip
 if (false) FieldDescription.displayName = "FieldDescription";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/field/control/FieldControl.mjs
-import * as React204 from "react";
-var FieldControl = /* @__PURE__ */ React204.forwardRef(function FieldControl2(componentProps, forwardedRef) {
+var FieldControl = /* @__PURE__ */ react_esm_exports.forwardRef(function FieldControl2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -24438,7 +23965,7 @@ var FieldControl = /* @__PURE__ */ React204.forwardRef(function FieldControl2(co
       setFilled(false);
     }
   }, [validation.inputRef, setFilled, valueProp]);
-  const inputRef = React204.useRef(null);
+  const inputRef = react_esm_exports.useRef(null);
   useIsoLayoutEffect(() => {
     if (autoFocus && inputRef.current === activeElement(ownerDocument(inputRef.current))) {
       setFocused(true);
@@ -24503,7 +24030,6 @@ var FieldControl = /* @__PURE__ */ React204.forwardRef(function FieldControl2(co
 if (false) FieldControl.displayName = "FieldControl";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/field/validity/FieldValidity.mjs
-import * as React205 from "react";
 import { jsx as _jsx59 } from "react/jsx-runtime";
 var FieldValidity = function FieldValidity2(props) {
   const {
@@ -24513,28 +24039,27 @@ var FieldValidity = function FieldValidity2(props) {
     validityData,
     invalid
   } = useFieldRootContext(false);
-  const combinedFieldValidityData = React205.useMemo(() => getCombinedFieldValidityData(validityData, invalid), [validityData, invalid]);
+  const combinedFieldValidityData = react_esm_exports.useMemo(() => getCombinedFieldValidityData(validityData, invalid), [validityData, invalid]);
   const isInvalid = combinedFieldValidityData.state.valid === false;
   const {
     transitionStatus
   } = useTransitionStatus(isInvalid);
-  const fieldValidityState = React205.useMemo(() => {
+  const fieldValidityState = react_esm_exports.useMemo(() => {
     return {
       ...combinedFieldValidityData,
       validity: combinedFieldValidityData.state,
       transitionStatus
     };
   }, [combinedFieldValidityData, transitionStatus]);
-  return /* @__PURE__ */ _jsx59(React205.Fragment, {
+  return /* @__PURE__ */ _jsx59(react_esm_exports.Fragment, {
     children: children(fieldValidityState)
   });
 };
 if (false) FieldValidity.displayName = "FieldValidity";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/field/item/FieldItem.mjs
-import * as React206 from "react";
 import { jsx as _jsx60 } from "react/jsx-runtime";
-var FieldItem = /* @__PURE__ */ React206.forwardRef(function FieldItem2(componentProps, forwardedRef) {
+var FieldItem = /* @__PURE__ */ react_esm_exports.forwardRef(function FieldItem2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -24554,7 +24079,7 @@ var FieldItem = /* @__PURE__ */ React206.forwardRef(function FieldItem2(componen
   const checkboxGroupContext = useCheckboxGroupContext();
   const hasParentCheckbox = checkboxGroupContext?.allValues !== void 0;
   const controlId = hasParentCheckbox ? checkboxGroupContext?.parent.id : void 0;
-  const fieldItemContext = React206.useMemo(() => ({
+  const fieldItemContext = react_esm_exports.useMemo(() => ({
     disabled: disabled2
   }), [disabled2]);
   const element = useRenderElement("div", componentProps, {
@@ -24581,9 +24106,8 @@ __export(index_parts_exports13, {
 });
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/fieldset/root/FieldsetRoot.mjs
-import * as React207 from "react";
 import { jsx as _jsx61 } from "react/jsx-runtime";
-var FieldsetRoot = /* @__PURE__ */ React207.forwardRef(function FieldsetRoot2(componentProps, forwardedRef) {
+var FieldsetRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function FieldsetRoot2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -24591,7 +24115,7 @@ var FieldsetRoot = /* @__PURE__ */ React207.forwardRef(function FieldsetRoot2(co
     disabled: disabledProp = false,
     ...elementProps
   } = componentProps;
-  const [legendId, setLegendId] = React207.useState(void 0);
+  const [legendId, setLegendId] = react_esm_exports.useState(void 0);
   const parentDisabled = useFieldsetRootContext(true)?.disabled;
   const disabled2 = parentDisabled || disabledProp;
   const state = {
@@ -24605,7 +24129,7 @@ var FieldsetRoot = /* @__PURE__ */ React207.forwardRef(function FieldsetRoot2(co
       disabled: disabled2
     }, elementProps]
   });
-  const contextValue = React207.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     legendId,
     setLegendId,
     disabled: disabled2
@@ -24618,8 +24142,7 @@ var FieldsetRoot = /* @__PURE__ */ React207.forwardRef(function FieldsetRoot2(co
 if (false) FieldsetRoot.displayName = "FieldsetRoot";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/fieldset/legend/FieldsetLegend.mjs
-import * as React208 from "react";
-var FieldsetLegend = /* @__PURE__ */ React208.forwardRef(function FieldsetLegend2(componentProps, forwardedRef) {
+var FieldsetLegend = /* @__PURE__ */ react_esm_exports.forwardRef(function FieldsetLegend2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -24653,9 +24176,8 @@ var FieldsetLegend = /* @__PURE__ */ React208.forwardRef(function FieldsetLegend
 if (false) FieldsetLegend.displayName = "FieldsetLegend";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/form/Form.mjs
-import * as React209 from "react";
 import { jsx as _jsx62 } from "react/jsx-runtime";
-var Form = /* @__PURE__ */ React209.forwardRef(function Form2(componentProps, forwardedRef) {
+var Form = /* @__PURE__ */ react_esm_exports.forwardRef(function Form2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -24667,11 +24189,11 @@ var Form = /* @__PURE__ */ React209.forwardRef(function Form2(componentProps, fo
     style,
     ...elementProps
   } = componentProps;
-  const formRef = React209.useRef({
+  const formRef = react_esm_exports.useRef({
     fields: /* @__PURE__ */ new Map()
   });
-  const submittedRef = React209.useRef(false);
-  const submitAttemptedRef = React209.useRef(false);
+  const submittedRef = react_esm_exports.useRef(false);
+  const submitAttemptedRef = react_esm_exports.useRef(false);
   const focusControl = useStableCallback((control) => {
     if (!control) {
       return;
@@ -24681,11 +24203,11 @@ var Form = /* @__PURE__ */ React209.forwardRef(function Form2(componentProps, fo
       control.select();
     }
   });
-  const [errors, setErrors] = React209.useState(externalErrors);
+  const [errors, setErrors] = react_esm_exports.useState(externalErrors);
   useValueChanged(externalErrors, () => {
     setErrors(externalErrors);
   });
-  React209.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!submittedRef.current) {
       return;
     }
@@ -24695,7 +24217,7 @@ var Form = /* @__PURE__ */ React209.forwardRef(function Form2(componentProps, fo
       focusControl(invalidFields[0].controlRef.current);
     }
   }, [errors, focusControl]);
-  const handleImperativeValidate = React209.useCallback((fieldName) => {
+  const handleImperativeValidate = react_esm_exports.useCallback((fieldName) => {
     const values = Array.from(formRef.current.fields.values());
     if (fieldName) {
       const namedField = values.find((field) => field.name === fieldName);
@@ -24708,7 +24230,7 @@ var Form = /* @__PURE__ */ React209.forwardRef(function Form2(componentProps, fo
       });
     }
   }, []);
-  React209.useImperativeHandle(actionsRef, () => ({
+  react_esm_exports.useImperativeHandle(actionsRef, () => ({
     validate: handleImperativeValidate
   }), [handleImperativeValidate]);
   const element = useRenderElement("form", componentProps, {
@@ -24752,7 +24274,7 @@ var Form = /* @__PURE__ */ React209.forwardRef(function Form2(componentProps, fo
       setErrors(nextErrors);
     }
   });
-  const contextValue = React209.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     formRef,
     validationMode,
     errors: errors ?? EMPTY_OBJECT,
@@ -24767,24 +24289,14 @@ var Form = /* @__PURE__ */ React209.forwardRef(function Form2(componentProps, fo
 if (false) Form.displayName = "Form";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/input/Input.mjs
-import * as React210 from "react";
 import { jsx as _jsx63 } from "react/jsx-runtime";
-var Input = /* @__PURE__ */ React210.forwardRef(function Input2(props, forwardedRef) {
+var Input = /* @__PURE__ */ react_esm_exports.forwardRef(function Input2(props, forwardedRef) {
   return /* @__PURE__ */ _jsx63(index_parts_exports12.Control, {
     ref: forwardedRef,
     ...props
   });
 });
 if (false) Input.displayName = "Input";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/menubar/Menubar.mjs
-import * as React213 from "react";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/root/CompositeRoot.mjs
-import * as React212 from "react";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/root/useCompositeRoot.mjs
-import * as React211 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/composite/constants.mjs
 var ACTIVE_COMPOSITE_ITEM = "data-composite-item-active";
@@ -24806,12 +24318,12 @@ function useCompositeRoot(params) {
     disabledIndices,
     modifierKeys = EMPTY_ARRAY2
   } = params;
-  const [internalHighlightedIndex, internalSetHighlightedIndex] = React211.useState(0);
+  const [internalHighlightedIndex, internalSetHighlightedIndex] = react_esm_exports.useState(0);
   const isGrid = grid != null;
-  const rootRef = React211.useRef(null);
+  const rootRef = react_esm_exports.useRef(null);
   const mergedRef = useMergedRefs(rootRef, externalRef);
-  const elementsRef = React211.useRef([]);
-  const hasSetDefaultIndexRef = React211.useRef(false);
+  const elementsRef = react_esm_exports.useRef([]);
+  const hasSetDefaultIndexRef = react_esm_exports.useRef(false);
   const highlightedIndex = externalHighlightedIndex ?? internalHighlightedIndex;
   const onHighlightedIndexChange = useStableCallback((index2, shouldScrollIntoView = false) => {
     (externalSetHighlightedIndex ?? internalSetHighlightedIndex)(index2);
@@ -25060,7 +24572,7 @@ function CompositeRoot(componentProps) {
     props: [defaultProps, ...props, elementProps],
     stateAttributesMapping: stateAttributesMapping41
   });
-  const contextValue = React212.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     highlightedIndex,
     onHighlightedIndexChange,
     highlightItemOnHover,
@@ -25096,7 +24608,7 @@ var menubarStateAttributesMapping = {
     } : null;
   }
 };
-var Menubar = /* @__PURE__ */ React213.forwardRef(function Menubar2(props, forwardedRef) {
+var Menubar = /* @__PURE__ */ react_esm_exports.forwardRef(function Menubar2(props, forwardedRef) {
   const {
     orientation = "horizontal",
     loopFocus = true,
@@ -25108,17 +24620,17 @@ var Menubar = /* @__PURE__ */ React213.forwardRef(function Menubar2(props, forwa
     style,
     ...elementProps
   } = props;
-  const [contentElement, setContentElement] = React213.useState(null);
-  const [hasSubmenuOpen, setHasSubmenuOpen] = React213.useState(false);
+  const [contentElement, setContentElement] = react_esm_exports.useState(null);
+  const [hasSubmenuOpen, setHasSubmenuOpen] = react_esm_exports.useState(false);
   const id = useBaseUiId(idProp);
   const state = {
     orientation,
     modal,
     hasSubmenuOpen
   };
-  const contentRef = React213.useRef(null);
-  const allowMouseUpTriggerRef = React213.useRef(false);
-  const context = React213.useMemo(() => ({
+  const contentRef = react_esm_exports.useRef(null);
+  const allowMouseUpTriggerRef = react_esm_exports.useRef(false);
+  const context = react_esm_exports.useMemo(() => ({
     contentElement,
     setContentElement,
     setHasSubmenuOpen,
@@ -25161,7 +24673,7 @@ function MenubarContent(props) {
     events: menuEvents
   } = useFloatingTree();
   const rootContext = useMenubarContext();
-  React213.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     function onSubmenuOpenChange(details) {
       if (!details.nodeId || details.parentNodeId !== nodeId) {
         return;
@@ -25195,15 +24707,11 @@ __export(index_parts_exports14, {
   Value: () => MeterValue
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/meter/root/MeterRoot.mjs
-import * as React215 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/meter/root/MeterRootContext.mjs
-import * as React214 from "react";
-var MeterRootContext = /* @__PURE__ */ React214.createContext(void 0);
+var MeterRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) MeterRootContext.displayName = "MeterRootContext";
 function useMeterRootContext() {
-  const context = React214.useContext(MeterRootContext);
+  const context = react_esm_exports.useContext(MeterRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: MeterRootContext is missing. Meter parts must be placed within <Meter.Root>." : formatErrorMessage_default(38));
   }
@@ -25250,7 +24758,7 @@ function valueToPercent(value, min2, max2) {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/meter/root/MeterRoot.mjs
 import { jsx as _jsx66, jsxs as _jsxs14 } from "react/jsx-runtime";
-var MeterRoot = /* @__PURE__ */ React215.forwardRef(function MeterRoot2(componentProps, forwardedRef) {
+var MeterRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function MeterRoot2(componentProps, forwardedRef) {
   const {
     format,
     getAriaValueText,
@@ -25264,7 +24772,7 @@ var MeterRoot = /* @__PURE__ */ React215.forwardRef(function MeterRoot2(componen
     style,
     ...elementProps
   } = componentProps;
-  const [labelId, setLabelId] = React215.useState();
+  const [labelId, setLabelId] = react_esm_exports.useState();
   const rawPercentage = valueToPercent(valueProp, min2, max2);
   const percentageValue = clamp2(Number.isNaN(rawPercentage) ? 0 : rawPercentage, 0, 100);
   const clampedValue = clamp2(Number.isNaN(valueProp) ? min2 : valueProp, min2, max2);
@@ -25282,7 +24790,7 @@ var MeterRoot = /* @__PURE__ */ React215.forwardRef(function MeterRoot2(componen
     "aria-valuenow": clampedValue,
     "aria-valuetext": ariaValuetext,
     role: "meter",
-    children: /* @__PURE__ */ _jsxs14(React215.Fragment, {
+    children: /* @__PURE__ */ _jsxs14(react_esm_exports.Fragment, {
       children: [children, /* @__PURE__ */ _jsx66("span", {
         role: "presentation",
         style: visuallyHidden,
@@ -25290,7 +24798,7 @@ var MeterRoot = /* @__PURE__ */ React215.forwardRef(function MeterRoot2(componen
       })]
     })
   };
-  const contextValue = React215.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     formattedValue,
     max: max2,
     min: min2,
@@ -25310,8 +24818,7 @@ var MeterRoot = /* @__PURE__ */ React215.forwardRef(function MeterRoot2(componen
 if (false) MeterRoot.displayName = "MeterRoot";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/meter/track/MeterTrack.mjs
-import * as React216 from "react";
-var MeterTrack = /* @__PURE__ */ React216.forwardRef(function MeterTrack2(componentProps, forwardedRef) {
+var MeterTrack = /* @__PURE__ */ react_esm_exports.forwardRef(function MeterTrack2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -25326,8 +24833,7 @@ var MeterTrack = /* @__PURE__ */ React216.forwardRef(function MeterTrack2(compon
 if (false) MeterTrack.displayName = "MeterTrack";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/meter/indicator/MeterIndicator.mjs
-import * as React217 from "react";
-var MeterIndicator = /* @__PURE__ */ React217.forwardRef(function MeterIndicator2(componentProps, forwardedRef) {
+var MeterIndicator = /* @__PURE__ */ react_esm_exports.forwardRef(function MeterIndicator2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -25351,8 +24857,7 @@ var MeterIndicator = /* @__PURE__ */ React217.forwardRef(function MeterIndicator
 if (false) MeterIndicator.displayName = "MeterIndicator";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/meter/value/MeterValue.mjs
-import * as React218 from "react";
-var MeterValue = /* @__PURE__ */ React218.forwardRef(function MeterValue2(componentProps, forwardedRef) {
+var MeterValue = /* @__PURE__ */ react_esm_exports.forwardRef(function MeterValue2(componentProps, forwardedRef) {
   const {
     className,
     render,
@@ -25375,8 +24880,7 @@ var MeterValue = /* @__PURE__ */ React218.forwardRef(function MeterValue2(compon
 if (false) MeterValue.displayName = "MeterValue";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/meter/label/MeterLabel.mjs
-import * as React219 from "react";
-var MeterLabel = /* @__PURE__ */ React219.forwardRef(function MeterLabel2(componentProps, forwardedRef) {
+var MeterLabel = /* @__PURE__ */ react_esm_exports.forwardRef(function MeterLabel2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -25416,27 +24920,23 @@ __export(index_parts_exports15, {
   Viewport: () => NavigationMenuViewport
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/root/NavigationMenuRoot.mjs
-import * as React221 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/root/NavigationMenuRootContext.mjs
-import * as React220 from "react";
-var NavigationMenuRootContext = /* @__PURE__ */ React220.createContext(void 0);
+var NavigationMenuRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) NavigationMenuRootContext.displayName = "NavigationMenuRootContext";
 if (false) {
   NavigationMenuRootContext.displayName = "NavigationMenuRootContext";
 }
 function useNavigationMenuRootContext(optional) {
-  const context = React220.useContext(NavigationMenuRootContext);
+  const context = react_esm_exports.useContext(NavigationMenuRootContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: NavigationMenuRootContext is missing. Navigation Menu parts must be placed within <NavigationMenu.Root>." : formatErrorMessage_default(41));
   }
   return context;
 }
-var NavigationMenuTreeContext = /* @__PURE__ */ React220.createContext(void 0);
+var NavigationMenuTreeContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) NavigationMenuTreeContext.displayName = "NavigationMenuTreeContext";
 function useNavigationMenuTreeContext() {
-  return React220.useContext(NavigationMenuTreeContext);
+  return react_esm_exports.useContext(NavigationMenuTreeContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/positioner/NavigationMenuPositionerCssVars.mjs
@@ -25480,7 +24980,7 @@ function getPositionerFixedSize(positionerElement) {
     height
   };
 }
-var NavigationMenuRoot = /* @__PURE__ */ React221.forwardRef(function NavigationMenuRoot2(componentProps, forwardedRef) {
+var NavigationMenuRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function NavigationMenuRoot2(componentProps, forwardedRef) {
   const {
     defaultValue = null,
     value: valueParam,
@@ -25500,22 +25000,22 @@ var NavigationMenuRoot = /* @__PURE__ */ React221.forwardRef(function Navigation
     state: "value"
   });
   const open = value != null;
-  const closeReasonRef = React221.useRef(void 0);
-  const rootRef = React221.useRef(null);
-  const [positionerElement, setPositionerElement] = React221.useState(null);
-  const [popupElement, setPopupElement] = React221.useState(null);
-  const [viewportElement, setViewportElement] = React221.useState(null);
-  const [viewportTargetElement, setViewportTargetElement] = React221.useState(null);
-  const [activationDirection, setActivationDirection] = React221.useState(null);
-  const [floatingRootContext, setFloatingRootContext] = React221.useState(void 0);
-  const [viewportInert, setViewportInert] = React221.useState(false);
-  const prevTriggerElementRef = React221.useRef(null);
-  const currentContentRef = React221.useRef(null);
-  const beforeInsideRef = React221.useRef(null);
-  const afterInsideRef = React221.useRef(null);
-  const beforeOutsideRef = React221.useRef(null);
-  const afterOutsideRef = React221.useRef(null);
-  const popupAutoSizeResetRef = React221.useRef({
+  const closeReasonRef = react_esm_exports.useRef(void 0);
+  const rootRef = react_esm_exports.useRef(null);
+  const [positionerElement, setPositionerElement] = react_esm_exports.useState(null);
+  const [popupElement, setPopupElement] = react_esm_exports.useState(null);
+  const [viewportElement, setViewportElement] = react_esm_exports.useState(null);
+  const [viewportTargetElement, setViewportTargetElement] = react_esm_exports.useState(null);
+  const [activationDirection, setActivationDirection] = react_esm_exports.useState(null);
+  const [floatingRootContext, setFloatingRootContext] = react_esm_exports.useState(void 0);
+  const [viewportInert, setViewportInert] = react_esm_exports.useState(false);
+  const prevTriggerElementRef = react_esm_exports.useRef(null);
+  const currentContentRef = react_esm_exports.useRef(null);
+  const beforeInsideRef = react_esm_exports.useRef(null);
+  const afterInsideRef = react_esm_exports.useRef(null);
+  const beforeOutsideRef = react_esm_exports.useRef(null);
+  const afterOutsideRef = react_esm_exports.useRef(null);
+  const popupAutoSizeResetRef = react_esm_exports.useRef({
     abortController: null,
     owner: null
   });
@@ -25537,7 +25037,7 @@ var NavigationMenuRoot = /* @__PURE__ */ React221.forwardRef(function Navigation
     }
     setSharedFixedSize(popupElement, positionerElement, closeTransitionSize.width, closeTransitionSize.height);
   }, [open, popupElement, positionerElement]);
-  React221.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     setViewportInert(false);
   }, [value]);
   const setValue = useStableCallback((nextValue, eventDetails) => {
@@ -25576,7 +25076,7 @@ var NavigationMenuRoot = /* @__PURE__ */ React221.forwardRef(function Navigation
     currentContentRef.current = null;
     closeReasonRef.current = void 0;
   });
-  React221.useImperativeHandle(actionsRef, () => ({
+  react_esm_exports.useImperativeHandle(actionsRef, () => ({
     unmount: handleUnmount
   }), [handleUnmount]);
   useOpenChangeComplete({
@@ -25604,7 +25104,7 @@ var NavigationMenuRoot = /* @__PURE__ */ React221.forwardRef(function Navigation
     }
   });
   const contextActivationDirection = open ? activationDirection : null;
-  const contextValue = React221.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     open,
     value,
     setValue,
@@ -25692,23 +25192,19 @@ function TreeContext(props) {
   });
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/list/NavigationMenuList.mjs
-import * as React223 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/utils/constants.mjs
 var NAVIGATION_MENU_TRIGGER_IDENTIFIER = "data-base-ui-navigation-menu-trigger";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/list/NavigationMenuDismissContext.mjs
-import * as React222 from "react";
-var NavigationMenuDismissContext = /* @__PURE__ */ React222.createContext(void 0);
+var NavigationMenuDismissContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) NavigationMenuDismissContext.displayName = "NavigationMenuDismissContext";
 function useNavigationMenuDismissContext() {
-  return React222.useContext(NavigationMenuDismissContext);
+  return react_esm_exports.useContext(NavigationMenuDismissContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/list/NavigationMenuList.mjs
 import { jsx as _jsx68 } from "react/jsx-runtime";
-var NavigationMenuList = /* @__PURE__ */ React223.forwardRef(function NavigationMenuList2(componentProps, forwardedRef) {
+var NavigationMenuList = /* @__PURE__ */ react_esm_exports.forwardRef(function NavigationMenuList2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -25726,7 +25222,7 @@ var NavigationMenuList = /* @__PURE__ */ React223.forwardRef(function Navigation
     viewportElement,
     nested
   } = useNavigationMenuRootContext();
-  const fallbackContext = React223.useMemo(() => getEmptyRootContext(), []);
+  const fallbackContext = react_esm_exports.useMemo(() => getEmptyRootContext(), []);
   const context = floatingRootContext || fallbackContext;
   const interactionsEnabled = positionerElement != null || value == null;
   const hoverInteractionsEnabled = positionerElement != null || viewportElement != null || value == null;
@@ -25786,15 +25282,11 @@ var NavigationMenuList = /* @__PURE__ */ React223.forwardRef(function Navigation
 });
 if (false) NavigationMenuList.displayName = "NavigationMenuList";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/item/NavigationMenuItem.mjs
-import * as React225 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/item/NavigationMenuItemContext.mjs
-import * as React224 from "react";
-var NavigationMenuItemContext = /* @__PURE__ */ React224.createContext(void 0);
+var NavigationMenuItemContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) NavigationMenuItemContext.displayName = "NavigationMenuItemContext";
 function useNavigationMenuItemContext() {
-  const value = React224.useContext(NavigationMenuItemContext);
+  const value = react_esm_exports.useContext(NavigationMenuItemContext);
   if (!value) {
     throw new Error(false ? "Base UI: NavigationMenuItem parts must be used within a <NavigationMenu.Item>." : formatErrorMessage_default(39));
   }
@@ -25803,7 +25295,7 @@ function useNavigationMenuItemContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/item/NavigationMenuItem.mjs
 import { jsx as _jsx69 } from "react/jsx-runtime";
-var NavigationMenuItem = /* @__PURE__ */ React225.forwardRef(function NavigationMenuItem2(componentProps, forwardedRef) {
+var NavigationMenuItem = /* @__PURE__ */ react_esm_exports.forwardRef(function NavigationMenuItem2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -25817,7 +25309,7 @@ var NavigationMenuItem = /* @__PURE__ */ React225.forwardRef(function Navigation
     ref: forwardedRef,
     props: elementProps
   });
-  const contextValue = React225.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     value
   }), [value]);
   return /* @__PURE__ */ _jsx69(NavigationMenuItemContext.Provider, {
@@ -25828,7 +25320,6 @@ var NavigationMenuItem = /* @__PURE__ */ React225.forwardRef(function Navigation
 if (false) NavigationMenuItem.displayName = "NavigationMenuItem";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/content/NavigationMenuContent.mjs
-import * as React226 from "react";
 import * as ReactDOM11 from "react-dom";
 import { jsx as _jsx70 } from "react/jsx-runtime";
 var stateAttributesMapping18 = {
@@ -25843,7 +25334,7 @@ var stateAttributesMapping18 = {
     };
   }
 };
-var NavigationMenuContent = /* @__PURE__ */ React226.forwardRef(function NavigationMenuContent2(componentProps, forwardedRef) {
+var NavigationMenuContent = /* @__PURE__ */ react_esm_exports.forwardRef(function NavigationMenuContent2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -25864,9 +25355,9 @@ var NavigationMenuContent = /* @__PURE__ */ React226.forwardRef(function Navigat
   } = useNavigationMenuItemContext();
   const nodeId = useNavigationMenuTreeContext();
   const open = popupMounted && value === itemValue;
-  const ref = React226.useRef(null);
-  const [hasMountedInPortal, setHasMountedInPortal] = React226.useState(false);
-  const [focusInside, setFocusInside] = React226.useState(false);
+  const ref = react_esm_exports.useRef(null);
+  const [hasMountedInPortal, setHasMountedInPortal] = react_esm_exports.useState(false);
+  const [focusInside, setFocusInside] = react_esm_exports.useState(false);
   const {
     mounted,
     setMounted,
@@ -25962,7 +25453,6 @@ var NavigationMenuContent = /* @__PURE__ */ React226.forwardRef(function Navigat
 if (false) NavigationMenuContent.displayName = "NavigationMenuContent";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/trigger/NavigationMenuTrigger.mjs
-import * as React227 from "react";
 import * as ReactDOM12 from "react-dom";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/utils/isOutsideMenuEvent.mjs
@@ -25989,7 +25479,7 @@ var DEFAULT_SIZE = {
   width: 0,
   height: 0
 };
-var NavigationMenuTrigger = /* @__PURE__ */ React227.forwardRef(function NavigationMenuTrigger2(componentProps, forwardedRef) {
+var NavigationMenuTrigger = /* @__PURE__ */ react_esm_exports.forwardRef(function NavigationMenuTrigger2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -26035,20 +25525,20 @@ var NavigationMenuTrigger = /* @__PURE__ */ React227.forwardRef(function Navigat
   const mutationFrame = useAnimationFrame();
   const resizeFrame = useAnimationFrame();
   const sizeFrame = useAnimationFrame();
-  const [triggerElement, setTriggerElement] = React227.useState(null);
-  const [stickIfOpen, setStickIfOpen] = React227.useState(true);
-  const [pointerType, setPointerType] = React227.useState("");
-  const triggerElementRef = React227.useRef(null);
-  const allowFocusRef = React227.useRef(false);
-  const prevSizeRef = React227.useRef(DEFAULT_SIZE);
-  const skipAutoSizeSyncRef = React227.useRef(false);
+  const [triggerElement, setTriggerElement] = react_esm_exports.useState(null);
+  const [stickIfOpen, setStickIfOpen] = react_esm_exports.useState(true);
+  const [pointerType, setPointerType] = react_esm_exports.useState("");
+  const triggerElementRef = react_esm_exports.useRef(null);
+  const allowFocusRef = react_esm_exports.useRef(false);
+  const prevSizeRef = react_esm_exports.useRef(DEFAULT_SIZE);
+  const skipAutoSizeSyncRef = react_esm_exports.useRef(false);
   const isActiveItem = open && value === itemValue;
   const isActiveItemRef = useValueAsRef(isActiveItem);
   const interactionsEnabled = (positionerElement != null || value == null) && !disabled2;
   const hoverFloatingElement = positionerElement || viewportElement;
   const hoverInteractionsEnabled = (hoverFloatingElement != null || value == null) && !disabled2;
   const runOnceAnimationsFinish = useAnimationsFinished(popupElement, false, false);
-  const handleTriggerElement = React227.useCallback((element) => {
+  const handleTriggerElement = react_esm_exports.useCallback((element) => {
     triggerElementRef.current = element;
     setTriggerElement(element);
   }, []);
@@ -26211,7 +25701,7 @@ var NavigationMenuTrigger = /* @__PURE__ */ React227.forwardRef(function Navigat
       syncPositioner: true
     };
   });
-  React227.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!open) {
       stickIfOpenTimeout.clear();
       mutationFrame.cancel();
@@ -26222,7 +25712,7 @@ var NavigationMenuTrigger = /* @__PURE__ */ React227.forwardRef(function Navigat
       setPointerType("");
     }
   }, [stickIfOpenTimeout, open, mutationFrame, resizeFrame, sizeFrame, cancelAutoSizeReset]);
-  React227.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!mounted) {
       prevSizeRef.current = DEFAULT_SIZE;
     }
@@ -26242,7 +25732,7 @@ var NavigationMenuTrigger = /* @__PURE__ */ React227.forwardRef(function Navigat
       resizeObserver.disconnect();
     };
   }, [popupElement]);
-  React227.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!open || !isActiveItem || !popupElement || !positionerElement) {
       return void 0;
     }
@@ -26257,7 +25747,7 @@ var NavigationMenuTrigger = /* @__PURE__ */ React227.forwardRef(function Navigat
       unsubscribe();
     };
   }, [open, isActiveItem, popupElement, positionerElement, resizeFrame, syncCurrentSize]);
-  React227.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     const observedElement = currentContentRef.current;
     if (!observedElement || !popupElement || !isActiveItem || typeof MutationObserver !== "function") {
       return void 0;
@@ -26290,7 +25780,7 @@ var NavigationMenuTrigger = /* @__PURE__ */ React227.forwardRef(function Navigat
       mutationObserver.disconnect();
     };
   }, [currentContentRef, popupElement, isActiveItem, transitionStatus, getMutationBaseline, handleInterruptedMutationResize, handleValueChange, syncCurrentSize]);
-  React227.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (isActiveItem && open && popupElement && allowFocusRef.current) {
       allowFocusRef.current = false;
       focusFrame.request(() => {
@@ -26364,7 +25854,7 @@ var NavigationMenuTrigger = /* @__PURE__ */ React227.forwardRef(function Navigat
   });
   const hoverInteractionState = useHoverInteractionSharedState(context);
   const shouldBlockSafePolygonPointerEvents = pointerType !== "touch";
-  React227.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!open) {
       context.context.dataRef.current.openEvent = void 0;
       hoverInteractionState.pointerType = void 0;
@@ -26401,7 +25891,7 @@ var NavigationMenuTrigger = /* @__PURE__ */ React227.forwardRef(function Navigat
     triggerElementRef,
     getHandleCloseContext: getInlineHandleCloseContext
   });
-  const hover = React227.useMemo(() => hoverProps ? {
+  const hover = react_esm_exports.useMemo(() => hoverProps ? {
     reference: hoverProps
   } : void 0, [hoverProps]);
   const click = useClick(context, {
@@ -26409,7 +25899,7 @@ var NavigationMenuTrigger = /* @__PURE__ */ React227.forwardRef(function Navigat
     stickIfOpen,
     toggle: isActiveItem
   });
-  const referenceProps = React227.useMemo(() => mergeProps(click.reference, hover?.reference), [click.reference, hover]);
+  const referenceProps = react_esm_exports.useMemo(() => mergeProps(click.reference, hover?.reference), [click.reference, hover]);
   useIsoLayoutEffect(() => {
     if (isActiveItem) {
       setFloatingRootContext(context);
@@ -26540,7 +26030,7 @@ var NavigationMenuTrigger = /* @__PURE__ */ React227.forwardRef(function Navigat
     native: nativeButton
   });
   const referenceElement = hoverFloatingElement;
-  return /* @__PURE__ */ _jsxs15(React227.Fragment, {
+  return /* @__PURE__ */ _jsxs15(react_esm_exports.Fragment, {
     children: [/* @__PURE__ */ _jsx71(CompositeItem, {
       tag: "button",
       render,
@@ -26550,7 +26040,7 @@ var NavigationMenuTrigger = /* @__PURE__ */ React227.forwardRef(function Navigat
       stateAttributesMapping: pressableTriggerOpenStateMapping,
       refs: [forwardedRef, handleTriggerElement, buttonRef],
       props: [referenceProps, dismissProps?.reference || EMPTY_ARRAY, defaultProps, elementProps, getButtonProps]
-    }), isActiveItem && /* @__PURE__ */ _jsxs15(React227.Fragment, {
+    }), isActiveItem && /* @__PURE__ */ _jsxs15(react_esm_exports.Fragment, {
       children: [/* @__PURE__ */ _jsx71(FocusGuard, {
         ref: beforeOutsideRef,
         onFocus: (event) => {
@@ -26614,15 +26104,11 @@ function getHandleCloseContext(domReferenceElement, floatingElement, nodeId) {
   };
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/portal/NavigationMenuPortal.mjs
-import * as React229 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/portal/NavigationMenuPortalContext.mjs
-import * as React228 from "react";
-var NavigationMenuPortalContext = /* @__PURE__ */ React228.createContext(void 0);
+var NavigationMenuPortalContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) NavigationMenuPortalContext.displayName = "NavigationMenuPortalContext";
 function useNavigationMenuPortalContext() {
-  const value = React228.useContext(NavigationMenuPortalContext);
+  const value = react_esm_exports.useContext(NavigationMenuPortalContext);
   if (value === void 0) {
     throw new Error(false ? "Base UI: <NavigationMenu.Portal> is missing." : formatErrorMessage_default(40));
   }
@@ -26631,7 +26117,7 @@ function useNavigationMenuPortalContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/portal/NavigationMenuPortal.mjs
 import { jsx as _jsx72 } from "react/jsx-runtime";
-var NavigationMenuPortal = /* @__PURE__ */ React229.forwardRef(function NavigationMenuPortal2(props, forwardedRef) {
+var NavigationMenuPortal = /* @__PURE__ */ react_esm_exports.forwardRef(function NavigationMenuPortal2(props, forwardedRef) {
   const {
     keepMounted = false,
     ...portalProps
@@ -26654,15 +26140,13 @@ var NavigationMenuPortal = /* @__PURE__ */ React229.forwardRef(function Navigati
 if (false) NavigationMenuPortal.displayName = "NavigationMenuPortal";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/positioner/NavigationMenuPositioner.mjs
-import * as React231 from "react";
 import * as ReactDOM13 from "react-dom";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/positioner/NavigationMenuPositionerContext.mjs
-import * as React230 from "react";
-var NavigationMenuPositionerContext = /* @__PURE__ */ React230.createContext(void 0);
+var NavigationMenuPositionerContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) NavigationMenuPositionerContext.displayName = "NavigationMenuPositionerContext";
 function useNavigationMenuPositionerContext(optional = false) {
-  const context = React230.useContext(NavigationMenuPositionerContext);
+  const context = react_esm_exports.useContext(NavigationMenuPositionerContext);
   if (!context && !optional) {
     throw new Error(false ? "Base UI: NavigationMenuPositionerContext is missing. NavigationMenuPositioner parts must be placed within <NavigationMenu.Positioner>." : formatErrorMessage_default(42));
   }
@@ -26672,7 +26156,7 @@ function useNavigationMenuPositionerContext(optional = false) {
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/positioner/NavigationMenuPositioner.mjs
 import { jsx as _jsx73 } from "react/jsx-runtime";
 var EMPTY_ROOT_CONTEXT = getEmptyRootContext();
-var NavigationMenuPositioner = /* @__PURE__ */ React231.forwardRef(function NavigationMenuPositioner2(componentProps, forwardedRef) {
+var NavigationMenuPositioner = /* @__PURE__ */ react_esm_exports.forwardRef(function NavigationMenuPositioner2(componentProps, forwardedRef) {
   const {
     open,
     mounted,
@@ -26704,11 +26188,11 @@ var NavigationMenuPositioner = /* @__PURE__ */ React231.forwardRef(function Navi
   const nodeId = useNavigationMenuTreeContext();
   const initialInstantTimeout = useTimeout();
   const resizeTimeout = useTimeout();
-  const [instant, setInstant] = React231.useState(open);
-  const needsInitialInstantResetRef = React231.useRef(open);
-  const positionerRef = React231.useRef(null);
-  const prevTriggerElementRef = React231.useRef(null);
-  React231.useEffect(() => {
+  const [instant, setInstant] = react_esm_exports.useState(open);
+  const needsInitialInstantResetRef = react_esm_exports.useRef(open);
+  const positionerRef = react_esm_exports.useRef(null);
+  const prevTriggerElementRef = react_esm_exports.useRef(null);
+  react_esm_exports.useEffect(() => {
     if (!positionerElement) {
       return void 0;
     }
@@ -26750,7 +26234,7 @@ var NavigationMenuPositioner = /* @__PURE__ */ React231.forwardRef(function Navi
     anchorHidden: positioning.anchorHidden,
     instant
   };
-  React231.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!open) {
       return void 0;
     }
@@ -26789,7 +26273,6 @@ var NavigationMenuPositioner = /* @__PURE__ */ React231.forwardRef(function Navi
 if (false) NavigationMenuPositioner.displayName = "NavigationMenuPositioner";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/viewport/NavigationMenuViewport.mjs
-import * as React232 from "react";
 import { jsx as _jsx74, jsxs as _jsxs16 } from "react/jsx-runtime";
 var EMPTY_ROOT_CONTEXT2 = getEmptyRootContext();
 function Guards({
@@ -26809,7 +26292,7 @@ function Guards({
   if (!floatingRootContext && !hasPositioner) {
     return children;
   }
-  return /* @__PURE__ */ _jsxs16(React232.Fragment, {
+  return /* @__PURE__ */ _jsxs16(react_esm_exports.Fragment, {
     children: [/* @__PURE__ */ _jsx74(FocusGuard, {
       ref: beforeInsideRef,
       onFocus: (event) => {
@@ -26831,7 +26314,7 @@ function Guards({
     })]
   });
 }
-var NavigationMenuViewport = /* @__PURE__ */ React232.forwardRef(function NavigationMenuViewport2(componentProps, forwardedRef) {
+var NavigationMenuViewport = /* @__PURE__ */ react_esm_exports.forwardRef(function NavigationMenuViewport2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -26886,12 +26369,11 @@ var NavigationMenuViewport = /* @__PURE__ */ React232.forwardRef(function Naviga
 if (false) NavigationMenuViewport.displayName = "NavigationMenuViewport";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/backdrop/NavigationMenuBackdrop.mjs
-import * as React233 from "react";
 var stateAttributesMapping19 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var NavigationMenuBackdrop = /* @__PURE__ */ React233.forwardRef(function NavigationMenuBackdrop2(componentProps, forwardedRef) {
+var NavigationMenuBackdrop = /* @__PURE__ */ react_esm_exports.forwardRef(function NavigationMenuBackdrop2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -26925,12 +26407,11 @@ var NavigationMenuBackdrop = /* @__PURE__ */ React233.forwardRef(function Naviga
 if (false) NavigationMenuBackdrop.displayName = "NavigationMenuBackdrop";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/popup/NavigationMenuPopup.mjs
-import * as React234 from "react";
 var stateAttributesMapping20 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var NavigationMenuPopup = /* @__PURE__ */ React234.forwardRef(function NavigationMenuPopup2(componentProps, forwardedRef) {
+var NavigationMenuPopup = /* @__PURE__ */ react_esm_exports.forwardRef(function NavigationMenuPopup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -26979,8 +26460,7 @@ var NavigationMenuPopup = /* @__PURE__ */ React234.forwardRef(function Navigatio
 if (false) NavigationMenuPopup.displayName = "NavigationMenuPopup";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/arrow/NavigationMenuArrow.mjs
-import * as React235 from "react";
-var NavigationMenuArrow = /* @__PURE__ */ React235.forwardRef(function NavigationMenuArrow2(componentProps, forwardedRef) {
+var NavigationMenuArrow = /* @__PURE__ */ react_esm_exports.forwardRef(function NavigationMenuArrow2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -27018,9 +26498,8 @@ var NavigationMenuArrow = /* @__PURE__ */ React235.forwardRef(function Navigatio
 if (false) NavigationMenuArrow.displayName = "NavigationMenuArrow";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/link/NavigationMenuLink.mjs
-import * as React236 from "react";
 import { jsx as _jsx75 } from "react/jsx-runtime";
-var NavigationMenuLink = /* @__PURE__ */ React236.forwardRef(function NavigationMenuLink2(componentProps, forwardedRef) {
+var NavigationMenuLink = /* @__PURE__ */ react_esm_exports.forwardRef(function NavigationMenuLink2(componentProps, forwardedRef) {
   const {
     className,
     render,
@@ -27075,8 +26554,7 @@ var NavigationMenuLink = /* @__PURE__ */ React236.forwardRef(function Navigation
 if (false) NavigationMenuLink.displayName = "NavigationMenuLink";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/navigation-menu/icon/NavigationMenuIcon.mjs
-import * as React237 from "react";
-var NavigationMenuIcon = /* @__PURE__ */ React237.forwardRef(function NavigationMenuIcon2(componentProps, forwardedRef) {
+var NavigationMenuIcon = /* @__PURE__ */ react_esm_exports.forwardRef(function NavigationMenuIcon2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -27119,15 +26597,11 @@ __export(index_parts_exports16, {
   ScrubAreaCursor: () => NumberFieldScrubAreaCursor
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/number-field/root/NumberFieldRoot.mjs
-import * as React239 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/number-field/root/NumberFieldRootContext.mjs
-import * as React238 from "react";
-var NumberFieldRootContext = /* @__PURE__ */ React238.createContext(void 0);
+var NumberFieldRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) NumberFieldRootContext.displayName = "NumberFieldRootContext";
 function useNumberFieldRootContext() {
-  const context = React238.useContext(NumberFieldRootContext);
+  const context = react_esm_exports.useContext(NumberFieldRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: NumberFieldRootContext is missing. NumberField parts must be placed within <NumberField.Root>." : formatErrorMessage_default(43));
   }
@@ -27431,7 +26905,7 @@ function toValidatedNumber(value, {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/number-field/root/NumberFieldRoot.mjs
 import { jsx as _jsx76, jsxs as _jsxs17 } from "react/jsx-runtime";
-var NumberFieldRoot = /* @__PURE__ */ React239.forwardRef(function NumberFieldRoot2(componentProps, forwardedRef) {
+var NumberFieldRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function NumberFieldRoot2(componentProps, forwardedRef) {
   const {
     id: idProp,
     min: min2,
@@ -27475,12 +26949,12 @@ var NumberFieldRoot = /* @__PURE__ */ React239.forwardRef(function NumberFieldRo
   const disabled2 = fieldDisabled || disabledProp;
   const name = fieldName ?? nameProp;
   const step = stepProp === "any" ? 1 : stepProp;
-  const [isScrubbing, setIsScrubbing] = React239.useState(false);
+  const [isScrubbing, setIsScrubbing] = react_esm_exports.useState(false);
   const minWithDefault = min2 ?? Number.MIN_SAFE_INTEGER;
   const maxWithDefault = max2 ?? Number.MAX_SAFE_INTEGER;
   const minWithZeroDefault = min2 ?? 0;
   const formatStyle = format?.style;
-  const inputRef = React239.useRef(null);
+  const inputRef = react_esm_exports.useRef(null);
   const hiddenInputRef = useMergedRefs(inputRefProp, validation.inputRef);
   const id = useLabelableId({
     id: idProp
@@ -27498,15 +26972,15 @@ var NumberFieldRoot = /* @__PURE__ */ React239.forwardRef(function NumberFieldRo
   }, [setFilled, value]);
   const forceRender = useForcedRerendering();
   const formatOptionsRef = useValueAsRef(format);
-  const hasPendingCommitRef = React239.useRef(false);
+  const hasPendingCommitRef = react_esm_exports.useRef(false);
   const onValueCommitted = useStableCallback((nextValue, eventDetails) => {
     hasPendingCommitRef.current = false;
     onValueCommittedProp?.(nextValue, eventDetails);
   });
-  const allowInputSyncRef = React239.useRef(true);
-  const lastChangedValueRef = React239.useRef(null);
-  const [inputValue, setInputValue] = React239.useState(() => formatNumber(value, locale, format));
-  const [inputMode, setInputMode] = React239.useState("numeric");
+  const allowInputSyncRef = react_esm_exports.useRef(true);
+  const lastChangedValueRef = react_esm_exports.useRef(null);
+  const [inputValue, setInputValue] = react_esm_exports.useState(() => formatNumber(value, locale, format));
+  const [inputMode, setInputMode] = react_esm_exports.useState("numeric");
   const getAllowedNonNumericKeys = useStableCallback(() => {
     const {
       decimal,
@@ -27623,7 +27097,7 @@ var NumberFieldRoot = /* @__PURE__ */ React239.forwardRef(function NumberFieldRo
     }
     setInputMode(computedInputMode);
   }, [minWithDefault]);
-  React239.useEffect(function registerElementWheelListener() {
+  react_esm_exports.useEffect(function registerElementWheelListener() {
     const element2 = inputRef.current;
     if (disabled2 || readOnly || !allowWheelScrub || !element2) {
       return void 0;
@@ -27649,7 +27123,7 @@ var NumberFieldRoot = /* @__PURE__ */ React239.forwardRef(function NumberFieldRo
     }
     return addEventListener(element2, "wheel", handleWheel);
   }, [allowWheelScrub, incrementValue, disabled2, readOnly, getStepAmount, onValueCommitted, lastChangedValueRef, valueRef]);
-  const state = React239.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     ...fieldState,
     disabled: disabled2,
     readOnly,
@@ -27658,7 +27132,7 @@ var NumberFieldRoot = /* @__PURE__ */ React239.forwardRef(function NumberFieldRo
     inputValue,
     scrubbing: isScrubbing
   }), [fieldState, disabled2, readOnly, required, value, inputValue, isScrubbing]);
-  const contextValue = React239.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     inputRef,
     inputValue,
     value,
@@ -27736,8 +27210,7 @@ var NumberFieldRoot = /* @__PURE__ */ React239.forwardRef(function NumberFieldRo
 if (false) NumberFieldRoot.displayName = "NumberFieldRoot";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/number-field/group/NumberFieldGroup.mjs
-import * as React240 from "react";
-var NumberFieldGroup = /* @__PURE__ */ React240.forwardRef(function NumberFieldGroup2(componentProps, forwardedRef) {
+var NumberFieldGroup = /* @__PURE__ */ react_esm_exports.forwardRef(function NumberFieldGroup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -27758,12 +27231,6 @@ var NumberFieldGroup = /* @__PURE__ */ React240.forwardRef(function NumberFieldG
   return element;
 });
 if (false) NumberFieldGroup.displayName = "NumberFieldGroup";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/number-field/increment/NumberFieldIncrement.mjs
-import * as React242 from "react";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/internals/usePressAndHold.mjs
-import * as React241 from "react";
 
 // node_modules/.pnpm/@base-ui+utils@0.3.1_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/utils/useInterval.mjs
 var EMPTY5 = 0;
@@ -27816,17 +27283,17 @@ function usePressAndHold(params) {
   const startTickTimeout = useTimeout();
   const tickInterval = useInterval();
   const intentionalTouchCheckTimeout = useTimeout();
-  const isPressedRef = React241.useRef(false);
-  const movesAfterTouchRef = React241.useRef(0);
-  const downCoordsRef = React241.useRef({
+  const isPressedRef = react_esm_exports.useRef(false);
+  const movesAfterTouchRef = react_esm_exports.useRef(0);
+  const downCoordsRef = react_esm_exports.useRef({
     x: 0,
     y: 0
   });
-  const isTouchingButtonRef = React241.useRef(false);
-  const ignoreClickRef = React241.useRef(false);
-  const pointerTypeRef = React241.useRef("");
-  const unsubscribeFromGlobalContextMenuRef = React241.useRef(NOOP);
-  const unsubscribeFromGlobalPointerUpRef = React241.useRef(NOOP);
+  const isTouchingButtonRef = react_esm_exports.useRef(false);
+  const ignoreClickRef = react_esm_exports.useRef(false);
+  const pointerTypeRef = react_esm_exports.useRef("");
+  const unsubscribeFromGlobalContextMenuRef = react_esm_exports.useRef(NOOP);
+  const unsubscribeFromGlobalPointerUpRef = react_esm_exports.useRef(NOOP);
   const stopAutoChange = useStableCallback(() => {
     intentionalTouchCheckTimeout.clear();
     startTickTimeout.clear();
@@ -27865,7 +27332,7 @@ function usePressAndHold(params) {
       });
     });
   }
-  React241.useEffect(() => () => {
+  react_esm_exports.useEffect(() => () => {
     stopAutoChange();
     unsubscribeFromGlobalPointerUpRef.current();
   }, [stopAutoChange]);
@@ -28147,22 +27614,20 @@ function useNumberFieldStepperButton(componentProps, forwardedRef, isIncrement) 
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/number-field/increment/NumberFieldIncrement.mjs
-var NumberFieldIncrement = /* @__PURE__ */ React242.forwardRef(function NumberFieldIncrement2(componentProps, forwardedRef) {
+var NumberFieldIncrement = /* @__PURE__ */ react_esm_exports.forwardRef(function NumberFieldIncrement2(componentProps, forwardedRef) {
   return useNumberFieldStepperButton(componentProps, forwardedRef, true);
 });
 if (false) NumberFieldIncrement.displayName = "NumberFieldIncrement";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/number-field/decrement/NumberFieldDecrement.mjs
-import * as React243 from "react";
-var NumberFieldDecrement = /* @__PURE__ */ React243.forwardRef(function NumberFieldDecrement2(componentProps, forwardedRef) {
+var NumberFieldDecrement = /* @__PURE__ */ react_esm_exports.forwardRef(function NumberFieldDecrement2(componentProps, forwardedRef) {
   return useNumberFieldStepperButton(componentProps, forwardedRef, false);
 });
 if (false) NumberFieldDecrement.displayName = "NumberFieldDecrement";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/number-field/input/NumberFieldInput.mjs
-import * as React244 from "react";
 var NAVIGATE_KEYS = /* @__PURE__ */ new Set(["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab", "Enter", "Escape"]);
-var NumberFieldInput = /* @__PURE__ */ React244.forwardRef(function NumberFieldInput2(componentProps, forwardedRef) {
+var NumberFieldInput = /* @__PURE__ */ react_esm_exports.forwardRef(function NumberFieldInput2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -28210,9 +27675,9 @@ var NumberFieldInput = /* @__PURE__ */ React244.forwardRef(function NumberFieldI
   const {
     labelId
   } = useLabelableContext();
-  const hasTouchedInputRef = React244.useRef(false);
-  const blockRevalidationRef = React244.useRef(false);
-  const pendingCaretRef = React244.useRef(null);
+  const hasTouchedInputRef = react_esm_exports.useRef(false);
+  const blockRevalidationRef = react_esm_exports.useRef(false);
+  const pendingCaretRef = react_esm_exports.useRef(null);
   useRegisterFieldControl(inputRef, id, value, void 0, !disabled2, nameProp);
   useIsoLayoutEffect(() => {
     if (pendingCaretRef.current != null) {
@@ -28462,15 +27927,13 @@ var NumberFieldInput = /* @__PURE__ */ React244.forwardRef(function NumberFieldI
 if (false) NumberFieldInput.displayName = "NumberFieldInput";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/number-field/scrub-area/NumberFieldScrubArea.mjs
-import * as React246 from "react";
 import * as ReactDOM14 from "react-dom";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/number-field/scrub-area/NumberFieldScrubAreaContext.mjs
-import * as React245 from "react";
-var NumberFieldScrubAreaContext = /* @__PURE__ */ React245.createContext(void 0);
+var NumberFieldScrubAreaContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) NumberFieldScrubAreaContext.displayName = "NumberFieldScrubAreaContext";
 function useNumberFieldScrubAreaContext() {
-  const context = React245.useContext(NumberFieldScrubAreaContext);
+  const context = react_esm_exports.useContext(NumberFieldScrubAreaContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: NumberFieldScrubAreaContext is missing. NumberFieldScrubArea parts must be placed within <NumberField.ScrubArea>." : formatErrorMessage_default(44));
   }
@@ -28529,7 +27992,7 @@ var SCRUB_AREA_STYLE = {
   WebkitUserSelect: "none",
   userSelect: "none"
 };
-var NumberFieldScrubArea = /* @__PURE__ */ React246.forwardRef(function NumberFieldScrubArea2(componentProps, forwardedRef) {
+var NumberFieldScrubArea = /* @__PURE__ */ react_esm_exports.forwardRef(function NumberFieldScrubArea2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -28552,21 +28015,21 @@ var NumberFieldScrubArea = /* @__PURE__ */ React246.forwardRef(function NumberFi
     lastChangedValueRef,
     valueRef
   } = useNumberFieldRootContext();
-  const scrubAreaRef = React246.useRef(null);
-  const isScrubbingRef = React246.useRef(false);
-  const didMoveRef = React246.useRef(false);
-  const pointerDownTargetRef = React246.useRef(null);
-  const scrubAreaCursorRef = React246.useRef(null);
-  const virtualCursorCoords = React246.useRef({
+  const scrubAreaRef = react_esm_exports.useRef(null);
+  const isScrubbingRef = react_esm_exports.useRef(false);
+  const didMoveRef = react_esm_exports.useRef(false);
+  const pointerDownTargetRef = react_esm_exports.useRef(null);
+  const scrubAreaCursorRef = react_esm_exports.useRef(null);
+  const virtualCursorCoords = react_esm_exports.useRef({
     x: 0,
     y: 0
   });
-  const visualScaleRef = React246.useRef(1);
+  const visualScaleRef = react_esm_exports.useRef(1);
   const exitPointerLockTimeout = useTimeout();
-  const [isTouchInput, setIsTouchInput] = React246.useState(false);
-  const [isPointerLockDenied, setIsPointerLockDenied] = React246.useState(false);
-  const [isScrubbing, setIsScrubbing] = React246.useState(false);
-  React246.useEffect(() => {
+  const [isTouchInput, setIsTouchInput] = react_esm_exports.useState(false);
+  const [isPointerLockDenied, setIsPointerLockDenied] = react_esm_exports.useState(false);
+  const [isScrubbing, setIsScrubbing] = react_esm_exports.useState(false);
+  react_esm_exports.useEffect(() => {
     if (!isScrubbing || !scrubAreaCursorRef.current) {
       return void 0;
     }
@@ -28626,7 +28089,7 @@ var NumberFieldScrubArea = /* @__PURE__ */ React246.forwardRef(function NumberFi
     virtualCursorCoords.current = initialCoords;
     updateCursorTransform(initialCoords.x, initialCoords.y);
   });
-  React246.useEffect(function registerGlobalScrubbingEventListeners() {
+  react_esm_exports.useEffect(function registerGlobalScrubbingEventListeners() {
     if (!inputRef.current || disabled2 || readOnly || !isScrubbing) {
       return void 0;
     }
@@ -28692,7 +28155,7 @@ var NumberFieldScrubArea = /* @__PURE__ */ React246.forwardRef(function NumberFi
       unsubscribe();
     };
   }, [disabled2, readOnly, allowInputSyncRef, incrementValue, isScrubbing, getStepAmount, inputRef, onScrubbingChange, onScrub, direction, pixelSensitivity, lastChangedValueRef, onValueCommitted, valueRef, exitPointerLockTimeout]);
-  React246.useEffect(() => () => {
+  react_esm_exports.useEffect(() => () => {
     if (isScrubbingRef.current) {
       isScrubbingRef.current = false;
       setRootScrubbing(false);
@@ -28702,7 +28165,7 @@ var NumberFieldScrubArea = /* @__PURE__ */ React246.forwardRef(function NumberFi
       }
     }
   }, [setRootScrubbing]);
-  React246.useEffect(function registerScrubberTouchPreventListener() {
+  react_esm_exports.useEffect(function registerScrubberTouchPreventListener() {
     const element2 = scrubAreaRef.current;
     if (!element2 || disabled2 || readOnly) {
       return void 0;
@@ -28752,7 +28215,7 @@ var NumberFieldScrubArea = /* @__PURE__ */ React246.forwardRef(function NumberFi
     props: [defaultProps, elementProps],
     stateAttributesMapping: stateAttributesMapping21
   });
-  const contextValue = React246.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     isScrubbing,
     isTouchInput,
     isPointerLockDenied,
@@ -28766,7 +28229,6 @@ var NumberFieldScrubArea = /* @__PURE__ */ React246.forwardRef(function NumberFi
 if (false) NumberFieldScrubArea.displayName = "NumberFieldScrubArea";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/number-field/scrub-area-cursor/NumberFieldScrubAreaCursor.mjs
-import * as React247 from "react";
 import * as ReactDOM15 from "react-dom";
 var CURSOR_STYLE = {
   position: "fixed",
@@ -28774,7 +28236,7 @@ var CURSOR_STYLE = {
   left: 0,
   pointerEvents: "none"
 };
-var NumberFieldScrubAreaCursor = /* @__PURE__ */ React247.forwardRef(function NumberFieldScrubAreaCursor2(componentProps, forwardedRef) {
+var NumberFieldScrubAreaCursor = /* @__PURE__ */ react_esm_exports.forwardRef(function NumberFieldScrubAreaCursor2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -28790,7 +28252,7 @@ var NumberFieldScrubAreaCursor = /* @__PURE__ */ React247.forwardRef(function Nu
     isPointerLockDenied,
     scrubAreaCursorRef
   } = useNumberFieldScrubAreaContext();
-  const [domElement, setDomElement] = React247.useState(null);
+  const [domElement, setDomElement] = react_esm_exports.useState(null);
   const shouldRender = isScrubbing && !parts_exports.engine.webkit && !isTouchInput && !isPointerLockDenied;
   const element = useRenderElement("span", componentProps, {
     enabled: shouldRender,
@@ -28814,15 +28276,11 @@ __export(index_parts_exports17, {
   Separator: () => Separator
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/otp-field/root/OTPFieldRoot.mjs
-import * as React249 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/otp-field/root/OTPFieldRootContext.mjs
-import * as React248 from "react";
-var OTPFieldRootContext = /* @__PURE__ */ React248.createContext(void 0);
+var OTPFieldRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) OTPFieldRootContext.displayName = "OTPFieldRootContext";
 function useOTPFieldRootContext() {
-  const context = React248.useContext(OTPFieldRootContext);
+  const context = react_esm_exports.useContext(OTPFieldRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: OTPFieldRootContext is missing. OTPField parts must be placed within <OTPField.Root>." : formatErrorMessage_default(98));
   }
@@ -28915,7 +28373,7 @@ function removeOTPCharacter(currentValue, index2) {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/otp-field/root/OTPFieldRoot.mjs
 import { jsx as _jsx78, jsxs as _jsxs18 } from "react/jsx-runtime";
-var OTPFieldRoot = /* @__PURE__ */ React249.forwardRef(function OTPFieldRoot2(componentProps, forwardedRef) {
+var OTPFieldRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function OTPFieldRoot2(componentProps, forwardedRef) {
   const {
     "aria-describedby": ariaDescribedByProp,
     "aria-labelledby": ariaLabelledByProp,
@@ -28970,11 +28428,11 @@ var OTPFieldRoot = /* @__PURE__ */ React249.forwardRef(function OTPFieldRoot2(co
     name: "OTPField",
     state: "value"
   });
-  const rootRef = React249.useRef(null);
-  const inputRefs = React249.useRef([]);
-  const pendingFocusRef = React249.useRef(null);
-  const pendingCompleteValueRef = React249.useRef(null);
-  const firstInputRef = React249.useMemo(() => ({
+  const rootRef = react_esm_exports.useRef(null);
+  const inputRefs = react_esm_exports.useRef([]);
+  const pendingFocusRef = react_esm_exports.useRef(null);
+  const pendingCompleteValueRef = react_esm_exports.useRef(null);
+  const firstInputRef = react_esm_exports.useMemo(() => ({
     get current() {
       return inputRefs.current[0] ?? null;
     }
@@ -28994,9 +28452,9 @@ var OTPFieldRoot = /* @__PURE__ */ React249.forwardRef(function OTPFieldRoot2(co
   const value = normalizeOTPValue(valueUnwrapped, length, validationType, normalizeValue);
   const valueRef = useValueAsRef(value);
   const filled = value !== "";
-  const [inputCount, setInputCount] = React249.useState(0);
-  const [focusedIndex, setFocusedIndex] = React249.useState(() => Math.min(value.length, length - 1));
-  const [focused, setFocusedState] = React249.useState(false);
+  const [inputCount, setInputCount] = react_esm_exports.useState(0);
+  const [focusedIndex, setFocusedIndex] = react_esm_exports.useState(() => Math.min(value.length, length - 1));
+  const [focused, setFocusedState] = react_esm_exports.useState(false);
   const activeIndex = focused ? Math.min(focusedIndex, Math.max(length - 1, 0)) : Math.min(value.length, length - 1);
   useIsoLayoutEffect(() => {
     setFilled(filled);
@@ -29105,13 +28563,13 @@ var OTPFieldRoot = /* @__PURE__ */ React249.forwardRef(function OTPFieldRoot2(co
       validation.commit(valueRef.current);
     }
   });
-  const getInputId = React249.useCallback((index2) => {
+  const getInputId = react_esm_exports.useCallback((index2) => {
     if (id == null) {
       return void 0;
     }
     return index2 === 0 ? id : `${id}-${index2 + 1}`;
   }, [id]);
-  const state = React249.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     ...fieldState,
     complete: value.length === length,
     disabled: disabled2,
@@ -29122,7 +28580,7 @@ var OTPFieldRoot = /* @__PURE__ */ React249.forwardRef(function OTPFieldRoot2(co
     required,
     value
   }), [disabled2, fieldState, filled, focused, length, readOnly, required, value]);
-  const contextValue = React249.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     autoComplete,
     activeIndex,
     disabled: disabled2,
@@ -29218,8 +28676,7 @@ function mergeAriaIds(...values) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/otp-field/input/OTPFieldInput.mjs
-import * as React250 from "react";
-var OTPFieldInput = /* @__PURE__ */ React250.forwardRef(function OTPFieldInput2(componentProps, forwardedRef) {
+var OTPFieldInput = /* @__PURE__ */ react_esm_exports.forwardRef(function OTPFieldInput2(componentProps, forwardedRef) {
   const {
     "aria-label": externalAriaLabel,
     "aria-labelledby": externalAriaLabelledBy,
@@ -29259,7 +28716,7 @@ var OTPFieldInput = /* @__PURE__ */ React250.forwardRef(function OTPFieldInput2(
   } = useCompositeListItem({
     indexGuessBehavior: IndexGuessBehavior.GuessFromOrder
   });
-  const inputRef = React250.useRef(null);
+  const inputRef = react_esm_exports.useRef(null);
   const direction = useDirection();
   const slotValue = value[index2] ?? "";
   const inputState = getOTPFieldInputState(state, slotValue, index2);
@@ -29267,7 +28724,7 @@ var OTPFieldInput = /* @__PURE__ */ React250.forwardRef(function OTPFieldInput2(
   const inheritedLabel = externalAriaLabelledBy ?? inputAriaLabelledBy;
   const ariaLabel = index2 === 0 ? void 0 : slotAriaLabel;
   if (false) {
-    React250.useEffect(() => {
+    react_esm_exports.useEffect(() => {
       if (index2 !== 0 || slotAriaLabel == null || inputRef.current?.labels?.length) {
         return;
       }
@@ -29462,15 +28919,11 @@ __export(index_parts_exports18, {
   createHandle: () => createPopoverHandle
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/root/PopoverRoot.mjs
-import * as React253 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/root/PopoverRootContext.mjs
-import * as React251 from "react";
-var PopoverRootContext = /* @__PURE__ */ React251.createContext(void 0);
+var PopoverRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) PopoverRootContext.displayName = "PopoverRootContext";
 function usePopoverRootContext(optional) {
-  const context = React251.useContext(PopoverRootContext);
+  const context = react_esm_exports.useContext(PopoverRootContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: PopoverRootContext is missing. Popover parts must be placed within <Popover.Root>." : formatErrorMessage_default(47));
   }
@@ -29478,7 +28931,6 @@ function usePopoverRootContext(optional) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/store/PopoverStore.mjs
-import * as React252 from "react";
 import * as ReactDOM16 from "react-dom";
 function createInitialState3() {
   return {
@@ -29525,13 +28977,13 @@ var PopoverStore = class _PopoverStore extends ReactStore {
     }
     initial2.floatingRootContext = createPopupFloatingRootContext(triggerElements, floatingId, nested);
     super(initial2, {
-      popupRef: /* @__PURE__ */ React252.createRef(),
-      backdropRef: /* @__PURE__ */ React252.createRef(),
-      internalBackdropRef: /* @__PURE__ */ React252.createRef(),
+      popupRef: /* @__PURE__ */ react_esm_exports.createRef(),
+      backdropRef: /* @__PURE__ */ react_esm_exports.createRef(),
+      internalBackdropRef: /* @__PURE__ */ react_esm_exports.createRef(),
       onOpenChange: void 0,
       onOpenChangeComplete: void 0,
-      triggerFocusTargetRef: /* @__PURE__ */ React252.createRef(),
-      beforeContentFocusGuardRef: /* @__PURE__ */ React252.createRef(),
+      triggerFocusTargetRef: /* @__PURE__ */ react_esm_exports.createRef(),
+      beforeContentFocusGuardRef: /* @__PURE__ */ react_esm_exports.createRef(),
       stickIfOpenTimeout: new Timeout(),
       triggerElements
     }, selectors5);
@@ -29580,7 +29032,7 @@ var PopoverStore = class _PopoverStore extends ReactStore {
       store,
       internalStore
     } = usePopupStore(externalStore, (floatingId, nested) => new _PopoverStore(initialState, floatingId, nested));
-    React252.useEffect(() => internalStore?.disposeEffect(), [internalStore]);
+    react_esm_exports.useEffect(() => internalStore?.disposeEffect(), [internalStore]);
     return store;
   }
   disposeEffect = () => {
@@ -29634,20 +29086,20 @@ function PopoverRootComponent({
     modal,
     nested
   });
-  React253.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!open) {
       store.context.stickIfOpenTimeout.clear();
     }
   }, [store, open]);
-  const handleImperativeClose = React253.useCallback(() => {
+  const handleImperativeClose = react_esm_exports.useCallback(() => {
     store.setOpen(false, createChangeEventDetails(reason_parts_exports.imperativeAction));
   }, [store]);
-  React253.useImperativeHandle(props.actionsRef, () => ({
+  react_esm_exports.useImperativeHandle(props.actionsRef, () => ({
     unmount: forceUnmount,
     close: handleImperativeClose
   }), [forceUnmount, handleImperativeClose]);
   const shouldRenderInteractions = open || mounted;
-  const popoverContext = React253.useMemo(() => ({
+  const popoverContext = react_esm_exports.useMemo(() => ({
     store
   }), [store]);
   return /* @__PURE__ */ _jsxs19(PopoverRootContext.Provider, {
@@ -29687,7 +29139,7 @@ function PopoverInteractions({
   });
   const activeTriggerProps = dismiss.reference ?? EMPTY_OBJECT;
   const inactiveTriggerProps = dismiss.trigger ?? EMPTY_OBJECT;
-  const popupProps = React253.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, dismiss.floating), [dismiss.floating]);
+  const popupProps = react_esm_exports.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, dismiss.floating), [dismiss.floating]);
   usePopupInteractionProps(store, {
     activeTriggerProps,
     inactiveTriggerProps,
@@ -29696,15 +29148,12 @@ function PopoverInteractions({
   return null;
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/trigger/PopoverTrigger.mjs
-import * as React254 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/utils/constants.mjs
 var OPEN_DELAY = 300;
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/trigger/PopoverTrigger.mjs
 import { jsx as _jsx80, jsxs as _jsxs20 } from "react/jsx-runtime";
-var PopoverTrigger = /* @__PURE__ */ React254.forwardRef(function PopoverTrigger2(componentProps, forwardedRef) {
+var PopoverTrigger = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverTrigger2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -29729,7 +29178,7 @@ var PopoverTrigger = /* @__PURE__ */ React254.forwardRef(function PopoverTrigger
   const floatingContext = store.useState("floatingRootContext");
   const isOpenedByThisTrigger = store.useState("isOpenedByTrigger", thisTriggerId);
   const popupId = store.useState("triggerPopupId", thisTriggerId);
-  const triggerElementRef = React254.useRef(null);
+  const triggerElementRef = react_esm_exports.useRef(null);
   const {
     registerTrigger,
     isMountedByThisTrigger
@@ -29801,11 +29250,11 @@ var PopoverTrigger = /* @__PURE__ */ React254.forwardRef(function PopoverTrigger
     stateAttributesMapping: stateAttributesMapping41
   });
   if (isMountedByThisTrigger && !focusManagerModal) {
-    return /* @__PURE__ */ _jsxs20(React254.Fragment, {
+    return /* @__PURE__ */ _jsxs20(react_esm_exports.Fragment, {
       children: [/* @__PURE__ */ _jsx80(FocusGuard, {
         ref: preFocusGuardRef,
         onFocus: handlePreFocusGuardFocus
-      }), /* @__PURE__ */ _jsx80(React254.Fragment, {
+      }), /* @__PURE__ */ _jsx80(react_esm_exports.Fragment, {
         children: element
       }, thisTriggerId), /* @__PURE__ */ _jsx80(FocusGuard, {
         ref: store.context.triggerFocusTargetRef,
@@ -29813,21 +29262,17 @@ var PopoverTrigger = /* @__PURE__ */ React254.forwardRef(function PopoverTrigger
       })]
     });
   }
-  return /* @__PURE__ */ _jsx80(React254.Fragment, {
+  return /* @__PURE__ */ _jsx80(react_esm_exports.Fragment, {
     children: element
   }, thisTriggerId);
 });
 if (false) PopoverTrigger.displayName = "PopoverTrigger";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/portal/PopoverPortal.mjs
-import * as React256 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/portal/PopoverPortalContext.mjs
-import * as React255 from "react";
-var PopoverPortalContext = /* @__PURE__ */ React255.createContext(void 0);
+var PopoverPortalContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) PopoverPortalContext.displayName = "PopoverPortalContext";
 function usePopoverPortalContext() {
-  const value = React255.useContext(PopoverPortalContext);
+  const value = react_esm_exports.useContext(PopoverPortalContext);
   if (value === void 0) {
     throw new Error(false ? "Base UI: <Popover.Portal> is missing." : formatErrorMessage_default(45));
   }
@@ -29836,7 +29281,7 @@ function usePopoverPortalContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/portal/PopoverPortal.mjs
 import { jsx as _jsx81 } from "react/jsx-runtime";
-var PopoverPortal = /* @__PURE__ */ React256.forwardRef(function PopoverPortal2(props, forwardedRef) {
+var PopoverPortal = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverPortal2(props, forwardedRef) {
   const {
     keepMounted = false,
     ...portalProps
@@ -29859,15 +29304,11 @@ var PopoverPortal = /* @__PURE__ */ React256.forwardRef(function PopoverPortal2(
 });
 if (false) PopoverPortal.displayName = "PopoverPortal";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/positioner/PopoverPositioner.mjs
-import * as React258 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/positioner/PopoverPositionerContext.mjs
-import * as React257 from "react";
-var PopoverPositionerContext = /* @__PURE__ */ React257.createContext(void 0);
+var PopoverPositionerContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) PopoverPositionerContext.displayName = "PopoverPositionerContext";
 function usePopoverPositionerContext() {
-  const context = React257.useContext(PopoverPositionerContext);
+  const context = react_esm_exports.useContext(PopoverPositionerContext);
   if (!context) {
     throw new Error(false ? "Base UI: PopoverPositionerContext is missing. PopoverPositioner parts must be placed within <Popover.Positioner>." : formatErrorMessage_default(46));
   }
@@ -29876,7 +29317,7 @@ function usePopoverPositionerContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/positioner/PopoverPositioner.mjs
 import { jsx as _jsx82, jsxs as _jsxs21 } from "react/jsx-runtime";
-var PopoverPositioner = /* @__PURE__ */ React258.forwardRef(function PopoverPositioner2(componentProps, forwardedRef) {
+var PopoverPositioner = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverPositioner2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -29911,7 +29352,7 @@ var PopoverPositioner = /* @__PURE__ */ React258.forwardRef(function PopoverPosi
   const instantType = store.useState("instantType");
   const transitionStatus = store.useState("transitionStatus");
   const hasViewport = store.useState("hasViewport");
-  const prevTriggerElementRef = React258.useRef(null);
+  const prevTriggerElementRef = react_esm_exports.useRef(null);
   const runOnceAnimationsFinish = useAnimationsFinished(positionerElement, false, false);
   const positioning = useAnchorPositioning({
     anchor,
@@ -29952,7 +29393,7 @@ var PopoverPositioner = /* @__PURE__ */ React258.forwardRef(function PopoverPosi
     return void 0;
   }, [domReference, runOnceAnimationsFinish, store]);
   useAnchoredPopupScrollLock(open && modal === true && openReason !== reason_parts_exports.triggerHover, openMethod === "touch", positionerElement, triggerElement);
-  const setPositionerElement = React258.useCallback((element2) => {
+  const setPositionerElement = react_esm_exports.useCallback((element2) => {
     store.set("positionerElement", element2);
   }, [store]);
   const state = {
@@ -29984,23 +29425,19 @@ var PopoverPositioner = /* @__PURE__ */ React258.forwardRef(function PopoverPosi
 });
 if (false) PopoverPositioner.displayName = "PopoverPositioner";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/popup/PopoverPopup.mjs
-import * as React260 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/closePart.mjs
-import * as React259 from "react";
 import { jsx as _jsx83 } from "react/jsx-runtime";
-var ClosePartContext = /* @__PURE__ */ React259.createContext(void 0);
+var ClosePartContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ClosePartContext.displayName = "ClosePartContext";
 function useClosePartCount() {
-  const [closePartCount, setClosePartCount] = React259.useState(0);
+  const [closePartCount, setClosePartCount] = react_esm_exports.useState(0);
   const register2 = useStableCallback(() => {
     setClosePartCount((count) => count + 1);
     return () => {
       setClosePartCount((count) => Math.max(0, count - 1));
     };
   });
-  const context = React259.useMemo(() => ({
+  const context = react_esm_exports.useMemo(() => ({
     register: register2
   }), [register2]);
   return {
@@ -30019,7 +29456,7 @@ function ClosePartProvider(props) {
   });
 }
 function useClosePartRegistration() {
-  const context = React259.useContext(ClosePartContext);
+  const context = react_esm_exports.useContext(ClosePartContext);
   useIsoLayoutEffect(() => {
     return context?.register();
   }, [context]);
@@ -30031,7 +29468,7 @@ var stateAttributesMapping22 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var PopoverPopup = /* @__PURE__ */ React260.forwardRef(function PopoverPopup2(componentProps, forwardedRef) {
+var PopoverPopup = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverPopup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -30082,7 +29519,7 @@ var PopoverPopup = /* @__PURE__ */ React260.forwardRef(function PopoverPopup2(co
   const resolvedInitialFocus = initialFocus === void 0 ? createDefaultInitialFocus(store.context.popupRef) : initialFocus;
   const focusManagerModal = modal !== false && hasClosePart;
   store.useSyncedValue("focusManagerModal", focusManagerModal);
-  const setPopupElement = React260.useCallback((element2) => {
+  const setPopupElement = react_esm_exports.useCallback((element2) => {
     store.set("popupElement", element2);
   }, [store]);
   const state = {
@@ -30129,8 +29566,7 @@ var PopoverPopup = /* @__PURE__ */ React260.forwardRef(function PopoverPopup2(co
 if (false) PopoverPopup.displayName = "PopoverPopup";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/arrow/PopoverArrow.mjs
-import * as React261 from "react";
-var PopoverArrow = /* @__PURE__ */ React261.forwardRef(function PopoverArrow2(componentProps, forwardedRef) {
+var PopoverArrow = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverArrow2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -30168,12 +29604,11 @@ var PopoverArrow = /* @__PURE__ */ React261.forwardRef(function PopoverArrow2(co
 if (false) PopoverArrow.displayName = "PopoverArrow";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/backdrop/PopoverBackdrop.mjs
-import * as React262 from "react";
 var stateAttributesMapping23 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var PopoverBackdrop = /* @__PURE__ */ React262.forwardRef(function PopoverBackdrop2(props, forwardedRef) {
+var PopoverBackdrop = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverBackdrop2(props, forwardedRef) {
   const {
     render,
     className,
@@ -30210,8 +29645,7 @@ var PopoverBackdrop = /* @__PURE__ */ React262.forwardRef(function PopoverBackdr
 if (false) PopoverBackdrop.displayName = "PopoverBackdrop";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/title/PopoverTitle.mjs
-import * as React263 from "react";
-var PopoverTitle = /* @__PURE__ */ React263.forwardRef(function PopoverTitle2(componentProps, forwardedRef) {
+var PopoverTitle = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverTitle2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -30234,8 +29668,7 @@ var PopoverTitle = /* @__PURE__ */ React263.forwardRef(function PopoverTitle2(co
 if (false) PopoverTitle.displayName = "PopoverTitle";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/description/PopoverDescription.mjs
-import * as React264 from "react";
-var PopoverDescription = /* @__PURE__ */ React264.forwardRef(function PopoverDescription2(componentProps, forwardedRef) {
+var PopoverDescription = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverDescription2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -30258,8 +29691,7 @@ var PopoverDescription = /* @__PURE__ */ React264.forwardRef(function PopoverDes
 if (false) PopoverDescription.displayName = "PopoverDescription";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/close/PopoverClose.mjs
-import * as React265 from "react";
-var PopoverClose = /* @__PURE__ */ React265.forwardRef(function PopoverClose2(componentProps, forwardedRef) {
+var PopoverClose = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverClose2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -30292,9 +29724,6 @@ var PopoverClose = /* @__PURE__ */ React265.forwardRef(function PopoverClose2(co
 });
 if (false) PopoverClose.displayName = "PopoverClose";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/viewport/PopoverViewport.mjs
-import * as React266 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/popover/viewport/PopoverViewportCssVars.mjs
 var PopoverViewportCssVars = /* @__PURE__ */ (function(PopoverViewportCssVars2) {
   PopoverViewportCssVars2["popupWidth"] = "--popup-width";
@@ -30308,7 +29737,7 @@ var stateAttributesMapping24 = {
     "data-activation-direction": value
   } : null
 };
-var PopoverViewport = /* @__PURE__ */ React266.forwardRef(function PopoverViewport2(componentProps, forwardedRef) {
+var PopoverViewport = /* @__PURE__ */ react_esm_exports.forwardRef(function PopoverViewport2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -30402,23 +29831,16 @@ __export(index_parts_exports19, {
   createHandle: () => createPreviewCardHandle
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/root/PreviewCardRoot.mjs
-import * as React269 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/root/PreviewCardContext.mjs
-import * as React267 from "react";
-var PreviewCardRootContext = /* @__PURE__ */ React267.createContext(void 0);
+var PreviewCardRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) PreviewCardRootContext.displayName = "PreviewCardRootContext";
 function usePreviewCardRootContext(optional) {
-  const context = React267.useContext(PreviewCardRootContext);
+  const context = react_esm_exports.useContext(PreviewCardRootContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: PreviewCardRootContext is missing. PreviewCard parts must be placed within <PreviewCard.Root>." : formatErrorMessage_default(50));
   }
   return context;
 }
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/store/PreviewCardStore.mjs
-import * as React268 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/utils/constants.mjs
 var OPEN_DELAY2 = 600;
@@ -30439,7 +29861,7 @@ var PreviewCardStore = class _PreviewCardStore extends ReactStore {
     };
     state.floatingRootContext = createPopupFloatingRootContext(triggerElements, floatingId, nested);
     super(state, {
-      popupRef: /* @__PURE__ */ React268.createRef(),
+      popupRef: /* @__PURE__ */ react_esm_exports.createRef(),
       onOpenChange: void 0,
       onOpenChangeComplete: void 0,
       triggerElements,
@@ -30521,10 +29943,10 @@ function PreviewCardRootComponent(props) {
       }
     }
   }, [store, activeTriggerId, open]);
-  const handleImperativeClose = React269.useCallback(() => {
+  const handleImperativeClose = react_esm_exports.useCallback(() => {
     store.setOpen(false, createChangeEventDetails(reason_parts_exports.imperativeAction));
   }, [store]);
-  React269.useImperativeHandle(actionsRef, () => ({
+  react_esm_exports.useImperativeHandle(actionsRef, () => ({
     unmount: forceUnmount,
     close: handleImperativeClose
   }), [forceUnmount, handleImperativeClose]);
@@ -30545,7 +29967,7 @@ function PreviewCardInteractions({
   const dismiss = useDismiss(floatingRootContext);
   const activeTriggerProps = dismiss.reference ?? EMPTY_OBJECT;
   const inactiveTriggerProps = dismiss.trigger ?? EMPTY_OBJECT;
-  const popupProps = React269.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, dismiss.floating), [dismiss.floating]);
+  const popupProps = react_esm_exports.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, dismiss.floating), [dismiss.floating]);
   usePopupInteractionProps(store, {
     activeTriggerProps,
     inactiveTriggerProps,
@@ -30567,15 +29989,11 @@ var PreviewCardRoot = fastComponent(function PreviewCardRoot2(props) {
 });
 if (false) PreviewCardRoot.displayName = "PreviewCardRoot";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/portal/PreviewCardPortal.mjs
-import * as React272 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/portal/PreviewCardPortalContext.mjs
-import * as React270 from "react";
-var PreviewCardPortalContext = /* @__PURE__ */ React270.createContext(void 0);
+var PreviewCardPortalContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) PreviewCardPortalContext.displayName = "PreviewCardPortalContext";
 function usePreviewCardPortalContext() {
-  const value = React270.useContext(PreviewCardPortalContext);
+  const value = react_esm_exports.useContext(PreviewCardPortalContext);
   if (value === void 0) {
     throw new Error(false ? "Base UI: <PreviewCard.Portal> is missing." : formatErrorMessage_default(48));
   }
@@ -30583,10 +30001,9 @@ function usePreviewCardPortalContext() {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/FloatingPortalLite.mjs
-import * as React271 from "react";
 import * as ReactDOM17 from "react-dom";
 import { jsxs as _jsxs23 } from "react/jsx-runtime";
-var FloatingPortalLite = /* @__PURE__ */ React271.forwardRef(function FloatingPortalLite2(componentProps, forwardedRef) {
+var FloatingPortalLite = /* @__PURE__ */ react_esm_exports.forwardRef(function FloatingPortalLite2(componentProps, forwardedRef) {
   const {
     children,
     container,
@@ -30607,7 +30024,7 @@ var FloatingPortalLite = /* @__PURE__ */ React271.forwardRef(function FloatingPo
   if (!portalSubtree && !portalNode) {
     return null;
   }
-  return /* @__PURE__ */ _jsxs23(React271.Fragment, {
+  return /* @__PURE__ */ _jsxs23(react_esm_exports.Fragment, {
     children: [portalSubtree, portalNode && /* @__PURE__ */ ReactDOM17.createPortal(children, portalNode)]
   });
 });
@@ -30615,7 +30032,7 @@ if (false) FloatingPortalLite.displayName = "FloatingPortalLite";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/portal/PreviewCardPortal.mjs
 import { jsx as _jsx86 } from "react/jsx-runtime";
-var PreviewCardPortal = /* @__PURE__ */ React272.forwardRef(function PreviewCardPortal2(props, forwardedRef) {
+var PreviewCardPortal = /* @__PURE__ */ react_esm_exports.forwardRef(function PreviewCardPortal2(props, forwardedRef) {
   const {
     keepMounted = false,
     ...portalProps
@@ -30637,7 +30054,6 @@ var PreviewCardPortal = /* @__PURE__ */ React272.forwardRef(function PreviewCard
 if (false) PreviewCardPortal.displayName = "PreviewCardPortal";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/trigger/PreviewCardTrigger.mjs
-import * as React273 from "react";
 var PreviewCardTrigger = fastComponentRef(function PreviewCardTrigger2(componentProps, forwardedRef) {
   const {
     render,
@@ -30660,7 +30076,7 @@ var PreviewCardTrigger = fastComponentRef(function PreviewCardTrigger2(component
   const isOpenedByThisTrigger = store.useState("isOpenedByTrigger", thisTriggerId);
   const floatingRootContext = store.useState("floatingRootContext");
   const inlineRectCoordsRef = store.context.inlineRectCoordsRef;
-  const triggerElementRef = React273.useRef(null);
+  const triggerElementRef = react_esm_exports.useRef(null);
   const delayWithDefault = delay ?? OPEN_DELAY2;
   const closeDelayWithDefault = closeDelay ?? CLOSE_DELAY;
   const {
@@ -30706,15 +30122,11 @@ var PreviewCardTrigger = fastComponentRef(function PreviewCardTrigger2(component
 });
 if (false) PreviewCardTrigger.displayName = "PreviewCardTrigger";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/positioner/PreviewCardPositioner.mjs
-import * as React275 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/positioner/PreviewCardPositionerContext.mjs
-import * as React274 from "react";
-var PreviewCardPositionerContext = /* @__PURE__ */ React274.createContext(void 0);
+var PreviewCardPositionerContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) PreviewCardPositionerContext.displayName = "PreviewCardPositionerContext";
 function usePreviewCardPositionerContext() {
-  const context = React274.useContext(PreviewCardPositionerContext);
+  const context = react_esm_exports.useContext(PreviewCardPositionerContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: <PreviewCard.Popup> and <PreviewCard.Arrow> must be used within the <PreviewCard.Positioner> component" : formatErrorMessage_default(49));
   }
@@ -30723,7 +30135,7 @@ function usePreviewCardPositionerContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/positioner/PreviewCardPositioner.mjs
 import { jsx as _jsx87 } from "react/jsx-runtime";
-var PreviewCardPositioner = /* @__PURE__ */ React275.forwardRef(function PreviewCardPositioner2(componentProps, forwardedRef) {
+var PreviewCardPositioner = /* @__PURE__ */ react_esm_exports.forwardRef(function PreviewCardPositioner2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -30804,12 +30216,11 @@ var PreviewCardPositioner = /* @__PURE__ */ React275.forwardRef(function Preview
 if (false) PreviewCardPositioner.displayName = "PreviewCardPositioner";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/popup/PreviewCardPopup.mjs
-import * as React276 from "react";
 var stateAttributesMapping25 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var PreviewCardPopup = /* @__PURE__ */ React276.forwardRef(function PreviewCardPopup2(componentProps, forwardedRef) {
+var PreviewCardPopup = /* @__PURE__ */ react_esm_exports.forwardRef(function PreviewCardPopup2(componentProps, forwardedRef) {
   const {
     className,
     render,
@@ -30857,8 +30268,7 @@ var PreviewCardPopup = /* @__PURE__ */ React276.forwardRef(function PreviewCardP
 if (false) PreviewCardPopup.displayName = "PreviewCardPopup";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/arrow/PreviewCardArrow.mjs
-import * as React277 from "react";
-var PreviewCardArrow = /* @__PURE__ */ React277.forwardRef(function PreviewCardArrow2(componentProps, forwardedRef) {
+var PreviewCardArrow = /* @__PURE__ */ react_esm_exports.forwardRef(function PreviewCardArrow2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -30894,12 +30304,11 @@ var PreviewCardArrow = /* @__PURE__ */ React277.forwardRef(function PreviewCardA
 if (false) PreviewCardArrow.displayName = "PreviewCardArrow";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/backdrop/PreviewCardBackdrop.mjs
-import * as React278 from "react";
 var stateAttributesMapping26 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var PreviewCardBackdrop = /* @__PURE__ */ React278.forwardRef(function PreviewCardBackdrop2(componentProps, forwardedRef) {
+var PreviewCardBackdrop = /* @__PURE__ */ react_esm_exports.forwardRef(function PreviewCardBackdrop2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -30932,9 +30341,6 @@ var PreviewCardBackdrop = /* @__PURE__ */ React278.forwardRef(function PreviewCa
 });
 if (false) PreviewCardBackdrop.displayName = "PreviewCardBackdrop";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/viewport/PreviewCardViewport.mjs
-import * as React279 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/preview-card/viewport/PreviewCardViewportCssVars.mjs
 var PreviewCardViewportCssVars = /* @__PURE__ */ (function(PreviewCardViewportCssVars2) {
   PreviewCardViewportCssVars2["popupWidth"] = "--popup-width";
@@ -30948,7 +30354,7 @@ var stateAttributesMapping27 = {
     "data-activation-direction": value
   } : null
 };
-var PreviewCardViewport = /* @__PURE__ */ React279.forwardRef(function PreviewCardViewport2(componentProps, forwardedRef) {
+var PreviewCardViewport = /* @__PURE__ */ react_esm_exports.forwardRef(function PreviewCardViewport2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -31035,15 +30441,11 @@ __export(index_parts_exports20, {
   Value: () => ProgressValue
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/root/ProgressRoot.mjs
-import * as React281 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/root/ProgressRootContext.mjs
-import * as React280 from "react";
-var ProgressRootContext = /* @__PURE__ */ React280.createContext(void 0);
+var ProgressRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ProgressRootContext.displayName = "ProgressRootContext";
 function useProgressRootContext() {
-  const context = React280.useContext(ProgressRootContext);
+  const context = react_esm_exports.useContext(ProgressRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: ProgressRootContext is missing. Progress parts must be placed within <Progress.Root>." : formatErrorMessage_default(51));
   }
@@ -31088,7 +30490,7 @@ function getDefaultAriaValueText(formattedValue, value) {
   }
   return formattedValue || `${value}%`;
 }
-var ProgressRoot = /* @__PURE__ */ React281.forwardRef(function ProgressRoot2(componentProps, forwardedRef) {
+var ProgressRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function ProgressRoot2(componentProps, forwardedRef) {
   const {
     format,
     getAriaValueText = getDefaultAriaValueText,
@@ -31102,14 +30504,14 @@ var ProgressRoot = /* @__PURE__ */ React281.forwardRef(function ProgressRoot2(co
     style,
     ...elementProps
   } = componentProps;
-  const [labelId, setLabelId] = React281.useState();
+  const [labelId, setLabelId] = react_esm_exports.useState();
   const formatOptionsRef = useValueAsRef(format);
   let status = "indeterminate";
   if (Number.isFinite(value)) {
     status = value === max2 ? "complete" : "progressing";
   }
   const formattedValue = formatNumberValue(value, locale, formatOptionsRef.current);
-  const state = React281.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     status
   }), [status]);
   const defaultProps = {
@@ -31119,7 +30521,7 @@ var ProgressRoot = /* @__PURE__ */ React281.forwardRef(function ProgressRoot2(co
     "aria-valuenow": value ?? void 0,
     "aria-valuetext": getAriaValueText(formattedValue, value),
     role: "progressbar",
-    children: /* @__PURE__ */ _jsxs24(React281.Fragment, {
+    children: /* @__PURE__ */ _jsxs24(react_esm_exports.Fragment, {
       children: [children, /* @__PURE__ */ _jsx88("span", {
         role: "presentation",
         style: visuallyHidden,
@@ -31127,7 +30529,7 @@ var ProgressRoot = /* @__PURE__ */ React281.forwardRef(function ProgressRoot2(co
       })]
     })
   };
-  const contextValue = React281.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     formattedValue,
     max: max2,
     min: min2,
@@ -31150,8 +30552,7 @@ var ProgressRoot = /* @__PURE__ */ React281.forwardRef(function ProgressRoot2(co
 if (false) ProgressRoot.displayName = "ProgressRoot";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/track/ProgressTrack.mjs
-import * as React282 from "react";
-var ProgressTrack = /* @__PURE__ */ React282.forwardRef(function ProgressTrack2(componentProps, forwardedRef) {
+var ProgressTrack = /* @__PURE__ */ react_esm_exports.forwardRef(function ProgressTrack2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -31172,8 +30573,7 @@ var ProgressTrack = /* @__PURE__ */ React282.forwardRef(function ProgressTrack2(
 if (false) ProgressTrack.displayName = "ProgressTrack";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/indicator/ProgressIndicator.mjs
-import * as React283 from "react";
-var ProgressIndicator = /* @__PURE__ */ React283.forwardRef(function ProgressIndicator2(componentProps, forwardedRef) {
+var ProgressIndicator = /* @__PURE__ */ react_esm_exports.forwardRef(function ProgressIndicator2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -31205,8 +30605,7 @@ var ProgressIndicator = /* @__PURE__ */ React283.forwardRef(function ProgressInd
 if (false) ProgressIndicator.displayName = "ProgressIndicator";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/value/ProgressValue.mjs
-import * as React284 from "react";
-var ProgressValue = /* @__PURE__ */ React284.forwardRef(function ProgressValue2(componentProps, forwardedRef) {
+var ProgressValue = /* @__PURE__ */ react_esm_exports.forwardRef(function ProgressValue2(componentProps, forwardedRef) {
   const {
     className,
     render,
@@ -31235,8 +30634,7 @@ var ProgressValue = /* @__PURE__ */ React284.forwardRef(function ProgressValue2(
 if (false) ProgressValue.displayName = "ProgressValue";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/progress/label/ProgressLabel.mjs
-import * as React285 from "react";
-var ProgressLabel = /* @__PURE__ */ React285.forwardRef(function ProgressLabel2(componentProps, forwardedRef) {
+var ProgressLabel = /* @__PURE__ */ react_esm_exports.forwardRef(function ProgressLabel2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -31268,9 +30666,6 @@ __export(index_parts_exports21, {
   Indicator: () => RadioIndicator,
   Root: () => RadioRoot
 });
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/radio/root/RadioRoot.mjs
-import * as React288 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/radio/root/RadioRootDataAttributes.mjs
 var RadioRootDataAttributes = /* @__PURE__ */ (function(RadioRootDataAttributes2) {
@@ -31305,19 +30700,17 @@ var stateAttributesMapping28 = {
 };
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/radio-group/RadioGroupContext.mjs
-import * as React286 from "react";
-var RadioGroupContext = /* @__PURE__ */ React286.createContext(void 0);
+var RadioGroupContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) RadioGroupContext.displayName = "RadioGroupContext";
 function useRadioGroupContext() {
-  return React286.useContext(RadioGroupContext);
+  return react_esm_exports.useContext(RadioGroupContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/radio/root/RadioRootContext.mjs
-import * as React287 from "react";
-var RadioRootContext = /* @__PURE__ */ React287.createContext(void 0);
+var RadioRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) RadioRootContext.displayName = "RadioRootContext";
 function useRadioRootContext() {
-  const value = React287.useContext(RadioRootContext);
+  const value = react_esm_exports.useContext(RadioRootContext);
   if (value === void 0) {
     throw new Error(false ? "Base UI: RadioRootContext is missing. Radio parts must be placed within <Radio.Root>." : formatErrorMessage_default(52));
   }
@@ -31326,7 +30719,7 @@ function useRadioRootContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/radio/root/RadioRoot.mjs
 import { jsx as _jsx89, jsxs as _jsxs25 } from "react/jsx-runtime";
-var RadioRoot = /* @__PURE__ */ React288.forwardRef(function RadioRoot2(componentProps, forwardedRef) {
+var RadioRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function RadioRoot2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -31372,8 +30765,8 @@ var RadioRoot = /* @__PURE__ */ React288.forwardRef(function RadioRoot2(componen
   const required = requiredGroup || requiredProp;
   const form = formGroup;
   const checked = groupContext ? checkedValue === value : value === "";
-  const radioRef = React288.useRef(null);
-  const inputRef = React288.useRef(null);
+  const radioRef = react_esm_exports.useRef(null);
+  const inputRef = react_esm_exports.useRef(null);
   const handleControlRef = useStableCallback((element2) => {
     if (!element2) {
       return;
@@ -31487,7 +30880,7 @@ var RadioRoot = /* @__PURE__ */ React288.forwardRef(function RadioRoot2(componen
       radioRef.current?.focus();
     }
   };
-  const state = React288.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     ...fieldState,
     required,
     disabled: disabled2,
@@ -31525,8 +30918,7 @@ var RadioRoot = /* @__PURE__ */ React288.forwardRef(function RadioRoot2(componen
 if (false) RadioRoot.displayName = "RadioRoot";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/radio/indicator/RadioIndicator.mjs
-import * as React289 from "react";
-var RadioIndicator = /* @__PURE__ */ React289.forwardRef(function RadioIndicator2(componentProps, forwardedRef) {
+var RadioIndicator = /* @__PURE__ */ react_esm_exports.forwardRef(function RadioIndicator2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -31545,7 +30937,7 @@ var RadioIndicator = /* @__PURE__ */ React289.forwardRef(function RadioIndicator
     ...rootState,
     transitionStatus
   };
-  const indicatorRef = React289.useRef(null);
+  const indicatorRef = react_esm_exports.useRef(null);
   const shouldRender = keepMounted || mounted;
   const element = useRenderElement("span", componentProps, {
     ref: [forwardedRef, indicatorRef],
@@ -31570,10 +30962,9 @@ var RadioIndicator = /* @__PURE__ */ React289.forwardRef(function RadioIndicator
 if (false) RadioIndicator.displayName = "RadioIndicator";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/radio-group/RadioGroup.mjs
-import * as React290 from "react";
 import { jsx as _jsx90 } from "react/jsx-runtime";
 var MODIFIER_KEYS2 = [SHIFT];
-var RadioGroup = /* @__PURE__ */ React290.forwardRef(function RadioGroup2(componentProps, forwardedRef) {
+var RadioGroup = /* @__PURE__ */ react_esm_exports.forwardRef(function RadioGroup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -31618,7 +31009,7 @@ var RadioGroup = /* @__PURE__ */ React290.forwardRef(function RadioGroup2(compon
     name: "RadioGroup",
     state: "value"
   });
-  const [touched, setTouched] = React290.useState(false);
+  const [touched, setTouched] = react_esm_exports.useState(false);
   const setCheckedValue = useStableCallback((value, eventDetails) => {
     onValueChangeProp?.(value, eventDetails);
     if (eventDetails.isCanceled) {
@@ -31626,9 +31017,9 @@ var RadioGroup = /* @__PURE__ */ React290.forwardRef(function RadioGroup2(compon
     }
     setCheckedValueUnwrapped(value);
   });
-  const controlRef = React290.useRef(null);
-  const groupInputRef = React290.useRef(null);
-  const firstEnabledInputRef = React290.useRef(null);
+  const controlRef = react_esm_exports.useRef(null);
+  const groupInputRef = react_esm_exports.useRef(null);
+  const firstEnabledInputRef = react_esm_exports.useRef(null);
   function setInputRef(hiddenInput) {
     let cleanup = void 0;
     if (inputRefProp) {
@@ -31694,7 +31085,7 @@ var RadioGroup = /* @__PURE__ */ React290.forwardRef(function RadioGroup2(compon
     required: required ?? false,
     readOnly: readOnly ?? false
   };
-  const contextValue = React290.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     ...fieldState,
     checkedValue,
     disabled: disabled2,
@@ -31763,15 +31154,11 @@ __export(index_parts_exports22, {
   Viewport: () => ScrollAreaViewport
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/root/ScrollAreaRoot.mjs
-import * as React292 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/root/ScrollAreaRootContext.mjs
-import * as React291 from "react";
-var ScrollAreaRootContext = /* @__PURE__ */ React291.createContext(void 0);
+var ScrollAreaRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ScrollAreaRootContext.displayName = "ScrollAreaRootContext";
 function useScrollAreaRootContext() {
-  const context = React291.useContext(ScrollAreaRootContext);
+  const context = react_esm_exports.useContext(ScrollAreaRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: ScrollAreaRootContext is missing. ScrollArea parts must be placed within <ScrollArea.Root>." : formatErrorMessage_default(53));
   }
@@ -31888,7 +31275,7 @@ var DEFAULT_HIDDEN_STATE = {
   y: true,
   corner: true
 };
-var ScrollAreaRoot = /* @__PURE__ */ React292.forwardRef(function ScrollAreaRoot2(componentProps, forwardedRef) {
+var ScrollAreaRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function ScrollAreaRoot2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -31909,29 +31296,29 @@ var ScrollAreaRoot = /* @__PURE__ */ React292.forwardRef(function ScrollAreaRoot
     nonce,
     disableStyleElements
   } = useCSPContext();
-  const [hovering, setHovering] = React292.useState(false);
-  const [scrollingX, setScrollingX] = React292.useState(false);
-  const [scrollingY, setScrollingY] = React292.useState(false);
-  const [touchModality, setTouchModality] = React292.useState(false);
-  const [hasMeasuredScrollbar, setHasMeasuredScrollbar] = React292.useState(false);
-  const [cornerSize, setCornerSize] = React292.useState(DEFAULT_SIZE2);
-  const [thumbSize, setThumbSize] = React292.useState(DEFAULT_SIZE2);
-  const [overflowEdges, setOverflowEdges] = React292.useState(DEFAULT_OVERFLOW_EDGES);
-  const [hiddenState, setHiddenState] = React292.useState(DEFAULT_HIDDEN_STATE);
-  const rootRef = React292.useRef(null);
-  const viewportRef = React292.useRef(null);
-  const scrollbarYRef = React292.useRef(null);
-  const scrollbarXRef = React292.useRef(null);
-  const thumbYRef = React292.useRef(null);
-  const thumbXRef = React292.useRef(null);
-  const cornerRef = React292.useRef(null);
-  const thumbDraggingRef = React292.useRef(false);
-  const startYRef = React292.useRef(0);
-  const startXRef = React292.useRef(0);
-  const startScrollTopRef = React292.useRef(0);
-  const startScrollLeftRef = React292.useRef(0);
-  const currentOrientationRef = React292.useRef("vertical");
-  const scrollPositionRef = React292.useRef(DEFAULT_COORDS);
+  const [hovering, setHovering] = react_esm_exports.useState(false);
+  const [scrollingX, setScrollingX] = react_esm_exports.useState(false);
+  const [scrollingY, setScrollingY] = react_esm_exports.useState(false);
+  const [touchModality, setTouchModality] = react_esm_exports.useState(false);
+  const [hasMeasuredScrollbar, setHasMeasuredScrollbar] = react_esm_exports.useState(false);
+  const [cornerSize, setCornerSize] = react_esm_exports.useState(DEFAULT_SIZE2);
+  const [thumbSize, setThumbSize] = react_esm_exports.useState(DEFAULT_SIZE2);
+  const [overflowEdges, setOverflowEdges] = react_esm_exports.useState(DEFAULT_OVERFLOW_EDGES);
+  const [hiddenState, setHiddenState] = react_esm_exports.useState(DEFAULT_HIDDEN_STATE);
+  const rootRef = react_esm_exports.useRef(null);
+  const viewportRef = react_esm_exports.useRef(null);
+  const scrollbarYRef = react_esm_exports.useRef(null);
+  const scrollbarXRef = react_esm_exports.useRef(null);
+  const thumbYRef = react_esm_exports.useRef(null);
+  const thumbXRef = react_esm_exports.useRef(null);
+  const cornerRef = react_esm_exports.useRef(null);
+  const thumbDraggingRef = react_esm_exports.useRef(false);
+  const startYRef = react_esm_exports.useRef(0);
+  const startXRef = react_esm_exports.useRef(0);
+  const startScrollTopRef = react_esm_exports.useRef(0);
+  const startScrollLeftRef = react_esm_exports.useRef(0);
+  const currentOrientationRef = react_esm_exports.useRef("vertical");
+  const scrollPositionRef = react_esm_exports.useRef(DEFAULT_COORDS);
   const handleScroll = useStableCallback((scrollPosition) => {
     const offsetX = scrollPosition.x - scrollPositionRef.current.x;
     const offsetY = scrollPosition.y - scrollPositionRef.current.y;
@@ -32026,7 +31413,7 @@ var ScrollAreaRoot = /* @__PURE__ */ React292.forwardRef(function ScrollAreaRoot
       setHovering(isTargetRootChild);
     }
   }
-  const state = React292.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     scrolling: scrollingX || scrollingY,
     hasOverflowX: !hiddenState.x,
     hasOverflowY: !hiddenState.y,
@@ -32056,7 +31443,7 @@ var ScrollAreaRoot = /* @__PURE__ */ React292.forwardRef(function ScrollAreaRoot
     props: [props, elementProps],
     stateAttributesMapping: scrollAreaStateAttributesMapping
   });
-  const contextValue = React292.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     handlePointerDown,
     handlePointerMove,
     handlePointerUp,
@@ -32118,15 +31505,11 @@ function normalizeOverflowEdgeThreshold(threshold) {
   };
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/viewport/ScrollAreaViewport.mjs
-import * as React294 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/viewport/ScrollAreaViewportContext.mjs
-import * as React293 from "react";
-var ScrollAreaViewportContext = /* @__PURE__ */ React293.createContext(void 0);
+var ScrollAreaViewportContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ScrollAreaViewportContext.displayName = "ScrollAreaViewportContext";
 function useScrollAreaViewportContext() {
-  const context = React293.useContext(ScrollAreaViewportContext);
+  const context = react_esm_exports.useContext(ScrollAreaViewportContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: ScrollAreaViewportContext missing. ScrollAreaViewport parts must be placed within <ScrollArea.Viewport>." : formatErrorMessage_default(55));
   }
@@ -32192,7 +31575,7 @@ function removeCSSVariableInheritance2() {
   }
   scrollAreaOverflowVarsRegistered = true;
 }
-var ScrollAreaViewport = /* @__PURE__ */ React294.forwardRef(function ScrollAreaViewport2(componentProps, forwardedRef) {
+var ScrollAreaViewport = /* @__PURE__ */ react_esm_exports.forwardRef(function ScrollAreaViewport2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -32222,8 +31605,8 @@ var ScrollAreaViewport = /* @__PURE__ */ React294.forwardRef(function ScrollArea
     scrollingY
   } = useScrollAreaRootContext();
   const direction = useDirection();
-  const programmaticScrollRef = React294.useRef(true);
-  const lastMeasuredViewportMetricsRef = React294.useRef([NaN, NaN, NaN, NaN]);
+  const programmaticScrollRef = react_esm_exports.useRef(true);
+  const lastMeasuredViewportMetricsRef = react_esm_exports.useRef([NaN, NaN, NaN, NaN]);
   const scrollEndTimeout = useTimeout();
   const waitForAnimationsTimeout = useTimeout();
   const computeThumbPosition = useStableCallback(() => {
@@ -32433,7 +31816,7 @@ var ScrollAreaViewport = /* @__PURE__ */ React294.forwardRef(function ScrollArea
     onPointerEnter: handleUserInteraction,
     onKeyDown: handleUserInteraction
   };
-  const viewportState = React294.useMemo(() => ({
+  const viewportState = react_esm_exports.useMemo(() => ({
     scrolling: scrollingX || scrollingY,
     hasOverflowX: !hiddenState.x,
     hasOverflowY: !hiddenState.y,
@@ -32449,7 +31832,7 @@ var ScrollAreaViewport = /* @__PURE__ */ React294.forwardRef(function ScrollArea
     props: [props, elementProps],
     stateAttributesMapping: scrollAreaStateAttributesMapping
   });
-  const contextValue = React294.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     computeThumbPosition
   }), [computeThumbPosition]);
   return /* @__PURE__ */ _jsx92(ScrollAreaViewportContext.Provider, {
@@ -32474,15 +31857,11 @@ function mergeHiddenState(prevState, nextState) {
   return nextState;
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/scrollbar/ScrollAreaScrollbar.mjs
-import * as React296 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/scrollbar/ScrollAreaScrollbarContext.mjs
-import * as React295 from "react";
-var ScrollAreaScrollbarContext = /* @__PURE__ */ React295.createContext(void 0);
+var ScrollAreaScrollbarContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ScrollAreaScrollbarContext.displayName = "ScrollAreaScrollbarContext";
 function useScrollAreaScrollbarContext() {
-  const context = React295.useContext(ScrollAreaScrollbarContext);
+  const context = react_esm_exports.useContext(ScrollAreaScrollbarContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: ScrollAreaScrollbarContext is missing. ScrollAreaScrollbar parts must be placed within <ScrollArea.Scrollbar>." : formatErrorMessage_default(54));
   }
@@ -32498,7 +31877,7 @@ var ScrollAreaScrollbarCssVars = /* @__PURE__ */ (function(ScrollAreaScrollbarCs
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/scrollbar/ScrollAreaScrollbar.mjs
 import { jsx as _jsx93 } from "react/jsx-runtime";
-var ScrollAreaScrollbar = /* @__PURE__ */ React296.forwardRef(function ScrollAreaScrollbar2(componentProps, forwardedRef) {
+var ScrollAreaScrollbar = /* @__PURE__ */ react_esm_exports.forwardRef(function ScrollAreaScrollbar2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -32544,7 +31923,7 @@ var ScrollAreaScrollbar = /* @__PURE__ */ React296.forwardRef(function ScrollAre
   const hideTrackUntilMeasured = !hasMeasuredScrollbar && !keepMounted;
   const isHidden = orientation === "vertical" ? hiddenState.y : hiddenState.x;
   const shouldRender = keepMounted || !isHidden;
-  React296.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!shouldRender) {
       return void 0;
     }
@@ -32667,7 +32046,7 @@ var ScrollAreaScrollbar = /* @__PURE__ */ React296.forwardRef(function ScrollAre
     props: [props, elementProps],
     stateAttributesMapping: scrollAreaStateAttributesMapping
   });
-  const contextValue = React296.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     orientation
   }), [orientation]);
   if (!shouldRender) {
@@ -32681,8 +32060,7 @@ var ScrollAreaScrollbar = /* @__PURE__ */ React296.forwardRef(function ScrollAre
 if (false) ScrollAreaScrollbar.displayName = "ScrollAreaScrollbar";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/content/ScrollAreaContent.mjs
-import * as React297 from "react";
-var ScrollAreaContent = /* @__PURE__ */ React297.forwardRef(function ScrollAreaContent2(componentProps, forwardedRef) {
+var ScrollAreaContent = /* @__PURE__ */ react_esm_exports.forwardRef(function ScrollAreaContent2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -32696,8 +32074,8 @@ var ScrollAreaContent = /* @__PURE__ */ React297.forwardRef(function ScrollAreaC
     hasMeasuredScrollbar,
     viewportState
   } = useScrollAreaRootContext();
-  const contentWrapperRef = React297.useRef(null);
-  const computeOnInitialResizeRef = React297.useRef(hasMeasuredScrollbar);
+  const contentWrapperRef = react_esm_exports.useRef(null);
+  const computeOnInitialResizeRef = react_esm_exports.useRef(hasMeasuredScrollbar);
   useIsoLayoutEffect(() => {
     if (typeof ResizeObserver === "undefined") {
       return void 0;
@@ -32735,8 +32113,7 @@ var ScrollAreaContent = /* @__PURE__ */ React297.forwardRef(function ScrollAreaC
 if (false) ScrollAreaContent.displayName = "ScrollAreaContent";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/thumb/ScrollAreaThumb.mjs
-import * as React298 from "react";
-var ScrollAreaThumb = /* @__PURE__ */ React298.forwardRef(function ScrollAreaThumb2(componentProps, forwardedRef) {
+var ScrollAreaThumb = /* @__PURE__ */ react_esm_exports.forwardRef(function ScrollAreaThumb2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -32795,8 +32172,7 @@ var ScrollAreaThumb = /* @__PURE__ */ React298.forwardRef(function ScrollAreaThu
 if (false) ScrollAreaThumb.displayName = "ScrollAreaThumb";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/scroll-area/corner/ScrollAreaCorner.mjs
-import * as React299 from "react";
-var ScrollAreaCorner = /* @__PURE__ */ React299.forwardRef(function ScrollAreaCorner2(componentProps, forwardedRef) {
+var ScrollAreaCorner = /* @__PURE__ */ react_esm_exports.forwardRef(function ScrollAreaCorner2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -32851,24 +32227,20 @@ __export(index_parts_exports23, {
   Value: () => SelectValue
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/root/SelectRoot.mjs
-import * as React301 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/root/SelectRootContext.mjs
-import * as React300 from "react";
-var SelectRootContext = /* @__PURE__ */ React300.createContext(null);
+var SelectRootContext = /* @__PURE__ */ react_esm_exports.createContext(null);
 if (false) SelectRootContext.displayName = "SelectRootContext";
-var SelectFloatingContext = /* @__PURE__ */ React300.createContext(null);
+var SelectFloatingContext = /* @__PURE__ */ react_esm_exports.createContext(null);
 if (false) SelectFloatingContext.displayName = "SelectFloatingContext";
 function useSelectRootContext() {
-  const context = React300.useContext(SelectRootContext);
+  const context = react_esm_exports.useContext(SelectRootContext);
   if (context === null) {
     throw new Error(false ? "Base UI: SelectRootContext is missing. Select parts must be placed within <Select.Root>." : formatErrorMessage_default(60));
   }
   return context;
 }
 function useSelectFloatingContext() {
-  const context = React300.useContext(SelectFloatingContext);
+  const context = react_esm_exports.useContext(SelectFloatingContext);
   if (context === null) {
     throw new Error(false ? "Base UI: SelectFloatingContext is missing. Select parts must be placed within <Select.Root>." : formatErrorMessage_default(61));
   }
@@ -32993,22 +32365,22 @@ function SelectRoot(props) {
     name: "Select",
     state: "open"
   });
-  const listRef = React301.useRef([]);
-  const labelsRef = React301.useRef([]);
-  const popupRef = React301.useRef(null);
-  const scrollHandlerRef = React301.useRef(null);
-  const scrollArrowsMountedCountRef = React301.useRef(0);
-  const valueRef = React301.useRef(null);
-  const valuesRef = React301.useRef([]);
-  const typingRef = React301.useRef(false);
-  const firstItemTextRef = React301.useRef(null);
-  const selectedItemTextRef = React301.useRef(null);
-  const selectionRef = React301.useRef({
+  const listRef = react_esm_exports.useRef([]);
+  const labelsRef = react_esm_exports.useRef([]);
+  const popupRef = react_esm_exports.useRef(null);
+  const scrollHandlerRef = react_esm_exports.useRef(null);
+  const scrollArrowsMountedCountRef = react_esm_exports.useRef(0);
+  const valueRef = react_esm_exports.useRef(null);
+  const valuesRef = react_esm_exports.useRef([]);
+  const typingRef = react_esm_exports.useRef(false);
+  const firstItemTextRef = react_esm_exports.useRef(null);
+  const selectedItemTextRef = react_esm_exports.useRef(null);
+  const selectionRef = react_esm_exports.useRef({
     allowSelectedMouseUp: false,
     allowUnselectedMouseUp: false,
     dragY: 0
   });
-  const alignItemWithTriggerActiveRef = React301.useRef(false);
+  const alignItemWithTriggerActiveRef = react_esm_exports.useRef(false);
   const {
     mounted,
     setMounted,
@@ -33051,13 +32423,13 @@ function SelectRoot(props) {
   const positionerElement = useStore(store, selectors7.positionerElement);
   const previousOpenMethod = usePreviousValue(openMethod);
   const renderedOpenMethod = openMethod ?? previousOpenMethod ?? null;
-  const serializedValue = React301.useMemo(() => {
+  const serializedValue = react_esm_exports.useMemo(() => {
     if (multiple) {
       return "";
     }
     return stringifyAsValue(value, itemToStringValue);
   }, [multiple, value, itemToStringValue]);
-  const fieldStringValue = React301.useMemo(() => {
+  const fieldStringValue = react_esm_exports.useMemo(() => {
     if (multiple && Array.isArray(value)) {
       return value.map((currentValue) => stringifyAsValue(currentValue, itemToStringValue));
     }
@@ -33066,7 +32438,7 @@ function SelectRoot(props) {
   const controlRef = useValueAsRef(store.state.triggerElement);
   const getStringifiedValueForForm = useStableCallback(() => fieldStringValue);
   useRegisterFieldControl(controlRef, generatedId, value, getStringifiedValueForForm, !disabled2, nameProp);
-  const initialValueRef = React301.useRef(value);
+  const initialValueRef = react_esm_exports.useRef(value);
   const hasSelectedValue = multiple ? Array.isArray(value) && value.length > 0 : value != null && stringifyAsValue(value, itemToStringValue) !== "";
   useIsoLayoutEffect(() => {
     if (value !== initialValueRef.current) {
@@ -33144,7 +32516,7 @@ function SelectRoot(props) {
       }
     }
   });
-  React301.useImperativeHandle(actionsRef, () => ({
+  react_esm_exports.useImperativeHandle(actionsRef, () => ({
     unmount: handleUnmount
   }), [handleUnmount]);
   const setValue = useStableCallback((nextValue, eventDetails) => {
@@ -33219,14 +32591,14 @@ function SelectRoot(props) {
       typingRef.current = typing;
     }
   });
-  const mergedTriggerProps = React301.useMemo(() => {
+  const mergedTriggerProps = react_esm_exports.useMemo(() => {
     const triggerInteractionProps = mergeProps(typeahead.reference, listNavigation2.reference, dismiss.reference, click.reference, interactionTypeProps);
     if (generatedId) {
       triggerInteractionProps.id = generatedId;
     }
     return triggerInteractionProps;
   }, [click.reference, typeahead.reference, listNavigation2.reference, dismiss.reference, interactionTypeProps, generatedId]);
-  const popupProps = React301.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, typeahead.floating, listNavigation2.floating, dismiss.floating), [typeahead.floating, listNavigation2.floating, dismiss.floating]);
+  const popupProps = react_esm_exports.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, typeahead.floating, listNavigation2.floating, dismiss.floating), [typeahead.floating, listNavigation2.floating, dismiss.floating]);
   const itemProps = listNavigation2.item ?? EMPTY_OBJECT;
   useOnFirstRender(() => {
     store.update({
@@ -33252,7 +32624,7 @@ function SelectRoot(props) {
       openMethod: renderedOpenMethod
     });
   }, [store, generatedId, modal, multiple, value, open, mounted, transitionStatus, popupProps, mergedTriggerProps, items, itemToStringLabel, itemToStringValue, isItemEqualToValue, renderedOpenMethod]);
-  const contextValue = React301.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     store,
     name,
     required,
@@ -33283,7 +32655,7 @@ function SelectRoot(props) {
   const ref = useMergedRefs(inputRef, validation.inputRef);
   const hasMultipleSelection = multiple && Array.isArray(value) && value.length > 0;
   const hiddenInputName = multiple ? void 0 : name;
-  const hiddenInputs = React301.useMemo(() => {
+  const hiddenInputs = react_esm_exports.useMemo(() => {
     if (!multiple || !Array.isArray(value) || !name) {
       return null;
     }
@@ -33357,8 +32729,7 @@ function SelectRoot(props) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/label/SelectLabel.mjs
-import * as React302 from "react";
-var SelectLabel = /* @__PURE__ */ React302.forwardRef(function SelectLabel2(componentProps, forwardedRef) {
+var SelectLabel = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectLabel2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -33391,7 +32762,6 @@ var SelectLabel = /* @__PURE__ */ React302.forwardRef(function SelectLabel2(comp
 if (false) SelectLabel.displayName = "SelectLabel";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/trigger/SelectTrigger.mjs
-import * as React303 from "react";
 var BOUNDARY_OFFSET3 = 2;
 var SELECTED_DELAY = 400;
 var stateAttributesMapping29 = {
@@ -33402,7 +32772,7 @@ var stateAttributesMapping29 = {
   } : null,
   value: () => null
 };
-var SelectTrigger = /* @__PURE__ */ React303.forwardRef(function SelectTrigger2(componentProps, forwardedRef) {
+var SelectTrigger = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectTrigger2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -33450,7 +32820,7 @@ var SelectTrigger = /* @__PURE__ */ React303.forwardRef(function SelectTrigger2(
     id
   });
   const positionerRef = useValueAsRef(positionerElement);
-  const triggerRef = React303.useRef(null);
+  const triggerRef = react_esm_exports.useRef(null);
   const {
     getButtonProps,
     buttonRef
@@ -33464,7 +32834,7 @@ var SelectTrigger = /* @__PURE__ */ React303.forwardRef(function SelectTrigger2(
   const timeoutFocus = useTimeout();
   const timeoutMouseDown = useTimeout();
   const selectedDelayTimeout = useTimeout();
-  React303.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (open) {
       selectedDelayTimeout.start(SELECTED_DELAY, () => {
         selectionRef.current.allowUnselectedMouseUp = true;
@@ -33558,11 +32928,10 @@ var SelectTrigger = /* @__PURE__ */ React303.forwardRef(function SelectTrigger2(
 if (false) SelectTrigger.displayName = "SelectTrigger";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/value/SelectValue.mjs
-import * as React304 from "react";
 var stateAttributesMapping30 = {
   value: () => null
 };
-var SelectValue = /* @__PURE__ */ React304.forwardRef(function SelectValue2(componentProps, forwardedRef) {
+var SelectValue = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectValue2(componentProps, forwardedRef) {
   const {
     className,
     render,
@@ -33610,8 +32979,7 @@ var SelectValue = /* @__PURE__ */ React304.forwardRef(function SelectValue2(comp
 if (false) SelectValue.displayName = "SelectValue";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/icon/SelectIcon.mjs
-import * as React305 from "react";
-var SelectIcon = /* @__PURE__ */ React305.forwardRef(function SelectIcon2(componentProps, forwardedRef) {
+var SelectIcon = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectIcon2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -33638,17 +33006,13 @@ var SelectIcon = /* @__PURE__ */ React305.forwardRef(function SelectIcon2(compon
 });
 if (false) SelectIcon.displayName = "SelectIcon";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/portal/SelectPortal.mjs
-import * as React307 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/portal/SelectPortalContext.mjs
-import * as React306 from "react";
-var SelectPortalContext = /* @__PURE__ */ React306.createContext(void 0);
+var SelectPortalContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) SelectPortalContext.displayName = "SelectPortalContext";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/portal/SelectPortal.mjs
 import { jsx as _jsx95 } from "react/jsx-runtime";
-var SelectPortal = /* @__PURE__ */ React307.forwardRef(function SelectPortal2(portalProps, forwardedRef) {
+var SelectPortal = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectPortal2(portalProps, forwardedRef) {
   const {
     store
   } = useSelectRootContext();
@@ -33669,12 +33033,11 @@ var SelectPortal = /* @__PURE__ */ React307.forwardRef(function SelectPortal2(po
 if (false) SelectPortal.displayName = "SelectPortal";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/backdrop/SelectBackdrop.mjs
-import * as React308 from "react";
 var stateAttributesMapping31 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var SelectBackdrop = /* @__PURE__ */ React308.forwardRef(function SelectBackdrop2(componentProps, forwardedRef) {
+var SelectBackdrop = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectBackdrop2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -33708,15 +33071,11 @@ var SelectBackdrop = /* @__PURE__ */ React308.forwardRef(function SelectBackdrop
 });
 if (false) SelectBackdrop.displayName = "SelectBackdrop";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/positioner/SelectPositioner.mjs
-import * as React310 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/positioner/SelectPositionerContext.mjs
-import * as React309 from "react";
-var SelectPositionerContext = /* @__PURE__ */ React309.createContext(void 0);
+var SelectPositionerContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) SelectPositionerContext.displayName = "SelectPositionerContext";
 function useSelectPositionerContext() {
-  const context = React309.useContext(SelectPositionerContext);
+  const context = react_esm_exports.useContext(SelectPositionerContext);
   if (!context) {
     throw new Error(false ? "Base UI: SelectPositionerContext is missing. SelectPositioner parts must be placed within <Select.Positioner>." : formatErrorMessage_default(59));
   }
@@ -33741,7 +33100,7 @@ import { jsx as _jsx96, jsxs as _jsxs28 } from "react/jsx-runtime";
 var FIXED = {
   position: "fixed"
 };
-var SelectPositioner = /* @__PURE__ */ React310.forwardRef(function SelectPositioner2(componentProps, forwardedRef) {
+var SelectPositioner = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectPositioner2(componentProps, forwardedRef) {
   const {
     anchor,
     positionMethod = "absolute",
@@ -33782,9 +33141,9 @@ var SelectPositioner = /* @__PURE__ */ React310.forwardRef(function SelectPositi
   const triggerElement = useStore(store, selectors7.triggerElement);
   const isItemEqualToValue = useStore(store, selectors7.isItemEqualToValue);
   const transitionStatus = useStore(store, selectors7.transitionStatus);
-  const scrollUpArrowRef = React310.useRef(null);
-  const scrollDownArrowRef = React310.useRef(null);
-  const [controlledAlignItemWithTrigger, setControlledAlignItemWithTrigger] = React310.useState(alignItemWithTrigger);
+  const scrollUpArrowRef = react_esm_exports.useRef(null);
+  const scrollDownArrowRef = react_esm_exports.useRef(null);
+  const [controlledAlignItemWithTrigger, setControlledAlignItemWithTrigger] = react_esm_exports.useState(alignItemWithTrigger);
   const alignItemWithTriggerActive = mounted && controlledAlignItemWithTrigger && openMethod !== "touch";
   if (!mounted && controlledAlignItemWithTrigger !== alignItemWithTrigger) {
     setControlledAlignItemWithTrigger(alignItemWithTrigger);
@@ -33799,7 +33158,7 @@ var SelectPositioner = /* @__PURE__ */ React310.forwardRef(function SelectPositi
       }
     }
   }, [store, mounted]);
-  React310.useImperativeHandle(alignItemWithTriggerActiveRef, () => alignItemWithTriggerActive);
+  react_esm_exports.useImperativeHandle(alignItemWithTriggerActiveRef, () => alignItemWithTriggerActive);
   useAnchoredPopupScrollLock((alignItemWithTriggerActive || modal) && open, openMethod === "touch", positionerElement, triggerElement);
   const positioning = useAnchorPositioning({
     anchor,
@@ -33840,7 +33199,7 @@ var SelectPositioner = /* @__PURE__ */ React310.forwardRef(function SelectPositi
     hidden: !mounted,
     inert: !open
   });
-  const prevMapSizeRef = React310.useRef(0);
+  const prevMapSizeRef = react_esm_exports.useRef(0);
   const onMapChange = useStableCallback((map) => {
     if (map.size === 0 && prevMapSizeRef.current === 0) {
       return;
@@ -33890,7 +33249,7 @@ var SelectPositioner = /* @__PURE__ */ React310.forwardRef(function SelectPositi
       clearStyles(popupRef.current, stylesToClear);
     }
   });
-  const contextValue = React310.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     ...positioning,
     side: renderedSide,
     alignItemWithTriggerActive,
@@ -33914,13 +33273,12 @@ var SelectPositioner = /* @__PURE__ */ React310.forwardRef(function SelectPositi
 if (false) SelectPositioner.displayName = "SelectPositioner";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/popup/SelectPopup.mjs
-import * as React311 from "react";
 import { jsx as _jsx97, jsxs as _jsxs29 } from "react/jsx-runtime";
 var stateAttributesMapping32 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var SelectPopup = /* @__PURE__ */ React311.forwardRef(function SelectPopup2(componentProps, forwardedRef) {
+var SelectPopup = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectPopup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -33965,9 +33323,9 @@ var SelectPopup = /* @__PURE__ */ React311.forwardRef(function SelectPopup2(comp
   const triggerElement = useStore(store, selectors7.triggerElement);
   const positionerElement = useStore(store, selectors7.positionerElement);
   const listElement = useStore(store, selectors7.listElement);
-  const reachedMaxHeightRef = React311.useRef(false);
-  const initialPlacedRef = React311.useRef(false);
-  const originalPositionerStylesRef = React311.useRef({});
+  const reachedMaxHeightRef = react_esm_exports.useRef(false);
+  const initialPlacedRef = react_esm_exports.useRef(false);
+  const originalPositionerStylesRef = react_esm_exports.useRef({});
   const scrollArrowFrame = useAnimationFrame();
   const handleScroll = useStableCallback((scroller) => {
     if (!positionerElement || !popupRef.current || !initialPlacedRef.current) {
@@ -34048,7 +33406,7 @@ var SelectPopup = /* @__PURE__ */ React311.forwardRef(function SelectPopup2(comp
     }
     handleScrollArrowVisibility();
   });
-  React311.useImperativeHandle(scrollHandlerRef, () => handleScroll, [handleScroll]);
+  react_esm_exports.useImperativeHandle(scrollHandlerRef, () => handleScroll, [handleScroll]);
   useOpenChangeComplete({
     open,
     ref: popupRef,
@@ -34194,7 +33552,7 @@ var SelectPopup = /* @__PURE__ */ React311.forwardRef(function SelectPopup2(comp
       restoreTransformStyles();
     }
   }, [store, open, positionerElement, triggerElement, valueRef, firstItemTextRef, selectedItemTextRef, popupRef, handleScrollArrowVisibility, alignItemWithTriggerActive, setControlledAlignItemWithTrigger, scrollArrowFrame, listElement, listRef, highlightItemOnHover, direction, isPositioned]);
-  React311.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!alignItemWithTriggerActive || !positionerElement || !open) {
       return void 0;
     }
@@ -34238,7 +33596,7 @@ var SelectPopup = /* @__PURE__ */ React311.forwardRef(function SelectPopup2(comp
       className: !listElement && alignItemWithTriggerActive ? styleDisableScrollbar.className : void 0
     }, elementProps]
   });
-  return /* @__PURE__ */ _jsxs29(React311.Fragment, {
+  return /* @__PURE__ */ _jsxs29(react_esm_exports.Fragment, {
     children: [!disableStyleElements && styleDisableScrollbar.getElement(nonce), /* @__PURE__ */ _jsx97(FloatingFocusManager, {
       context: floatingRootContext,
       modal: false,
@@ -34295,8 +33653,7 @@ function unsetTransformStyles(popupElement) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/list/SelectList.mjs
-import * as React312 from "react";
-var SelectList = /* @__PURE__ */ React312.forwardRef(function SelectList2(componentProps, forwardedRef) {
+var SelectList = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectList2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -34336,15 +33693,11 @@ var SelectList = /* @__PURE__ */ React312.forwardRef(function SelectList2(compon
 });
 if (false) SelectList.displayName = "SelectList";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/item/SelectItem.mjs
-import * as React314 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/item/SelectItemContext.mjs
-import * as React313 from "react";
-var SelectItemContext = /* @__PURE__ */ React313.createContext(void 0);
+var SelectItemContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) SelectItemContext.displayName = "SelectItemContext";
 function useSelectItemContext() {
-  const context = React313.useContext(SelectItemContext);
+  const context = react_esm_exports.useContext(SelectItemContext);
   if (!context) {
     throw new Error(false ? "Base UI: SelectItemContext is missing. SelectItem parts must be placed within <Select.Item>." : formatErrorMessage_default(57));
   }
@@ -34353,7 +33706,7 @@ function useSelectItemContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/item/SelectItem.mjs
 import { jsx as _jsx98 } from "react/jsx-runtime";
-var SelectItem = /* @__PURE__ */ React314.memo(/* @__PURE__ */ React314.forwardRef(function SelectItem2(componentProps, forwardedRef) {
+var SelectItem = /* @__PURE__ */ react_esm_exports.memo(/* @__PURE__ */ react_esm_exports.forwardRef(function SelectItem2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -34364,7 +33717,7 @@ var SelectItem = /* @__PURE__ */ React314.memo(/* @__PURE__ */ React314.forwardR
     nativeButton = false,
     ...elementProps
   } = componentProps;
-  const textRef = React314.useRef(null);
+  const textRef = react_esm_exports.useRef(null);
   const listItem = useCompositeListItem({
     label,
     textRef,
@@ -34390,7 +33743,7 @@ var SelectItem = /* @__PURE__ */ React314.memo(/* @__PURE__ */ React314.forwardR
   const isItemEqualToValue = useStore(store, selectors7.isItemEqualToValue);
   const index2 = listItem.index;
   const hasRegistered = index2 !== -1;
-  const itemRef = React314.useRef(null);
+  const itemRef = react_esm_exports.useRef(null);
   useIsoLayoutEffect(() => {
     if (!hasRegistered) {
       return void 0;
@@ -34417,9 +33770,9 @@ var SelectItem = /* @__PURE__ */ React314.memo(/* @__PURE__ */ React314.forwardR
       }
     }
   }, [hasRegistered, index2, multiple, isItemEqualToValue, store, itemValue, selectedItemTextRef]);
-  const lastKeyRef = React314.useRef(null);
-  const pointerTypeRef = React314.useRef("mouse");
-  const allowMouseSelectionRef = React314.useRef(false);
+  const lastKeyRef = react_esm_exports.useRef(null);
+  const pointerTypeRef = react_esm_exports.useRef("mouse");
+  const allowMouseSelectionRef = react_esm_exports.useRef(false);
   const {
     getButtonProps,
     buttonRef
@@ -34520,7 +33873,7 @@ var SelectItem = /* @__PURE__ */ React314.memo(/* @__PURE__ */ React314.forwardR
     state,
     props: [itemProps, defaultProps, elementProps, getButtonProps]
   });
-  const contextValue = React314.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     selected,
     index: index2,
     textRef,
@@ -34535,9 +33888,8 @@ var SelectItem = /* @__PURE__ */ React314.memo(/* @__PURE__ */ React314.forwardR
 if (false) SelectItem.displayName = "SelectItem";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/item-indicator/SelectItemIndicator.mjs
-import * as React315 from "react";
 import { jsx as _jsx99 } from "react/jsx-runtime";
-var SelectItemIndicator = /* @__PURE__ */ React315.forwardRef(function SelectItemIndicator2(componentProps, forwardedRef) {
+var SelectItemIndicator = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectItemIndicator2(componentProps, forwardedRef) {
   const keepMounted = componentProps.keepMounted ?? false;
   const {
     selected
@@ -34552,7 +33904,7 @@ var SelectItemIndicator = /* @__PURE__ */ React315.forwardRef(function SelectIte
   });
 });
 if (false) SelectItemIndicator.displayName = "SelectItemIndicator";
-var Inner2 = /* @__PURE__ */ React315.memo(/* @__PURE__ */ React315.forwardRef((componentProps, forwardedRef) => {
+var Inner2 = /* @__PURE__ */ react_esm_exports.memo(/* @__PURE__ */ react_esm_exports.forwardRef((componentProps, forwardedRef) => {
   const {
     render,
     className,
@@ -34563,7 +33915,7 @@ var Inner2 = /* @__PURE__ */ React315.memo(/* @__PURE__ */ React315.forwardRef((
   const {
     selected
   } = useSelectItemContext();
-  const indicatorRef = React315.useRef(null);
+  const indicatorRef = react_esm_exports.useRef(null);
   const {
     transitionStatus,
     setMounted
@@ -34595,8 +33947,7 @@ var Inner2 = /* @__PURE__ */ React315.memo(/* @__PURE__ */ React315.forwardRef((
 if (false) Inner2.displayName = "Inner";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/item-text/SelectItemText.mjs
-import * as React316 from "react";
-var SelectItemText = /* @__PURE__ */ React316.memo(/* @__PURE__ */ React316.forwardRef(function SelectItemText2(componentProps, forwardedRef) {
+var SelectItemText = /* @__PURE__ */ react_esm_exports.memo(/* @__PURE__ */ react_esm_exports.forwardRef(function SelectItemText2(componentProps, forwardedRef) {
   const {
     index: index2,
     textRef,
@@ -34613,7 +33964,7 @@ var SelectItemText = /* @__PURE__ */ React316.memo(/* @__PURE__ */ React316.forw
     style,
     ...elementProps
   } = componentProps;
-  const localRef = React316.useCallback((node) => {
+  const localRef = react_esm_exports.useCallback((node) => {
     if (!node) {
       return;
     }
@@ -34633,12 +33984,11 @@ var SelectItemText = /* @__PURE__ */ React316.memo(/* @__PURE__ */ React316.forw
 if (false) SelectItemText.displayName = "SelectItemText";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/arrow/SelectArrow.mjs
-import * as React317 from "react";
 var stateAttributesMapping33 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var SelectArrow = /* @__PURE__ */ React317.forwardRef(function SelectArrow2(componentProps, forwardedRef) {
+var SelectArrow = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectArrow2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -34679,12 +34029,8 @@ var SelectArrow = /* @__PURE__ */ React317.forwardRef(function SelectArrow2(comp
 });
 if (false) SelectArrow.displayName = "SelectArrow";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/scroll-down-arrow/SelectScrollDownArrow.mjs
-import * as React319 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/scroll-arrow/SelectScrollArrow.mjs
-import * as React318 from "react";
-var SelectScrollArrow = /* @__PURE__ */ React318.forwardRef(function SelectScrollArrow2(componentProps, forwardedRef) {
+var SelectScrollArrow = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectScrollArrow2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -34832,7 +34178,7 @@ function getTargetScrollTop(items, isUp, scrollTop, clientHeight, scrollArrowHei
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/scroll-down-arrow/SelectScrollDownArrow.mjs
 import { jsx as _jsx100 } from "react/jsx-runtime";
-var SelectScrollDownArrow = /* @__PURE__ */ React319.forwardRef(function SelectScrollDownArrow2(props, forwardedRef) {
+var SelectScrollDownArrow = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectScrollDownArrow2(props, forwardedRef) {
   return /* @__PURE__ */ _jsx100(SelectScrollArrow, {
     ...props,
     ref: forwardedRef,
@@ -34842,9 +34188,8 @@ var SelectScrollDownArrow = /* @__PURE__ */ React319.forwardRef(function SelectS
 if (false) SelectScrollDownArrow.displayName = "SelectScrollDownArrow";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/scroll-up-arrow/SelectScrollUpArrow.mjs
-import * as React320 from "react";
 import { jsx as _jsx101 } from "react/jsx-runtime";
-var SelectScrollUpArrow = /* @__PURE__ */ React320.forwardRef(function SelectScrollUpArrow2(props, forwardedRef) {
+var SelectScrollUpArrow = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectScrollUpArrow2(props, forwardedRef) {
   return /* @__PURE__ */ _jsx101(SelectScrollArrow, {
     ...props,
     ref: forwardedRef,
@@ -34853,15 +34198,11 @@ var SelectScrollUpArrow = /* @__PURE__ */ React320.forwardRef(function SelectScr
 });
 if (false) SelectScrollUpArrow.displayName = "SelectScrollUpArrow";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/group/SelectGroup.mjs
-import * as React322 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/group/SelectGroupContext.mjs
-import * as React321 from "react";
-var SelectGroupContext = /* @__PURE__ */ React321.createContext(void 0);
+var SelectGroupContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) SelectGroupContext.displayName = "SelectGroupContext";
 function useSelectGroupContext() {
-  const context = React321.useContext(SelectGroupContext);
+  const context = react_esm_exports.useContext(SelectGroupContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: SelectGroupContext is missing. SelectGroup parts must be placed within <Select.Group>." : formatErrorMessage_default(56));
   }
@@ -34870,15 +34211,15 @@ function useSelectGroupContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/group/SelectGroup.mjs
 import { jsx as _jsx102 } from "react/jsx-runtime";
-var SelectGroup = /* @__PURE__ */ React322.forwardRef(function SelectGroup2(componentProps, forwardedRef) {
+var SelectGroup = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectGroup2(componentProps, forwardedRef) {
   const {
     render,
     className,
     style,
     ...elementProps
   } = componentProps;
-  const [labelId, setLabelId] = React322.useState();
-  const contextValue = React322.useMemo(() => ({
+  const [labelId, setLabelId] = react_esm_exports.useState();
+  const contextValue = react_esm_exports.useMemo(() => ({
     labelId,
     setLabelId
   }), [labelId, setLabelId]);
@@ -34897,8 +34238,7 @@ var SelectGroup = /* @__PURE__ */ React322.forwardRef(function SelectGroup2(comp
 if (false) SelectGroup.displayName = "SelectGroup";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/select/group-label/SelectGroupLabel.mjs
-import * as React323 from "react";
-var SelectGroupLabel = /* @__PURE__ */ React323.forwardRef(function SelectGroupLabel2(componentProps, forwardedRef) {
+var SelectGroupLabel = /* @__PURE__ */ react_esm_exports.forwardRef(function SelectGroupLabel2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -34934,9 +34274,6 @@ __export(index_parts_exports24, {
   Track: () => SliderTrack,
   Value: () => SliderValue
 });
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/root/SliderRoot.mjs
-import * as React325 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/utils/asc.mjs
 function asc(a, b) {
@@ -34992,11 +34329,10 @@ var sliderStateAttributesMapping = {
 };
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/root/SliderRootContext.mjs
-import * as React324 from "react";
-var SliderRootContext = /* @__PURE__ */ React324.createContext(void 0);
+var SliderRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) SliderRootContext.displayName = "SliderRootContext";
 function useSliderRootContext() {
-  const context = React324.useContext(SliderRootContext);
+  const context = react_esm_exports.useContext(SliderRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: SliderRootContext is missing. Slider parts must be placed within <Slider.Root>." : formatErrorMessage_default(62));
   }
@@ -35017,7 +34353,7 @@ function areValuesEqual(newValue, oldValue) {
   }
   return false;
 }
-var SliderRoot = /* @__PURE__ */ React325.forwardRef(function SliderRoot2(componentProps, forwardedRef) {
+var SliderRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function SliderRoot2(componentProps, forwardedRef) {
   const {
     "aria-labelledby": ariaLabelledByProp,
     className,
@@ -35062,7 +34398,7 @@ var SliderRoot = /* @__PURE__ */ React325.forwardRef(function SliderRoot2(compon
   const {
     labelId: fieldLabelId
   } = useLabelableContext();
-  const [labelId, setLabelId] = React325.useState();
+  const [labelId, setLabelId] = react_esm_exports.useState();
   const ariaLabelledby = ariaLabelledByProp ?? resolveAriaLabelledBy(fieldLabelId, labelId);
   const disabled2 = fieldDisabled || disabledProp;
   const name = fieldName ?? nameProp;
@@ -35071,20 +34407,20 @@ var SliderRoot = /* @__PURE__ */ React325.forwardRef(function SliderRoot2(compon
     default: defaultValue ?? min2,
     name: "Slider"
   });
-  const sliderRef = React325.useRef(null);
-  const controlRef = React325.useRef(null);
-  const thumbRefs = React325.useRef([]);
-  const pressedInputRef = React325.useRef(null);
-  const pressedThumbCenterOffsetRef = React325.useRef(null);
-  const pressedThumbIndexRef = React325.useRef(-1);
-  const pressedValuesRef = React325.useRef(null);
-  const lastChangeReasonRef = React325.useRef("none");
+  const sliderRef = react_esm_exports.useRef(null);
+  const controlRef = react_esm_exports.useRef(null);
+  const thumbRefs = react_esm_exports.useRef([]);
+  const pressedInputRef = react_esm_exports.useRef(null);
+  const pressedThumbCenterOffsetRef = react_esm_exports.useRef(null);
+  const pressedThumbIndexRef = react_esm_exports.useRef(-1);
+  const pressedValuesRef = react_esm_exports.useRef(null);
+  const lastChangeReasonRef = react_esm_exports.useRef("none");
   const formatOptionsRef = useValueAsRef(format);
-  const [active, setActiveState] = React325.useState(-1);
-  const [lastUsedThumbIndex, setLastUsedThumbIndex] = React325.useState(-1);
-  const [dragging, setDragging] = React325.useState(false);
-  const [thumbMap, setThumbMap] = React325.useState(() => /* @__PURE__ */ new Map());
-  const [indicatorPosition, setIndicatorPosition] = React325.useState([void 0, void 0]);
+  const [active, setActiveState] = react_esm_exports.useState(-1);
+  const [lastUsedThumbIndex, setLastUsedThumbIndex] = react_esm_exports.useState(-1);
+  const [dragging, setDragging] = react_esm_exports.useState(false);
+  const [thumbMap, setThumbMap] = react_esm_exports.useState(() => /* @__PURE__ */ new Map());
+  const [indicatorPosition, setIndicatorPosition] = react_esm_exports.useState([void 0, void 0]);
   const setActive = useStableCallback((value) => {
     setActiveState(value);
     if (value !== -1) {
@@ -35110,7 +34446,7 @@ var SliderRoot = /* @__PURE__ */ React325.forwardRef(function SliderRoot2(compon
     }
   });
   const range = Array.isArray(valueUnwrapped);
-  const values = React325.useMemo(() => {
+  const values = react_esm_exports.useMemo(() => {
     if (!range) {
       return [clamp2(valueUnwrapped, min2, max2)];
     }
@@ -35169,7 +34505,7 @@ var SliderRoot = /* @__PURE__ */ React325.forwardRef(function SliderRoot2(compon
   if (disabled2 && active !== -1) {
     setActive(-1);
   }
-  const state = React325.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     ...fieldState,
     activeThumbIndex: active,
     disabled: disabled2,
@@ -35181,7 +34517,7 @@ var SliderRoot = /* @__PURE__ */ React325.forwardRef(function SliderRoot2(compon
     step,
     values
   }), [fieldState, active, disabled2, dragging, max2, min2, minStepsBetweenValues, orientation, step, values]);
-  const contextValue = React325.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     active,
     controlRef,
     disabled: disabled2,
@@ -35244,8 +34580,7 @@ var SliderRoot = /* @__PURE__ */ React325.forwardRef(function SliderRoot2(compon
 if (false) SliderRoot.displayName = "SliderRoot";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/label/SliderLabel.mjs
-import * as React326 from "react";
-var SliderLabel = /* @__PURE__ */ React326.forwardRef(function SliderLabel2(componentProps, forwardedRef) {
+var SliderLabel = /* @__PURE__ */ react_esm_exports.forwardRef(function SliderLabel2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -35289,8 +34624,7 @@ var SliderLabel = /* @__PURE__ */ React326.forwardRef(function SliderLabel2(comp
 if (false) SliderLabel.displayName = "SliderLabel";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/value/SliderValue.mjs
-import * as React327 from "react";
-var SliderValue = /* @__PURE__ */ React327.forwardRef(function SliderValue2(componentProps, forwardedRef) {
+var SliderValue = /* @__PURE__ */ react_esm_exports.forwardRef(function SliderValue2(componentProps, forwardedRef) {
   const {
     "aria-live": ariaLive = "off",
     render,
@@ -35313,7 +34647,7 @@ var SliderValue = /* @__PURE__ */ React327.forwardRef(function SliderValue2(comp
     }
   }
   const outputFor = htmlFor.trim() === "" ? void 0 : htmlFor.trim();
-  const formattedValues = React327.useMemo(() => {
+  const formattedValues = react_esm_exports.useMemo(() => {
     const arr = [];
     for (let i = 0; i < values.length; i += 1) {
       arr.push(formatNumber(values[i], locale, formatOptionsRef.current ?? void 0));
@@ -35336,9 +34670,6 @@ var SliderValue = /* @__PURE__ */ React327.forwardRef(function SliderValue2(comp
   return element;
 });
 if (false) SliderValue.displayName = "SliderValue";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/control/SliderControl.mjs
-import * as React328 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/utils/getMidpoint.mjs
 function getMidpoint(element) {
@@ -35578,7 +34909,7 @@ function getFingerCoords(event, touchIdRef) {
     y: event.clientY
   };
 }
-var SliderControl = /* @__PURE__ */ React328.forwardRef(function SliderControl2(componentProps, forwardedRef) {
+var SliderControl = /* @__PURE__ */ react_esm_exports.forwardRef(function SliderControl2(componentProps, forwardedRef) {
   const {
     render: renderProp,
     className,
@@ -35613,17 +34944,17 @@ var SliderControl = /* @__PURE__ */ React328.forwardRef(function SliderControl2(
   const direction = useDirection();
   const range = values.length > 1;
   const vertical = orientation === "vertical";
-  const controlRef = React328.useRef(null);
-  const stylesRef = React328.useRef(null);
+  const controlRef = react_esm_exports.useRef(null);
+  const stylesRef = react_esm_exports.useRef(null);
   const setStylesRef = useStableCallback((element2) => {
     if (element2 && stylesRef.current == null) {
       stylesRef.current = getWindow(element2).getComputedStyle(element2);
     }
   });
-  const touchIdRef = React328.useRef(null);
-  const moveCountRef = React328.useRef(0);
-  const insetThumbOffsetRef = React328.useRef(0);
-  const currentInteractionValueRef = React328.useRef(null);
+  const touchIdRef = react_esm_exports.useRef(null);
+  const moveCountRef = react_esm_exports.useRef(0);
+  const insetThumbOffsetRef = react_esm_exports.useRef(0);
+  const currentInteractionValueRef = react_esm_exports.useRef(null);
   const latestValuesRef = useValueAsRef(values);
   function updatePressedThumb(nextIndex) {
     if (pressedThumbIndexRef.current !== nextIndex) {
@@ -35854,7 +35185,7 @@ var SliderControl = /* @__PURE__ */ React328.forwardRef(function SliderControl2(
     currentInteractionValueRef.current = null;
   });
   const focusFrame = useAnimationFrame();
-  React328.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     const control = controlRef.current;
     if (!control) {
       return () => stopListening();
@@ -35868,7 +35199,7 @@ var SliderControl = /* @__PURE__ */ React328.forwardRef(function SliderControl2(
       stopListening();
     };
   }, [stopListening, handleTouchStart, controlRef, focusFrame]);
-  React328.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (disabled2) {
       stopListening();
     }
@@ -35933,8 +35264,7 @@ var SliderControl = /* @__PURE__ */ React328.forwardRef(function SliderControl2(
 if (false) SliderControl.displayName = "SliderControl";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/track/SliderTrack.mjs
-import * as React329 from "react";
-var SliderTrack = /* @__PURE__ */ React329.forwardRef(function SliderTrack2(componentProps, forwardedRef) {
+var SliderTrack = /* @__PURE__ */ react_esm_exports.forwardRef(function SliderTrack2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -35958,11 +35288,7 @@ var SliderTrack = /* @__PURE__ */ React329.forwardRef(function SliderTrack2(comp
 });
 if (false) SliderTrack.displayName = "SliderTrack";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/thumb/SliderThumb.mjs
-import * as React330 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/utils/useIsHydrating.mjs
-var import_shim2 = __toESM(require_shim(), 1);
 function subscribe() {
   return NOOP;
 }
@@ -35973,7 +35299,7 @@ function getServerSnapshot() {
   return true;
 }
 function useIsHydrating() {
-  return (0, import_shim2.useSyncExternalStore)(subscribe, getSnapshot, getServerSnapshot);
+  return (0, react_esm_exports.useSyncExternalStore)(subscribe, getSnapshot, getServerSnapshot);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/thumb/SliderThumbDataAttributes.mjs
@@ -36013,7 +35339,7 @@ function getNewValue(thumbValue, increment, direction, min2, max2) {
   const roundedValue = Number(value.toFixed(Math.max(getDecimalPrecision(thumbValue), getDecimalPrecision(increment), getDecimalPrecision(min2))));
   return clamp2(roundedValue, min2, max2);
 }
-var SliderThumb = /* @__PURE__ */ React330.forwardRef(function SliderThumb2(componentProps, forwardedRef) {
+var SliderThumb = /* @__PURE__ */ react_esm_exports.forwardRef(function SliderThumb2(componentProps, forwardedRef) {
   const {
     render,
     children: childrenProp,
@@ -36077,13 +35403,13 @@ var SliderThumb = /* @__PURE__ */ React330.forwardRef(function SliderThumb2(comp
     setFocused,
     validationMode
   } = useFieldRootContext();
-  const thumbRef = React330.useRef(null);
-  const inputRef = React330.useRef(null);
-  const restoringFocusVisibleRef = React330.useRef(false);
+  const thumbRef = react_esm_exports.useRef(null);
+  const inputRef = react_esm_exports.useRef(null);
+  const restoringFocusVisibleRef = react_esm_exports.useRef(false);
   const defaultInputId = useBaseUiId();
   const labelableId = useLabelableId();
   const inputId = range ? defaultInputId : labelableId;
-  const thumbMetadata = React330.useMemo(() => ({
+  const thumbMetadata = react_esm_exports.useMemo(() => ({
     inputId
   }), [inputId]);
   const {
@@ -36096,7 +35422,7 @@ var SliderThumb = /* @__PURE__ */ React330.forwardRef(function SliderThumb2(comp
   const last = index2 === sliderValues.length - 1;
   const thumbValue = sliderValues[index2];
   const thumbValuePercent = valueToPercent(thumbValue, min2, max2);
-  const [positionPercent, setPositionPercent] = React330.useState();
+  const [positionPercent, setPositionPercent] = react_esm_exports.useState();
   const isHydrating = useIsHydrating();
   const safeLastUsedThumbIndex = lastUsedThumbIndex >= 0 && lastUsedThumbIndex < sliderValues.length ? lastUsedThumbIndex : -1;
   const getInsetPosition = useStableCallback(() => {
@@ -36308,7 +35634,7 @@ var SliderThumb = /* @__PURE__ */ React330.forwardRef(function SliderThumb2(comp
     ref: [forwardedRef, listItemRef, thumbRef],
     props: [{
       [SliderThumbDataAttributes.index]: index2,
-      children: /* @__PURE__ */ _jsxs30(React330.Fragment, {
+      children: /* @__PURE__ */ _jsxs30(react_esm_exports.Fragment, {
         children: [childrenProp, /* @__PURE__ */ _jsx104("input", {
           ref: mergedInputRef,
           ...inputProps,
@@ -36351,7 +35677,6 @@ var SliderThumb = /* @__PURE__ */ React330.forwardRef(function SliderThumb2(comp
 if (false) SliderThumb.displayName = "SliderThumb";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/slider/indicator/SliderIndicator.mjs
-import * as React331 from "react";
 function getInsetStyles(vertical, range, start, end, renderBeforeHydration, hydrating) {
   const visibility = start === void 0 || range && end === void 0 ? "hidden" : void 0;
   const startEdge = vertical ? "bottom" : "insetInlineStart";
@@ -36391,7 +35716,7 @@ function getCenteredStyles(vertical, range, start, end) {
   styles[mainSide] = `${size4}%`;
   return styles;
 }
-var SliderIndicator = /* @__PURE__ */ React331.forwardRef(function SliderIndicator2(componentProps, forwardedRef) {
+var SliderIndicator = /* @__PURE__ */ react_esm_exports.forwardRef(function SliderIndicator2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -36433,15 +35758,11 @@ __export(index_parts_exports25, {
   Thumb: () => SwitchThumb
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/switch/root/SwitchRoot.mjs
-import * as React333 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/switch/root/SwitchRootContext.mjs
-import * as React332 from "react";
-var SwitchRootContext = /* @__PURE__ */ React332.createContext(void 0);
+var SwitchRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) SwitchRootContext.displayName = "SwitchRootContext";
 function useSwitchRootContext() {
-  const context = React332.useContext(SwitchRootContext);
+  const context = react_esm_exports.useContext(SwitchRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: SwitchRootContext is missing. Switch parts must be placed within <Switch.Root>." : formatErrorMessage_default(63));
   }
@@ -36481,7 +35802,7 @@ var stateAttributesMapping34 = {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/switch/root/SwitchRoot.mjs
 import { jsx as _jsx105, jsxs as _jsxs31 } from "react/jsx-runtime";
-var SwitchRoot = /* @__PURE__ */ React333.forwardRef(function SwitchRoot2(componentProps, forwardedRef) {
+var SwitchRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function SwitchRoot2(componentProps, forwardedRef) {
   const {
     checked: checkedProp,
     className,
@@ -36522,9 +35843,9 @@ var SwitchRoot = /* @__PURE__ */ React333.forwardRef(function SwitchRoot2(compon
   } = useLabelableContext();
   const disabled2 = fieldDisabled || disabledProp;
   const name = fieldName ?? nameProp;
-  const inputRef = React333.useRef(null);
+  const inputRef = react_esm_exports.useRef(null);
   const handleInputRef = useMergedRefs(inputRef, externalInputRef, validation.inputRef);
-  const switchRef = React333.useRef(null);
+  const switchRef = react_esm_exports.useRef(null);
   const id = useBaseUiId();
   const controlId = useLabelableId({
     id: idProp,
@@ -36639,7 +35960,7 @@ var SwitchRoot = /* @__PURE__ */ React333.forwardRef(function SwitchRoot2(compon
       value
     } : EMPTY_OBJECT
   );
-  const state = React333.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     ...fieldState,
     checked,
     disabled: disabled2,
@@ -36669,8 +35990,7 @@ var SwitchRoot = /* @__PURE__ */ React333.forwardRef(function SwitchRoot2(compon
 if (false) SwitchRoot.displayName = "SwitchRoot";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/switch/thumb/SwitchThumb.mjs
-import * as React334 from "react";
-var SwitchThumb = /* @__PURE__ */ React334.forwardRef(function SwitchThumb2(componentProps, forwardedRef) {
+var SwitchThumb = /* @__PURE__ */ react_esm_exports.forwardRef(function SwitchThumb2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -36697,15 +36017,11 @@ __export(index_parts_exports26, {
   Tab: () => TabsTab
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/root/TabsRoot.mjs
-import * as React336 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/root/TabsRootContext.mjs
-import * as React335 from "react";
-var TabsRootContext = /* @__PURE__ */ React335.createContext(void 0);
+var TabsRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) TabsRootContext.displayName = "TabsRootContext";
 function useTabsRootContext() {
-  const context = React335.useContext(TabsRootContext);
+  const context = react_esm_exports.useContext(TabsRootContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: TabsRootContext is missing. Tabs parts must be placed within <Tabs.Root>." : formatErrorMessage_default(64));
   }
@@ -36728,7 +36044,7 @@ var tabsStateAttributesMapping = {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/root/TabsRoot.mjs
 import { jsx as _jsx106 } from "react/jsx-runtime";
-var TabsRoot = /* @__PURE__ */ React336.forwardRef(function TabsRoot2(componentProps, forwardedRef) {
+var TabsRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function TabsRoot2(componentProps, forwardedRef) {
   const {
     className,
     defaultValue: defaultValueProp = 0,
@@ -36740,8 +36056,8 @@ var TabsRoot = /* @__PURE__ */ React336.forwardRef(function TabsRoot2(componentP
     ...elementProps
   } = componentProps;
   const hasExplicitDefaultValueProp = componentProps.defaultValue !== void 0;
-  const tabPanelRefs = React336.useRef([]);
-  const [mountedTabPanels, setMountedTabPanels] = React336.useState(() => /* @__PURE__ */ new Map());
+  const tabPanelRefs = react_esm_exports.useRef([]);
+  const [mountedTabPanels, setMountedTabPanels] = react_esm_exports.useState(() => /* @__PURE__ */ new Map());
   const [value, setValue] = useControlled({
     controlled: valueProp,
     default: defaultValueProp,
@@ -36749,9 +36065,9 @@ var TabsRoot = /* @__PURE__ */ React336.forwardRef(function TabsRoot2(componentP
     state: "value"
   });
   const isControlled = valueProp !== void 0;
-  const [tabMap, setTabMap] = React336.useState(() => /* @__PURE__ */ new Map());
-  const lastKnownTabElementRef = React336.useRef(void 0);
-  const getTabElementBySelectedValue = React336.useCallback((selectedValue) => {
+  const [tabMap, setTabMap] = react_esm_exports.useState(() => /* @__PURE__ */ new Map());
+  const lastKnownTabElementRef = react_esm_exports.useRef(void 0);
+  const getTabElementBySelectedValue = react_esm_exports.useCallback((selectedValue) => {
     if (selectedValue === void 0) {
       return null;
     }
@@ -36762,7 +36078,7 @@ var TabsRoot = /* @__PURE__ */ React336.forwardRef(function TabsRoot2(componentP
     }
     return null;
   }, [tabMap]);
-  const [activationDirectionState, setActivationDirectionState] = React336.useState(() => ({
+  const [activationDirectionState, setActivationDirectionState] = react_esm_exports.useState(() => ({
     previousValue: value,
     tabActivationDirection: "none"
   }));
@@ -36821,10 +36137,10 @@ var TabsRoot = /* @__PURE__ */ React336.forwardRef(function TabsRoot2(componentP
       return next;
     });
   });
-  const getTabPanelIdByValue = React336.useCallback((tabValue) => {
+  const getTabPanelIdByValue = react_esm_exports.useCallback((tabValue) => {
     return mountedTabPanels.get(tabValue);
   }, [mountedTabPanels]);
-  const getTabIdByPanelValue = React336.useCallback((tabPanelValue) => {
+  const getTabIdByPanelValue = react_esm_exports.useCallback((tabPanelValue) => {
     for (const tabMetadata of tabMap.values()) {
       if (tabPanelValue === tabMetadata?.value) {
         return tabMetadata?.id;
@@ -36832,7 +36148,7 @@ var TabsRoot = /* @__PURE__ */ React336.forwardRef(function TabsRoot2(componentP
     }
     return void 0;
   }, [tabMap]);
-  const tabsContextValue = React336.useMemo(() => ({
+  const tabsContextValue = react_esm_exports.useMemo(() => ({
     getTabElementBySelectedValue,
     getTabIdByPanelValue,
     getTabPanelIdByValue,
@@ -36844,7 +36160,7 @@ var TabsRoot = /* @__PURE__ */ React336.forwardRef(function TabsRoot2(componentP
     tabActivationDirection,
     value
   }), [getTabElementBySelectedValue, getTabIdByPanelValue, getTabPanelIdByValue, onValueChange, orientation, registerMountedTabPanel, setTabMap, unregisterMountedTabPanel, tabActivationDirection, value]);
-  const selectedTabMetadata = React336.useMemo(() => {
+  const selectedTabMetadata = react_esm_exports.useMemo(() => {
     for (const tabMetadata of tabMap.values()) {
       if (tabMetadata != null && tabMetadata.value === value) {
         return tabMetadata;
@@ -36852,7 +36168,7 @@ var TabsRoot = /* @__PURE__ */ React336.forwardRef(function TabsRoot2(componentP
     }
     return void 0;
   }, [tabMap, value]);
-  const firstEnabledTabValue = React336.useMemo(() => {
+  const firstEnabledTabValue = react_esm_exports.useMemo(() => {
     for (const tabMetadata of tabMap.values()) {
       if (tabMetadata != null && !tabMetadata.disabled) {
         return tabMetadata.value;
@@ -36860,10 +36176,10 @@ var TabsRoot = /* @__PURE__ */ React336.forwardRef(function TabsRoot2(componentP
     }
     return void 0;
   }, [tabMap]);
-  const shouldNotifyInitialValueChangeRef = React336.useRef(!hasExplicitDefaultValueProp);
-  const initialDefaultValueRef = React336.useRef(defaultValueProp);
-  const shouldHonorDisabledDefaultValueRef = React336.useRef(hasExplicitDefaultValueProp);
-  const didRegisterTabsRef = React336.useRef(false);
+  const shouldNotifyInitialValueChangeRef = react_esm_exports.useRef(!hasExplicitDefaultValueProp);
+  const initialDefaultValueRef = react_esm_exports.useRef(defaultValueProp);
+  const shouldHonorDisabledDefaultValueRef = react_esm_exports.useRef(hasExplicitDefaultValueProp);
+  const didRegisterTabsRef = react_esm_exports.useRef(false);
   useIsoLayoutEffect(() => {
     if (isControlled) {
       return;
@@ -36988,15 +36304,11 @@ function computeActivationDirection(oldValue, newValue, orientation, tabMap) {
   return "none";
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/tab/TabsTab.mjs
-import * as React338 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/list/TabsListContext.mjs
-import * as React337 from "react";
-var TabsListContext = /* @__PURE__ */ React337.createContext(void 0);
+var TabsListContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) TabsListContext.displayName = "TabsListContext";
 function useTabsListContext() {
-  const context = React337.useContext(TabsListContext);
+  const context = react_esm_exports.useContext(TabsListContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: TabsListContext is missing. TabsList parts must be placed within <Tabs.List>." : formatErrorMessage_default(65));
   }
@@ -37004,7 +36316,7 @@ function useTabsListContext() {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/tab/TabsTab.mjs
-var TabsTab = /* @__PURE__ */ React338.forwardRef(function TabsTab2(componentProps, forwardedRef) {
+var TabsTab = /* @__PURE__ */ react_esm_exports.forwardRef(function TabsTab2(componentProps, forwardedRef) {
   const {
     className,
     disabled: disabled2 = false,
@@ -37030,7 +36342,7 @@ var TabsTab = /* @__PURE__ */ React338.forwardRef(function TabsTab2(componentPro
     tabsListElement
   } = useTabsListContext();
   const id = useBaseUiId(idProp);
-  const tabMetadata = React338.useMemo(() => ({
+  const tabMetadata = react_esm_exports.useMemo(() => ({
     disabled: disabled2,
     id,
     value
@@ -37045,8 +36357,8 @@ var TabsTab = /* @__PURE__ */ React338.forwardRef(function TabsTab2(componentPro
     metadata: tabMetadata
   });
   const active = value === activeTabValue;
-  const isNavigatingRef = React338.useRef(false);
-  const tabElementRef = React338.useRef(null);
+  const isNavigatingRef = react_esm_exports.useRef(false);
+  const tabElementRef = react_esm_exports.useRef(null);
   useIsoLayoutEffect(() => {
     const tabElement = tabElementRef.current;
     if (!tabElement) {
@@ -37082,8 +36394,8 @@ var TabsTab = /* @__PURE__ */ React338.forwardRef(function TabsTab2(componentPro
     focusableWhenDisabled: true
   });
   const tabPanelId = getTabPanelIdByValue(value);
-  const isPressingRef = React338.useRef(false);
-  const isMainButtonRef = React338.useRef(false);
+  const isPressingRef = react_esm_exports.useRef(false);
+  const isMainButtonRef = react_esm_exports.useRef(false);
   function onClick(event) {
     if (active || disabled2) {
       return;
@@ -37154,9 +36466,6 @@ var TabsTab = /* @__PURE__ */ React338.forwardRef(function TabsTab2(componentPro
 });
 if (false) TabsTab.displayName = "TabsTab";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/indicator/TabsIndicator.mjs
-import * as React339 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/indicator/prehydrationScript.min.mjs
 var script2 = '!function(){const t=document.currentScript.previousElementSibling;if(!t)return;const e=t.closest(\'[role="tablist"]\');if(!e)return;const i=e.querySelector("[data-active]");if(!i)return;if(0===i.offsetWidth||0===e.offsetWidth)return;let o=0,n=0,h=0,l=0,r=0,f=0;function s(t){const e=getComputedStyle(t);let i=parseFloat(e.width)||0,o=parseFloat(e.height)||0;return(Math.round(i)!==t.offsetWidth||Math.round(o)!==t.offsetHeight)&&(i=t.offsetWidth,o=t.offsetHeight),{width:i,height:o}}if(null!=i&&null!=e){const{width:t,height:c}=s(i),{width:u,height:d}=s(e),a=i.getBoundingClientRect(),g=e.getBoundingClientRect(),p=u>0?g.width/u:1,b=d>0?g.height/d:1;if(Math.abs(p)>Number.EPSILON&&Math.abs(b)>Number.EPSILON){const t=a.left-g.left,i=a.top-g.top;o=t/p+e.scrollLeft-e.clientLeft,h=i/b+e.scrollTop-e.clientTop}else o=i.offsetLeft,h=i.offsetTop;r=t,f=c,n=e.scrollWidth-o-r,l=e.scrollHeight-h-f}function c(e,i){t.style.setProperty(`--active-tab-${e}`,`${i}px`)}c("left",o),c("right",n),c("top",h),c("bottom",l),c("width",r),c("height",f),r>0&&f>0&&t.removeAttribute("hidden")}();';
 
@@ -37178,7 +36487,7 @@ var stateAttributesMapping35 = {
   activeTabPosition: () => null,
   activeTabSize: () => null
 };
-var TabsIndicator = /* @__PURE__ */ React339.forwardRef(function TabsIndicator2(componentProps, forwardedRef) {
+var TabsIndicator = /* @__PURE__ */ react_esm_exports.forwardRef(function TabsIndicator2(componentProps, forwardedRef) {
   const {
     className,
     render,
@@ -37201,7 +36510,7 @@ var TabsIndicator = /* @__PURE__ */ React339.forwardRef(function TabsIndicator2(
   } = useTabsListContext();
   const isHydrating = useIsHydrating();
   const rerender = useForcedRerendering();
-  React339.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     return registerIndicatorUpdateListener(rerender);
   }, [registerIndicatorUpdateListener, rerender]);
   let left = 0;
@@ -37284,7 +36593,7 @@ var TabsIndicator = /* @__PURE__ */ React339.forwardRef(function TabsIndicator2(
   if (value == null) {
     return null;
   }
-  return /* @__PURE__ */ _jsxs32(React339.Fragment, {
+  return /* @__PURE__ */ _jsxs32(react_esm_exports.Fragment, {
     children: [element, isHydrating && renderBeforeHydration && /* @__PURE__ */ _jsx107("script", {
       nonce,
       dangerouslySetInnerHTML: {
@@ -37295,9 +36604,6 @@ var TabsIndicator = /* @__PURE__ */ React339.forwardRef(function TabsIndicator2(
   });
 });
 if (false) TabsIndicator.displayName = "TabsIndicator";
-
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/panel/TabsPanel.mjs
-import * as React340 from "react";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/panel/TabsPanelDataAttributes.mjs
 var TabsPanelDataAttributes = (function(TabsPanelDataAttributes2) {
@@ -37315,7 +36621,7 @@ var stateAttributesMapping36 = {
   ...tabsStateAttributesMapping,
   ...transitionStatusMapping
 };
-var TabsPanel = /* @__PURE__ */ React340.forwardRef(function TabsPanel2(componentProps, forwardedRef) {
+var TabsPanel = /* @__PURE__ */ react_esm_exports.forwardRef(function TabsPanel2(componentProps, forwardedRef) {
   const {
     className,
     value,
@@ -37333,7 +36639,7 @@ var TabsPanel = /* @__PURE__ */ React340.forwardRef(function TabsPanel2(componen
     unregisterMountedTabPanel
   } = useTabsRootContext();
   const id = useBaseUiId();
-  const metadata = React340.useMemo(() => ({
+  const metadata = react_esm_exports.useMemo(() => ({
     id,
     value
   }), [id, value]);
@@ -37357,7 +36663,7 @@ var TabsPanel = /* @__PURE__ */ React340.forwardRef(function TabsPanel2(componen
     tabActivationDirection,
     transitionStatus
   };
-  const panelRef = React340.useRef(null);
+  const panelRef = react_esm_exports.useRef(null);
   const element = useRenderElement("div", componentProps, {
     state,
     ref: [forwardedRef, listItemRef, panelRef],
@@ -37402,9 +36708,8 @@ var TabsPanel = /* @__PURE__ */ React340.forwardRef(function TabsPanel2(componen
 if (false) TabsPanel.displayName = "TabsPanel";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tabs/list/TabsList.mjs
-import * as React341 from "react";
 import { jsx as _jsx108 } from "react/jsx-runtime";
-var TabsList = /* @__PURE__ */ React341.forwardRef(function TabsList2(componentProps, forwardedRef) {
+var TabsList = /* @__PURE__ */ react_esm_exports.forwardRef(function TabsList2(componentProps, forwardedRef) {
   const {
     activateOnFocus = false,
     className,
@@ -37420,11 +36725,11 @@ var TabsList = /* @__PURE__ */ React341.forwardRef(function TabsList2(componentP
     setTabMap,
     tabActivationDirection
   } = useTabsRootContext();
-  const [highlightedTabIndex, setHighlightedTabIndex] = React341.useState(0);
-  const [tabsListElement, setTabsListElement] = React341.useState(null);
-  const indicatorUpdateListenersRef = React341.useRef(/* @__PURE__ */ new Set());
-  const tabResizeObserverElementsRef = React341.useRef(/* @__PURE__ */ new Set());
-  const resizeObserverRef = React341.useRef(null);
+  const [highlightedTabIndex, setHighlightedTabIndex] = react_esm_exports.useState(0);
+  const [tabsListElement, setTabsListElement] = react_esm_exports.useState(null);
+  const indicatorUpdateListenersRef = react_esm_exports.useRef(/* @__PURE__ */ new Set());
+  const tabResizeObserverElementsRef = react_esm_exports.useRef(/* @__PURE__ */ new Set());
+  const resizeObserverRef = react_esm_exports.useRef(null);
   useIsoLayoutEffect(() => {
     if (typeof ResizeObserver === "undefined") {
       return void 0;
@@ -37473,7 +36778,7 @@ var TabsList = /* @__PURE__ */ React341.forwardRef(function TabsList2(componentP
     "aria-orientation": orientation === "vertical" ? "vertical" : void 0,
     role: "tablist"
   };
-  const tabsListContextValue = React341.useMemo(() => ({
+  const tabsListContextValue = react_esm_exports.useMemo(() => ({
     activateOnFocus,
     highlightedTabIndex,
     registerIndicatorUpdateListener,
@@ -37522,15 +36827,11 @@ __export(index_parts_exports27, {
   useToastManager: () => useToastManager
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/provider/ToastProvider.mjs
-import * as React343 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/provider/ToastProviderContext.mjs
-import * as React342 from "react";
-var ToastContext = /* @__PURE__ */ React342.createContext(void 0);
+var ToastContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ToastContext.displayName = "ToastContext";
 function useToastProviderContext() {
-  const context = React342.useContext(ToastContext);
+  const context = react_esm_exports.useContext(ToastContext);
   if (!context) {
     throw new Error(false ? "Base UI: useToastManager must be used within <Toast.Provider>." : formatErrorMessage_default(73));
   }
@@ -37981,7 +37282,7 @@ var ToastProvider = function ToastProvider2(props) {
     prevFocusElement: null
   })).current;
   useOnMount(store.disposeEffect);
-  React343.useEffect(function subscribeToToastManager() {
+  react_esm_exports.useEffect(function subscribeToToastManager() {
     if (!toastManager) {
       return void 0;
     }
@@ -38015,9 +37316,6 @@ var ToastProvider = function ToastProvider2(props) {
 };
 if (false) ToastProvider.displayName = "ToastProvider";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/viewport/ToastViewport.mjs
-import * as React344 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/viewport/ToastViewportCssVars.mjs
 var ToastViewportCssVars = /* @__PURE__ */ (function(ToastViewportCssVars2) {
   ToastViewportCssVars2["frontmostHeight"] = "--toast-frontmost-height";
@@ -38026,7 +37324,7 @@ var ToastViewportCssVars = /* @__PURE__ */ (function(ToastViewportCssVars2) {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/viewport/ToastViewport.mjs
 import { jsx as _jsx110, jsxs as _jsxs33 } from "react/jsx-runtime";
-var ToastViewport = /* @__PURE__ */ React344.forwardRef(function ToastViewport2(componentProps, forwardedRef) {
+var ToastViewport = /* @__PURE__ */ react_esm_exports.forwardRef(function ToastViewport2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -38036,18 +37334,18 @@ var ToastViewport = /* @__PURE__ */ React344.forwardRef(function ToastViewport2(
   } = componentProps;
   const store = useToastProviderContext();
   const windowFocusTimeout = useTimeout();
-  const handlingFocusGuardRef = React344.useRef(false);
-  const markedReadyForMouseLeaveRef = React344.useRef(false);
-  const touchActiveRef = React344.useRef(false);
+  const handlingFocusGuardRef = react_esm_exports.useRef(false);
+  const markedReadyForMouseLeaveRef = react_esm_exports.useRef(false);
+  const touchActiveRef = react_esm_exports.useRef(false);
   const isEmpty = store.useState("isEmpty");
   const toasts = store.useState("toasts");
   const focused = store.useState("focused");
   const expanded = store.useState("expanded");
   const prevFocusElement = store.useState("prevFocusElement");
   const frontmostHeight = toasts[0]?.height ?? 0;
-  const hasTransitioningToasts = React344.useMemo(() => toasts.some((toast) => toast.transitionStatus === "ending"), [toasts]);
-  const highPriorityToasts = React344.useMemo(() => toasts.filter((toast) => toast.priority === "high"), [toasts]);
-  React344.useEffect(() => {
+  const hasTransitioningToasts = react_esm_exports.useMemo(() => toasts.some((toast) => toast.transitionStatus === "ending"), [toasts]);
+  const highPriorityToasts = react_esm_exports.useMemo(() => toasts.filter((toast) => toast.priority === "high"), [toasts]);
+  react_esm_exports.useEffect(() => {
     const viewport = store.state.viewport;
     if (!viewport) {
       return void 0;
@@ -38069,7 +37367,7 @@ var ToastViewport = /* @__PURE__ */ React344.forwardRef(function ToastViewport2(
     const win = getWindow(viewport);
     return addEventListener(win, "keydown", handleGlobalKeyDown);
   }, [store, isEmpty]);
-  React344.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     const viewport = store.state.viewport;
     if (!viewport || isEmpty) {
       return void 0;
@@ -38103,7 +37401,7 @@ var ToastViewport = /* @__PURE__ */ React344.forwardRef(function ToastViewport2(
     // are added when toasts have been created, once the ref is available.
     isEmpty
   ]);
-  React344.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     const viewport = store.state.viewport;
     if (!viewport || isEmpty) {
       return void 0;
@@ -38146,7 +37444,7 @@ var ToastViewport = /* @__PURE__ */ React344.forwardRef(function ToastViewport2(
     store.setHovering(false);
     markedReadyForMouseLeaveRef.current = false;
   }
-  React344.useEffect(flushMouseLeave, [hasTransitioningToasts, store]);
+  react_esm_exports.useEffect(flushMouseLeave, [hasTransitioningToasts, store]);
   function handleMouseEnter() {
     store.pauseTimers();
     store.setHovering(true);
@@ -38227,7 +37525,7 @@ var ToastViewport = /* @__PURE__ */ React344.forwardRef(function ToastViewport2(
         [ToastViewportCssVars.frontmostHeight]: frontmostHeight ? `${frontmostHeight}px` : void 0
       }
     }, elementProps, {
-      children: /* @__PURE__ */ _jsxs33(React344.Fragment, {
+      children: /* @__PURE__ */ _jsxs33(react_esm_exports.Fragment, {
         children: [!isEmpty && prevFocusElement && /* @__PURE__ */ _jsx110(FocusGuard, {
           onFocus: handleFocusGuard
         }), children, !isEmpty && prevFocusElement && /* @__PURE__ */ _jsx110(FocusGuard, {
@@ -38236,7 +37534,7 @@ var ToastViewport = /* @__PURE__ */ React344.forwardRef(function ToastViewport2(
       })
     }]
   });
-  return /* @__PURE__ */ _jsxs33(React344.Fragment, {
+  return /* @__PURE__ */ _jsxs33(react_esm_exports.Fragment, {
     children: [!isEmpty && prevFocusElement && /* @__PURE__ */ _jsx110(FocusGuard, {
       onFocus: handleFocusGuard
     }), element, !focused && highPriorityToasts.length > 0 && /* @__PURE__ */ _jsx110("div", {
@@ -38256,15 +37554,13 @@ var ToastViewport = /* @__PURE__ */ React344.forwardRef(function ToastViewport2(
 if (false) ToastViewport.displayName = "ToastViewport";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/root/ToastRoot.mjs
-import * as React346 from "react";
 import * as ReactDOM18 from "react-dom";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/root/ToastRootContext.mjs
-import * as React345 from "react";
-var ToastRootContext = /* @__PURE__ */ React345.createContext(void 0);
+var ToastRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ToastRootContext.displayName = "ToastRootContext";
 function useToastRootContext() {
-  const context = React345.useContext(ToastRootContext);
+  const context = react_esm_exports.useContext(ToastRootContext);
   if (!context) {
     throw new Error(false ? "Base UI: ToastRootContext is missing. Toast parts must be used within <Toast.Root>." : formatErrorMessage_default(66));
   }
@@ -38296,7 +37592,7 @@ var REVERSE_CANCEL_THRESHOLD2 = 10;
 var OPPOSITE_DIRECTION_DAMPING_FACTOR = 0.5;
 var MIN_DRAG_THRESHOLD2 = 1;
 var TOAST_SWIPE_IGNORE_SELECTOR = `${BASE_UI_SWIPE_IGNORE_SELECTOR},${LEGACY_SWIPE_IGNORE_SELECTOR}`;
-var ToastRoot = /* @__PURE__ */ React346.forwardRef(function ToastRoot2(componentProps, forwardedRef) {
+var ToastRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function ToastRoot2(componentProps, forwardedRef) {
   const {
     toast,
     render,
@@ -38312,46 +37608,46 @@ var ToastRoot = /* @__PURE__ */ React346.forwardRef(function ToastRoot2(componen
   }
   const swipeEnabled = swipeDirections.length > 0;
   const store = useToastProviderContext();
-  const [currentSwipeDirection, setCurrentSwipeDirection] = React346.useState(void 0);
-  const [isSwiping, setIsSwiping] = React346.useState(false);
-  const [isRealSwipe, setIsRealSwipe] = React346.useState(false);
-  const [dragDismissed, setDragDismissed] = React346.useState(false);
-  const [dragOffset, setDragOffset] = React346.useState({
+  const [currentSwipeDirection, setCurrentSwipeDirection] = react_esm_exports.useState(void 0);
+  const [isSwiping, setIsSwiping] = react_esm_exports.useState(false);
+  const [isRealSwipe, setIsRealSwipe] = react_esm_exports.useState(false);
+  const [dragDismissed, setDragDismissed] = react_esm_exports.useState(false);
+  const [dragOffset, setDragOffset] = react_esm_exports.useState({
     x: 0,
     y: 0
   });
-  const [initialTransform, setInitialTransform] = React346.useState({
+  const [initialTransform, setInitialTransform] = react_esm_exports.useState({
     x: 0,
     y: 0,
     scale: 1
   });
-  const [titleId, setTitleId] = React346.useState();
-  const [descriptionId, setDescriptionId] = React346.useState();
-  const [lockedDirection, setLockedDirection] = React346.useState(null);
-  const rootRef = React346.useRef(null);
-  const dragStartPosRef = React346.useRef({
+  const [titleId, setTitleId] = react_esm_exports.useState();
+  const [descriptionId, setDescriptionId] = react_esm_exports.useState();
+  const [lockedDirection, setLockedDirection] = react_esm_exports.useState(null);
+  const rootRef = react_esm_exports.useRef(null);
+  const dragStartPosRef = react_esm_exports.useRef({
     x: 0,
     y: 0
   });
-  const initialTransformRef = React346.useRef({
+  const initialTransformRef = react_esm_exports.useRef({
     x: 0,
     y: 0,
     scale: 1
   });
-  const intendedSwipeDirectionRef = React346.useRef(void 0);
-  const maxSwipeDisplacementRef = React346.useRef(0);
-  const cancelledSwipeRef = React346.useRef(false);
-  const swipeCancelBaselineRef = React346.useRef({
+  const intendedSwipeDirectionRef = react_esm_exports.useRef(void 0);
+  const maxSwipeDisplacementRef = react_esm_exports.useRef(0);
+  const cancelledSwipeRef = react_esm_exports.useRef(false);
+  const swipeCancelBaselineRef = react_esm_exports.useRef({
     x: 0,
     y: 0
   });
-  const isFirstPointerMoveRef = React346.useRef(false);
-  const dragOffsetRef = React346.useRef({
+  const isFirstPointerMoveRef = react_esm_exports.useRef(false);
+  const dragOffsetRef = react_esm_exports.useRef({
     x: 0,
     y: 0
   });
-  const activePointerIdRef = React346.useRef(null);
-  const dragAbortControllerRef = React346.useRef(null);
+  const activePointerIdRef = react_esm_exports.useRef(null);
+  const dragAbortControllerRef = react_esm_exports.useRef(null);
   const domIndex = store.useState("toastIndex", toast.id);
   const visibleIndex = store.useState("toastVisibleIndex", toast.id);
   const offsetY = store.useState("toastOffsetY", toast.id);
@@ -38662,7 +37958,7 @@ var ToastRoot = /* @__PURE__ */ React346.forwardRef(function ToastRoot2(componen
       store.closeToast(toast.id);
     }
   }
-  React346.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!swipeEnabled) {
       return void 0;
     }
@@ -38719,7 +38015,7 @@ var ToastRoot = /* @__PURE__ */ React346.forwardRef(function ToastRoot2(componen
       [ToastRootCssVars.height]: toast.height ? `${toast.height}px` : void 0
     }
   };
-  const toastRoot = React346.useMemo(() => ({
+  const toastRoot = react_esm_exports.useMemo(() => ({
     rootRef,
     toast,
     titleId,
@@ -38755,8 +38051,7 @@ var ToastRoot = /* @__PURE__ */ React346.forwardRef(function ToastRoot2(componen
 if (false) ToastRoot.displayName = "ToastRoot";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/content/ToastContent.mjs
-import * as React347 from "react";
-var ToastContent = /* @__PURE__ */ React347.forwardRef(function ToastContent2(componentProps, forwardedRef) {
+var ToastContent = /* @__PURE__ */ react_esm_exports.forwardRef(function ToastContent2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -38768,7 +38063,7 @@ var ToastContent = /* @__PURE__ */ React347.forwardRef(function ToastContent2(co
     expanded,
     recalculateHeight
   } = useToastRootContext();
-  const contentRef = React347.useRef(null);
+  const contentRef = react_esm_exports.useRef(null);
   useIsoLayoutEffect(() => {
     const node = contentRef.current;
     if (!node) {
@@ -38806,8 +38101,7 @@ var ToastContent = /* @__PURE__ */ React347.forwardRef(function ToastContent2(co
 if (false) ToastContent.displayName = "ToastContent";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/description/ToastDescription.mjs
-import * as React348 from "react";
-var ToastDescription = /* @__PURE__ */ React348.forwardRef(function ToastDescription2(componentProps, forwardedRef) {
+var ToastDescription = /* @__PURE__ */ react_esm_exports.forwardRef(function ToastDescription2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -38852,8 +38146,7 @@ var ToastDescription = /* @__PURE__ */ React348.forwardRef(function ToastDescrip
 if (false) ToastDescription.displayName = "ToastDescription";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/title/ToastTitle.mjs
-import * as React349 from "react";
-var ToastTitle = /* @__PURE__ */ React349.forwardRef(function ToastTitle2(componentProps, forwardedRef) {
+var ToastTitle = /* @__PURE__ */ react_esm_exports.forwardRef(function ToastTitle2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -38898,8 +38191,7 @@ var ToastTitle = /* @__PURE__ */ React349.forwardRef(function ToastTitle2(compon
 if (false) ToastTitle.displayName = "ToastTitle";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/close/ToastClose.mjs
-import * as React350 from "react";
-var ToastClose = /* @__PURE__ */ React350.forwardRef(function ToastClose2(componentProps, forwardedRef) {
+var ToastClose = /* @__PURE__ */ react_esm_exports.forwardRef(function ToastClose2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -38913,7 +38205,7 @@ var ToastClose = /* @__PURE__ */ React350.forwardRef(function ToastClose2(compon
     toast
   } = useToastRootContext();
   const expanded = store.useState("expanded");
-  const [hasFocus, setHasFocus] = React350.useState(false);
+  const [hasFocus, setHasFocus] = react_esm_exports.useState(false);
   const {
     getButtonProps,
     buttonRef
@@ -38945,8 +38237,7 @@ var ToastClose = /* @__PURE__ */ React350.forwardRef(function ToastClose2(compon
 if (false) ToastClose.displayName = "ToastClose";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/action/ToastAction.mjs
-import * as React351 from "react";
-var ToastAction = /* @__PURE__ */ React351.forwardRef(function ToastAction2(componentProps, forwardedRef) {
+var ToastAction = /* @__PURE__ */ react_esm_exports.forwardRef(function ToastAction2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -38987,15 +38278,11 @@ if (false) ToastAction.displayName = "ToastAction";
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/portal/ToastPortal.mjs
 var ToastPortal = FloatingPortalLite;
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/positioner/ToastPositioner.mjs
-import * as React353 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/positioner/ToastPositionerContext.mjs
-import * as React352 from "react";
-var ToastPositionerContext = /* @__PURE__ */ React352.createContext(void 0);
+var ToastPositionerContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ToastPositionerContext.displayName = "ToastPositionerContext";
 function useToastPositionerContext() {
-  const context = React352.useContext(ToastPositionerContext);
+  const context = react_esm_exports.useContext(ToastPositionerContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: ToastPositionerContext is missing. ToastPositioner parts must be placed within <Toast.Positioner>." : formatErrorMessage_default(84));
   }
@@ -39004,7 +38291,7 @@ function useToastPositionerContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/positioner/ToastPositioner.mjs
 import { jsx as _jsx112 } from "react/jsx-runtime";
-var ToastPositioner = /* @__PURE__ */ React353.forwardRef(function ToastPositioner2(componentProps, forwardedRef) {
+var ToastPositioner = /* @__PURE__ */ react_esm_exports.forwardRef(function ToastPositioner2(componentProps, forwardedRef) {
   const {
     toast,
     ...props
@@ -39029,7 +38316,7 @@ var ToastPositioner = /* @__PURE__ */ React353.forwardRef(function ToastPosition
     style,
     ...elementProps
   } = props;
-  const [positionerElement, setPositionerElement] = React353.useState(null);
+  const [positionerElement, setPositionerElement] = react_esm_exports.useState(null);
   const domIndex = store.useState("toastIndex", toast.id);
   const visibleIndex = store.useState("toastVisibleIndex", toast.id);
   const anchor = isElement(anchorProp) ? anchorProp : null;
@@ -39058,7 +38345,7 @@ var ToastPositioner = /* @__PURE__ */ React353.forwardRef(function ToastPosition
     keepMounted: true,
     collisionAvoidance
   });
-  const state = React353.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     side: positioning.side,
     align: positioning.align,
     anchorHidden: positioning.anchorHidden
@@ -39080,8 +38367,7 @@ var ToastPositioner = /* @__PURE__ */ React353.forwardRef(function ToastPosition
 if (false) ToastPositioner.displayName = "ToastPositioner";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/arrow/ToastArrow.mjs
-import * as React354 from "react";
-var ToastArrow = /* @__PURE__ */ React354.forwardRef(function ToastArrow2(componentProps, forwardedRef) {
+var ToastArrow = /* @__PURE__ */ react_esm_exports.forwardRef(function ToastArrow2(componentProps, forwardedRef) {
   const {
     className,
     render,
@@ -39113,14 +38399,13 @@ var ToastArrow = /* @__PURE__ */ React354.forwardRef(function ToastArrow2(compon
 if (false) ToastArrow.displayName = "ToastArrow";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toast/useToastManager.mjs
-import * as React355 from "react";
 function useToastManager() {
-  const store = React355.useContext(ToastContext);
+  const store = react_esm_exports.useContext(ToastContext);
   if (!store) {
     throw new Error(false ? "Base UI: useToastManager must be used within <Toast.Provider>." : formatErrorMessage_default(73));
   }
   const toasts = store.useState("toasts");
-  return React355.useMemo(() => ({
+  return react_esm_exports.useMemo(() => ({
     toasts,
     add: store.addToast,
     close: store.closeToast,
@@ -39191,15 +38476,11 @@ function createToastManager() {
   };
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toggle/Toggle.mjs
-import * as React357 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toggle-group/ToggleGroupContext.mjs
-import * as React356 from "react";
-var ToggleGroupContext = /* @__PURE__ */ React356.createContext(void 0);
+var ToggleGroupContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ToggleGroupContext.displayName = "ToggleGroupContext";
 function useToggleGroupContext(optional = true) {
-  const context = React356.useContext(ToggleGroupContext);
+  const context = react_esm_exports.useContext(ToggleGroupContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: ToggleGroupContext is missing. ToggleGroup parts must be placed within <ToggleGroup>." : formatErrorMessage_default(7));
   }
@@ -39208,7 +38489,7 @@ function useToggleGroupContext(optional = true) {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toggle/Toggle.mjs
 import { jsx as _jsx113 } from "react/jsx-runtime";
-var Toggle = /* @__PURE__ */ React357.forwardRef(function Toggle2(componentProps, forwardedRef) {
+var Toggle = /* @__PURE__ */ react_esm_exports.forwardRef(function Toggle2(componentProps, forwardedRef) {
   const {
     className,
     defaultPressed: defaultPressedProp = false,
@@ -39279,7 +38560,7 @@ var Toggle = /* @__PURE__ */ React357.forwardRef(function Toggle2(componentProps
     ref: refs,
     props
   });
-  const itemMetadata = React357.useMemo(() => ({
+  const itemMetadata = react_esm_exports.useMemo(() => ({
     disabled: disabled2,
     focusableWhenDisabled: false
   }), [disabled2]);
@@ -39299,15 +38580,11 @@ var Toggle = /* @__PURE__ */ React357.forwardRef(function Toggle2(componentProps
 });
 if (false) Toggle.displayName = "Toggle";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toggle-group/ToggleGroup.mjs
-import * as React359 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toolbar/group/ToolbarGroupContext.mjs
-import * as React358 from "react";
-var ToolbarGroupContext = /* @__PURE__ */ React358.createContext(void 0);
+var ToolbarGroupContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) ToolbarGroupContext.displayName = "ToolbarGroupContext";
 function useToolbarGroupContext(optional) {
-  const context = React358.useContext(ToolbarGroupContext);
+  const context = react_esm_exports.useContext(ToolbarGroupContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: ToolbarGroupContext is missing. ToolbarGroup parts must be placed within <Toolbar.Group>." : formatErrorMessage_default(68));
   }
@@ -39334,7 +38611,7 @@ var stateAttributesMapping38 = {
     return null;
   }
 };
-var ToggleGroup = /* @__PURE__ */ React359.forwardRef(function ToggleGroup2(componentProps, forwardedRef) {
+var ToggleGroup = /* @__PURE__ */ react_esm_exports.forwardRef(function ToggleGroup2(componentProps, forwardedRef) {
   const {
     defaultValue: defaultValueProp,
     disabled: disabledProp = false,
@@ -39350,7 +38627,7 @@ var ToggleGroup = /* @__PURE__ */ React359.forwardRef(function ToggleGroup2(comp
   } = componentProps;
   const toolbarContext = useToolbarRootContext(true);
   const toolbarGroupContext = useToolbarGroupContext(true);
-  const isValueInitialized = React359.useMemo(() => valueProp !== void 0 || defaultValueProp !== void 0, [valueProp, defaultValueProp]);
+  const isValueInitialized = react_esm_exports.useMemo(() => valueProp !== void 0 || defaultValueProp !== void 0, [valueProp, defaultValueProp]);
   const disabled2 = (toolbarContext?.disabled ?? false) || (toolbarGroupContext?.disabled ?? false) || disabledProp;
   const [groupValue, setValueState] = useControlled({
     controlled: valueProp,
@@ -39381,7 +38658,7 @@ var ToggleGroup = /* @__PURE__ */ React359.forwardRef(function ToggleGroup2(comp
     multiple,
     orientation
   };
-  const contextValue = React359.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     disabled: disabled2,
     orientation,
     setGroupValue,
@@ -39428,9 +38705,8 @@ __export(index_parts_exports28, {
 });
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toolbar/separator/ToolbarSeparator.mjs
-import * as React360 from "react";
 import { jsx as _jsx115 } from "react/jsx-runtime";
-var ToolbarSeparator = /* @__PURE__ */ React360.forwardRef(function ToolbarSeparator2(props, forwardedRef) {
+var ToolbarSeparator = /* @__PURE__ */ react_esm_exports.forwardRef(function ToolbarSeparator2(props, forwardedRef) {
   const context = useToolbarRootContext();
   const orientation = {
     vertical: "horizontal",
@@ -39445,9 +38721,8 @@ var ToolbarSeparator = /* @__PURE__ */ React360.forwardRef(function ToolbarSepar
 if (false) ToolbarSeparator.displayName = "ToolbarSeparator";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toolbar/root/ToolbarRoot.mjs
-import * as React361 from "react";
 import { jsx as _jsx116 } from "react/jsx-runtime";
-var ToolbarRoot = /* @__PURE__ */ React361.forwardRef(function ToolbarRoot2(componentProps, forwardedRef) {
+var ToolbarRoot = /* @__PURE__ */ react_esm_exports.forwardRef(function ToolbarRoot2(componentProps, forwardedRef) {
   const {
     disabled: disabled2 = false,
     loopFocus = true,
@@ -39457,8 +38732,8 @@ var ToolbarRoot = /* @__PURE__ */ React361.forwardRef(function ToolbarRoot2(comp
     style,
     ...elementProps
   } = componentProps;
-  const [itemMap, setItemMap] = React361.useState(() => /* @__PURE__ */ new Map());
-  const disabledIndices = React361.useMemo(() => {
+  const [itemMap, setItemMap] = react_esm_exports.useState(() => /* @__PURE__ */ new Map());
+  const disabledIndices = react_esm_exports.useMemo(() => {
     const output = [];
     for (const itemMetadata of itemMap.values()) {
       if (itemMetadata?.index != null && itemMetadata.disabled && !itemMetadata.focusableWhenDisabled) {
@@ -39467,7 +38742,7 @@ var ToolbarRoot = /* @__PURE__ */ React361.forwardRef(function ToolbarRoot2(comp
     }
     return output;
   }, [itemMap]);
-  const toolbarRootContext = React361.useMemo(() => ({
+  const toolbarRootContext = react_esm_exports.useMemo(() => ({
     disabled: disabled2,
     orientation,
     setItemMap
@@ -39499,9 +38774,8 @@ var ToolbarRoot = /* @__PURE__ */ React361.forwardRef(function ToolbarRoot2(comp
 if (false) ToolbarRoot.displayName = "ToolbarRoot";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toolbar/group/ToolbarGroup.mjs
-import * as React362 from "react";
 import { jsx as _jsx117 } from "react/jsx-runtime";
-var ToolbarGroup = /* @__PURE__ */ React362.forwardRef(function ToolbarGroup2(componentProps, forwardedRef) {
+var ToolbarGroup = /* @__PURE__ */ react_esm_exports.forwardRef(function ToolbarGroup2(componentProps, forwardedRef) {
   const {
     className,
     disabled: disabledProp = false,
@@ -39514,7 +38788,7 @@ var ToolbarGroup = /* @__PURE__ */ React362.forwardRef(function ToolbarGroup2(co
     disabled: toolbarDisabled
   } = useToolbarRootContext();
   const disabled2 = toolbarDisabled || disabledProp;
-  const contextValue = React362.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     disabled: disabled2
   }), [disabled2]);
   const state = {
@@ -39536,9 +38810,8 @@ var ToolbarGroup = /* @__PURE__ */ React362.forwardRef(function ToolbarGroup2(co
 if (false) ToolbarGroup.displayName = "ToolbarGroup";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toolbar/button/ToolbarButton.mjs
-import * as React363 from "react";
 import { jsx as _jsx118 } from "react/jsx-runtime";
-var ToolbarButton = /* @__PURE__ */ React363.forwardRef(function ToolbarButton2(componentProps, forwardedRef) {
+var ToolbarButton = /* @__PURE__ */ react_esm_exports.forwardRef(function ToolbarButton2(componentProps, forwardedRef) {
   const {
     className,
     disabled: disabledProp = false,
@@ -39554,7 +38827,7 @@ var ToolbarButton = /* @__PURE__ */ React363.forwardRef(function ToolbarButton2(
   } = useToolbarRootContext();
   const groupContext = useToolbarGroupContext(true);
   const disabled2 = toolbarDisabled || (groupContext?.disabled ?? false) || disabledProp;
-  const itemMetadata = React363.useMemo(() => ({
+  const itemMetadata = react_esm_exports.useMemo(() => ({
     disabled: disabled2,
     focusableWhenDisabled
   }), [disabled2, focusableWhenDisabled]);
@@ -39597,14 +38870,13 @@ var ToolbarButton = /* @__PURE__ */ React363.forwardRef(function ToolbarButton2(
 if (false) ToolbarButton.displayName = "ToolbarButton";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toolbar/link/ToolbarLink.mjs
-import * as React364 from "react";
 import { jsx as _jsx119 } from "react/jsx-runtime";
 var TOOLBAR_LINK_METADATA = {
   // Links cannot be disabled, but they still occupy a focusable composite item slot.
   disabled: false,
   focusableWhenDisabled: true
 };
-var ToolbarLink = /* @__PURE__ */ React364.forwardRef(function ToolbarLink2(componentProps, forwardedRef) {
+var ToolbarLink = /* @__PURE__ */ react_esm_exports.forwardRef(function ToolbarLink2(componentProps, forwardedRef) {
   const {
     className,
     render,
@@ -39631,9 +38903,8 @@ var ToolbarLink = /* @__PURE__ */ React364.forwardRef(function ToolbarLink2(comp
 if (false) ToolbarLink.displayName = "ToolbarLink";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/toolbar/input/ToolbarInput.mjs
-import * as React365 from "react";
 import { jsx as _jsx120 } from "react/jsx-runtime";
-var ToolbarInput = /* @__PURE__ */ React365.forwardRef(function ToolbarInput2(componentProps, forwardedRef) {
+var ToolbarInput = /* @__PURE__ */ react_esm_exports.forwardRef(function ToolbarInput2(componentProps, forwardedRef) {
   const {
     className,
     focusableWhenDisabled = true,
@@ -39648,7 +38919,7 @@ var ToolbarInput = /* @__PURE__ */ React365.forwardRef(function ToolbarInput2(co
   } = useToolbarRootContext();
   const groupContext = useToolbarGroupContext(true);
   const disabled2 = toolbarDisabled || (groupContext?.disabled ?? false) || disabledProp;
-  const itemMetadata = React365.useMemo(() => ({
+  const itemMetadata = react_esm_exports.useMemo(() => ({
     disabled: disabled2,
     focusableWhenDisabled
   }), [disabled2, focusableWhenDisabled]);
@@ -39705,15 +38976,11 @@ __export(index_parts_exports29, {
   createHandle: () => createTooltipHandle
 });
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/root/TooltipRoot.mjs
-import * as React368 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/root/TooltipRootContext.mjs
-import * as React366 from "react";
-var TooltipRootContext = /* @__PURE__ */ React366.createContext(void 0);
+var TooltipRootContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) TooltipRootContext.displayName = "TooltipRootContext";
 function useTooltipRootContext(optional) {
-  const context = React366.useContext(TooltipRootContext);
+  const context = react_esm_exports.useContext(TooltipRootContext);
   if (context === void 0 && !optional) {
     throw new Error(false ? "Base UI: TooltipRootContext is missing. Tooltip parts must be placed within <Tooltip.Root>." : formatErrorMessage_default(72));
   }
@@ -39721,7 +38988,6 @@ function useTooltipRootContext(optional) {
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/store/TooltipStore.mjs
-import * as React367 from "react";
 var selectors9 = {
   ...popupStoreSelectors,
   disabled: createSelector((state) => state.disabled),
@@ -39743,7 +39009,7 @@ var TooltipStore = class _TooltipStore extends ReactStore {
     };
     state.floatingRootContext = createPopupFloatingRootContext(triggerElements, floatingId, nested);
     super(state, {
-      popupRef: /* @__PURE__ */ React367.createRef(),
+      popupRef: /* @__PURE__ */ react_esm_exports.createRef(),
       onOpenChange: void 0,
       onOpenChangeComplete: void 0,
       triggerElements
@@ -39828,7 +39094,7 @@ var TooltipRoot = fastComponent(function TooltipRoot2(props) {
   const isInstantPhase = store.useState("isInstantPhase");
   const instantType = store.useState("instantType");
   const lastOpenChangeReason = store.useState("lastOpenChangeReason");
-  const previousInstantTypeRef = React368.useRef(null);
+  const previousInstantTypeRef = react_esm_exports.useRef(null);
   useIsoLayoutEffect(() => {
     if (openState && disabled2) {
       store.setOpen(false, createChangeEventDetails(reason_parts_exports.disabled));
@@ -39852,10 +39118,10 @@ var TooltipRoot = fastComponent(function TooltipRoot2(props) {
       }
     }
   }, [store, activeTriggerId, open]);
-  const handleImperativeClose = React368.useCallback(() => {
+  const handleImperativeClose = react_esm_exports.useCallback(() => {
     store.setOpen(false, createChangeEventDetails(reason_parts_exports.imperativeAction));
   }, [store]);
-  React368.useImperativeHandle(actionsRef, () => ({
+  react_esm_exports.useImperativeHandle(actionsRef, () => ({
     unmount: forceUnmount,
     close: handleImperativeClose
   }), [forceUnmount, handleImperativeClose]);
@@ -39886,9 +39152,9 @@ function TooltipInteractions({
     enabled: !disabled2 && trackCursorAxis !== "none",
     axis: trackCursorAxis === "none" ? void 0 : trackCursorAxis
   });
-  const activeTriggerProps = React368.useMemo(() => mergeProps(clientPoint.reference, dismiss.reference), [clientPoint.reference, dismiss.reference]);
-  const inactiveTriggerProps = React368.useMemo(() => mergeProps(clientPoint.trigger, dismiss.trigger), [clientPoint.trigger, dismiss.trigger]);
-  const popupProps = React368.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, clientPoint.floating, dismiss.floating), [clientPoint.floating, dismiss.floating]);
+  const activeTriggerProps = react_esm_exports.useMemo(() => mergeProps(clientPoint.reference, dismiss.reference), [clientPoint.reference, dismiss.reference]);
+  const inactiveTriggerProps = react_esm_exports.useMemo(() => mergeProps(clientPoint.trigger, dismiss.trigger), [clientPoint.trigger, dismiss.trigger]);
+  const popupProps = react_esm_exports.useMemo(() => mergeProps(FOCUSABLE_POPUP_PROPS, clientPoint.floating, dismiss.floating), [clientPoint.floating, dismiss.floating]);
   usePopupInteractionProps(store, {
     activeTriggerProps,
     inactiveTriggerProps,
@@ -39897,15 +39163,11 @@ function TooltipInteractions({
   return null;
 }
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/trigger/TooltipTrigger.mjs
-import * as React370 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/provider/TooltipProviderContext.mjs
-import * as React369 from "react";
-var TooltipProviderContext = /* @__PURE__ */ React369.createContext(void 0);
+var TooltipProviderContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) TooltipProviderContext.displayName = "TooltipProviderContext";
 function useTooltipProviderContext() {
-  return React369.useContext(TooltipProviderContext);
+  return react_esm_exports.useContext(TooltipProviderContext);
 }
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/trigger/TooltipTriggerDataAttributes.mjs
@@ -39975,7 +39237,7 @@ var TooltipTrigger = fastComponentRef(function TooltipTrigger2(componentProps, f
   const isTriggerActive = store.useState("isTriggerActive", thisTriggerId);
   const isOpenedByThisTrigger = store.useState("isOpenedByTrigger", thisTriggerId);
   const floatingRootContext = store.useState("floatingRootContext");
-  const triggerElementRef = React370.useRef(null);
+  const triggerElementRef = react_esm_exports.useRef(null);
   const delayWithDefault = delay ?? OPEN_DELAY3;
   const closeDelayWithDefault = closeDelay ?? 0;
   const {
@@ -40001,9 +39263,9 @@ var TooltipTrigger = fastComponentRef(function TooltipTrigger2(componentProps, f
   const disabledRef = useValueAsRef(disabled2);
   const trackCursorAxis = store.useState("trackCursorAxis");
   const disableHoverablePopup = store.useState("disableHoverablePopup");
-  const isNestedTriggerHoveredRef = React370.useRef(false);
+  const isNestedTriggerHoveredRef = react_esm_exports.useRef(false);
   const nestedTriggerOpenTimeout = useTimeout();
-  const pointerTypeRef = React370.useRef(void 0);
+  const pointerTypeRef = react_esm_exports.useRef(void 0);
   function getOpenDelay() {
     const providerDelay = providerContext?.delay;
     const groupOpenValue = typeof delayRef.current === "object" ? delayRef.current.open : void 0;
@@ -40135,15 +39397,11 @@ var TooltipTrigger = fastComponentRef(function TooltipTrigger2(componentProps, f
 });
 if (false) TooltipTrigger.displayName = "TooltipTrigger";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/portal/TooltipPortal.mjs
-import * as React372 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/portal/TooltipPortalContext.mjs
-import * as React371 from "react";
-var TooltipPortalContext = /* @__PURE__ */ React371.createContext(void 0);
+var TooltipPortalContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) TooltipPortalContext.displayName = "TooltipPortalContext";
 function useTooltipPortalContext() {
-  const value = React371.useContext(TooltipPortalContext);
+  const value = react_esm_exports.useContext(TooltipPortalContext);
   if (value === void 0) {
     throw new Error(false ? "Base UI: <Tooltip.Portal> is missing." : formatErrorMessage_default(70));
   }
@@ -40152,7 +39410,7 @@ function useTooltipPortalContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/portal/TooltipPortal.mjs
 import { jsx as _jsx122 } from "react/jsx-runtime";
-var TooltipPortal = /* @__PURE__ */ React372.forwardRef(function TooltipPortal2(props, forwardedRef) {
+var TooltipPortal = /* @__PURE__ */ react_esm_exports.forwardRef(function TooltipPortal2(props, forwardedRef) {
   const {
     keepMounted = false,
     ...portalProps
@@ -40173,15 +39431,11 @@ var TooltipPortal = /* @__PURE__ */ React372.forwardRef(function TooltipPortal2(
 });
 if (false) TooltipPortal.displayName = "TooltipPortal";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/positioner/TooltipPositioner.mjs
-import * as React374 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/positioner/TooltipPositionerContext.mjs
-import * as React373 from "react";
-var TooltipPositionerContext = /* @__PURE__ */ React373.createContext(void 0);
+var TooltipPositionerContext = /* @__PURE__ */ react_esm_exports.createContext(void 0);
 if (false) TooltipPositionerContext.displayName = "TooltipPositionerContext";
 function useTooltipPositionerContext() {
-  const context = React373.useContext(TooltipPositionerContext);
+  const context = react_esm_exports.useContext(TooltipPositionerContext);
   if (context === void 0) {
     throw new Error(false ? "Base UI: TooltipPositionerContext is missing. TooltipPositioner parts must be placed within <Tooltip.Positioner>." : formatErrorMessage_default(71));
   }
@@ -40190,7 +39444,7 @@ function useTooltipPositionerContext() {
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/positioner/TooltipPositioner.mjs
 import { jsx as _jsx123 } from "react/jsx-runtime";
-var TooltipPositioner = /* @__PURE__ */ React374.forwardRef(function TooltipPositioner2(componentProps, forwardedRef) {
+var TooltipPositioner = /* @__PURE__ */ react_esm_exports.forwardRef(function TooltipPositioner2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -40237,7 +39491,7 @@ var TooltipPositioner = /* @__PURE__ */ React374.forwardRef(function TooltipPosi
     collisionAvoidance,
     adaptiveOrigin: hasViewport ? adaptiveOrigin : void 0
   });
-  const state = React374.useMemo(() => ({
+  const state = react_esm_exports.useMemo(() => ({
     open,
     side: positioning.side,
     align: positioning.align,
@@ -40260,12 +39514,11 @@ var TooltipPositioner = /* @__PURE__ */ React374.forwardRef(function TooltipPosi
 if (false) TooltipPositioner.displayName = "TooltipPositioner";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/popup/TooltipPopup.mjs
-import * as React375 from "react";
 var stateAttributesMapping39 = {
   ...popupStateMapping,
   ...transitionStatusMapping
 };
-var TooltipPopup = /* @__PURE__ */ React375.forwardRef(function TooltipPopup2(componentProps, forwardedRef) {
+var TooltipPopup = /* @__PURE__ */ react_esm_exports.forwardRef(function TooltipPopup2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -40316,8 +39569,7 @@ var TooltipPopup = /* @__PURE__ */ React375.forwardRef(function TooltipPopup2(co
 if (false) TooltipPopup.displayName = "TooltipPopup";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/arrow/TooltipArrow.mjs
-import * as React376 from "react";
-var TooltipArrow = /* @__PURE__ */ React376.forwardRef(function TooltipArrow2(componentProps, forwardedRef) {
+var TooltipArrow = /* @__PURE__ */ react_esm_exports.forwardRef(function TooltipArrow2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -40355,7 +39607,6 @@ var TooltipArrow = /* @__PURE__ */ React376.forwardRef(function TooltipArrow2(co
 if (false) TooltipArrow.displayName = "TooltipArrow";
 
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/provider/TooltipProvider.mjs
-import * as React377 from "react";
 import { jsx as _jsx124 } from "react/jsx-runtime";
 var TooltipProvider = function TooltipProvider2(props) {
   const {
@@ -40363,11 +39614,11 @@ var TooltipProvider = function TooltipProvider2(props) {
     closeDelay,
     timeout = 400
   } = props;
-  const contextValue = React377.useMemo(() => ({
+  const contextValue = react_esm_exports.useMemo(() => ({
     delay,
     closeDelay
   }), [delay, closeDelay]);
-  const delayValue = React377.useMemo(() => ({
+  const delayValue = react_esm_exports.useMemo(() => ({
     open: delay,
     close: closeDelay
   }), [delay, closeDelay]);
@@ -40382,9 +39633,6 @@ var TooltipProvider = function TooltipProvider2(props) {
 };
 if (false) TooltipProvider.displayName = "TooltipProvider";
 
-// node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/viewport/TooltipViewport.mjs
-import * as React378 from "react";
-
 // node_modules/.pnpm/@base-ui+react@1.6.0_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/@base-ui/react/tooltip/viewport/TooltipViewportCssVars.mjs
 var TooltipViewportCssVars = /* @__PURE__ */ (function(TooltipViewportCssVars2) {
   TooltipViewportCssVars2["popupWidth"] = "--popup-width";
@@ -40398,7 +39646,7 @@ var stateAttributesMapping40 = {
     "data-activation-direction": value
   } : null
 };
-var TooltipViewport = /* @__PURE__ */ React378.forwardRef(function TooltipViewport2(componentProps, forwardedRef) {
+var TooltipViewport = /* @__PURE__ */ react_esm_exports.forwardRef(function TooltipViewport2(componentProps, forwardedRef) {
   const {
     render,
     className,
@@ -40527,27 +39775,3 @@ export {
   useDirection,
   useRender
 };
-/*! Bundled license information:
-
-use-sync-external-store/cjs/use-sync-external-store-shim.production.js:
-  (**
-   * @license React
-   * use-sync-external-store-shim.production.js
-   *
-   * Copyright (c) Meta Platforms, Inc. and affiliates.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE file in the root directory of this source tree.
-   *)
-
-use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.production.js:
-  (**
-   * @license React
-   * use-sync-external-store-shim/with-selector.production.js
-   *
-   * Copyright (c) Meta Platforms, Inc. and affiliates.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE file in the root directory of this source tree.
-   *)
-*/

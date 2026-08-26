@@ -1,10 +1,37 @@
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
+
+// vendor/shims/react-esm.js
+var react_esm_exports = {};
+__export(react_esm_exports, {
+  default: () => react_esm_default
+});
+__reExport(react_esm_exports, react_star);
+import * as React from "react";
+import * as react_star from "react";
+var react_esm_default = React.default ?? React;
+
 // node_modules/.pnpm/@dnd-kit+utilities@3.2.2_react@19.2.8/node_modules/@dnd-kit/utilities/dist/utilities.esm.js
-import { useMemo, useLayoutEffect, useEffect, useRef, useCallback } from "react";
 function useCombinedRefs() {
   for (var _len = arguments.length, refs = new Array(_len), _key = 0; _key < _len; _key++) {
     refs[_key] = arguments[_key];
   }
-  return useMemo(
+  return (0, react_esm_exports.useMemo)(
     () => (node) => {
       refs.forEach((ref) => ref(node));
     },
@@ -67,13 +94,13 @@ function getOwnerDocument(target) {
   }
   return document;
 }
-var useIsomorphicLayoutEffect = canUseDOM ? useLayoutEffect : useEffect;
+var useIsomorphicLayoutEffect = canUseDOM ? react_esm_exports.useLayoutEffect : react_esm_exports.useEffect;
 function useEvent(handler) {
-  const handlerRef = useRef(handler);
+  const handlerRef = (0, react_esm_exports.useRef)(handler);
   useIsomorphicLayoutEffect(() => {
     handlerRef.current = handler;
   });
-  return useCallback(function() {
+  return (0, react_esm_exports.useCallback)(function() {
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
@@ -81,11 +108,11 @@ function useEvent(handler) {
   }, []);
 }
 function useInterval() {
-  const intervalRef = useRef(null);
-  const set = useCallback((listener, duration) => {
+  const intervalRef = (0, react_esm_exports.useRef)(null);
+  const set = (0, react_esm_exports.useCallback)((listener, duration) => {
     intervalRef.current = setInterval(listener, duration);
   }, []);
-  const clear = useCallback(() => {
+  const clear = (0, react_esm_exports.useCallback)(() => {
     if (intervalRef.current !== null) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -97,7 +124,7 @@ function useLatestValue(value, dependencies) {
   if (dependencies === void 0) {
     dependencies = [value];
   }
-  const valueRef = useRef(value);
+  const valueRef = (0, react_esm_exports.useRef)(value);
   useIsomorphicLayoutEffect(() => {
     if (valueRef.current !== value) {
       valueRef.current = value;
@@ -106,8 +133,8 @@ function useLatestValue(value, dependencies) {
   return valueRef;
 }
 function useLazyMemo(callback, dependencies) {
-  const valueRef = useRef();
-  return useMemo(
+  const valueRef = (0, react_esm_exports.useRef)();
+  return (0, react_esm_exports.useMemo)(
     () => {
       const newValue = callback(valueRef.current);
       valueRef.current = newValue;
@@ -119,8 +146,8 @@ function useLazyMemo(callback, dependencies) {
 }
 function useNodeRef(onChange) {
   const onChangeHandler = useEvent(onChange);
-  const node = useRef(null);
-  const setNodeRef = useCallback(
+  const node = (0, react_esm_exports.useRef)(null);
+  const setNodeRef = (0, react_esm_exports.useCallback)(
     (element) => {
       if (element !== node.current) {
         onChangeHandler == null ? void 0 : onChangeHandler(element, node.current);
@@ -133,15 +160,15 @@ function useNodeRef(onChange) {
   return [node, setNodeRef];
 }
 function usePrevious(value) {
-  const ref = useRef();
-  useEffect(() => {
+  const ref = (0, react_esm_exports.useRef)();
+  (0, react_esm_exports.useEffect)(() => {
     ref.current = value;
   }, [value]);
   return ref.current;
 }
 var ids = {};
 function useUniqueId(prefix, value) {
-  return useMemo(() => {
+  return (0, react_esm_exports.useMemo)(() => {
     if (value) {
       return value;
     }

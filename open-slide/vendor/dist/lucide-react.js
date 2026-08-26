@@ -1,8 +1,20 @@
 var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
 
 // node_modules/.pnpm/lucide-react@1.34.0_react@19.2.8/node_modules/lucide-react/dist/esm/icons/index.mjs
 var icons_exports = {};
@@ -1786,8 +1798,15 @@ __export(icons_exports, {
   ZoomOut: () => ZoomOut
 });
 
-// node_modules/.pnpm/lucide-react@1.34.0_react@19.2.8/node_modules/lucide-react/dist/esm/createLucideIcon.mjs
-import { forwardRef as forwardRef2, createElement as createElement3 } from "react";
+// vendor/shims/react-esm.js
+var react_esm_exports = {};
+__export(react_esm_exports, {
+  default: () => react_esm_default
+});
+__reExport(react_esm_exports, react_star);
+import * as React from "react";
+import * as react_star from "react";
+var react_esm_default = React.default ?? React;
 
 // node_modules/.pnpm/lucide-react@1.34.0_react@19.2.8/node_modules/lucide-react/dist/esm/shared/src/utils/mergeClasses.mjs
 var mergeClasses = (...classes) => classes.filter((className, index, array) => {
@@ -1808,9 +1827,6 @@ var toPascalCase = (string) => {
   const camelCase = toCamelCase(string);
   return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
 };
-
-// node_modules/.pnpm/lucide-react@1.34.0_react@19.2.8/node_modules/lucide-react/dist/esm/Icon.mjs
-import { forwardRef, createElement as createElement2 } from "react";
 
 // node_modules/.pnpm/lucide-react@1.34.0_react@19.2.8/node_modules/lucide-react/dist/esm/defaultAttributes.mjs
 var defaultAttributes = {
@@ -1836,8 +1852,7 @@ var hasA11yProp = (props) => {
 };
 
 // node_modules/.pnpm/lucide-react@1.34.0_react@19.2.8/node_modules/lucide-react/dist/esm/context.mjs
-import { createContext, useContext, useMemo, createElement } from "react";
-var LucideContext = createContext({});
+var LucideContext = (0, react_esm_exports.createContext)({});
 function LucideProvider({
   children,
   size,
@@ -1846,7 +1861,7 @@ function LucideProvider({
   absoluteStrokeWidth,
   className
 }) {
-  const value = useMemo(
+  const value = (0, react_esm_exports.useMemo)(
     () => ({
       size,
       color,
@@ -1856,12 +1871,12 @@ function LucideProvider({
     }),
     [size, color, strokeWidth, absoluteStrokeWidth, className]
   );
-  return createElement(LucideContext.Provider, { value }, children);
+  return (0, react_esm_exports.createElement)(LucideContext.Provider, { value }, children);
 }
-var useLucideContext = () => useContext(LucideContext);
+var useLucideContext = () => (0, react_esm_exports.useContext)(LucideContext);
 
 // node_modules/.pnpm/lucide-react@1.34.0_react@19.2.8/node_modules/lucide-react/dist/esm/Icon.mjs
-var Icon = forwardRef(
+var Icon = (0, react_esm_exports.forwardRef)(
   ({ color, size, strokeWidth, absoluteStrokeWidth, className = "", children, iconNode, ...rest }, ref) => {
     const {
       size: contextSize = 24,
@@ -1871,7 +1886,7 @@ var Icon = forwardRef(
       className: contextClass = ""
     } = useLucideContext() ?? {};
     const calculatedStrokeWidth = absoluteStrokeWidth ?? contextAbsoluteStrokeWidth ? Number(strokeWidth ?? contextStrokeWidth) * 24 / Number(size ?? contextSize) : strokeWidth ?? contextStrokeWidth;
-    return createElement2(
+    return (0, react_esm_exports.createElement)(
       "svg",
       {
         ref,
@@ -1885,7 +1900,7 @@ var Icon = forwardRef(
         ...rest
       },
       [
-        ...iconNode.map(([tag, attrs]) => createElement2(tag, attrs)),
+        ...iconNode.map(([tag, attrs]) => (0, react_esm_exports.createElement)(tag, attrs)),
         ...Array.isArray(children) ? children : [children]
       ]
     );
@@ -1894,8 +1909,8 @@ var Icon = forwardRef(
 
 // node_modules/.pnpm/lucide-react@1.34.0_react@19.2.8/node_modules/lucide-react/dist/esm/createLucideIcon.mjs
 var createLucideIcon = (iconName, iconNode) => {
-  const Component2 = forwardRef2(
-    ({ className, ...props }, ref) => createElement3(Icon, {
+  const Component2 = (0, react_esm_exports.forwardRef)(
+    ({ className, ...props }, ref) => (0, react_esm_exports.createElement)(Icon, {
       ref,
       iconNode,
       className: mergeClasses(

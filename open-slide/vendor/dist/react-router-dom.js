@@ -7,6 +7,10 @@ var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
     for (let key of __getOwnPropNames(from))
@@ -15,6 +19,7 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __reExport = (target, mod, secondTarget) => (__copyProps(target, mod, "default"), secondTarget && __copyProps(secondTarget, mod, "default"));
 var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
   // If the importer is in node compatibility mode or this is not an ESM
   // file that has been converted to a CommonJS file using a Babel-
@@ -456,18 +461,17 @@ var require_set_cookie = __commonJS({
   }
 });
 
-// node_modules/.pnpm/react-router@7.18.2_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/development/chunk-62JRHF6Z.mjs
+// vendor/shims/react-esm.js
+var react_esm_exports = {};
+__export(react_esm_exports, {
+  default: () => react_esm_default
+});
+__reExport(react_esm_exports, react_star);
 import * as React from "react";
-import * as React2 from "react";
-import * as React3 from "react";
-import * as React4 from "react";
-import * as React9 from "react";
-import * as React8 from "react";
-import * as React7 from "react";
-import * as React6 from "react";
-import * as React5 from "react";
-import * as React10 from "react";
-import * as React11 from "react";
+import * as react_star from "react";
+var react_esm_default = React.default ?? React;
+
+// node_modules/.pnpm/react-router@7.18.2_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/development/chunk-62JRHF6Z.mjs
 var __typeError = (msg) => {
   throw TypeError(msg);
 };
@@ -6234,40 +6238,40 @@ function createDeferred() {
     reject
   };
 }
-var DataRouterContext = React.createContext(null);
+var DataRouterContext = react_esm_exports.createContext(null);
 DataRouterContext.displayName = "DataRouter";
-var DataRouterStateContext = React.createContext(null);
+var DataRouterStateContext = react_esm_exports.createContext(null);
 DataRouterStateContext.displayName = "DataRouterState";
-var RSCRouterContext = React.createContext(false);
+var RSCRouterContext = react_esm_exports.createContext(false);
 function useIsRSCRouterContext() {
-  return React.useContext(RSCRouterContext);
+  return react_esm_exports.useContext(RSCRouterContext);
 }
-var ViewTransitionContext = React.createContext({
+var ViewTransitionContext = react_esm_exports.createContext({
   isTransitioning: false
 });
 ViewTransitionContext.displayName = "ViewTransition";
-var FetchersContext = React.createContext(
+var FetchersContext = react_esm_exports.createContext(
   /* @__PURE__ */ new Map()
 );
 FetchersContext.displayName = "Fetchers";
-var AwaitContext = React.createContext(null);
+var AwaitContext = react_esm_exports.createContext(null);
 AwaitContext.displayName = "Await";
-var AwaitContextProvider = (props) => React.createElement(AwaitContext.Provider, props);
-var NavigationContext = React.createContext(
+var AwaitContextProvider = (props) => react_esm_exports.createElement(AwaitContext.Provider, props);
+var NavigationContext = react_esm_exports.createContext(
   null
 );
 NavigationContext.displayName = "Navigation";
-var LocationContext = React.createContext(
+var LocationContext = react_esm_exports.createContext(
   null
 );
 LocationContext.displayName = "Location";
-var RouteContext = React.createContext({
+var RouteContext = react_esm_exports.createContext({
   outlet: null,
   matches: [],
   isDataRoute: false
 });
 RouteContext.displayName = "Route";
-var RouteErrorContext = React.createContext(null);
+var RouteErrorContext = react_esm_exports.createContext(null);
 RouteErrorContext.displayName = "RouteError";
 var ENABLE_DEV_WARNINGS = true;
 var ERROR_DIGEST_BASE = "REACT_ROUTER_ERROR";
@@ -6308,7 +6312,7 @@ function useHref(to, { relative } = {}) {
     // router loaded. We can help them understand how to avoid that.
     `useHref() may be used only in the context of a <Router> component.`
   );
-  let { basename, navigator } = React2.useContext(NavigationContext);
+  let { basename, navigator } = react_esm_exports.useContext(NavigationContext);
   let { hash, pathname, search } = useResolvedPath(to, { relative });
   let joinedPathname = pathname;
   if (basename !== "/") {
@@ -6317,7 +6321,7 @@ function useHref(to, { relative } = {}) {
   return navigator.createHref({ pathname: joinedPathname, search, hash });
 }
 function useInRouterContext() {
-  return React2.useContext(LocationContext) != null;
+  return react_esm_exports.useContext(LocationContext) != null;
 }
 function useLocation() {
   invariant(
@@ -6326,10 +6330,10 @@ function useLocation() {
     // router loaded. We can help them understand how to avoid that.
     `useLocation() may be used only in the context of a <Router> component.`
   );
-  return React2.useContext(LocationContext).location;
+  return react_esm_exports.useContext(LocationContext).location;
 }
 function useNavigationType() {
-  return React2.useContext(LocationContext).navigationType;
+  return react_esm_exports.useContext(LocationContext).navigationType;
 }
 function useMatch(pattern) {
   invariant(
@@ -6339,20 +6343,20 @@ function useMatch(pattern) {
     `useMatch() may be used only in the context of a <Router> component.`
   );
   let { pathname } = useLocation();
-  return React2.useMemo(
+  return react_esm_exports.useMemo(
     () => matchPath(pattern, decodePath(pathname)),
     [pathname, pattern]
   );
 }
 var navigateEffectWarning = `You should call navigate() in a React.useEffect(), not when your component is first rendered.`;
 function useIsomorphicLayoutEffect(cb) {
-  let isStatic = React2.useContext(NavigationContext).static;
+  let isStatic = react_esm_exports.useContext(NavigationContext).static;
   if (!isStatic) {
-    React2.useLayoutEffect(cb);
+    react_esm_exports.useLayoutEffect(cb);
   }
 }
 function useNavigate() {
-  let { isDataRoute } = React2.useContext(RouteContext);
+  let { isDataRoute } = react_esm_exports.useContext(RouteContext);
   return isDataRoute ? useNavigateStable() : useNavigateUnstable();
 }
 function useNavigateUnstable() {
@@ -6362,16 +6366,16 @@ function useNavigateUnstable() {
     // router loaded. We can help them understand how to avoid that.
     `useNavigate() may be used only in the context of a <Router> component.`
   );
-  let dataRouterContext = React2.useContext(DataRouterContext);
-  let { basename, navigator } = React2.useContext(NavigationContext);
-  let { matches } = React2.useContext(RouteContext);
+  let dataRouterContext = react_esm_exports.useContext(DataRouterContext);
+  let { basename, navigator } = react_esm_exports.useContext(NavigationContext);
+  let { matches } = react_esm_exports.useContext(RouteContext);
   let { pathname: locationPathname } = useLocation();
   let routePathnamesJson = JSON.stringify(getResolveToMatches(matches));
-  let activeRef = React2.useRef(false);
+  let activeRef = react_esm_exports.useRef(false);
   useIsomorphicLayoutEffect(() => {
     activeRef.current = true;
   });
-  let navigate = React2.useCallback(
+  let navigate = react_esm_exports.useCallback(
     (to, options = {}) => {
       warning(activeRef.current, navigateEffectWarning);
       if (!activeRef.current) return;
@@ -6404,27 +6408,27 @@ function useNavigateUnstable() {
   );
   return navigate;
 }
-var OutletContext = React2.createContext(null);
+var OutletContext = react_esm_exports.createContext(null);
 function useOutletContext() {
-  return React2.useContext(OutletContext);
+  return react_esm_exports.useContext(OutletContext);
 }
 function useOutlet(context) {
-  let outlet = React2.useContext(RouteContext).outlet;
-  return React2.useMemo(
-    () => outlet && /* @__PURE__ */ React2.createElement(OutletContext.Provider, { value: context }, outlet),
+  let outlet = react_esm_exports.useContext(RouteContext).outlet;
+  return react_esm_exports.useMemo(
+    () => outlet && /* @__PURE__ */ react_esm_exports.createElement(OutletContext.Provider, { value: context }, outlet),
     [outlet, context]
   );
 }
 function useParams() {
-  let { matches } = React2.useContext(RouteContext);
+  let { matches } = react_esm_exports.useContext(RouteContext);
   let routeMatch = matches[matches.length - 1];
   return routeMatch?.params ?? {};
 }
 function useResolvedPath(to, { relative } = {}) {
-  let { matches } = React2.useContext(RouteContext);
+  let { matches } = react_esm_exports.useContext(RouteContext);
   let { pathname: locationPathname } = useLocation();
   let routePathnamesJson = JSON.stringify(getResolveToMatches(matches));
-  return React2.useMemo(
+  return react_esm_exports.useMemo(
     () => resolveTo(
       to,
       JSON.parse(routePathnamesJson),
@@ -6444,8 +6448,8 @@ function useRoutesImpl(routes, locationArg, dataRouterOpts) {
     // router loaded. We can help them understand how to avoid that.
     `useRoutes() may be used only in the context of a <Router> component.`
   );
-  let { navigator } = React2.useContext(NavigationContext);
-  let { matches: parentMatches } = React2.useContext(RouteContext);
+  let { navigator } = react_esm_exports.useContext(NavigationContext);
+  let { matches: parentMatches } = react_esm_exports.useContext(RouteContext);
   let routeMatch = parentMatches[parentMatches.length - 1];
   let parentParams = routeMatch ? routeMatch.params : {};
   let parentPathname = routeMatch ? routeMatch.pathname : "/";
@@ -6529,7 +6533,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     dataRouterOpts
   );
   if (locationArg && renderedMatches) {
-    return /* @__PURE__ */ React2.createElement(
+    return /* @__PURE__ */ react_esm_exports.createElement(
       LocationContext.Provider,
       {
         value: {
@@ -6564,12 +6568,12 @@ function DefaultErrorComponent() {
       "Error handled by React Router default ErrorBoundary:",
       error
     );
-    devInfo = /* @__PURE__ */ React2.createElement(React2.Fragment, null, /* @__PURE__ */ React2.createElement("p", null, "\u{1F4BF} Hey developer \u{1F44B}"), /* @__PURE__ */ React2.createElement("p", null, "You can provide a way better UX than this when your app throws errors by providing your own ", /* @__PURE__ */ React2.createElement("code", { style: codeStyles }, "ErrorBoundary"), " or", " ", /* @__PURE__ */ React2.createElement("code", { style: codeStyles }, "errorElement"), " prop on your route."));
+    devInfo = /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, /* @__PURE__ */ react_esm_exports.createElement("p", null, "\u{1F4BF} Hey developer \u{1F44B}"), /* @__PURE__ */ react_esm_exports.createElement("p", null, "You can provide a way better UX than this when your app throws errors by providing your own ", /* @__PURE__ */ react_esm_exports.createElement("code", { style: codeStyles }, "ErrorBoundary"), " or", " ", /* @__PURE__ */ react_esm_exports.createElement("code", { style: codeStyles }, "errorElement"), " prop on your route."));
   }
-  return /* @__PURE__ */ React2.createElement(React2.Fragment, null, /* @__PURE__ */ React2.createElement("h2", null, "Unexpected Application Error!"), /* @__PURE__ */ React2.createElement("h3", { style: { fontStyle: "italic" } }, message), stack ? /* @__PURE__ */ React2.createElement("pre", { style: preStyles }, stack) : null, devInfo);
+  return /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, /* @__PURE__ */ react_esm_exports.createElement("h2", null, "Unexpected Application Error!"), /* @__PURE__ */ react_esm_exports.createElement("h3", { style: { fontStyle: "italic" } }, message), stack ? /* @__PURE__ */ react_esm_exports.createElement("pre", { style: preStyles }, stack) : null, devInfo);
 }
-var defaultErrorElement = /* @__PURE__ */ React2.createElement(DefaultErrorComponent, null);
-var RenderErrorBoundary = class extends React2.Component {
+var defaultErrorElement = /* @__PURE__ */ react_esm_exports.createElement(DefaultErrorComponent, null);
+var RenderErrorBoundary = class extends react_esm_exports.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -6611,7 +6615,7 @@ var RenderErrorBoundary = class extends React2.Component {
       const decoded = decodeRouteErrorResponseDigest(error.digest);
       if (decoded) error = decoded;
     }
-    let result = error !== void 0 ? /* @__PURE__ */ React2.createElement(RouteContext.Provider, { value: this.props.routeContext }, /* @__PURE__ */ React2.createElement(
+    let result = error !== void 0 ? /* @__PURE__ */ react_esm_exports.createElement(RouteContext.Provider, { value: this.props.routeContext }, /* @__PURE__ */ react_esm_exports.createElement(
       RouteErrorContext.Provider,
       {
         value: error,
@@ -6619,7 +6623,7 @@ var RenderErrorBoundary = class extends React2.Component {
       }
     )) : this.props.children;
     if (this.context) {
-      return /* @__PURE__ */ React2.createElement(RSCErrorHandler, { error }, result);
+      return /* @__PURE__ */ react_esm_exports.createElement(RSCErrorHandler, { error }, result);
     }
     return result;
   }
@@ -6630,7 +6634,7 @@ function RSCErrorHandler({
   children,
   error
 }) {
-  let { basename } = React2.useContext(NavigationContext);
+  let { basename } = react_esm_exports.useContext(NavigationContext);
   if (typeof error === "object" && error && "digest" in error && typeof error.digest === "string") {
     let redirect2 = decodeRedirectErrorDigest(error.digest);
     if (redirect2) {
@@ -6654,17 +6658,17 @@ function RSCErrorHandler({
           throw redirectPromise;
         }
       }
-      return /* @__PURE__ */ React2.createElement("meta", { httpEquiv: "refresh", content: `0;url=${target}` });
+      return /* @__PURE__ */ react_esm_exports.createElement("meta", { httpEquiv: "refresh", content: `0;url=${target}` });
     }
   }
   return children;
 }
 function RenderedRoute({ routeContext, match, children }) {
-  let dataRouterContext = React2.useContext(DataRouterContext);
+  let dataRouterContext = react_esm_exports.useContext(DataRouterContext);
   if (dataRouterContext && dataRouterContext.static && dataRouterContext.staticContext && (match.route.errorElement || match.route.ErrorBoundary)) {
     dataRouterContext.staticContext._deepestRenderedBoundaryId = match.route.id;
   }
-  return /* @__PURE__ */ React2.createElement(RouteContext.Provider, { value: routeContext }, children);
+  return /* @__PURE__ */ react_esm_exports.createElement(RouteContext.Provider, { value: routeContext }, children);
 }
 function _renderMatches(matches, parentMatches = [], dataRouterOpts) {
   let dataRouterState = dataRouterOpts?.state;
@@ -6764,13 +6768,13 @@ function _renderMatches(matches, parentMatches = [], dataRouterOpts) {
         } else if (shouldRenderHydrateFallback) {
           children = hydrateFallbackElement;
         } else if (match.route.Component) {
-          children = /* @__PURE__ */ React2.createElement(match.route.Component, null);
+          children = /* @__PURE__ */ react_esm_exports.createElement(match.route.Component, null);
         } else if (match.route.element) {
           children = match.route.element;
         } else {
           children = outlet;
         }
-        return /* @__PURE__ */ React2.createElement(
+        return /* @__PURE__ */ react_esm_exports.createElement(
           RenderedRoute,
           {
             match,
@@ -6783,7 +6787,7 @@ function _renderMatches(matches, parentMatches = [], dataRouterOpts) {
           }
         );
       };
-      return dataRouterState && (match.route.ErrorBoundary || match.route.errorElement || index === 0) ? /* @__PURE__ */ React2.createElement(
+      return dataRouterState && (match.route.ErrorBoundary || match.route.errorElement || index === 0) ? /* @__PURE__ */ react_esm_exports.createElement(
         RenderErrorBoundary,
         {
           location: dataRouterState.location,
@@ -6803,17 +6807,17 @@ function getDataRouterConsoleError(hookName) {
   return `${hookName} must be used within a data router.  See https://reactrouter.com/en/main/routers/picking-a-router.`;
 }
 function useDataRouterContext(hookName) {
-  let ctx = React2.useContext(DataRouterContext);
+  let ctx = react_esm_exports.useContext(DataRouterContext);
   invariant(ctx, getDataRouterConsoleError(hookName));
   return ctx;
 }
 function useDataRouterState(hookName) {
-  let state = React2.useContext(DataRouterStateContext);
+  let state = react_esm_exports.useContext(DataRouterStateContext);
   invariant(state, getDataRouterConsoleError(hookName));
   return state;
 }
 function useRouteContext(hookName) {
-  let route = React2.useContext(RouteContext);
+  let route = react_esm_exports.useContext(RouteContext);
   invariant(route, getDataRouterConsoleError(hookName));
   return route;
 }
@@ -6837,7 +6841,7 @@ function useNavigation() {
     "useNavigation"
     /* UseNavigation */
   );
-  return React2.useMemo(() => {
+  return react_esm_exports.useMemo(() => {
     let { matches, historyAction, ...rest } = state.navigation;
     return rest;
   }, [state.navigation]);
@@ -6851,10 +6855,10 @@ function useRevalidator() {
     "useRevalidator"
     /* UseRevalidator */
   );
-  let revalidate = React2.useCallback(async () => {
+  let revalidate = react_esm_exports.useCallback(async () => {
     await dataRouterContext.router.revalidate();
   }, [dataRouterContext.router]);
-  return React2.useMemo(
+  return react_esm_exports.useMemo(
     () => ({ revalidate, state: state.revalidation }),
     [revalidate, state.revalidation]
   );
@@ -6864,7 +6868,7 @@ function useMatches() {
     "useMatches"
     /* UseMatches */
   );
-  return React2.useMemo(
+  return react_esm_exports.useMemo(
     () => matches.map((m) => convertRouteMatchToUiMatch(m, loaderData)),
     [matches, loaderData]
   );
@@ -6899,7 +6903,7 @@ function useActionData() {
   return state.actionData ? state.actionData[routeId] : void 0;
 }
 function useRouteError() {
-  let error = React2.useContext(RouteErrorContext);
+  let error = react_esm_exports.useContext(RouteErrorContext);
   let state = useDataRouterState(
     "useRouteError"
     /* UseRouteError */
@@ -6914,11 +6918,11 @@ function useRouteError() {
   return state.errors?.[routeId];
 }
 function useAsyncValue() {
-  let value = React2.useContext(AwaitContext);
+  let value = react_esm_exports.useContext(AwaitContext);
   return value?._data;
 }
 function useAsyncError() {
-  let value = React2.useContext(AwaitContext);
+  let value = react_esm_exports.useContext(AwaitContext);
   return value?._error;
 }
 var blockerId = 0;
@@ -6931,8 +6935,8 @@ function useBlocker(shouldBlock) {
     "useBlocker"
     /* UseBlocker */
   );
-  let [blockerKey, setBlockerKey] = React2.useState("");
-  let blockerFunction = React2.useCallback(
+  let [blockerKey, setBlockerKey] = react_esm_exports.useState("");
+  let blockerFunction = react_esm_exports.useCallback(
     (arg) => {
       if (typeof shouldBlock !== "function") {
         return !!shouldBlock;
@@ -6955,12 +6959,12 @@ function useBlocker(shouldBlock) {
     },
     [basename, shouldBlock]
   );
-  React2.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     let key = String(++blockerId);
     setBlockerKey(key);
     return () => router2.deleteBlocker(key);
   }, [router2]);
-  React2.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (blockerKey !== "") {
       router2.getBlocker(blockerKey, blockerFunction);
     }
@@ -6976,11 +6980,11 @@ function useNavigateStable() {
     "useNavigate"
     /* UseNavigateStable */
   );
-  let activeRef = React2.useRef(false);
+  let activeRef = react_esm_exports.useRef(false);
   useIsomorphicLayoutEffect(() => {
     activeRef.current = true;
   });
-  let navigate = React2.useCallback(
+  let navigate = react_esm_exports.useCallback(
     async (to, options = {}) => {
       warning(activeRef.current, navigateEffectWarning);
       if (!activeRef.current) return;
@@ -7037,7 +7041,7 @@ function useRouterState() {
     "unstable_useRouterState"
     /* UseRouterState */
   );
-  let active = React2.useMemo(
+  let active = react_esm_exports.useMemo(
     () => ({
       type,
       location: location2,
@@ -7047,7 +7051,7 @@ function useRouterState() {
     }),
     [location2, matches, type]
   );
-  let pending = React2.useMemo(() => {
+  let pending = react_esm_exports.useMemo(() => {
     if (navigation.state === "idle") return null;
     let shared = {
       type: navigation.historyAction,
@@ -7076,7 +7080,7 @@ function useRouterState() {
       text: navigation.text
     };
   }, [navigation]);
-  return React2.useMemo(
+  return react_esm_exports.useMemo(
     () => ({ active, pending }),
     [active, pending]
   );
@@ -7089,7 +7093,7 @@ function warnOnce(condition, message) {
   }
 }
 var USE_OPTIMISTIC = "useOptimistic";
-var useOptimisticImpl = React3[USE_OPTIMISTIC];
+var useOptimisticImpl = react_esm_exports[USE_OPTIMISTIC];
 var stableUseOptimisticSetter = () => void 0;
 function useOptimisticSafe(val) {
   if (useOptimisticImpl) {
@@ -7114,7 +7118,7 @@ function mapRouteProperties(route) {
       }
     }
     Object.assign(updates, {
-      element: React3.createElement(route.Component),
+      element: react_esm_exports.createElement(route.Component),
       Component: void 0
     });
   }
@@ -7128,7 +7132,7 @@ function mapRouteProperties(route) {
       }
     }
     Object.assign(updates, {
-      hydrateFallbackElement: React3.createElement(route.HydrateFallback),
+      hydrateFallbackElement: react_esm_exports.createElement(route.HydrateFallback),
       HydrateFallback: void 0
     });
   }
@@ -7142,7 +7146,7 @@ function mapRouteProperties(route) {
       }
     }
     Object.assign(updates, {
-      errorElement: React3.createElement(route.ErrorBoundary),
+      errorElement: react_esm_exports.createElement(route.ErrorBoundary),
       ErrorBoundary: void 0
     });
   }
@@ -7197,17 +7201,17 @@ function RouterProvider({
 }) {
   let unstable_rsc = useIsRSCRouterContext();
   useTransitions = unstable_rsc || useTransitions;
-  let [_state, setStateImpl] = React3.useState(router2.state);
+  let [_state, setStateImpl] = react_esm_exports.useState(router2.state);
   let [state, setOptimisticState] = useOptimisticSafe(_state);
-  let [pendingState, setPendingState] = React3.useState();
-  let [vtContext, setVtContext] = React3.useState({
+  let [pendingState, setPendingState] = react_esm_exports.useState();
+  let [vtContext, setVtContext] = react_esm_exports.useState({
     isTransitioning: false
   });
-  let [renderDfd, setRenderDfd] = React3.useState();
-  let [transition, setTransition] = React3.useState();
-  let [interruption, setInterruption] = React3.useState();
-  let fetcherData = React3.useRef(/* @__PURE__ */ new Map());
-  let setState = React3.useCallback(
+  let [renderDfd, setRenderDfd] = react_esm_exports.useState();
+  let [transition, setTransition] = react_esm_exports.useState();
+  let [interruption, setInterruption] = react_esm_exports.useState();
+  let fetcherData = react_esm_exports.useRef(/* @__PURE__ */ new Map());
+  let setState = react_esm_exports.useCallback(
     (newState, { deletedFetchers, newErrors, flushSync: flushSync3, viewTransitionOpts }) => {
       if (newErrors && onError) {
         Object.values(newErrors).forEach(
@@ -7239,7 +7243,7 @@ function RouterProvider({
         } else if (useTransitions === false) {
           setStateImpl(newState);
         } else {
-          React3.startTransition(() => {
+          react_esm_exports.startTransition(() => {
             if (useTransitions === true) {
               setOptimisticState((s) => getOptimisticRouterState(s, newState));
             }
@@ -7303,13 +7307,13 @@ function RouterProvider({
       onError
     ]
   );
-  React3.useLayoutEffect(() => router2.subscribe(setState), [router2, setState]);
-  React3.useEffect(() => {
+  react_esm_exports.useLayoutEffect(() => router2.subscribe(setState), [router2, setState]);
+  react_esm_exports.useEffect(() => {
     if (vtContext.isTransitioning && !vtContext.flushSync) {
       setRenderDfd(new Deferred());
     }
   }, [vtContext]);
-  React3.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (renderDfd && pendingState && router2.window) {
       let newState = pendingState;
       let renderPromise = renderDfd.promise;
@@ -7317,7 +7321,7 @@ function RouterProvider({
         if (useTransitions === false) {
           setStateImpl(newState);
         } else {
-          React3.startTransition(() => {
+          react_esm_exports.startTransition(() => {
             if (useTransitions === true) {
               setOptimisticState((s) => getOptimisticRouterState(s, newState));
             }
@@ -7341,12 +7345,12 @@ function RouterProvider({
     useTransitions,
     setOptimisticState
   ]);
-  React3.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (renderDfd && pendingState && state.location.key === pendingState.location.key) {
       renderDfd.resolve();
     }
   }, [renderDfd, transition, state.location, pendingState]);
-  React3.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!vtContext.isTransitioning && interruption) {
       setPendingState(interruption.state);
       setVtContext({
@@ -7358,7 +7362,7 @@ function RouterProvider({
       setInterruption(void 0);
     }
   }, [vtContext.isTransitioning, interruption]);
-  let navigator = React3.useMemo(() => {
+  let navigator = react_esm_exports.useMemo(() => {
     return {
       createHref: router2.createHref,
       encodeLocation: router2.encodeLocation,
@@ -7375,7 +7379,7 @@ function RouterProvider({
     };
   }, [router2]);
   let basename = router2.basename || "/";
-  let dataRouterContext = React3.useMemo(
+  let dataRouterContext = react_esm_exports.useMemo(
     () => ({
       router: router2,
       navigator,
@@ -7385,7 +7389,7 @@ function RouterProvider({
     }),
     [router2, navigator, basename, onError]
   );
-  return /* @__PURE__ */ React3.createElement(React3.Fragment, null, /* @__PURE__ */ React3.createElement(DataRouterContext.Provider, { value: dataRouterContext }, /* @__PURE__ */ React3.createElement(DataRouterStateContext.Provider, { value: state }, /* @__PURE__ */ React3.createElement(FetchersContext.Provider, { value: fetcherData.current }, /* @__PURE__ */ React3.createElement(ViewTransitionContext.Provider, { value: vtContext }, /* @__PURE__ */ React3.createElement(
+  return /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, /* @__PURE__ */ react_esm_exports.createElement(DataRouterContext.Provider, { value: dataRouterContext }, /* @__PURE__ */ react_esm_exports.createElement(DataRouterStateContext.Provider, { value: state }, /* @__PURE__ */ react_esm_exports.createElement(FetchersContext.Provider, { value: fetcherData.current }, /* @__PURE__ */ react_esm_exports.createElement(ViewTransitionContext.Provider, { value: vtContext }, /* @__PURE__ */ react_esm_exports.createElement(
     Router,
     {
       basename,
@@ -7394,7 +7398,7 @@ function RouterProvider({
       navigator,
       useTransitions
     },
-    /* @__PURE__ */ React3.createElement(
+    /* @__PURE__ */ react_esm_exports.createElement(
       MemoizedDataRoutes,
       {
         routes: router2.routes,
@@ -7421,7 +7425,7 @@ function getOptimisticRouterState(currentState, newState) {
     fetchers: newState.fetchers
   };
 }
-var MemoizedDataRoutes = React3.memo(DataRoutes2);
+var MemoizedDataRoutes = react_esm_exports.memo(DataRoutes2);
 function DataRoutes2({
   routes,
   manifest,
@@ -7445,7 +7449,7 @@ function MemoryRouter({
   initialIndex,
   useTransitions
 }) {
-  let historyRef = React3.useRef();
+  let historyRef = react_esm_exports.useRef();
   if (historyRef.current == null) {
     historyRef.current = createMemoryHistory({
       initialEntries,
@@ -7454,22 +7458,22 @@ function MemoryRouter({
     });
   }
   let history = historyRef.current;
-  let [state, setStateImpl] = React3.useState({
+  let [state, setStateImpl] = react_esm_exports.useState({
     action: history.action,
     location: history.location
   });
-  let setState = React3.useCallback(
+  let setState = react_esm_exports.useCallback(
     (newState) => {
       if (useTransitions === false) {
         setStateImpl(newState);
       } else {
-        React3.startTransition(() => setStateImpl(newState));
+        react_esm_exports.startTransition(() => setStateImpl(newState));
       }
     },
     [useTransitions]
   );
-  React3.useLayoutEffect(() => history.listen(setState), [history, setState]);
-  return /* @__PURE__ */ React3.createElement(
+  react_esm_exports.useLayoutEffect(() => history.listen(setState), [history, setState]);
+  return /* @__PURE__ */ react_esm_exports.createElement(
     Router,
     {
       basename,
@@ -7493,12 +7497,12 @@ function Navigate({
     // the router loaded. We can help them understand how to avoid that.
     `<Navigate> may be used only in the context of a <Router> component.`
   );
-  let { static: isStatic } = React3.useContext(NavigationContext);
+  let { static: isStatic } = react_esm_exports.useContext(NavigationContext);
   warning(
     !isStatic,
     `<Navigate> must not be used on the initial render in a <StaticRouter>. This is a no-op, but you should modify your code so the <Navigate> is only ever rendered in response to some user interaction or state change.`
   );
-  let { matches } = React3.useContext(RouteContext);
+  let { matches } = react_esm_exports.useContext(RouteContext);
   let { pathname: locationPathname } = useLocation();
   let navigate = useNavigate();
   let path = resolveTo(
@@ -7508,7 +7512,7 @@ function Navigate({
     relative === "path"
   );
   let jsonPath = JSON.stringify(path);
-  React3.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     navigate(JSON.parse(jsonPath), { replace: replace2, state, relative });
   }, [navigate, jsonPath, relative, replace2, state]);
   return null;
@@ -7536,7 +7540,7 @@ function Router({
     `You cannot render a <Router> inside another <Router>. You should never have more than one in your app.`
   );
   let basename = basenameProp.replace(/^\/*/, "/");
-  let navigationContext = React3.useMemo(
+  let navigationContext = react_esm_exports.useMemo(
     () => ({
       basename,
       navigator,
@@ -7557,7 +7561,7 @@ function Router({
     key = "default",
     mask
   } = locationProp;
-  let locationContext = React3.useMemo(() => {
+  let locationContext = react_esm_exports.useMemo(() => {
     let trailingPathname = stripBasename(pathname, basename);
     if (trailingPathname == null) {
       return null;
@@ -7581,7 +7585,7 @@ function Router({
   if (locationContext == null) {
     return null;
   }
-  return /* @__PURE__ */ React3.createElement(NavigationContext.Provider, { value: navigationContext }, /* @__PURE__ */ React3.createElement(LocationContext.Provider, { children, value: locationContext }));
+  return /* @__PURE__ */ react_esm_exports.createElement(NavigationContext.Provider, { value: navigationContext }, /* @__PURE__ */ react_esm_exports.createElement(LocationContext.Provider, { children, value: locationContext }));
 }
 function Routes({
   children,
@@ -7594,9 +7598,9 @@ function Await({
   errorElement,
   resolve
 }) {
-  let dataRouterContext = React3.useContext(DataRouterContext);
-  let dataRouterStateContext = React3.useContext(DataRouterStateContext);
-  let onError = React3.useCallback(
+  let dataRouterContext = react_esm_exports.useContext(DataRouterContext);
+  let dataRouterStateContext = react_esm_exports.useContext(DataRouterStateContext);
+  let onError = react_esm_exports.useCallback(
     (error, errorInfo) => {
       if (dataRouterContext && dataRouterContext.onError && dataRouterStateContext) {
         dataRouterContext.onError(error, {
@@ -7609,17 +7613,17 @@ function Await({
     },
     [dataRouterContext, dataRouterStateContext]
   );
-  return /* @__PURE__ */ React3.createElement(
+  return /* @__PURE__ */ react_esm_exports.createElement(
     AwaitErrorBoundary,
     {
       resolve,
       errorElement,
       onError
     },
-    /* @__PURE__ */ React3.createElement(ResolveAwait, null, children)
+    /* @__PURE__ */ react_esm_exports.createElement(ResolveAwait, null, children)
   );
 }
-var AwaitErrorBoundary = class extends React3.Component {
+var AwaitErrorBoundary = class extends react_esm_exports.Component {
   constructor(props) {
     super(props);
     this.state = { error: null };
@@ -7672,10 +7676,10 @@ var AwaitErrorBoundary = class extends React3.Component {
       throw promise._error;
     }
     if (status === 2) {
-      return /* @__PURE__ */ React3.createElement(AwaitContext.Provider, { value: promise, children: errorElement });
+      return /* @__PURE__ */ react_esm_exports.createElement(AwaitContext.Provider, { value: promise, children: errorElement });
     }
     if (status === 1) {
-      return /* @__PURE__ */ React3.createElement(AwaitContext.Provider, { value: promise, children });
+      return /* @__PURE__ */ react_esm_exports.createElement(AwaitContext.Provider, { value: promise, children });
     }
     throw promise;
   }
@@ -7685,16 +7689,16 @@ function ResolveAwait({
 }) {
   let data2 = useAsyncValue();
   let toRender = typeof children === "function" ? children(data2) : children;
-  return /* @__PURE__ */ React3.createElement(React3.Fragment, null, toRender);
+  return /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, toRender);
 }
 function createRoutesFromChildren(children, parentPath = []) {
   let routes = [];
-  React3.Children.forEach(children, (element, index) => {
-    if (!React3.isValidElement(element)) {
+  react_esm_exports.Children.forEach(children, (element, index) => {
+    if (!react_esm_exports.isValidElement(element)) {
       return;
     }
     let treePath = [...parentPath, index];
-    if (element.type === React3.Fragment) {
+    if (element.type === react_esm_exports.Fragment) {
       routes.push.apply(
         routes,
         createRoutesFromChildren(element.props.children, treePath)
@@ -7754,12 +7758,12 @@ function WithComponentProps({
   children
 }) {
   const props = useRouteComponentProps();
-  return React3.cloneElement(children, props);
+  return react_esm_exports.cloneElement(children, props);
 }
 function withComponentProps(Component4) {
   return function WithComponentProps2() {
     const props = useRouteComponentProps();
-    return React3.createElement(Component4, props);
+    return react_esm_exports.createElement(Component4, props);
   };
 }
 function useHydrateFallbackProps() {
@@ -7773,12 +7777,12 @@ function WithHydrateFallbackProps({
   children
 }) {
   const props = useHydrateFallbackProps();
-  return React3.cloneElement(children, props);
+  return react_esm_exports.cloneElement(children, props);
 }
 function withHydrateFallbackProps(HydrateFallback) {
   return function WithHydrateFallbackProps2() {
     const props = useHydrateFallbackProps();
-    return React3.createElement(HydrateFallback, props);
+    return react_esm_exports.createElement(HydrateFallback, props);
   };
 }
 function useErrorBoundaryProps() {
@@ -7793,12 +7797,12 @@ function WithErrorBoundaryProps({
   children
 }) {
   const props = useErrorBoundaryProps();
-  return React3.cloneElement(children, props);
+  return react_esm_exports.cloneElement(children, props);
 }
 function withErrorBoundaryProps(ErrorBoundary) {
   return function WithErrorBoundaryProps2() {
     const props = useErrorBoundaryProps();
-    return React3.createElement(ErrorBoundary, props);
+    return react_esm_exports.createElement(ErrorBoundary, props);
   };
 }
 var defaultMethod = "get";
@@ -8687,7 +8691,7 @@ function StreamTransfer({
     throw promise;
   }
   let { done, value } = promise.result;
-  let scriptTag = value ? /* @__PURE__ */ React4.createElement(
+  let scriptTag = value ? /* @__PURE__ */ react_esm_exports.createElement(
     "script",
     {
       nonce,
@@ -8699,7 +8703,7 @@ function StreamTransfer({
     }
   ) : null;
   if (done) {
-    return /* @__PURE__ */ React4.createElement(React4.Fragment, null, scriptTag, /* @__PURE__ */ React4.createElement(
+    return /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, scriptTag, /* @__PURE__ */ react_esm_exports.createElement(
       "script",
       {
         nonce,
@@ -8709,7 +8713,7 @@ function StreamTransfer({
       }
     ));
   } else {
-    return /* @__PURE__ */ React4.createElement(React4.Fragment, null, scriptTag, /* @__PURE__ */ React4.createElement(React4.Suspense, null, /* @__PURE__ */ React4.createElement(
+    return /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, scriptTag, /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Suspense, null, /* @__PURE__ */ react_esm_exports.createElement(
       StreamTransfer,
       {
         context,
@@ -9389,7 +9393,7 @@ function isPreloadSupported() {
 }
 function RemixRootDefaultHydrateFallback() {
   let { nonce } = useFrameworkContext();
-  return /* @__PURE__ */ React5.createElement(BoundaryShell, { title: "Loading...", renderScripts: true }, ENABLE_DEV_WARNINGS ? /* @__PURE__ */ React5.createElement(
+  return /* @__PURE__ */ react_esm_exports.createElement(BoundaryShell, { title: "Loading...", renderScripts: true }, ENABLE_DEV_WARNINGS ? /* @__PURE__ */ react_esm_exports.createElement(
     "script",
     {
       nonce,
@@ -9422,17 +9426,17 @@ function groupRoutesByParentId(manifest) {
 function getRouteComponents(route, routeModule, isSpaMode) {
   let Component4 = getRouteModuleComponent(routeModule);
   let HydrateFallback = routeModule.HydrateFallback && (!isSpaMode || route.id === "root") ? routeModule.HydrateFallback : route.id === "root" ? RemixRootDefaultHydrateFallback : void 0;
-  let ErrorBoundary = routeModule.ErrorBoundary ? routeModule.ErrorBoundary : route.id === "root" ? () => /* @__PURE__ */ React6.createElement(RemixRootDefaultErrorBoundary, { error: useRouteError() }) : void 0;
+  let ErrorBoundary = routeModule.ErrorBoundary ? routeModule.ErrorBoundary : route.id === "root" ? () => /* @__PURE__ */ react_esm_exports.createElement(RemixRootDefaultErrorBoundary, { error: useRouteError() }) : void 0;
   if (route.id === "root" && routeModule.Layout) {
     return {
       ...Component4 ? {
-        element: /* @__PURE__ */ React6.createElement(routeModule.Layout, null, /* @__PURE__ */ React6.createElement(Component4, null))
+        element: /* @__PURE__ */ react_esm_exports.createElement(routeModule.Layout, null, /* @__PURE__ */ react_esm_exports.createElement(Component4, null))
       } : { Component: Component4 },
       ...ErrorBoundary ? {
-        errorElement: /* @__PURE__ */ React6.createElement(routeModule.Layout, null, /* @__PURE__ */ React6.createElement(ErrorBoundary, null))
+        errorElement: /* @__PURE__ */ react_esm_exports.createElement(routeModule.Layout, null, /* @__PURE__ */ react_esm_exports.createElement(ErrorBoundary, null))
       } : { ErrorBoundary },
       ...HydrateFallback ? {
-        hydrateFallbackElement: /* @__PURE__ */ React6.createElement(routeModule.Layout, null, /* @__PURE__ */ React6.createElement(HydrateFallback, null))
+        hydrateFallbackElement: /* @__PURE__ */ react_esm_exports.createElement(routeModule.Layout, null, /* @__PURE__ */ react_esm_exports.createElement(HydrateFallback, null))
       } : { HydrateFallback }
     };
   }
@@ -9883,7 +9887,7 @@ function getPatchRoutesOnNavigationFunction(getRouter, manifest, routeModules, s
   };
 }
 function useFogOFWarDiscovery(router2, manifest, routeModules, ssr, routeDiscovery, isSpaMode) {
-  React7.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (!isFogOfWarEnabled(routeDiscovery, ssr) || // @ts-expect-error - TS doesn't know about this yet
     window.navigator?.connection?.saveData === true) {
       return;
@@ -10032,7 +10036,7 @@ function debounce(callback, wait) {
   };
 }
 function useDataRouterContext2() {
-  let context = React8.useContext(DataRouterContext);
+  let context = react_esm_exports.useContext(DataRouterContext);
   invariant2(
     context,
     "You must render this element inside a <DataRouterContext.Provider> element"
@@ -10040,17 +10044,17 @@ function useDataRouterContext2() {
   return context;
 }
 function useDataRouterStateContext() {
-  let context = React8.useContext(DataRouterStateContext);
+  let context = react_esm_exports.useContext(DataRouterStateContext);
   invariant2(
     context,
     "You must render this element inside a <DataRouterStateContext.Provider> element"
   );
   return context;
 }
-var FrameworkContext = React8.createContext(void 0);
+var FrameworkContext = react_esm_exports.createContext(void 0);
 FrameworkContext.displayName = "FrameworkContext";
 function useFrameworkContext() {
-  let context = React8.useContext(FrameworkContext);
+  let context = react_esm_exports.useContext(FrameworkContext);
   invariant2(
     context,
     "You must render this element inside a <HydratedRouter> element"
@@ -10058,12 +10062,12 @@ function useFrameworkContext() {
   return context;
 }
 function usePrefetchBehavior(prefetch, theirElementProps) {
-  let frameworkContext = React8.useContext(FrameworkContext);
-  let [maybePrefetch, setMaybePrefetch] = React8.useState(false);
-  let [shouldPrefetch, setShouldPrefetch] = React8.useState(false);
+  let frameworkContext = react_esm_exports.useContext(FrameworkContext);
+  let [maybePrefetch, setMaybePrefetch] = react_esm_exports.useState(false);
+  let [shouldPrefetch, setShouldPrefetch] = react_esm_exports.useState(false);
   let { onFocus, onBlur, onMouseEnter, onMouseLeave, onTouchStart } = theirElementProps;
-  let ref = React8.useRef(null);
-  React8.useEffect(() => {
+  let ref = react_esm_exports.useRef(null);
+  react_esm_exports.useEffect(() => {
     if (prefetch === "render") {
       setShouldPrefetch(true);
     }
@@ -10080,7 +10084,7 @@ function usePrefetchBehavior(prefetch, theirElementProps) {
       };
     }
   }, [prefetch]);
-  React8.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (maybePrefetch) {
       let id = setTimeout(() => {
         setShouldPrefetch(true);
@@ -10144,21 +10148,21 @@ function Links({ nonce, crossOrigin }) {
   } = useFrameworkContext();
   let { errors, matches: routerMatches } = useDataRouterStateContext();
   let matches = getActiveMatches(routerMatches, errors, isSpaMode);
-  let keyedLinks = React8.useMemo(
+  let keyedLinks = react_esm_exports.useMemo(
     () => getKeyedLinksForMatches(matches, routeModules, manifest),
     [matches, routeModules, manifest]
   );
   if (nonce == null && contextNonce) {
     nonce = contextNonce;
   }
-  return /* @__PURE__ */ React8.createElement(React8.Fragment, null, typeof criticalCss === "string" ? /* @__PURE__ */ React8.createElement(
+  return /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, typeof criticalCss === "string" ? /* @__PURE__ */ react_esm_exports.createElement(
     "style",
     {
       ...{ [CRITICAL_CSS_DATA_ATTRIBUTE]: "" },
       nonce,
       dangerouslySetInnerHTML: { __html: criticalCss }
     }
-  ) : null, typeof criticalCss === "object" ? /* @__PURE__ */ React8.createElement(
+  ) : null, typeof criticalCss === "object" ? /* @__PURE__ */ react_esm_exports.createElement(
     "link",
     {
       ...{ [CRITICAL_CSS_DATA_ATTRIBUTE]: "" },
@@ -10168,7 +10172,7 @@ function Links({ nonce, crossOrigin }) {
       crossOrigin
     }
   ) : null, keyedLinks.map(
-    ({ key, link }) => isPageLinkDescriptor(link) ? /* @__PURE__ */ React8.createElement(
+    ({ key, link }) => isPageLinkDescriptor(link) ? /* @__PURE__ */ react_esm_exports.createElement(
       PrefetchPageLinks,
       {
         key,
@@ -10176,7 +10180,7 @@ function Links({ nonce, crossOrigin }) {
         ...link,
         crossOrigin: link.crossOrigin ?? crossOrigin
       }
-    ) : /* @__PURE__ */ React8.createElement(
+    ) : /* @__PURE__ */ react_esm_exports.createElement(
       "link",
       {
         key,
@@ -10191,7 +10195,7 @@ function PrefetchPageLinks({ page, ...linkProps }) {
   let rsc = useIsRSCRouterContext();
   let { nonce: contextNonce } = useFrameworkContext();
   let { router: router2 } = useDataRouterContext2();
-  let matches = React8.useMemo(
+  let matches = react_esm_exports.useMemo(
     () => matchRoutes(router2.routes, page, router2.basename),
     [router2.routes, page, router2.basename]
   );
@@ -10202,14 +10206,14 @@ function PrefetchPageLinks({ page, ...linkProps }) {
     linkProps = { ...linkProps, nonce: contextNonce };
   }
   if (rsc) {
-    return /* @__PURE__ */ React8.createElement(RSCPrefetchPageLinksImpl, { page, matches, ...linkProps });
+    return /* @__PURE__ */ react_esm_exports.createElement(RSCPrefetchPageLinksImpl, { page, matches, ...linkProps });
   }
-  return /* @__PURE__ */ React8.createElement(PrefetchPageLinksImpl, { page, matches, ...linkProps });
+  return /* @__PURE__ */ react_esm_exports.createElement(PrefetchPageLinksImpl, { page, matches, ...linkProps });
 }
 function useKeyedPrefetchLinks(matches) {
   let { manifest, routeModules } = useFrameworkContext();
-  let [keyedPrefetchLinks, setKeyedPrefetchLinks] = React8.useState([]);
-  React8.useEffect(() => {
+  let [keyedPrefetchLinks, setKeyedPrefetchLinks] = react_esm_exports.useState([]);
+  react_esm_exports.useEffect(() => {
     let interrupted = false;
     void getKeyedPrefetchLinks(matches, manifest, routeModules).then(
       (links) => {
@@ -10232,7 +10236,7 @@ function RSCPrefetchPageLinksImpl({
   let location2 = useLocation();
   let { future } = useFrameworkContext();
   let { basename } = useDataRouterContext2();
-  let dataHrefs = React8.useMemo(() => {
+  let dataHrefs = react_esm_exports.useMemo(() => {
     if (page === location2.pathname + location2.search + location2.hash) {
       return [];
     }
@@ -10262,7 +10266,7 @@ function RSCPrefetchPageLinksImpl({
     location2,
     nextMatches
   ]);
-  return /* @__PURE__ */ React8.createElement(React8.Fragment, null, dataHrefs.map((href2) => /* @__PURE__ */ React8.createElement("link", { key: href2, rel: "prefetch", as: "fetch", href: href2, ...linkProps })));
+  return /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, dataHrefs.map((href2) => /* @__PURE__ */ react_esm_exports.createElement("link", { key: href2, rel: "prefetch", as: "fetch", href: href2, ...linkProps })));
 }
 function PrefetchPageLinksImpl({
   page,
@@ -10273,7 +10277,7 @@ function PrefetchPageLinksImpl({
   let { future, manifest, routeModules } = useFrameworkContext();
   let { basename } = useDataRouterContext2();
   let { loaderData, matches } = useDataRouterStateContext();
-  let newMatchesForData = React8.useMemo(
+  let newMatchesForData = react_esm_exports.useMemo(
     () => getNewMatchesForLinks(
       page,
       nextMatches,
@@ -10284,7 +10288,7 @@ function PrefetchPageLinksImpl({
     ),
     [page, nextMatches, matches, manifest, location2]
   );
-  let newMatchesForAssets = React8.useMemo(
+  let newMatchesForAssets = react_esm_exports.useMemo(
     () => getNewMatchesForLinks(
       page,
       nextMatches,
@@ -10295,7 +10299,7 @@ function PrefetchPageLinksImpl({
     ),
     [page, nextMatches, matches, manifest, location2]
   );
-  let dataHrefs = React8.useMemo(() => {
+  let dataHrefs = react_esm_exports.useMemo(() => {
     if (page === location2.pathname + location2.search + location2.hash) {
       return [];
     }
@@ -10341,15 +10345,15 @@ function PrefetchPageLinksImpl({
     page,
     routeModules
   ]);
-  let moduleHrefs = React8.useMemo(
+  let moduleHrefs = react_esm_exports.useMemo(
     () => getModuleLinkHrefs(newMatchesForAssets, manifest),
     [newMatchesForAssets, manifest]
   );
   let keyedPrefetchLinks = useKeyedPrefetchLinks(newMatchesForAssets);
-  return /* @__PURE__ */ React8.createElement(React8.Fragment, null, dataHrefs.map((href2) => /* @__PURE__ */ React8.createElement("link", { key: href2, rel: "prefetch", as: "fetch", href: href2, ...linkProps })), moduleHrefs.map((href2) => /* @__PURE__ */ React8.createElement("link", { key: href2, rel: "modulepreload", href: href2, ...linkProps })), keyedPrefetchLinks.map(({ key, link }) => (
+  return /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, dataHrefs.map((href2) => /* @__PURE__ */ react_esm_exports.createElement("link", { key: href2, rel: "prefetch", as: "fetch", href: href2, ...linkProps })), moduleHrefs.map((href2) => /* @__PURE__ */ react_esm_exports.createElement("link", { key: href2, rel: "modulepreload", href: href2, ...linkProps })), keyedPrefetchLinks.map(({ key, link }) => (
     // these don't spread `linkProps` because they are full link descriptors
     // already with their own props
-    /* @__PURE__ */ React8.createElement(
+    /* @__PURE__ */ react_esm_exports.createElement(
       "link",
       {
         key,
@@ -10417,7 +10421,7 @@ function Meta() {
     meta = [...routeMeta];
     leafMeta = meta;
   }
-  return /* @__PURE__ */ React8.createElement(React8.Fragment, null, meta.flat().map((metaProps) => {
+  return /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, meta.flat().map((metaProps) => {
     if (!metaProps) {
       return null;
     }
@@ -10430,22 +10434,22 @@ function Meta() {
         return null;
       }
       let Comp = tagName;
-      return /* @__PURE__ */ React8.createElement(Comp, { key: JSON.stringify(rest), ...rest });
+      return /* @__PURE__ */ react_esm_exports.createElement(Comp, { key: JSON.stringify(rest), ...rest });
     }
     if ("title" in metaProps) {
-      return /* @__PURE__ */ React8.createElement("title", { key: "title" }, String(metaProps.title));
+      return /* @__PURE__ */ react_esm_exports.createElement("title", { key: "title" }, String(metaProps.title));
     }
     if ("charset" in metaProps) {
       metaProps.charSet ?? (metaProps.charSet = metaProps.charset);
       delete metaProps.charset;
     }
     if ("charSet" in metaProps && metaProps.charSet != null) {
-      return typeof metaProps.charSet === "string" ? /* @__PURE__ */ React8.createElement("meta", { key: "charSet", charSet: metaProps.charSet }) : null;
+      return typeof metaProps.charSet === "string" ? /* @__PURE__ */ react_esm_exports.createElement("meta", { key: "charSet", charSet: metaProps.charSet }) : null;
     }
     if ("script:ld+json" in metaProps) {
       try {
         let json = JSON.stringify(metaProps["script:ld+json"]);
-        return /* @__PURE__ */ React8.createElement(
+        return /* @__PURE__ */ react_esm_exports.createElement(
           "script",
           {
             key: `script:ld+json:${json}`,
@@ -10457,7 +10461,7 @@ function Meta() {
         return null;
       }
     }
-    return /* @__PURE__ */ React8.createElement("meta", { key: JSON.stringify(metaProps), ...metaProps });
+    return /* @__PURE__ */ react_esm_exports.createElement("meta", { key: JSON.stringify(metaProps), ...metaProps });
   }));
 }
 function isValidMetaTag(tagName) {
@@ -10488,10 +10492,10 @@ function Scripts(scriptProps) {
     renderMeta.didRenderScripts = true;
   }
   let matches = getActiveMatches(routerMatches, null, isSpaMode);
-  React8.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     setIsHydrated();
   }, []);
-  let initialScripts = React8.useMemo(() => {
+  let initialScripts = react_esm_exports.useMemo(() => {
     if (isRSCRouterContext) {
       return null;
     }
@@ -10554,7 +10558,7 @@ ${matches.map((match, routeIndex) => {
   window.__reactRouterRouteModules = {${matches.map((match, index) => `${JSON.stringify(match.route.id)}:route${index}`).join(",")}};
 
 import(${JSON.stringify(manifest.entry.module)});`;
-    return /* @__PURE__ */ React8.createElement(React8.Fragment, null, /* @__PURE__ */ React8.createElement(
+    return /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, /* @__PURE__ */ react_esm_exports.createElement(
       "script",
       {
         ...scriptProps,
@@ -10562,7 +10566,7 @@ import(${JSON.stringify(manifest.entry.module)});`;
         dangerouslySetInnerHTML: { __html: contextScript },
         type: void 0
       }
-    ), /* @__PURE__ */ React8.createElement(
+    ), /* @__PURE__ */ react_esm_exports.createElement(
       "script",
       {
         ...scriptProps,
@@ -10588,7 +10592,7 @@ import(${JSON.stringify(manifest.entry.module)});`;
     !isRSCRouterContext,
     "The <Scripts /> element is a no-op when using RSC and can be safely removed."
   );
-  return isHydrated || isRSCRouterContext ? null : /* @__PURE__ */ React8.createElement(React8.Fragment, null, typeof manifest.sri === "object" ? /* @__PURE__ */ React8.createElement(
+  return isHydrated || isRSCRouterContext ? null : /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, typeof manifest.sri === "object" ? /* @__PURE__ */ react_esm_exports.createElement(
     "script",
     {
       ...scriptProps,
@@ -10601,7 +10605,7 @@ import(${JSON.stringify(manifest.entry.module)});`;
         })
       }
     }
-  ) : null, !enableFogOfWar ? /* @__PURE__ */ React8.createElement(
+  ) : null, !enableFogOfWar ? /* @__PURE__ */ react_esm_exports.createElement(
     "link",
     {
       rel: "modulepreload",
@@ -10611,7 +10615,7 @@ import(${JSON.stringify(manifest.entry.module)});`;
       nonce: scriptProps.nonce,
       suppressHydrationWarning: true
     }
-  ) : null, /* @__PURE__ */ React8.createElement(
+  ) : null, /* @__PURE__ */ react_esm_exports.createElement(
     "link",
     {
       rel: "modulepreload",
@@ -10621,7 +10625,7 @@ import(${JSON.stringify(manifest.entry.module)});`;
       nonce: scriptProps.nonce,
       suppressHydrationWarning: true
     }
-  ), preloads.map((path) => /* @__PURE__ */ React8.createElement(
+  ), preloads.map((path) => /* @__PURE__ */ react_esm_exports.createElement(
     "link",
     {
       key: path,
@@ -10645,7 +10649,7 @@ function mergeRefs(...refs) {
     });
   };
 }
-var RemixErrorBoundary = class extends React9.Component {
+var RemixErrorBoundary = class extends react_esm_exports.Component {
   constructor(props) {
     super(props);
     this.state = { error: props.error || null, location: props.location };
@@ -10661,7 +10665,7 @@ var RemixErrorBoundary = class extends React9.Component {
   }
   render() {
     if (this.state.error) {
-      return /* @__PURE__ */ React9.createElement(
+      return /* @__PURE__ */ react_esm_exports.createElement(
         RemixRootDefaultErrorBoundary,
         {
           error: this.state.error,
@@ -10679,7 +10683,7 @@ function RemixRootDefaultErrorBoundary({
 }) {
   let { nonce } = useFrameworkContext();
   console.error(error);
-  let heyDeveloper = /* @__PURE__ */ React9.createElement(
+  let heyDeveloper = /* @__PURE__ */ react_esm_exports.createElement(
     "script",
     {
       nonce,
@@ -10693,7 +10697,7 @@ function RemixRootDefaultErrorBoundary({
     }
   );
   if (isRouteErrorResponse(error)) {
-    return /* @__PURE__ */ React9.createElement(BoundaryShell, { title: "Unhandled Thrown Response!" }, /* @__PURE__ */ React9.createElement("h1", { style: { fontSize: "24px" } }, error.status, " ", error.statusText), ENABLE_DEV_WARNINGS ? heyDeveloper : null);
+    return /* @__PURE__ */ react_esm_exports.createElement(BoundaryShell, { title: "Unhandled Thrown Response!" }, /* @__PURE__ */ react_esm_exports.createElement("h1", { style: { fontSize: "24px" } }, error.status, " ", error.statusText), ENABLE_DEV_WARNINGS ? heyDeveloper : null);
   }
   let errorInstance;
   if (error instanceof Error) {
@@ -10702,14 +10706,14 @@ function RemixRootDefaultErrorBoundary({
     let errorString = error == null ? "Unknown Error" : typeof error === "object" && "toString" in error ? error.toString() : JSON.stringify(error);
     errorInstance = new Error(errorString);
   }
-  return /* @__PURE__ */ React9.createElement(
+  return /* @__PURE__ */ react_esm_exports.createElement(
     BoundaryShell,
     {
       title: "Application Error!",
       isOutsideRemixApp
     },
-    /* @__PURE__ */ React9.createElement("h1", { style: { fontSize: "24px" } }, "Application Error"),
-    /* @__PURE__ */ React9.createElement(
+    /* @__PURE__ */ react_esm_exports.createElement("h1", { style: { fontSize: "24px" } }, "Application Error"),
+    /* @__PURE__ */ react_esm_exports.createElement(
       "pre",
       {
         style: {
@@ -10734,13 +10738,13 @@ function BoundaryShell({
   if (routeModules.root?.Layout && !isOutsideRemixApp) {
     return children;
   }
-  return /* @__PURE__ */ React9.createElement("html", { lang: "en" }, /* @__PURE__ */ React9.createElement("head", null, /* @__PURE__ */ React9.createElement("meta", { charSet: "utf-8" }), /* @__PURE__ */ React9.createElement(
+  return /* @__PURE__ */ react_esm_exports.createElement("html", { lang: "en" }, /* @__PURE__ */ react_esm_exports.createElement("head", null, /* @__PURE__ */ react_esm_exports.createElement("meta", { charSet: "utf-8" }), /* @__PURE__ */ react_esm_exports.createElement(
     "meta",
     {
       name: "viewport",
       content: "width=device-width,initial-scale=1,viewport-fit=cover"
     }
-  ), /* @__PURE__ */ React9.createElement("title", null, title)), /* @__PURE__ */ React9.createElement("body", null, /* @__PURE__ */ React9.createElement("main", { style: { fontFamily: "system-ui, sans-serif", padding: "2rem" } }, children, renderScripts ? /* @__PURE__ */ React9.createElement(Scripts, null) : null)));
+  ), /* @__PURE__ */ react_esm_exports.createElement("title", null, title)), /* @__PURE__ */ react_esm_exports.createElement("body", null, /* @__PURE__ */ react_esm_exports.createElement("main", { style: { fontFamily: "system-ui, sans-serif", padding: "2rem" } }, children, renderScripts ? /* @__PURE__ */ react_esm_exports.createElement(Scripts, null) : null)));
 }
 var isBrowser2 = typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined";
 try {
@@ -10833,27 +10837,27 @@ function BrowserRouter({
   useTransitions,
   window: window2
 }) {
-  let historyRef = React10.useRef();
+  let historyRef = react_esm_exports.useRef();
   if (historyRef.current == null) {
     historyRef.current = createBrowserHistory({ window: window2, v5Compat: true });
   }
   let history = historyRef.current;
-  let [state, setStateImpl] = React10.useState({
+  let [state, setStateImpl] = react_esm_exports.useState({
     action: history.action,
     location: history.location
   });
-  let setState = React10.useCallback(
+  let setState = react_esm_exports.useCallback(
     (newState) => {
       if (useTransitions === false) {
         setStateImpl(newState);
       } else {
-        React10.startTransition(() => setStateImpl(newState));
+        react_esm_exports.startTransition(() => setStateImpl(newState));
       }
     },
     [useTransitions]
   );
-  React10.useLayoutEffect(() => history.listen(setState), [history, setState]);
-  return /* @__PURE__ */ React10.createElement(
+  react_esm_exports.useLayoutEffect(() => history.listen(setState), [history, setState]);
+  return /* @__PURE__ */ react_esm_exports.createElement(
     Router,
     {
       basename,
@@ -10871,27 +10875,27 @@ function HashRouter({
   useTransitions,
   window: window2
 }) {
-  let historyRef = React10.useRef();
+  let historyRef = react_esm_exports.useRef();
   if (historyRef.current == null) {
     historyRef.current = createHashHistory({ window: window2, v5Compat: true });
   }
   let history = historyRef.current;
-  let [state, setStateImpl] = React10.useState({
+  let [state, setStateImpl] = react_esm_exports.useState({
     action: history.action,
     location: history.location
   });
-  let setState = React10.useCallback(
+  let setState = react_esm_exports.useCallback(
     (newState) => {
       if (useTransitions === false) {
         setStateImpl(newState);
       } else {
-        React10.startTransition(() => setStateImpl(newState));
+        react_esm_exports.startTransition(() => setStateImpl(newState));
       }
     },
     [useTransitions]
   );
-  React10.useLayoutEffect(() => history.listen(setState), [history, setState]);
-  return /* @__PURE__ */ React10.createElement(
+  react_esm_exports.useLayoutEffect(() => history.listen(setState), [history, setState]);
+  return /* @__PURE__ */ react_esm_exports.createElement(
     Router,
     {
       basename,
@@ -10909,22 +10913,22 @@ function HistoryRouter({
   history,
   useTransitions
 }) {
-  let [state, setStateImpl] = React10.useState({
+  let [state, setStateImpl] = react_esm_exports.useState({
     action: history.action,
     location: history.location
   });
-  let setState = React10.useCallback(
+  let setState = react_esm_exports.useCallback(
     (newState) => {
       if (useTransitions === false) {
         setStateImpl(newState);
       } else {
-        React10.startTransition(() => setStateImpl(newState));
+        react_esm_exports.startTransition(() => setStateImpl(newState));
       }
     },
     [useTransitions]
   );
-  React10.useLayoutEffect(() => history.listen(setState), [history, setState]);
-  return /* @__PURE__ */ React10.createElement(
+  react_esm_exports.useLayoutEffect(() => history.listen(setState), [history, setState]);
+  return /* @__PURE__ */ react_esm_exports.createElement(
     Router,
     {
       basename,
@@ -10937,7 +10941,7 @@ function HistoryRouter({
   );
 }
 HistoryRouter.displayName = "unstable_HistoryRouter";
-var Link = React10.forwardRef(
+var Link = react_esm_exports.forwardRef(
   function LinkWithRef({
     onClick,
     discover = "render",
@@ -10954,7 +10958,7 @@ var Link = React10.forwardRef(
     defaultShouldRevalidate,
     ...rest
   }, forwardedRef) {
-    let { basename, navigator, useTransitions } = React10.useContext(NavigationContext);
+    let { basename, navigator, useTransitions } = react_esm_exports.useContext(NavigationContext);
     let isAbsolute = typeof to === "string" && ABSOLUTE_URL_REGEX.test(to);
     let parsed = parseToInfo(to, basename);
     to = parsed.to;
@@ -10997,7 +11001,7 @@ var Link = React10.forwardRef(
     let isSpaLink = !(parsed.isExternal || reloadDocument);
     let link = (
       // eslint-disable-next-line jsx-a11y/anchor-has-content
-      /* @__PURE__ */ React10.createElement(
+      /* @__PURE__ */ react_esm_exports.createElement(
         "a",
         {
           ...rest,
@@ -11010,11 +11014,11 @@ var Link = React10.forwardRef(
         }
       )
     );
-    return shouldPrefetch && !isAbsolute ? /* @__PURE__ */ React10.createElement(React10.Fragment, null, link, /* @__PURE__ */ React10.createElement(PrefetchPageLinks, { page: href2 })) : link;
+    return shouldPrefetch && !isAbsolute ? /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, link, /* @__PURE__ */ react_esm_exports.createElement(PrefetchPageLinks, { page: href2 })) : link;
   }
 );
 Link.displayName = "Link";
-var NavLink = React10.forwardRef(
+var NavLink = react_esm_exports.forwardRef(
   function NavLinkWithRef({
     "aria-current": ariaCurrentProp = "page",
     caseSensitive = false,
@@ -11028,8 +11032,8 @@ var NavLink = React10.forwardRef(
   }, ref) {
     let path = useResolvedPath(to, { relative: rest.relative });
     let location2 = useLocation();
-    let routerState = React10.useContext(DataRouterStateContext);
-    let { navigator, basename } = React10.useContext(NavigationContext);
+    let routerState = react_esm_exports.useContext(DataRouterStateContext);
+    let { navigator, basename } = react_esm_exports.useContext(NavigationContext);
     let isTransitioning = routerState != null && // Conditional usage is OK here because the usage of a data router is static
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useViewTransitionState(path) && viewTransition === true;
@@ -11065,7 +11069,7 @@ var NavLink = React10.forwardRef(
       ].filter(Boolean).join(" ");
     }
     let style = typeof styleProp === "function" ? styleProp(renderProps) : styleProp;
-    return /* @__PURE__ */ React10.createElement(
+    return /* @__PURE__ */ react_esm_exports.createElement(
       Link,
       {
         ...rest,
@@ -11081,7 +11085,7 @@ var NavLink = React10.forwardRef(
   }
 );
 NavLink.displayName = "NavLink";
-var Form = React10.forwardRef(
+var Form = react_esm_exports.forwardRef(
   ({
     discover = "render",
     fetcherKey,
@@ -11098,7 +11102,7 @@ var Form = React10.forwardRef(
     defaultShouldRevalidate,
     ...props
   }, forwardedRef) => {
-    let { useTransitions } = React10.useContext(NavigationContext);
+    let { useTransitions } = react_esm_exports.useContext(NavigationContext);
     let submit = useSubmit();
     let formAction = useFormAction(action, { relative });
     let formMethod = method.toLowerCase() === "get" ? "get" : "post";
@@ -11121,12 +11125,12 @@ var Form = React10.forwardRef(
         defaultShouldRevalidate
       });
       if (useTransitions && navigate !== false) {
-        React10.startTransition(() => doSubmit());
+        react_esm_exports.startTransition(() => doSubmit());
       } else {
         doSubmit();
       }
     };
-    return /* @__PURE__ */ React10.createElement(
+    return /* @__PURE__ */ react_esm_exports.createElement(
       "form",
       {
         ref: forwardedRef,
@@ -11145,12 +11149,12 @@ function ScrollRestoration({
   storageKey,
   ...props
 }) {
-  let remixContext = React10.useContext(FrameworkContext);
-  let { basename } = React10.useContext(NavigationContext);
+  let remixContext = react_esm_exports.useContext(FrameworkContext);
+  let { basename } = react_esm_exports.useContext(NavigationContext);
   let location2 = useLocation();
   let matches = useMatches();
   useScrollRestoration({ getKey, storageKey });
-  let ssrKey = React10.useMemo(
+  let ssrKey = react_esm_exports.useMemo(
     () => {
       if (!remixContext || !getKey) return null;
       let userKey = getScrollRestorationKey(
@@ -11187,7 +11191,7 @@ function ScrollRestoration({
   if (props.nonce == null && remixContext?.nonce) {
     props.nonce = remixContext.nonce;
   }
-  return /* @__PURE__ */ React10.createElement(
+  return /* @__PURE__ */ react_esm_exports.createElement(
     "script",
     {
       ...props,
@@ -11205,12 +11209,12 @@ function getDataRouterConsoleError2(hookName) {
   return `${hookName} must be used within a data router.  See https://reactrouter.com/en/main/routers/picking-a-router.`;
 }
 function useDataRouterContext3(hookName) {
-  let ctx = React10.useContext(DataRouterContext);
+  let ctx = react_esm_exports.useContext(DataRouterContext);
   invariant(ctx, getDataRouterConsoleError2(hookName));
   return ctx;
 }
 function useDataRouterState2(hookName) {
-  let state = React10.useContext(DataRouterStateContext);
+  let state = react_esm_exports.useContext(DataRouterStateContext);
   invariant(state, getDataRouterConsoleError2(hookName));
   return state;
 }
@@ -11228,7 +11232,7 @@ function useLinkClickHandler(to, {
   let navigate = useNavigate();
   let location2 = useLocation();
   let path = useResolvedPath(to, { relative });
-  return React10.useCallback(
+  return react_esm_exports.useCallback(
     (event) => {
       if (shouldProcessLinkClick(event, target)) {
         event.preventDefault();
@@ -11243,7 +11247,7 @@ function useLinkClickHandler(to, {
           defaultShouldRevalidate
         });
         if (useTransitions) {
-          React10.startTransition(() => doNavigate());
+          react_esm_exports.startTransition(() => doNavigate());
         } else {
           doNavigate();
         }
@@ -11271,10 +11275,10 @@ function useSearchParams(defaultInit) {
     typeof URLSearchParams !== "undefined",
     `You cannot use the \`useSearchParams\` hook in a browser that does not support the URLSearchParams API. If you need to support Internet Explorer 11, we recommend you load a polyfill such as https://github.com/ungap/url-search-params.`
   );
-  let defaultSearchParamsRef = React10.useRef(createSearchParams(defaultInit));
-  let hasSetSearchParamsRef = React10.useRef(false);
+  let defaultSearchParamsRef = react_esm_exports.useRef(createSearchParams(defaultInit));
+  let hasSetSearchParamsRef = react_esm_exports.useRef(false);
   let location2 = useLocation();
-  let searchParams = React10.useMemo(
+  let searchParams = react_esm_exports.useMemo(
     () => (
       // Only merge in the defaults if we haven't yet called setSearchParams.
       // Once we call that we want those to take precedence, otherwise you can't
@@ -11287,7 +11291,7 @@ function useSearchParams(defaultInit) {
     [location2.search]
   );
   let navigate = useNavigate();
-  let setSearchParams = React10.useCallback(
+  let setSearchParams = react_esm_exports.useCallback(
     (nextInit, navigateOptions) => {
       const newSearchParams = createSearchParams(
         typeof nextInit === "function" ? nextInit(new URLSearchParams(searchParams)) : nextInit
@@ -11306,11 +11310,11 @@ function useSubmit() {
     "useSubmit"
     /* UseSubmit */
   );
-  let { basename } = React10.useContext(NavigationContext);
+  let { basename } = react_esm_exports.useContext(NavigationContext);
   let currentRouteId = useRouteId();
   let routerFetch = router2.fetch;
   let routerNavigate = router2.navigate;
-  return React10.useCallback(
+  return react_esm_exports.useCallback(
     async (target, options = {}) => {
       let { action, method, encType, formData, body } = getFormSubmissionInfo(
         target,
@@ -11347,8 +11351,8 @@ function useSubmit() {
   );
 }
 function useFormAction(action, { relative } = {}) {
-  let { basename } = React10.useContext(NavigationContext);
-  let routeContext = React10.useContext(RouteContext);
+  let { basename } = react_esm_exports.useContext(NavigationContext);
+  let routeContext = react_esm_exports.useContext(RouteContext);
   invariant(routeContext, "useFormAction must be used inside a RouteContext");
   let [match] = routeContext.matches.slice(-1);
   let path = { ...useResolvedPath(action ? action : ".", { relative }) };
@@ -11384,8 +11388,8 @@ function useFetcher({
     "useFetcher"
     /* UseFetcher */
   );
-  let fetcherData = React10.useContext(FetchersContext);
-  let route = React10.useContext(RouteContext);
+  let fetcherData = react_esm_exports.useContext(FetchersContext);
+  let route = react_esm_exports.useContext(RouteContext);
   let routeId = route.matches[route.matches.length - 1]?.route.id;
   invariant(fetcherData, `useFetcher must be used inside a FetchersContext`);
   invariant(route, `useFetcher must be used inside a RouteContext`);
@@ -11393,17 +11397,17 @@ function useFetcher({
     routeId != null,
     `useFetcher can only be used on routes that contain a unique "id"`
   );
-  let defaultKey = React10.useId();
-  let [fetcherKey, setFetcherKey] = React10.useState(key || defaultKey);
+  let defaultKey = react_esm_exports.useId();
+  let [fetcherKey, setFetcherKey] = react_esm_exports.useState(key || defaultKey);
   if (key && key !== fetcherKey) {
     setFetcherKey(key);
   }
   let { deleteFetcher, getFetcher, resetFetcher, fetch: routerFetch } = router2;
-  React10.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     getFetcher(fetcherKey);
     return () => deleteFetcher(fetcherKey);
   }, [deleteFetcher, getFetcher, fetcherKey]);
-  let load = React10.useCallback(
+  let load = react_esm_exports.useCallback(
     async (href2, opts) => {
       invariant(routeId, "No routeId available for fetcher.load()");
       await routerFetch(fetcherKey, routeId, href2, opts);
@@ -11411,7 +11415,7 @@ function useFetcher({
     [fetcherKey, routeId, routerFetch]
   );
   let submitImpl = useSubmit();
-  let submit = React10.useCallback(
+  let submit = react_esm_exports.useCallback(
     async (target, opts) => {
       await submitImpl(target, {
         ...opts,
@@ -11421,14 +11425,14 @@ function useFetcher({
     },
     [fetcherKey, submitImpl]
   );
-  let reset = React10.useCallback(
+  let reset = react_esm_exports.useCallback(
     (opts) => resetFetcher(fetcherKey, opts),
     [resetFetcher, fetcherKey]
   );
-  let FetcherForm = React10.useMemo(() => {
-    let FetcherForm2 = React10.forwardRef(
+  let FetcherForm = react_esm_exports.useMemo(() => {
+    let FetcherForm2 = react_esm_exports.forwardRef(
       (props, ref) => {
-        return /* @__PURE__ */ React10.createElement(Form, { ...props, navigate: false, fetcherKey, ref });
+        return /* @__PURE__ */ react_esm_exports.createElement(Form, { ...props, navigate: false, fetcherKey, ref });
       }
     );
     FetcherForm2.displayName = "fetcher.Form";
@@ -11436,7 +11440,7 @@ function useFetcher({
   }, [fetcherKey]);
   let fetcher = state.fetchers.get(fetcherKey) || IDLE_FETCHER;
   let data2 = fetcherData.get(fetcherKey);
-  let fetcherWithComponents = React10.useMemo(
+  let fetcherWithComponents = react_esm_exports.useMemo(
     () => ({
       Form: FetcherForm,
       submit,
@@ -11454,7 +11458,7 @@ function useFetchers() {
     "useFetchers"
     /* UseFetchers */
   );
-  return React10.useMemo(
+  return react_esm_exports.useMemo(
     () => Array.from(state.fetchers.entries()).map(([key, fetcher]) => ({
       ...fetcher,
       key
@@ -11496,18 +11500,18 @@ function useScrollRestoration({
     "useScrollRestoration"
     /* UseScrollRestoration */
   );
-  let { basename } = React10.useContext(NavigationContext);
+  let { basename } = react_esm_exports.useContext(NavigationContext);
   let location2 = useLocation();
   let matches = useMatches();
   let navigation = useNavigation();
-  React10.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     window.history.scrollRestoration = "manual";
     return () => {
       window.history.scrollRestoration = "auto";
     };
   }, []);
   usePageHide(
-    React10.useCallback(() => {
+    react_esm_exports.useCallback(() => {
       if (navigation.state === "idle") {
         let key = getScrollRestorationKey(location2, matches, basename, getKey);
         savedScrollPositions[key] = window.scrollY;
@@ -11527,7 +11531,7 @@ function useScrollRestoration({
     }, [navigation.state, getKey, basename, location2, matches, storageKey])
   );
   if (typeof document !== "undefined") {
-    React10.useLayoutEffect(() => {
+    react_esm_exports.useLayoutEffect(() => {
       try {
         let sessionPositions = sessionStorage.getItem(
           storageKey || SCROLL_RESTORATION_STORAGE_KEY
@@ -11538,7 +11542,7 @@ function useScrollRestoration({
       } catch (e) {
       }
     }, [storageKey]);
-    React10.useLayoutEffect(() => {
+    react_esm_exports.useLayoutEffect(() => {
       let disableScrollRestoration = router2?.enableScrollRestoration(
         savedScrollPositions,
         () => window.scrollY,
@@ -11546,7 +11550,7 @@ function useScrollRestoration({
       );
       return () => disableScrollRestoration && disableScrollRestoration();
     }, [router2, basename, getKey]);
-    React10.useLayoutEffect(() => {
+    react_esm_exports.useLayoutEffect(() => {
       if (restoreScrollPosition === false) {
         return;
       }
@@ -11581,7 +11585,7 @@ function useScrollRestoration({
 }
 function useBeforeUnload(callback, options) {
   let { capture } = options || {};
-  React10.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     let opts = capture != null ? { capture } : void 0;
     window.addEventListener("beforeunload", callback, opts);
     return () => {
@@ -11591,7 +11595,7 @@ function useBeforeUnload(callback, options) {
 }
 function usePageHide(callback, options) {
   let { capture } = options || {};
-  React10.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     let opts = capture != null ? { capture } : void 0;
     window.addEventListener("pagehide", callback, opts);
     return () => {
@@ -11604,7 +11608,7 @@ function usePrompt({
   message
 }) {
   let blocker = useBlocker(when);
-  React10.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (blocker.state === "blocked") {
       let proceed = window.confirm(message);
       if (proceed) {
@@ -11614,14 +11618,14 @@ function usePrompt({
       }
     }
   }, [blocker, message]);
-  React10.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (blocker.state === "blocked" && !when) {
       blocker.reset();
     }
   }, [blocker, when]);
 }
 function useViewTransitionState(to, { relative } = {}) {
-  let vtContext = React10.useContext(ViewTransitionContext);
+  let vtContext = react_esm_exports.useContext(ViewTransitionContext);
   invariant(
     vtContext != null,
     "`useViewTransitionState` must be used within `react-router-dom`'s `RouterProvider`.  Did you accidentally import `RouterProvider` from `react-router`?"
@@ -11656,7 +11660,7 @@ function StaticRouter({
     mask: void 0
   };
   let staticNavigator = getStatelessNavigator();
-  return /* @__PURE__ */ React11.createElement(
+  return /* @__PURE__ */ react_esm_exports.createElement(
     Router,
     {
       basename,
@@ -11698,7 +11702,7 @@ function StaticRouterProvider({
     hydrateScript = `window.__staticRouterHydrationData = JSON.parse(${json});`;
   }
   let { state } = dataRouterContext.router;
-  return /* @__PURE__ */ React11.createElement(React11.Fragment, null, /* @__PURE__ */ React11.createElement(DataRouterContext.Provider, { value: dataRouterContext }, /* @__PURE__ */ React11.createElement(DataRouterStateContext.Provider, { value: state }, /* @__PURE__ */ React11.createElement(FetchersContext.Provider, { value: fetchersContext }, /* @__PURE__ */ React11.createElement(ViewTransitionContext.Provider, { value: { isTransitioning: false } }, /* @__PURE__ */ React11.createElement(
+  return /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, /* @__PURE__ */ react_esm_exports.createElement(DataRouterContext.Provider, { value: dataRouterContext }, /* @__PURE__ */ react_esm_exports.createElement(DataRouterStateContext.Provider, { value: state }, /* @__PURE__ */ react_esm_exports.createElement(FetchersContext.Provider, { value: fetchersContext }, /* @__PURE__ */ react_esm_exports.createElement(ViewTransitionContext.Provider, { value: { isTransitioning: false } }, /* @__PURE__ */ react_esm_exports.createElement(
     Router,
     {
       basename: dataRouterContext.basename,
@@ -11708,7 +11712,7 @@ function StaticRouterProvider({
       static: dataRouterContext.static,
       useTransitions: false
     },
-    /* @__PURE__ */ React11.createElement(
+    /* @__PURE__ */ react_esm_exports.createElement(
       DataRoutes2,
       {
         manifest: router2.manifest,
@@ -11718,7 +11722,7 @@ function StaticRouterProvider({
         isStatic: true
       }
     )
-  ))))), hydrateScript ? /* @__PURE__ */ React11.createElement(
+  ))))), hydrateScript ? /* @__PURE__ */ react_esm_exports.createElement(
     "script",
     {
       suppressHydrationWarning: true,
@@ -11912,10 +11916,6 @@ function encodeLocation(to) {
 // node_modules/.pnpm/react-router@7.18.2_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/development/chunk-ZA36QIGN.mjs
 var import_cookie = __toESM(require_dist(), 1);
 var import_set_cookie_parser = __toESM(require_set_cookie(), 1);
-import * as React12 from "react";
-import * as React22 from "react";
-import * as React42 from "react";
-import React32 from "react";
 function ServerRouter({
   context,
   url,
@@ -11950,7 +11950,7 @@ function ServerRouter({
   let router2 = createStaticRouter(routes, context.staticHandlerContext, {
     branches: context.branches
   });
-  return /* @__PURE__ */ React12.createElement(React12.Fragment, null, /* @__PURE__ */ React12.createElement(
+  return /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, /* @__PURE__ */ react_esm_exports.createElement(
     FrameworkContext.Provider,
     {
       value: {
@@ -11967,7 +11967,7 @@ function ServerRouter({
         renderMeta: context.renderMeta
       }
     },
-    /* @__PURE__ */ React12.createElement(RemixErrorBoundary, { location: router2.state.location }, /* @__PURE__ */ React12.createElement(
+    /* @__PURE__ */ react_esm_exports.createElement(RemixErrorBoundary, { location: router2.state.location }, /* @__PURE__ */ react_esm_exports.createElement(
       StaticRouterProvider,
       {
         router: router2,
@@ -11975,7 +11975,7 @@ function ServerRouter({
         hydrate: false
       }
     ))
-  ), context.serverHandoffStream ? /* @__PURE__ */ React12.createElement(React12.Suspense, null, /* @__PURE__ */ React12.createElement(
+  ), context.serverHandoffStream ? /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Suspense, null, /* @__PURE__ */ react_esm_exports.createElement(
     StreamTransfer,
     {
       context,
@@ -11993,8 +11993,8 @@ function createRoutesStub(routes, _context) {
     hydrationData,
     future
   }) {
-    let routerRef = React22.useRef();
-    let frameworkContextRef = React22.useRef();
+    let routerRef = react_esm_exports.useRef();
+    let frameworkContextRef = react_esm_exports.useRef();
     if (routerRef.current == null) {
       frameworkContextRef.current = {
         future: {
@@ -12027,7 +12027,7 @@ function createRoutesStub(routes, _context) {
         hydrationData
       });
     }
-    return /* @__PURE__ */ React22.createElement(FrameworkContext.Provider, { value: frameworkContextRef.current }, /* @__PURE__ */ React22.createElement(RouterProvider, { router: routerRef.current }));
+    return /* @__PURE__ */ react_esm_exports.createElement(FrameworkContext.Provider, { value: frameworkContextRef.current }, /* @__PURE__ */ react_esm_exports.createElement(RouterProvider, { router: routerRef.current }));
   };
 }
 function processRoutes(routes, context, manifest, routeModules, parentId) {
@@ -13710,7 +13710,7 @@ function writeChunk(chunk, controller) {
 function escapeScript(script) {
   return script.replace(/<!--/g, "<\\!--").replace(/<\/(script)/gi, "</\\$1");
 }
-var RSCRouterGlobalErrorBoundary = class extends React32.Component {
+var RSCRouterGlobalErrorBoundary = class extends react_esm_default.Component {
   constructor(props) {
     super(props);
     this.state = { error: null, location: props.location };
@@ -13726,7 +13726,7 @@ var RSCRouterGlobalErrorBoundary = class extends React32.Component {
   }
   render() {
     if (this.state.error) {
-      return /* @__PURE__ */ React32.createElement(
+      return /* @__PURE__ */ react_esm_default.createElement(
         RSCDefaultRootErrorBoundaryImpl,
         {
           error: this.state.error,
@@ -13746,20 +13746,20 @@ function ErrorWrapper({
   if (!renderAppShell) {
     return children;
   }
-  return /* @__PURE__ */ React32.createElement("html", { lang: "en" }, /* @__PURE__ */ React32.createElement("head", null, /* @__PURE__ */ React32.createElement("meta", { charSet: "utf-8" }), /* @__PURE__ */ React32.createElement(
+  return /* @__PURE__ */ react_esm_default.createElement("html", { lang: "en" }, /* @__PURE__ */ react_esm_default.createElement("head", null, /* @__PURE__ */ react_esm_default.createElement("meta", { charSet: "utf-8" }), /* @__PURE__ */ react_esm_default.createElement(
     "meta",
     {
       name: "viewport",
       content: "width=device-width,initial-scale=1,viewport-fit=cover"
     }
-  ), /* @__PURE__ */ React32.createElement("title", null, title)), /* @__PURE__ */ React32.createElement("body", null, /* @__PURE__ */ React32.createElement("main", { style: { fontFamily: "system-ui, sans-serif", padding: "2rem" } }, children)));
+  ), /* @__PURE__ */ react_esm_default.createElement("title", null, title)), /* @__PURE__ */ react_esm_default.createElement("body", null, /* @__PURE__ */ react_esm_default.createElement("main", { style: { fontFamily: "system-ui, sans-serif", padding: "2rem" } }, children)));
 }
 function RSCDefaultRootErrorBoundaryImpl({
   error,
   renderAppShell
 }) {
   console.error(error);
-  let heyDeveloper = /* @__PURE__ */ React32.createElement(
+  let heyDeveloper = /* @__PURE__ */ react_esm_default.createElement(
     "script",
     {
       dangerouslySetInnerHTML: {
@@ -13772,13 +13772,13 @@ function RSCDefaultRootErrorBoundaryImpl({
     }
   );
   if (isRouteErrorResponse(error)) {
-    return /* @__PURE__ */ React32.createElement(
+    return /* @__PURE__ */ react_esm_default.createElement(
       ErrorWrapper,
       {
         renderAppShell,
         title: "Unhandled Thrown Response!"
       },
-      /* @__PURE__ */ React32.createElement("h1", { style: { fontSize: "24px" } }, error.status, " ", error.statusText),
+      /* @__PURE__ */ react_esm_default.createElement("h1", { style: { fontSize: "24px" } }, error.status, " ", error.statusText),
       ENABLE_DEV_WARNINGS ? heyDeveloper : null
     );
   }
@@ -13789,7 +13789,7 @@ function RSCDefaultRootErrorBoundaryImpl({
     let errorString = error == null ? "Unknown Error" : typeof error === "object" && "toString" in error ? error.toString() : JSON.stringify(error);
     errorInstance = new Error(errorString);
   }
-  return /* @__PURE__ */ React32.createElement(ErrorWrapper, { renderAppShell, title: "Application Error!" }, /* @__PURE__ */ React32.createElement("h1", { style: { fontSize: "24px" } }, "Application Error"), /* @__PURE__ */ React32.createElement(
+  return /* @__PURE__ */ react_esm_default.createElement(ErrorWrapper, { renderAppShell, title: "Application Error!" }, /* @__PURE__ */ react_esm_default.createElement("h1", { style: { fontSize: "24px" } }, "Application Error"), /* @__PURE__ */ react_esm_default.createElement(
     "pre",
     {
       style: {
@@ -13809,7 +13809,7 @@ function RSCDefaultRootErrorBoundary({
   if (hasRootLayout === void 0) {
     throw new Error("Missing 'hasRootLayout' prop");
   }
-  return /* @__PURE__ */ React32.createElement(
+  return /* @__PURE__ */ react_esm_default.createElement(
     RSCDefaultRootErrorBoundaryImpl,
     {
       renderAppShell: !hasRootLayout,
@@ -13837,7 +13837,7 @@ function populateRSCRouteModules(routeModules, matches) {
 var noopComponent = () => null;
 var defaultManifestPath = "/__manifest";
 var REACT_USE = "use";
-var useImpl = React42[REACT_USE];
+var useImpl = react_esm_exports[REACT_USE];
 function useSafe(promise) {
   if (useImpl) {
     return useImpl(promise);
@@ -14242,7 +14242,7 @@ function RSCStaticRouter({ getPayload }) {
     },
     routeModules: createRSCRouteModules(payload)
   };
-  return /* @__PURE__ */ React42.createElement(RSCRouterContext.Provider, { value: true }, /* @__PURE__ */ React42.createElement(RSCRouterGlobalErrorBoundary, { location: payload.location }, /* @__PURE__ */ React42.createElement(FrameworkContext.Provider, { value: frameworkContext }, /* @__PURE__ */ React42.createElement(
+  return /* @__PURE__ */ react_esm_exports.createElement(RSCRouterContext.Provider, { value: true }, /* @__PURE__ */ react_esm_exports.createElement(RSCRouterGlobalErrorBoundary, { location: payload.location }, /* @__PURE__ */ react_esm_exports.createElement(FrameworkContext.Provider, { value: frameworkContext }, /* @__PURE__ */ react_esm_exports.createElement(
     StaticRouterProvider,
     {
       context,
@@ -14291,13 +14291,10 @@ function getHydrationData({
 }
 
 // node_modules/.pnpm/react-router@7.18.2_react-dom@19.2.8_react@19.2.8__react@19.2.8/node_modules/react-router/dist/development/dom-export.mjs
-import * as React13 from "react";
 import * as ReactDOM from "react-dom";
-import * as React23 from "react";
-import * as React33 from "react";
 import * as ReactDOM2 from "react-dom";
 function RouterProvider2(props) {
-  return /* @__PURE__ */ React13.createElement(RouterProvider, { flushSync: ReactDOM.flushSync, ...props });
+  return /* @__PURE__ */ react_esm_exports.createElement(RouterProvider, { flushSync: ReactDOM.flushSync, ...props });
 }
 var ssrInfo = null;
 var router = null;
@@ -14437,27 +14434,27 @@ function HydratedRouter(props) {
       instrumentations: props.instrumentations
     });
   }
-  let [criticalCss, setCriticalCss] = React23.useState(
+  let [criticalCss, setCriticalCss] = react_esm_exports.useState(
     false ? ssrInfo?.context.criticalCss : void 0
   );
-  React23.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (false) {
       setCriticalCss(void 0);
     }
   }, []);
-  React23.useEffect(() => {
+  react_esm_exports.useEffect(() => {
     if (false) {
       document.querySelectorAll(`[${CRITICAL_CSS_DATA_ATTRIBUTE}]`).forEach((element) => element.remove());
     }
   }, [criticalCss]);
-  let [location2, setLocation] = React23.useState(router.state.location);
-  React23.useLayoutEffect(() => {
+  let [location2, setLocation] = react_esm_exports.useState(router.state.location);
+  react_esm_exports.useLayoutEffect(() => {
     if (ssrInfo && ssrInfo.router && !ssrInfo.routerInitialized) {
       ssrInfo.routerInitialized = true;
       ssrInfo.router.initialize();
     }
   }, []);
-  React23.useLayoutEffect(() => {
+  react_esm_exports.useLayoutEffect(() => {
     if (ssrInfo && ssrInfo.router) {
       return ssrInfo.router.subscribe((newState) => {
         if (newState.location !== location2) {
@@ -14478,7 +14475,7 @@ function HydratedRouter(props) {
   return (
     // This fragment is important to ensure we match the <ServerRouter> JSX
     // structure so that useId values hydrate correctly
-    /* @__PURE__ */ React23.createElement(React23.Fragment, null, /* @__PURE__ */ React23.createElement(
+    /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null, /* @__PURE__ */ react_esm_exports.createElement(
       FrameworkContext.Provider,
       {
         value: {
@@ -14491,7 +14488,7 @@ function HydratedRouter(props) {
           routeDiscovery: ssrInfo.context.routeDiscovery
         }
       },
-      /* @__PURE__ */ React23.createElement(RemixErrorBoundary, { location: location2 }, /* @__PURE__ */ React23.createElement(
+      /* @__PURE__ */ react_esm_exports.createElement(RemixErrorBoundary, { location: location2 }, /* @__PURE__ */ react_esm_exports.createElement(
         RouterProvider2,
         {
           router,
@@ -14499,7 +14496,7 @@ function HydratedRouter(props) {
           onError: props.onError
         }
       ))
-    ), /* @__PURE__ */ React23.createElement(React23.Fragment, null))
+    ), /* @__PURE__ */ react_esm_exports.createElement(react_esm_exports.Fragment, null))
   );
 }
 var renderedRoutesContext = createContext4();
