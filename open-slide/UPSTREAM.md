@@ -77,6 +77,22 @@ disk matches an upstream workspace: `slides/<id>/index.tsx`,
   inspector, the style panel — behind `import.meta.env.DEV`, and the authoring
   app is the app being ported.
 
+**4. Source edits go through an agent.** A slide is compiled app source and a
+sandboxed app cannot write the project root, so `/__edit` and the slide
+create / rename / delete / reorder / duplicate routes hand the change to a
+self-run agent (`agent.spawn` with this project as the target, gated by the
+`agent.dispatch` request — no privileged grant, no per-use prompt). The agent
+edits `src/slides/<id>/index.tsx`, the build watcher rebuilds, and the app
+reloads with it. These routes answer **202**, not 200: the edit is under way,
+not yet applied.
+
+`spawn` opens an agent *terminal*, so the target must be a CLI agent the user
+has installed — the first-party `ispo` agent runs in-process, has no terminal
+form, and refuses with "ISPO runs inside ISPO". The envelope is therefore
+`fs: self`, `ui: [notify]`, `agent: [dispatch]`, and the gallery summary says
+so in plain words ("run an agent in this project to edit its own slide
+sources").
+
 ## What cannot exist here
 
 - **The presenter window.** A sandboxed iframe cannot `window.open`. The

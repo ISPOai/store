@@ -8,9 +8,16 @@
   "root": "",
   "requests": {
     "fs": "self",
-    "ui": ["notify"]
+    "ui": [
+      "notify"
+    ],
+    "agent": [
+      "dispatch"
+    ]
   },
   "env": [],
   "entityTypes": [],
-  "egress": { "connect": [] }
+  "egress": {
+    "connect": []
+  }
 }

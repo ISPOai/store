@@ -34,7 +34,7 @@ have to.
 | `virtual:open-slide/slides` — Vite globs slides, emits `import()` per slide | no per-content compile step, **and CSP forbids evaluating code at all** | slides are app source under `src/`; a generated static import map lets the host's esbuild compile them at build time | editing a slide stays live — the host's build watcher rebuilds and the app reloads, standing in for Vite HMR. What is lost is the app writing its *own* source: a new deck comes from an agent or the Code surface, not from a button in the app |
 | `virtual:open-slide/{config,folders,themes}` | no build-time codegen | ordinary modules, same contracts, mapped by `tsconfig` `paths` | none — **no vendored import statement changed** |
 | `/__folders`, `/__notes`, `/__design`, `/__comments`, `/__assets` | no server in a sealed iframe | patch `fetch` before mount; answer in-process from project storage, same wire shapes. Asset bytes go through `fs.writeBinary` and reach the UI as `blob:` URLs, which `img-src 'self' assets: data: blob:` allows | vendored UI stays byte-identical |
-| `/__edit`, `/__slides` (create/rename/delete/page ops) | they rewrite a slide's **source**, and a sandboxed app cannot write the project root — `fs` is project *data* | refuse with the actual remedy: edit `src/slides/<id>/index.tsx` via an agent or the Code surface | the inspector and style panel can read but not write; a fake `200` would have been worse than the refusal |
+| `/__edit`, `/__slides` (create/rename/delete/page ops) | they rewrite a slide's **source**, and a sandboxed app cannot write the project root — `fs` is project *data* | hand the change to a self-run agent (`agent.spawn`, gated by `agent.dispatch`), which edits `src/slides/<id>/index.tsx`; the watcher rebuilds | the envelope widens to include `agent`; edits are asynchronous, so these answer **202**, not a 200 that would claim the file already changed |
 | `BrowserRouter` | `project://<id>/` has no server to answer a pushed path | `HashRouter` | one-line edit; URLs differ from upstream |
 | `import.meta.env.DEV` gating all authoring | esbuild ESM **with code splitting** → `import.meta` is per-chunk, unpatchable from the entry | mechanical rewrite to `__OSD_ENV__`, published by a first-imported module | 56 references across 21 files; re-vendoring upstream needs the codemod re-run |
 
@@ -130,15 +130,23 @@ app worth porting is the dev-mode one.
 - Read the consumers of every shimmed contract before writing the shim (issue
   5), and check for module-scope snapshots of async data (issue 6).
 
-## The one capability that would close the gap
+## The capability that closed the gap
 
-`agent.dispatch` has a SELF-RUN mode: an app may dispatch an agent run against
-its own project, and an agent *can* write project source. That is the sanctioned
-route for "New slide" and for the inspector's source edits — the app asks an
-agent to make the edit, the watcher rebuilds, the deck appears. It is not wired
-here because it widens the permission envelope from `fs` + `ui.notify` to
-include `agent`, which the guide calls rarely appropriate for a store app. That
-is a judgment call for the human validator, not a detail to slip in.
+`agent.spawn` with this project as its own target is a SELF-RUN (spec §10.22):
+gated by the `agent.dispatch` request alone — no privileged grant, no per-use
+prompt — and an agent *can* write project source. Approved by the human
+validator, so it is wired: "New slide", rename, delete, reorder, duplicate and
+the inspector's source edits all seed an agent, which edits the file and lets
+the watcher rebuild.
+
+Two things that cost a cycle each:
+
+- **`spawn` means a terminal.** Targeting the first-party `ispo` agent fails —
+  it runs in-process and has no terminal form ("ISPO runs inside ISPO. Open it
+  as a chat instead"). The target must be an installed CLI agent; the app picks
+  the first of claude / codex / opencode / cursor / pi that the catalog offers.
+- **These routes answer 202, not 200.** The file has not changed when the call
+  returns. A 200 would tell the UI the edit already landed.
 
 ## Still open
 

@@ -17,6 +17,13 @@ import {
 } from './store'
 import { invalidateSlide } from '../virtual/slides'
 import {
+  createSlideTask,
+  deleteSlideTask,
+  dispatchSourceTask,
+  editSlideTask,
+  renameSlideTask,
+} from './agent-edits'
+import {
   deleteAsset,
   isAssetScope,
   isSafeAssetName,
@@ -54,6 +61,19 @@ function designPath(slideId: string): string {
 
 function commentsPath(slideId: string): string {
   return `${SLIDES_DIR}/${slideId}/comments.json`
+}
+
+/** Hand a source edit to a self-run agent. 202, because the file has not
+ *  changed yet — it changes when the agent finishes and the watcher rebuilds. */
+async function dispatched(task: string, extra: Record<string, unknown> = {}): Promise<Response> {
+  try {
+    const { terminalId, agent } = await dispatchSourceTask(task)
+    return json(202, { ok: true, dispatched: true, terminalId, agent, ...extra })
+  } catch (err) {
+    return json(502, {
+      error: `could not hand this edit to an agent: ${(err as Error).message}`,
+    })
+  }
 }
 
 const routes: Array<[RegExp, Handler]> = [
@@ -137,34 +157,111 @@ const routes: Array<[RegExp, Handler]> = [
   // Source edits from the inspector and style panel, and slide create /
   // rename / delete / page operations.
   //
-  // All of these rewrite a slide's TSX. In this port a slide is *app source*
-  // compiled into the bundle (see src/virtual/slides.ts), and a sandboxed app
-  // cannot write its own source — `fs` is scoped to project data, not the
-  // project root. Writing the new source into storage would return a cheerful
-  // 200 and change nothing on screen, which is worse than refusing, so these
-  // say what actually has to happen instead.
+  // All of these rewrite a slide's TSX. A slide is *app source* compiled into
+  // the bundle (see src/virtual/slides.ts) and a sandboxed app cannot write the
+  // project root — `fs` is scoped to project data. So the app asks an agent
+  // instead: a self-run `agent.spawn` (gated by `agent.dispatch`) edits
+  // src/slides/<id>/index.tsx, the build watcher rebuilds, and the app reloads
+  // with the change.
+  //
+  // These return 202: the edit is accepted and under way, not yet applied. A
+  // 200 would tell the UI the file already changed, and it has not.
   [
     /^\/__edit(\/batch)?$/,
-    async () =>
-      json(501, {
-        error:
-          'this app cannot edit its own slide sources: a slide is compiled app source, and a ' +
-          'sandboxed app cannot write the project root. Edit src/slides/<id>/index.tsx through ' +
-          'the Code surface or an agent — the build watcher rebuilds and the app reloads.',
-      }),
+    async ({ body }) => {
+      const payload = (await body()) as { slideId?: unknown; source?: unknown }
+      const slideId = typeof payload.slideId === 'string' ? payload.slideId : ''
+      if (!SLIDE_ID_RE.test(slideId)) return json(400, { error: 'invalid slideId' })
+      const description =
+        typeof payload.source === 'string'
+          ? `Replace the file's contents with exactly this source:\n\n\`\`\`tsx\n${payload.source}\n\`\`\``
+          : `Apply this edit payload from the app's inspector. Each entry identifies a location in the file and the text it should now have:\n\n\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\``
+      return dispatched(editSlideTask(slideId, description))
+    },
   ],
 
   [
     /^\/__slides(\/.*)?$/,
-    async ({ method, path }) => {
+    async ({ method, path, body }) => {
       const rest = path.replace(/^\/__slides\/?/, '')
       if (method === 'GET' && !rest) return json(200, { slides: await listSlideIds() })
-      return json(501, {
-        error:
-          'creating, renaming, deleting or reordering a slide rewrites app source, which this ' +
-          'app cannot do from inside the sandbox. Ask an agent to edit src/slides/, then re-run ' +
-          'vendor/build-slide-manifest.mjs if a slide was added or removed.',
-      })
+
+      if (method === 'POST' && !rest) {
+        const next = (await body()) as { id?: unknown; source?: unknown }
+        const id = typeof next.id === 'string' ? next.id : ''
+        if (!SLIDE_ID_RE.test(id)) return json(400, { error: 'invalid slideId' })
+        return dispatched(
+          createSlideTask(id, typeof next.source === 'string' ? next.source : undefined),
+          { slideId: id },
+        )
+      }
+
+      const segments = rest.split('/').filter(Boolean)
+      const slideId = segments[0] ?? ''
+      if (!SLIDE_ID_RE.test(slideId)) return json(400, { error: 'invalid slideId' })
+
+      if (method === 'DELETE' && segments.length === 1) {
+        return dispatched(deleteSlideTask(slideId), { slideId })
+      }
+
+      if (method === 'PATCH' && segments.length === 1) {
+        const next = (await body()) as { id?: unknown; name?: unknown }
+        const to = typeof next.id === 'string' ? next.id : typeof next.name === 'string' ? next.name : ''
+        if (!SLIDE_ID_RE.test(to)) return json(400, { error: 'invalid slideId' })
+        return dispatched(renameSlideTask(slideId, to), { slideId: to })
+      }
+
+      if (segments[1] === 'reorder' && method === 'PUT') {
+        const next = (await body()) as { order?: unknown }
+        const order = Array.isArray(next.order) ? next.order : null
+        if (!order) return json(400, { error: 'invalid order' })
+        return dispatched(
+          editSlideTask(
+            slideId,
+            `Reorder the pages in the default-exported array to this order, where each number is the page's current zero-based index: [${order.join(', ')}].`,
+          ),
+          { slideId },
+        )
+      }
+
+      if (segments[1] === 'pages') {
+        const index = Number(segments[2])
+        if (!Number.isInteger(index) || index < 0) return json(400, { error: 'invalid page index' })
+        const human = index + 1
+        if (method === 'DELETE' && segments.length === 3) {
+          return dispatched(
+            editSlideTask(
+              slideId,
+              `Delete page ${human} (zero-based index ${index}): remove its component from the default-exported array, and remove the component itself if nothing else references it.`,
+            ),
+            { slideId },
+          )
+        }
+        if (method === 'POST' && segments[3] === 'duplicate') {
+          return dispatched(
+            editSlideTask(
+              slideId,
+              `Duplicate page ${human} (zero-based index ${index}): copy its component under a new unique name and insert it immediately after the original in the default-exported array.`,
+            ),
+            { slideId },
+          )
+        }
+      }
+
+      if (segments[1] === 'duplicate' && method === 'POST') {
+        return dispatched(
+          createSlideTask(
+            `${slideId}-copy`,
+            undefined,
+          ).replace(
+            'Author a small starter deck with two pages: a title page and one content page. Keep it plain and readable.',
+            `Copy the entire contents of src/slides/${slideId}/index.tsx into it, adjusting only \`meta\` if it names the deck.`,
+          ),
+          { slideId: `${slideId}-copy` },
+        )
+      }
+
+      return json(404, { error: 'unknown slides route' })
     },
   ],
 

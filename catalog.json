@@ -35,7 +35,7 @@
       "subpath": "open-slide",
       "category": "Productivity",
       "icon": "icon.png",
-      "capabilitySummary": "Requests project file access and notifications."
+      "capabilitySummary": "Requests project file access, notifications, and the ability to run an agent in this project to edit its own slide sources."
     }
   ]
 }
