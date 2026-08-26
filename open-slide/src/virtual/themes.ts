@@ -5,7 +5,6 @@
 
 import type { DesignSystem } from '@/lib/design'
 import type { Page } from '@/lib/sdk'
-import { compileSlideModule } from '../runtime/slide-module'
 import { listDir, readText, THEMES_DIR } from '../runtime/store'
 
 export type ThemeMeta = {
@@ -58,13 +57,10 @@ export async function refreshThemes(): Promise<ThemeMeta[]> {
   return themes
 }
 
-export async function loadThemeDemo(id: string): Promise<{ default: Page[]; design?: DesignSystem }> {
-  const path = `${THEMES_DIR}/${id}.demo.tsx`
-  const source = await readText(path)
-  if (source === null) throw new Error(`Theme demo not found: ${id}`)
-  const compiled = compileSlideModule(source, path)
-  if (!Array.isArray(compiled.default)) {
-    throw new Error(`Theme demo ${id} must default-export an array of page components`)
-  }
-  return compiled as unknown as { default: Page[]; design?: DesignSystem }
+export async function loadThemeDemo(_id: string): Promise<{ default: Page[]; design?: DesignSystem }> {
+  // A theme demo is a `.tsx` deck, and this host cannot compile one at runtime
+  // (see src/virtual/slides.ts). Demos would have to be compiled in like
+  // slides; until they are, the gallery shows the theme without its demo
+  // rather than pretending to load one.
+  throw new Error('theme demos are not compiled into this build')
 }

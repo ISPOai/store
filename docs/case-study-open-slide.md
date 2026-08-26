@@ -31,7 +31,7 @@ have to.
 
 | Upstream mechanism | Host constraint | What we did | Trade-off |
 | --- | --- | --- | --- |
-| `virtual:open-slide/slides` — Vite globs slides, emits `import()` per slide | one fixed entry, esbuild, no per-content compile step | read source from `fs`, transform TSX with Sucrase, evaluate with `new Function` | slides compile per session, not per build; a bad slide is now a *runtime* error, so it must be surfaced (see Issue 7) |
+| `virtual:open-slide/slides` — Vite globs slides, emits `import()` per slide | no per-content compile step, **and CSP forbids evaluating code at all** | slides are app source; a generated static import map lets the host's esbuild compile them at build time | adding a slide is a source change plus a rebuild, not a runtime action — upstream's instant author-and-render loop cannot exist here |
 | `virtual:open-slide/{config,folders,themes}` | no build-time codegen | ordinary modules, same contracts, mapped by `tsconfig` `paths` | none — **no vendored import statement changed** |
 | `/__edit`, `/__slides`, `/__folders`, `/__notes`, `/__design`, `/__assets`, `/__comments` | no server in a sealed iframe | patch `fetch` before mount; answer in-process from project storage, same wire shapes | vendored UI stays byte-identical; gaps must return honest `501`s, never a fake `200` |
 | `BrowserRouter` | `project://<id>/` has no server to answer a pushed path | `HashRouter` | one-line edit; URLs differ from upstream |
@@ -76,14 +76,39 @@ app worth porting is the dev-mode one.
 7. **A runtime-compiled slide needs a visible failure path.** Upstream's
    compile errors surface in the dev server; here a throw inside `loadSlide`
    leaves a thumbnail spinning. Errors are logged and rethrown.
-8. **Occluded window = no rendering steps.** With the host window not
+8. **A store app can never evaluate code at runtime.** The seam above was
+   first built as runtime compilation — Sucrase in the browser, then
+   `new Function`. It died on CSP: the project iframe is served
+   `script-src 'self' 'wasm-unsafe-eval'`, and per spec §4.5 the sole
+   `'unsafe-eval'` exception is host-authored, for the bundled Themes editor,
+   in unpackaged dev builds; **every other project is ineligible**. Importing a
+   `blob:`/`data:` module is refused by the same directive.
+   **The probe that said otherwise was wrong**: `new Function` was tested
+   through CDP `Runtime.evaluate`, which is exempt from page CSP. Measuring a
+   restriction with an instrument that bypasses it proves nothing — test from
+   inside the app's own code.
+   This is also why the re-implementation (#7) stores decks as JSON documents.
+   That was not a shortcut; it is the only shape this platform permits for
+   decks a user can author and see render immediately.
+9. **Occluded window = no rendering steps.** With the host window not
    frontmost, `visibilityState` stays `hidden` and no `ResizeObserver`,
    `resize`, `rAF` or `IntersectionObserver` callback fires — lazy thumbnails
-   never start and container-measuring code reads stale. Raise the window
-   before concluding anything about layout or lazy loading.
+   never start and container-measuring code reads stale. Hit twice: thumbnails
+   stuck on `LOADING`, then the player stuck on `Loading assets…` because
+   upstream's preload layer marks a deck warmed from a `requestAnimationFrame`
+   callback. Raise the window before concluding anything about layout or lazy
+   loading.
+10. **The host runs a managed `pnpm install` after all** — despite the build
+   error's claim that it "does not install arbitrary npm packages". A stale
+   lockfile fails the whole install (`managed-pnpm-install ... code 1`). With
+   every dependency vendored the app needs no manifest at its root at all, so
+   the tooling manifest moved to `vendor/` and the install step disappeared.
 
 ## What worked best
 
+- **Compiling slides at build time.** It costs the instant authoring loop, but
+  it is the only lawful way to keep "a slide is a React module", and it makes
+  slides real compiled code with real JS semantics — no interpreter, no eval.
 - **Re-serving the API instead of rewriting its call sites.** Patching `fetch`
   kept ~20k lines byte-identical. Rewriting call sites would have been days of
   edits and permanent drift.
@@ -96,8 +121,9 @@ app worth porting is the dev-mode one.
 
 ## What we would do differently
 
-- Check the palette *first*. The dependency question decides whether a port is
-  hours or days, and it is answerable in one command.
+- Check the platform's hard limits *first* — CSP and the dependency palette
+  both decide the architecture, and both are answerable in one command. Two
+  days of design rested on an eval probe that was never valid.
 - Read the consumers of every shimmed contract before writing the shim (issue
   5), and check for module-scope snapshots of async data (issue 6).
 
@@ -107,4 +133,6 @@ Page reorder/delete/duplicate (needs `editing/slide-ops` moved off `node:fs`),
 asset writes, splice edits — all return `501` rather than failing silently.
 Presenter *window*, HTML/PDF/PPTX export, icon search and HMR are argued as
 dropped in `open-slide/UPSTREAM.md`. React 19 against upstream's React 18 is
-compile-clean but not yet exercised across the whole UI.
+compile-clean but not yet exercised across the whole UI. In-app slide
+creation cannot work without a rebuild, so `create-slide` writes source that
+takes effect on the next build.

@@ -56,7 +56,6 @@ const PACKAGES = [
   'react-image-crop',
   'html-to-image',
   'fflate',
-  'sucrase',
   '@babel/parser',
   '@babel/types',
 ]

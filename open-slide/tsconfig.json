@@ -86,9 +86,6 @@
       "use-sync-external-store/shim": [
         "./vendor/shims/use-sync-external-store-shim.js"
       ],
-      "sucrase": [
-        "./vendor/dist/sucrase.js"
-      ],
       "@babel/parser": [
         "./vendor/dist/babel__parser.js"
       ],
@@ -145,10 +142,14 @@
       ],
       "use-sync-external-store/shim/with-selector": [
         "./vendor/shims/use-sync-external-store-with-selector.js"
+      ],
+      "@open-slide/core": [
+        "./src/core/index.ts"
       ]
     }
   },
   "include": [
-    "src"
+    "src",
+    "slides"
   ]
 }

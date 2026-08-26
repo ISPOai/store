@@ -36,14 +36,17 @@ contracts, resolved through `tsconfig.json` `paths` so no vendored import
 statement changes:
 
 - `slides` — upstream globs `slides/*/index.tsx` and emits a dynamic
-  `import()` per slide. This host builds one fixed entry with esbuild and has
-  no per-content compile step, so a slide is compiled **at runtime**: its
-  source is read from project storage, transformed TSX→JS with Sucrase, and
-  evaluated with `new Function` (`src/runtime/slide-module.ts`). `new Function`
-  works inside the sandboxed project iframe; dynamic `import()` of a `blob:` or
-  `data:` URL does not, which is why the compiled body is evaluated rather than
-  imported. A slide gets the app's own React instance injected, so there is
-  never a second copy.
+  `import()` per slide, which Vite compiles on demand. Here slides are ordinary
+  app source under `slides/`, and a generated static import map
+  (`src/generated/slide-manifest.ts`, from `vendor/build-slide-manifest.mjs`)
+  lets the **host's esbuild compile them into the bundle at build time**.
+  It has to be static: a store app cannot turn a string into code. The project
+  iframe is served `script-src 'self' 'wasm-unsafe-eval'`, and spec §4.5 grants
+  the only `'unsafe-eval'` exception to the bundled Themes editor in unpackaged
+  dev builds — every other project is ineligible. `blob:`/`data:` module
+  imports are refused by the same directive. The consequence is real and worth
+  stating plainly: **adding or editing a slide is a source change plus a
+  rebuild, not something the app can do to itself at runtime.**
 - `config` — static; `base`/`port` describe a dev server that does not exist.
 - `folders`, `themes` — read from project storage.
 
@@ -86,5 +89,6 @@ disk matches an upstream workspace: `slides/<id>/index.tsx`,
 
 ## Status
 
-Compiles clean against the host's esbuild options. **Not yet installed or
-validated on a live host** — see the PR for the remaining work.
+Installs and runs on a live host: the workspace, sidebar, folders, search and
+deck grid are upstream's, and four upstream demo decks compile into the bundle
+and render. **Phase 5 validation has not been run** — see the PR.
