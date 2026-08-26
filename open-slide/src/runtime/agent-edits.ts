@@ -14,6 +14,7 @@
 
 import { agent } from '@ispo/sdk'
 import type { AgentId } from '@ispo/sdk'
+import { writeText } from './store'
 
 /** The app is served from `project://<projectId>/`, so its own id is the
  *  origin's hostname. There is no SDK call for self-identity. */
@@ -55,13 +56,36 @@ async function pickAgent(): Promise<AgentId> {
 
 export type DispatchResult = { terminalId: string; agent: AgentId }
 
-/** Spawn a self-run agent with `task` as its seed prompt, submitted unattended. */
+let taskSeq = 0
+
+/**
+ * Hand `task` to a self-run agent.
+ *
+ * The task is written to a file and the seed prompt is ONE LINE pointing at it.
+ * That is not tidiness: the host stages a seed prompt by typing it into the
+ * agent's terminal, and a multi-line prompt is submitted at the first newline —
+ * the agent then receives only the trailing fragment. The first version of this
+ * sent the whole instruction inline and the agent replied "Your message came
+ * through truncated — it starts mid-sentence and the actual request is
+ * missing", so every dispatched edit was silently lost.
+ *
+ * The agent runs with the project root as its working directory, and project
+ * storage is a sibling of it, so `../.state/<projectId>/…` reaches the file
+ * without the app needing to know an absolute path.
+ */
 export async function dispatchSourceTask(task: string): Promise<DispatchResult> {
   const chosen = await pickAgent()
+  const projectId = selfProjectId()
+
+  taskSeq += 1
+  const name = `task-${Date.now().toString(36)}-${taskSeq}.md`
+  await writeText(`agent-tasks/${name}`, task)
+  const taskPath = `../.state/${projectId}/agent-tasks/${name}`
+
   const result = await agent.spawn({
-    projectId: selfProjectId(),
+    projectId,
     agent: chosen,
-    seedPrompt: task,
+    seedPrompt: `Read ${taskPath} and carry out exactly what it says, then stop. Do not ask for confirmation.`,
     autoSubmit: true,
     // A spawn boots a harness; the default 10s RPC budget is not enough and a
     // timeout would orphan the agent mid-boot.
