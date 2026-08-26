@@ -11,6 +11,38 @@ implementing agent performs against a running host**, followed by a **handoff
 report for the human validator**, who has the final word. An app is not done
 when it compiles; it is done when the human validator has watched it work.
 
+## The main goal
+
+Shipping the app is the visible output, but it is not the main goal. **Every
+implementation is a probe of the host: during implementation and verification
+we must figure out what bugs, gaps, and sharp edges the host application has.**
+A real app exercises paths no synthetic test does — install, build gates,
+permissions, storage, lifecycle, rendering — and each app stresses them from a
+different angle. Treat every friction point as a potential host finding, not
+just an obstacle to route around.
+
+Concretely, while you work:
+
+- When something behaves unexpectedly, decide **which side the defect is on** —
+  the app, the guide, or the host — before working around it. A workaround
+  without a diagnosis loses the finding.
+- Record every suspected host bug in a **Host findings** section of the PR
+  report: what you did, what happened, what you expected, and the smallest
+  repro you know. Findings shipped so far by this route include: an error
+  whose copy says "migration warning" while behaving as a hard error; a
+  vendored tool reporting the wrong version of itself; an interactive request
+  that expires unattended and strands an error toast; a failed install leaving
+  an unregistered folder that blocks the retry; hidden frames silently
+  dropping layout callbacks. None of these were visible until an app hit them.
+- Do not silently absorb host problems into app code. If the app must carry a
+  defensive workaround (a retry, a re-measure), comment it as a workaround and
+  name the host behaviour it compensates for, so it can be removed when the
+  host improves.
+
+The second half of the goal is that **the pipeline itself must learn** — see
+the retrospective phase at the end. An implementation that ships an app but
+teaches nothing about the host or the guide is only half done.
+
 ---
 
 ## Phase 0 — Review the candidate app
@@ -307,13 +339,43 @@ PR must let them do that **without reading the code first**. Include:
    the access review → first-run state → the core loop, step by step, with
    what should be seen at each point → each command → present/special modes →
    restart. Ten minutes, no source diving.
-6. **The side-by-side comparison:** where the reference build is running
+6. **Host findings** (may be empty, but say so explicitly): every suspected
+   host bug or sharp edge met during implementation and validation, each with
+   observed vs expected behaviour and the smallest repro. Mark any app-side
+   workaround that compensates for a host behaviour, so the workaround can be
+   retired when the host is fixed.
+7. **The side-by-side comparison:** where the reference build is running
    (`.reference/<app>`, its URL, how to relaunch it), the parity table from
    check 11, and which rows deserve the human's eyes first — typically the
    `adapted` rows, since `same` should look identical and `dropped` is already
    argued in the adaptation plan. The human validator compares the two apps
    directly; the port does not have to be pixel-identical, but every
    difference must be one the table already names.
+
+## Phase 7 — Retrospective: feed what you learned back into this guide
+
+After the app is finished — validation done, report written — stop and ask,
+in writing, before moving to the next app:
+
+1. **What did this implementation teach that the guide does not already say?**
+   A gate that failed for a new reason, a permission subtlety, a validation
+   check that should have existed, a trap that cost an hour.
+2. **What did it reveal about the host?** Anything in the Host findings
+   section that changes how the next app should be built belongs in the guide
+   too (as a rule or a trap), not only in the PR report.
+3. **Did the guide say anything wrong?** A rule that did not hold, an
+   impossibility that turned out to be possible, a step in the wrong order.
+   Wrong guidance is worse than missing guidance — fix it first.
+
+If any answer is non-empty, **update this guide in the same PR** as the app
+(or a small follow-up PR if the change is large), so the next implementation —
+possibly a different agent in the same loop — starts from everything this one
+learned. The guide's own history is the intended proof of this loop: the
+build-gate list, the permission traps, the hidden-frame rule, and the
+reference-build comparison each came out of one implementation's retrospective.
+
+In bulk runs, run the retrospective per app, not once at the end of the batch:
+later apps in the loop should benefit from earlier apps' lessons.
 
 For bulk runs (several apps in one loop): one branch and one PR per app, each
 with its own full report. A batch summary may link them, but validation is per
@@ -339,5 +401,6 @@ Phase 4  □ raster icon ≤128KiB, magic bytes match  □ catalog entry, subpat
 Phase 5  □ all 11 checks pass on a live host, from a scratch install
          □ reference build of upstream running from .reference/ at the recorded SHA
 Phase 6  □ PR report: plan + envelope + transcript + warts + hand-validation script
-         □ parity table + where the reference build runs
+         □ host findings (or an explicit "none")  □ parity table + reference build location
+Phase 7  □ retrospective written  □ guide updated with anything it taught
 ```

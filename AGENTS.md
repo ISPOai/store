@@ -3,6 +3,13 @@
 This is the curated app store for ISPO: one top-level folder per app plus
 `catalog.json`. Read `README.md` for the catalog schema and layout.
 
+**The main goal:** every implementation is a probe of the host — during
+implementation and verification we must figure out what bugs the host
+application has, record them as Host findings in the PR, and afterwards ask
+what the implementation taught and fold it back into the guide (Phase 7).
+Shipping the app is the output; the findings and the improved guide are the
+point.
+
 **Adding or porting an app? Follow `docs/adding-an-app.md` end to end.** It is
 the required pipeline — upstream review, the permission-envelope decision,
 the build gates that will otherwise fail your install, and a mandatory
