@@ -3,10 +3,10 @@
 // Static imports so the host's esbuild compiles every slide into the bundle.
 // See that script for why runtime compilation is impossible here.
 import type { SlideModule } from '@/lib/sdk'
-import * as slide0 from '../../slides/build-on-reveal/index'
-import * as slide1 from '../../slides/harness-engineering/index'
-import * as slide2 from '../../slides/llm-fundamentals/index'
-import * as slide3 from '../../slides/open-slide-anatomy/index'
+import * as slide0 from '../slides/build-on-reveal/index'
+import * as slide1 from '../slides/harness-engineering/index'
+import * as slide2 from '../slides/llm-fundamentals/index'
+import * as slide3 from '../slides/open-slide-anatomy/index'
 
 export const SLIDE_MODULES: Record<string, SlideModule> = {
   "build-on-reveal": slide0 as unknown as SlideModule,

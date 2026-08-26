@@ -31,7 +31,7 @@ have to.
 
 | Upstream mechanism | Host constraint | What we did | Trade-off |
 | --- | --- | --- | --- |
-| `virtual:open-slide/slides` — Vite globs slides, emits `import()` per slide | no per-content compile step, **and CSP forbids evaluating code at all** | slides are app source; a generated static import map lets the host's esbuild compile them at build time | adding a slide is a source change plus a rebuild, not a runtime action — upstream's instant author-and-render loop cannot exist here |
+| `virtual:open-slide/slides` — Vite globs slides, emits `import()` per slide | no per-content compile step, **and CSP forbids evaluating code at all** | slides are app source under `src/`; a generated static import map lets the host's esbuild compile them at build time | editing a slide stays live — the host's build watcher rebuilds and the app reloads, standing in for Vite HMR. What is lost is the app writing its *own* source: a new deck comes from an agent or the Code surface, not from a button in the app |
 | `virtual:open-slide/{config,folders,themes}` | no build-time codegen | ordinary modules, same contracts, mapped by `tsconfig` `paths` | none — **no vendored import statement changed** |
 | `/__edit`, `/__slides`, `/__folders`, `/__notes`, `/__design`, `/__assets`, `/__comments` | no server in a sealed iframe | patch `fetch` before mount; answer in-process from project storage, same wire shapes | vendored UI stays byte-identical; gaps must return honest `501`s, never a fake `200` |
 | `BrowserRouter` | `project://<id>/` has no server to answer a pushed path | `HashRouter` | one-line edit; URLs differ from upstream |
@@ -106,9 +106,11 @@ app worth porting is the dev-mode one.
 
 ## What worked best
 
-- **Compiling slides at build time.** It costs the instant authoring loop, but
-  it is the only lawful way to keep "a slide is a React module", and it makes
-  slides real compiled code with real JS semantics — no interpreter, no eval.
+- **Compiling slides at build time, with slides under `src/`.** The only lawful
+  way to keep "a slide is a React module", and it gives real compiled code with
+  real JS semantics — no interpreter, no eval. Putting them inside the build
+  watcher's scope (the entry's directory) is what keeps the edit loop live;
+  outside it, an edit is invisible until the next install.
 - **Re-serving the API instead of rewriting its call sites.** Patching `fetch`
   kept ~20k lines byte-identical. Rewriting call sites would have been days of
   edits and permanent drift.
@@ -133,6 +135,5 @@ Page reorder/delete/duplicate (needs `editing/slide-ops` moved off `node:fs`),
 asset writes, splice edits — all return `501` rather than failing silently.
 Presenter *window*, HTML/PDF/PPTX export, icon search and HMR are argued as
 dropped in `open-slide/UPSTREAM.md`. React 19 against upstream's React 18 is
-compile-clean but not yet exercised across the whole UI. In-app slide
-creation cannot work without a rebuild, so `create-slide` writes source that
-takes effect on the next build.
+compile-clean but not yet exercised across the whole UI. In-app *creation* of a new deck still has no runtime path — `create-slide`
+writes storage, not app source; authoring a new deck belongs to an agent.

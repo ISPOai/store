@@ -7,13 +7,17 @@
 // are ordinary app source and the HOST's esbuild compiles them at build time.
 // This manifest is the static import map that makes that possible.
 //
+// Slides live under src/ deliberately: the host's build watcher watches the
+// entry's directory, so a slide edited there triggers a rebuild and the app
+// reloads with it. Outside src/ the edit is invisible until the next install.
+//
 // Run after adding or removing a slide:  node vendor/build-slide-manifest.mjs
 import { readdir, stat, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const appRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
-const slidesDir = path.join(appRoot, 'slides')
+const slidesDir = path.join(appRoot, 'src/slides')
 
 const entries = await readdir(slidesDir).catch(() => [])
 const ids = []
@@ -28,7 +32,7 @@ for (const entry of entries.sort()) {
 }
 
 const imports = ids
-  .map((id, i) => `import * as slide${i} from '../../slides/${id}/index'`)
+  .map((id, i) => `import * as slide${i} from '../slides/${id}/index'`)
   .join('\n')
 const rows = ids.map((id, i) => `  ${JSON.stringify(id)}: slide${i} as unknown as SlideModule,`).join('\n')
 

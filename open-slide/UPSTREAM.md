@@ -45,8 +45,13 @@ statement changes:
   the only `'unsafe-eval'` exception to the bundled Themes editor in unpackaged
   dev builds — every other project is ineligible. `blob:`/`data:` module
   imports are refused by the same directive. The consequence is real and worth
-  stating plainly: **adding or editing a slide is a source change plus a
-  rebuild, not something the app can do to itself at runtime.**
+  consequence is narrower than it first looks: **editing a slide is still
+  live.** Slides live under `src/`, inside the host build watcher's scope, so
+  saving one rebuilds the project and the app reloads with it — the host's
+  watcher standing in for Vite's HMR. What is gone is the app writing its *own*
+  source: a new deck is authored by an agent or in the Code surface (and needs
+  `vendor/build-slide-manifest.mjs` re-run to add its import), not by the app
+  at runtime.
 - `config` — static; `base`/`port` describe a dev server that does not exist.
 - `folders`, `themes` — read from project storage.
 
