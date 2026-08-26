@@ -69,6 +69,11 @@ export async function listSlideIds(): Promise<string[]> {
     .sort()
 }
 
+/** Saved design overrides live beside the slide's other project data. */
+export function designPath(id: string): string {
+  return `${SLIDES_DIR}/${id}/design.json`
+}
+
 export function slideSourcePath(id: string): string {
   return `${SLIDES_DIR}/${id}/index.tsx`
 }

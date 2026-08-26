@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 /* Port seam: upstream pulls `tw-animate-css`, `shadcn/tailwind.css` and the
    Geist webfont from node_modules. The host resolves CSS imports against its
    own palette and installs no app packages, so the animation utilities and

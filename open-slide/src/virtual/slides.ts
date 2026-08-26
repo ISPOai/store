@@ -18,7 +18,7 @@
 
 import type { SlideModule } from '@/lib/sdk'
 import { SLIDE_IDS, SLIDE_MODULES } from '../generated/slide-manifest'
-import { readJson, SLIDES_DIR } from '../runtime/store'
+import { designPath, readJson, SLIDES_DIR } from '../runtime/store'
 
 type SlideIndex = {
   ids: string[]
@@ -57,5 +57,14 @@ export async function loadSlide(id: string): Promise<SlideModule> {
   if (!Array.isArray(mod.default)) {
     throw new Error(`Slide ${id} must default-export an array of page components`)
   }
-  return mod
+
+  // Upstream's Design panel saves by rewriting the slide's `design` export, so
+  // the next render simply picks it up. Here the module is compiled into the
+  // bundle and cannot be rewritten at runtime, so a saved design lives in
+  // project storage — and it has to be layered on here, at the one place every
+  // render path gets its module from. Without this the panel appears to work,
+  // writes the file, and then loses the change the moment the deck remounts,
+  // because all eight render sites read `slide.design` straight off the module.
+  const saved = await readJson<{ design?: SlideModule['design'] }>(designPath(id), {})
+  return saved.design ? { ...mod, design: saved.design } : mod
 }

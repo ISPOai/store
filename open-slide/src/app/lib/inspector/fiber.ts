@@ -56,6 +56,33 @@ export function findSlideSource(
     }
   }
 
+  // Port seam: this host stamps every intrinsic element with
+  // `data-ispo-source="<relPath>:<line>:<col>"` at build time
+  // (apps/desktop/src/main/projects/jsx-source-plugin.ts), which is the exact
+  // equivalent of upstream's `data-slide-loc`. It is also the ONLY path that
+  // works here: upstream's fallback reads `_debugSource`/`__source` off the
+  // React fiber, and React 19 carries neither — the app builds with the
+  // production JSX transform, so without this the inspector can never identify
+  // a clicked element and nothing on the slide is selectable.
+  //
+  // Only elements belonging to THIS slide's module are eligible, so clicking
+  // app chrome does not resolve to a source location. The attribute is stamped
+  // on host elements only, which is what `hostOnly` asks for anyway.
+  const ispoNeedle = `/slides/${slideId}/index.tsx`;
+  for (let node: HTMLElement | null = el; node; node = node.parentElement) {
+    const raw = node.dataset.ispoSource;
+    if (!raw) continue;
+    const at = raw.lastIndexOf(':');
+    const at2 = raw.lastIndexOf(':', at - 1);
+    if (at <= 0 || at2 <= 0) continue;
+    const file = normalizeDebugFileName(raw.slice(0, at2));
+    if (!file.endsWith(ispoNeedle)) continue;
+    const line = Number(raw.slice(at2 + 1, at));
+    const column = Number(raw.slice(at + 1));
+    if (!Number.isFinite(line) || !Number.isFinite(column)) continue;
+    return { line, column, anchor: node };
+  }
+
   // Fallback for JSX rendered from imported component files (which the
   // loc-tags plugin doesn't transform).
   const needle = `/slides/${slideId}/index.tsx`;

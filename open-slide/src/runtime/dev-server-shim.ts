@@ -7,6 +7,7 @@
 // layout an upstream workspace uses on disk.
 
 import {
+  designPath,
   FOLDERS_PATH,
   listDir,
   listSlideIds,
@@ -15,7 +16,8 @@ import {
   SLIDES_DIR,
   writeJson,
 } from './store'
-import { invalidateSlide } from '../virtual/slides'
+import { invalidateSlide, loadSlide } from '../virtual/slides'
+import { defaultDesign } from '@/lib/design'
 import {
   createSlideTask,
   deleteSlideTask,
@@ -55,9 +57,6 @@ function notesPath(slideId: string): string {
   return `${SLIDES_DIR}/${slideId}/notes.json`
 }
 
-function designPath(slideId: string): string {
-  return `${SLIDES_DIR}/${slideId}/design.json`
-}
 
 function commentsPath(slideId: string): string {
   return `${SLIDES_DIR}/${slideId}/comments.json`
@@ -114,16 +113,50 @@ const routes: Array<[RegExp, Handler]> = [
     },
   ],
 
-  // The design system a slide was last saved with.
+  // The design system a slide is rendered with.
+  //
+  // Upstream reads the `design` export out of the slide's source. Here the
+  // slide is a compiled module, so its export is read from the module itself
+  // and any saved override is layered on top. Shape matters: the panel gates on
+  // `loaded && draft != null` and returns null otherwise, so answering `{}`
+  // (as this route first did) makes the Design panel silently never open.
   [
     /^\/__design$/,
     async ({ method, query, body }) => {
       const slideId = query.get('slideId') ?? ''
       if (!SLIDE_ID_RE.test(slideId)) return json(400, { error: 'invalid slideId' })
-      if (method === 'GET') return json(200, await readJson(designPath(slideId), {}))
-      await writeJson(designPath(slideId), await body())
+
+      const moduleDesign = await loadSlide(slideId)
+        .then((mod) => mod.design ?? null)
+        .catch(() => null)
+      const stored = await readJson<{ design?: unknown }>(designPath(slideId), {})
+      const savedDesign = (stored.design ?? null) as Record<string, unknown> | null
+
+      if (method === 'GET') {
+        return json(200, {
+          design: savedDesign ?? moduleDesign ?? defaultDesign,
+          exists: Boolean(savedDesign ?? moduleDesign),
+          warning: null,
+        })
+      }
+
+      const payload = (await body()) as { patch?: Record<string, unknown> }
+      const patch = payload.patch && typeof payload.patch === 'object' ? payload.patch : {}
+      const base = (savedDesign ?? moduleDesign ?? defaultDesign) as Record<string, unknown>
+      // A shallow merge is not enough: DesignSystem nests palette/fonts/typeScale,
+      // and a patch that touches one colour must not drop the others.
+      const merged: Record<string, unknown> = { ...base }
+      for (const [key, value] of Object.entries(patch)) {
+        const prev = base[key]
+        merged[key] =
+          value && typeof value === 'object' && !Array.isArray(value) &&
+          prev && typeof prev === 'object' && !Array.isArray(prev)
+            ? { ...(prev as Record<string, unknown>), ...(value as Record<string, unknown>) }
+            : value
+      }
+      await writeJson(designPath(slideId), { design: merged })
       invalidateSlide(slideId)
-      return json(200, { ok: true })
+      return json(200, { ok: true, design: merged, created: savedDesign === null })
     },
   ],
 
@@ -168,15 +201,65 @@ const routes: Array<[RegExp, Handler]> = [
   // 200 would tell the UI the file already changed, and it has not.
   [
     /^\/__edit(\/batch)?$/,
-    async ({ body }) => {
-      const payload = (await body()) as { slideId?: unknown; source?: unknown }
+    async ({ path, body }) => {
+      const payload = (await body()) as {
+        slideId?: unknown
+        line?: unknown
+        column?: unknown
+        ops?: unknown
+        edits?: unknown[]
+      }
       const slideId = typeof payload.slideId === 'string' ? payload.slideId : ''
       if (!SLIDE_ID_RE.test(slideId)) return json(400, { error: 'invalid slideId' })
+
+      const isBatch = path.endsWith('/batch')
+      const edits = isBatch && Array.isArray(payload.edits) ? payload.edits : [payload]
+
       const description =
-        typeof payload.source === 'string'
-          ? `Replace the file's contents with exactly this source:\n\n\`\`\`tsx\n${payload.source}\n\`\`\``
-          : `Apply this edit payload from the app's inspector. Each entry identifies a location in the file and the text it should now have:\n\n\`\`\`json\n${JSON.stringify(payload, null, 2)}\n\`\`\``
-      return dispatched(editSlideTask(slideId, description))
+        `Apply these edits from the app's visual inspector. Each entry gives a location in the ` +
+        `file (1-based \`line\`, 0-based \`column\`) and the operations to apply there — ` +
+        `\`text\` ops replace the element's text content, style ops set a JSX style property:\n\n` +
+        `\`\`\`json\n${JSON.stringify(edits, null, 2)}\n\`\`\``
+
+      let dispatch: { terminalId: string; agent: string } | null = null
+      let failure = ''
+      try {
+        dispatch = await dispatchSourceTask(editSlideTask(slideId, description))
+      } catch (err) {
+        failure = (err as Error).message
+      }
+
+      // `results` is per-edit and the caller clears only the entries it reports
+      // as landed — omitting it (as this route first did) leaves every edit
+      // buffered forever with no error, which is exactly what "Save does
+      // nothing and the change stays unsaved" looks like.
+      //
+      // Nothing has landed yet either way: the agent rewrites the source and
+      // the build watcher reloads the app, which takes seconds. So each edit is
+      // reported as not-applied with a reason the panel can show, rather than a
+      // success the file does not yet justify.
+      const reason = dispatch
+        ? `handed to the ${dispatch.agent} agent (${dispatch.terminalId}); a slide is compiled app ` +
+          `source here, so the edit lands when the agent has rewritten ` +
+          `src/slides/${slideId}/index.tsx and the project rebuilds`
+        : `could not hand this edit to an agent: ${failure}`
+
+      const status = dispatch ? 202 : 502
+      if (isBatch) {
+        return json(status, {
+          ok: Boolean(dispatch),
+          dispatched: Boolean(dispatch),
+          ...(dispatch ?? {}),
+          results: edits.map(() => ({ ok: false, error: reason })),
+        })
+      }
+      return json(status, {
+        ok: Boolean(dispatch),
+        dispatched: Boolean(dispatch),
+        ...(dispatch ?? {}),
+        changed: false,
+        error: reason,
+      })
     },
   ],
 
