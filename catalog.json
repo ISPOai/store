@@ -27,6 +27,15 @@
       "category": "Design",
       "icon": "icon.webp",
       "capabilitySummary": "Requests file picker access and notifications."
+    },
+    {
+      "id": "open-slide",
+      "name": "Open Slide",
+      "description": "Author slide decks as React components on a fixed 1920x1080 canvas, and present them.",
+      "subpath": "open-slide",
+      "category": "Productivity",
+      "icon": "icon.png",
+      "capabilitySummary": "Requests project file access and notifications."
     }
   ]
 }

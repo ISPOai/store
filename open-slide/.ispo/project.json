@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "name": "Open Slide",
+  "version": "0.1.0",
+  "target": "react",
+  "appEntry": "src/main.tsx",
+  "mode": "edit",
+  "root": "",
+  "requests": {
+    "fs": "self",
+    "ui": ["notify"]
+  },
+  "env": [],
+  "entityTypes": [],
+  "egress": { "connect": [] }
+}
