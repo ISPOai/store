@@ -33,7 +33,8 @@ have to.
 | --- | --- | --- | --- |
 | `virtual:open-slide/slides` — Vite globs slides, emits `import()` per slide | no per-content compile step, **and CSP forbids evaluating code at all** | slides are app source under `src/`; a generated static import map lets the host's esbuild compile them at build time | editing a slide stays live — the host's build watcher rebuilds and the app reloads, standing in for Vite HMR. What is lost is the app writing its *own* source: a new deck comes from an agent or the Code surface, not from a button in the app |
 | `virtual:open-slide/{config,folders,themes}` | no build-time codegen | ordinary modules, same contracts, mapped by `tsconfig` `paths` | none — **no vendored import statement changed** |
-| `/__edit`, `/__slides`, `/__folders`, `/__notes`, `/__design`, `/__assets`, `/__comments` | no server in a sealed iframe | patch `fetch` before mount; answer in-process from project storage, same wire shapes | vendored UI stays byte-identical; gaps must return honest `501`s, never a fake `200` |
+| `/__folders`, `/__notes`, `/__design`, `/__comments`, `/__assets` | no server in a sealed iframe | patch `fetch` before mount; answer in-process from project storage, same wire shapes. Asset bytes go through `fs.writeBinary` and reach the UI as `blob:` URLs, which `img-src 'self' assets: data: blob:` allows | vendored UI stays byte-identical |
+| `/__edit`, `/__slides` (create/rename/delete/page ops) | they rewrite a slide's **source**, and a sandboxed app cannot write the project root — `fs` is project *data* | refuse with the actual remedy: edit `src/slides/<id>/index.tsx` via an agent or the Code surface | the inspector and style panel can read but not write; a fake `200` would have been worse than the refusal |
 | `BrowserRouter` | `project://<id>/` has no server to answer a pushed path | `HashRouter` | one-line edit; URLs differ from upstream |
 | `import.meta.env.DEV` gating all authoring | esbuild ESM **with code splitting** → `import.meta` is per-chunk, unpatchable from the entry | mechanical rewrite to `__OSD_ENV__`, published by a first-imported module | 56 references across 21 files; re-vendoring upstream needs the codemod re-run |
 
@@ -129,11 +130,22 @@ app worth porting is the dev-mode one.
 - Read the consumers of every shimmed contract before writing the shim (issue
   5), and check for module-scope snapshots of async data (issue 6).
 
+## The one capability that would close the gap
+
+`agent.dispatch` has a SELF-RUN mode: an app may dispatch an agent run against
+its own project, and an agent *can* write project source. That is the sanctioned
+route for "New slide" and for the inspector's source edits — the app asks an
+agent to make the edit, the watcher rebuilds, the deck appears. It is not wired
+here because it widens the permission envelope from `fs` + `ui.notify` to
+include `agent`, which the guide calls rarely appropriate for a store app. That
+is a judgment call for the human validator, not a detail to slip in.
+
 ## Still open
 
 Page reorder/delete/duplicate (needs `editing/slide-ops` moved off `node:fs`),
 asset writes, splice edits — all return `501` rather than failing silently.
 Presenter *window*, HTML/PDF/PPTX export, icon search and HMR are argued as
 dropped in `open-slide/UPSTREAM.md`. React 19 against upstream's React 18 is
-compile-clean but not yet exercised across the whole UI. In-app *creation* of a new deck still has no runtime path — `create-slide`
-writes storage, not app source; authoring a new deck belongs to an agent.
+compile-clean but not yet exercised across the whole UI. In-app creation and source editing are refused rather than faked (see above);
+theme demos are not compiled in. Assets, folders, notes, design and comments
+are fully implemented against project storage.

@@ -12,18 +12,28 @@ import {
   listSlideIds,
   readJson,
   readText,
-  slideSourcePath,
   SLIDES_DIR,
   writeJson,
-  writeText,
 } from './store'
-import { invalidateSlide, refreshSlideIndex } from '../virtual/slides'
+import { invalidateSlide } from '../virtual/slides'
+import {
+  deleteAsset,
+  isAssetScope,
+  isSafeAssetName,
+  listAssets,
+  mimeForName,
+  renameAsset,
+  writeAsset,
+  assetExists,
+} from './assets-store'
 
 type Handler = (req: {
   method: string
   path: string
   query: URLSearchParams
   body: () => Promise<unknown>
+  bytes: () => Promise<Uint8Array>
+  contentType: string
 }) => Promise<Response>
 
 const json = (status: number, value: unknown): Response =>
@@ -124,60 +134,90 @@ const routes: Array<[RegExp, Handler]> = [
     },
   ],
 
-  // Source edits from the inspector and style panel.
+  // Source edits from the inspector and style panel, and slide create /
+  // rename / delete / page operations.
+  //
+  // All of these rewrite a slide's TSX. In this port a slide is *app source*
+  // compiled into the bundle (see src/virtual/slides.ts), and a sandboxed app
+  // cannot write its own source — `fs` is scoped to project data, not the
+  // project root. Writing the new source into storage would return a cheerful
+  // 200 and change nothing on screen, which is worse than refusing, so these
+  // say what actually has to happen instead.
   [
     /^\/__edit(\/batch)?$/,
-    async ({ body }) => {
-      const payload = (await body()) as { slideId?: string; source?: string }
-      const slideId = payload.slideId ?? ''
-      if (!SLIDE_ID_RE.test(slideId)) return json(400, { error: 'invalid slideId' })
-      if (typeof payload.source !== 'string') {
-        // The AST-splicing edit ops are vendored (src/editing) but not yet
-        // wired to this route; a caller that sends splices rather than whole
-        // source gets an honest refusal instead of a silent no-op.
-        return json(501, { error: 'splice edits are not wired yet in this port' })
-      }
-      await writeText(slideSourcePath(slideId), payload.source)
-      invalidateSlide(slideId)
-      return json(200, { ok: true })
-    },
+    async () =>
+      json(501, {
+        error:
+          'this app cannot edit its own slide sources: a slide is compiled app source, and a ' +
+          'sandboxed app cannot write the project root. Edit src/slides/<id>/index.tsx through ' +
+          'the Code surface or an agent — the build watcher rebuilds and the app reloads.',
+      }),
   ],
 
-  // Slide create / rename / delete, and the page-level operations.
   [
     /^\/__slides(\/.*)?$/,
-    async ({ method, path, body }) => {
+    async ({ method, path }) => {
       const rest = path.replace(/^\/__slides\/?/, '')
       if (method === 'GET' && !rest) return json(200, { slides: await listSlideIds() })
-      if (method === 'POST' && !rest) {
-        const next = (await body()) as { id?: string; source?: string }
-        const id = next.id ?? ''
-        if (!SLIDE_ID_RE.test(id)) return json(400, { error: 'invalid slideId' })
-        await writeText(slideSourcePath(id), next.source ?? STARTER_SLIDE)
-        await refreshSlideIndex()
-        return json(200, { ok: true, slideId: id })
-      }
-      if (rest.includes('/pages/') || rest.endsWith('/reorder') || rest.endsWith('/duplicate')) {
-        // These rewrite the slide's TSX through upstream's AST ops, which need
-        // `editing/slide-ops` adapted from node fs to the SDK first.
-        return json(501, { error: 'page operations are not wired yet in this port' })
-      }
-      return json(404, { error: 'unknown slides route' })
+      return json(501, {
+        error:
+          'creating, renaming, deleting or reordering a slide rewrites app source, which this ' +
+          'app cannot do from inside the sandbox. Ask an agent to edit src/slides/, then re-run ' +
+          'vendor/build-slide-manifest.mjs if a slide was added or removed.',
+      })
     },
   ],
 
-  // Per-slide asset files.
+  // Per-slide asset files. Bytes live in project storage and reach the UI as
+  // blob: URLs, which the iframe's img-src allows.
   [
     /^\/__assets(\/.*)?$/,
-    async ({ method, path }) => {
+    async ({ method, path, query, body, bytes, contentType }) => {
       const rest = path.replace(/^\/__assets\/?/, '')
-      const slideId = rest.split('/')[0] ?? ''
-      if (!SLIDE_ID_RE.test(slideId)) return json(400, { error: 'invalid slideId' })
-      if (method === 'GET') {
-        const files = await listDir(`${SLIDES_DIR}/${slideId}/assets`)
-        return json(200, { assets: files.map((name) => ({ name })) })
+      const parts = rest.split('/').filter(Boolean).map((part) => decodeURIComponent(part))
+      const scope = parts[0] ?? ''
+      if (!isAssetScope(scope)) return json(400, { error: 'invalid asset scope' })
+
+      if (parts.length === 1) {
+        if (method !== 'GET') return json(405, { error: 'unsupported asset operation' })
+        return json(200, { assets: await listAssets(scope) })
       }
-      return json(501, { error: 'asset writes are not wired yet in this port' })
+
+      const name = parts[1] ?? ''
+      if (!isSafeAssetName(name)) return json(400, { error: 'invalid asset name' })
+
+      // Upstream reports which slides reference an asset by scanning their
+      // sources. Slides here are compiled app source that the app cannot read,
+      // so the honest answer is "unknown", not a confident empty list.
+      if (parts[2] === 'usages') return json(200, { usages: [], totalCount: 0, known: false })
+
+      if (method === 'POST') {
+        if (!query.has('overwrite') && (await assetExists(scope, name))) {
+          return json(409, { error: 'asset already exists' })
+        }
+        const data = await bytes()
+        if (data.byteLength === 0) return json(400, { error: 'empty upload' })
+        const entry = await writeAsset(scope, name, data, contentType || mimeForName(name))
+        return json(200, { ok: true, asset: entry })
+      }
+
+      if (method === 'PATCH') {
+        const next = (await body()) as { name?: unknown }
+        const to = typeof next.name === 'string' ? next.name : ''
+        if (!isSafeAssetName(to)) return json(400, { error: 'invalid asset name' })
+        if (to !== name && (await assetExists(scope, to))) {
+          return json(409, { error: 'asset already exists' })
+        }
+        if (to !== name) await renameAsset(scope, name, to)
+        return json(200, { ok: true, name: to })
+      }
+
+      if (method === 'DELETE') {
+        await deleteAsset(scope, name)
+        return json(200, { ok: true })
+      }
+
+      return json(405, { error: 'unsupported asset operation' })
     },
   ],
 
@@ -192,18 +232,6 @@ const routes: Array<[RegExp, Handler]> = [
   [/^\/__svgl\/.*$/, async () => json(501, { error: 'icon search needs network access' })],
 ]
 
-const STARTER_SLIDE = `import type { Page } from '@open-slide/core';
-
-function Title() {
-  return (
-    <div style={{ width: '100%', height: '100%', display: 'grid', placeItems: 'center' }}>
-      <h1 style={{ fontSize: 120 }}>New slide</h1>
-    </div>
-  );
-}
-
-export default [Title] satisfies Page[];
-`
 
 /** Patch `fetch` so `/__*` is served in-process. Everything else is passed
  *  through untouched. */
@@ -217,6 +245,20 @@ export function installDevServerShim(): void {
     if (!url.pathname.startsWith('/__')) return original(input as RequestInfo, init)
 
     const method = (init?.method ?? (input as Request).method ?? 'GET').toUpperCase()
+    const headers = new Headers(init?.headers ?? (input instanceof Request ? input.headers : undefined))
+    const contentType = (headers.get('content-type') ?? '').split(';')[0]?.trim() ?? ''
+
+    // Uploads arrive as a File/Blob body; everything else is JSON.
+    const bytes = async (): Promise<Uint8Array> => {
+      const payload = init?.body ?? (input instanceof Request ? await input.clone().blob() : null)
+      if (!payload) return new Uint8Array()
+      if (payload instanceof Uint8Array) return payload
+      if (payload instanceof ArrayBuffer) return new Uint8Array(payload)
+      if (payload instanceof Blob) return new Uint8Array(await payload.arrayBuffer())
+      if (typeof payload === 'string') return new TextEncoder().encode(payload)
+      return new Uint8Array()
+    }
+
     const body = async (): Promise<unknown> => {
       const payload = init?.body
       if (typeof payload === 'string') {
@@ -239,7 +281,14 @@ export function installDevServerShim(): void {
     for (const [pattern, handler] of routes) {
       if (!pattern.test(url.pathname)) continue
       try {
-        return await handler({ method, path: url.pathname, query: url.searchParams, body })
+        return await handler({
+          method,
+          path: url.pathname,
+          query: url.searchParams,
+          body,
+          bytes,
+          contentType,
+        })
       } catch (err) {
         return json(500, { error: (err as Error).message })
       }
