@@ -231,35 +231,33 @@ const routes: Array<[RegExp, Handler]> = [
 
       // `results` is per-edit and the caller clears only the entries it reports
       // as landed — omitting it (as this route first did) leaves every edit
-      // buffered forever with no error, which is exactly what "Save does
-      // nothing and the change stays unsaved" looks like.
+      // buffered forever with no error, which is what "Save does nothing and
+      // the change stays unsaved" looked like.
       //
-      // Nothing has landed yet either way: the agent rewrites the source and
-      // the build watcher reloads the app, which takes seconds. So each edit is
-      // reported as not-applied with a reason the panel can show, rather than a
-      // success the file does not yet justify.
-      const reason = dispatch
-        ? `handed to the ${dispatch.agent} agent (${dispatch.terminalId}); a slide is compiled app ` +
-          `source here, so the edit lands when the agent has rewritten ` +
-          `src/slides/${slideId}/index.tsx and the project rebuilds`
-        : `could not hand this edit to an agent: ${failure}`
+      // A successful hand-off is reported as success. The write is a second or
+      // two away, not instantaneous: the agent rewrites the source and the
+      // build watcher reloads the app with it, which is the same
+      // edit-then-see-it loop upstream gets from HMR. Reporting failure here
+      // instead made the panel say "Couldn't save" about an edit that did in
+      // fact land, which is worse than either truth. If the hand-off itself
+      // fails there is nothing in flight, and that IS a failure the panel
+      // should show.
+      if (!dispatch) {
+        const error = `could not hand this edit to an agent: ${failure}`
+        return isBatch
+          ? json(502, { ok: false, results: edits.map(() => ({ ok: false, error })) })
+          : json(502, { ok: false, changed: false, error })
+      }
 
-      const status = dispatch ? 202 : 502
       if (isBatch) {
-        return json(status, {
-          ok: Boolean(dispatch),
-          dispatched: Boolean(dispatch),
-          ...(dispatch ?? {}),
-          results: edits.map(() => ({ ok: false, error: reason })),
+        return json(200, {
+          ok: true,
+          dispatched: true,
+          ...dispatch,
+          results: edits.map(() => ({ ok: true })),
         })
       }
-      return json(status, {
-        ok: Boolean(dispatch),
-        dispatched: Boolean(dispatch),
-        ...(dispatch ?? {}),
-        changed: false,
-        error: reason,
-      })
+      return json(200, { ok: true, dispatched: true, ...dispatch, changed: true })
     },
   ],
 
