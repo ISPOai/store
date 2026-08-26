@@ -1,7 +1,8 @@
 import { type SyntheticEvent, useEffect, useRef, useState } from 'react';
 import ReactCrop, { type Crop, type PercentCrop } from 'react-image-crop';
 import { round2 } from '@/lib/utils';
-import 'react-image-crop/dist/ReactCrop.css';
+// Port seam: this stylesheet is folded into src/app/vendor.css, because the
+// host installs no app packages and cannot resolve a deep CSS import.
 import { Button } from '@/components/ui/button';
 import {
   Dialog,

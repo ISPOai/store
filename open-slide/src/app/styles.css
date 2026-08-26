@@ -1,13 +1,16 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+/* Port seam: upstream pulls `tw-animate-css`, `shadcn/tailwind.css` and the
+   Geist webfont from node_modules. The host resolves CSS imports against its
+   own palette and installs no app packages, so the animation utilities and
+   shadcn layer are vendored beside this file and the display font falls back to
+   the system stack rather than shipping a webfont this app never controls. */
+@import "./vendor.css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: "Geist Variable", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-heading: "Geist Variable", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-sans: "Geist Variable", ui-sans-serif, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: "Geist Variable", ui-sans-serif, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-serif:
     ui-serif, "New York", "Iowan Old Style", "Apple Garamond", "Big Caslon", "Charter", Georgia,
     serif;

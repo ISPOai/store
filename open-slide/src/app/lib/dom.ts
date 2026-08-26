@@ -20,16 +20,19 @@ export function nextPaint(): Promise<void> {
   });
 }
 
+// Port seam. Upstream hands the artifact to the browser as a download. A
+// `.download` assignment is a hard build error in this host (spec §25): a
+// browser download lands outside the storage planes, invisible to Files, other
+// projects and agents. The artifact goes to the host save dialog instead, which
+// is its own consent surface, so nothing has to be granted up front.
 export function downloadBlob(blob: Blob, filename: string): void {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  a.rel = 'noopener';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 0);
+  void saveBlobThroughFiles(blob, filename);
+}
+
+async function saveBlobThroughFiles(blob: Blob, filename: string): Promise<void> {
+  const { files } = await import('@ispo/sdk');
+  const bytes = new Uint8Array(await blob.arrayBuffer());
+  await files.save({ suggestedName: filename, data: bytes, mimeType: blob.type || undefined });
 }
 
 export function dragHasFiles(e: { dataTransfer: DataTransfer | null }): boolean {
