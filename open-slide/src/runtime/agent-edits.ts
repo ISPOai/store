@@ -102,7 +102,13 @@ const HOUSE_RULES = `Rules for this repository:
 - After ADDING or REMOVING a slide directory, run: node vendor/build-slide-manifest.mjs
   (it regenerates src/generated/slide-manifest.ts, the static import map).
 - Do not edit anything under src/app/ or vendor/ — that is vendored upstream code.
-- Make the smallest change that satisfies the request, then stop.`
+- Make the smallest change that satisfies the request.
+- FINALLY, and this is required: wait for the project to rebuild before you
+  finish — use the host's \`wait_for_fresh_build\` tool for this project id if
+  you have it, otherwise poll dist/main.js until its mtime is newer than your
+  edit. The running app only picks up a slide change when the project is
+  rebuilt; without this step the edit sits on disk, the user sees nothing
+  change, and it looks like the save was lost.`
 
 export function createSlideTask(id: string, source?: string): string {
   return `Create a new slide deck in this project.
