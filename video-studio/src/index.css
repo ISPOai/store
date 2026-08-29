@@ -1,0 +1,50 @@
+@import "tailwindcss";
+@import "@ispo/design/tokens.css";
+
+@font-face {
+  font-family: "Inter";
+  src: url("../assets/fonts/inter-variable.ttf") format("truetype-variations");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border, currentColor);
+  }
+
+  body {
+    background: transparent;
+    color: var(--color-foreground);
+    font-family: "Inter", var(--font-sans, system-ui, sans-serif);
+  }
+
+  /* DOM focus has no visual treatment in ISPO surfaces. */
+  :focus {
+    outline: none;
+  }
+}
+
+@layer components {
+  .hover-wash:hover {
+    background: var(--w-hover-wash);
+  }
+
+  .hairline-dense {
+    border-bottom: 1px solid var(--w-hairline-dense);
+  }
+}
+
+/* Timeline clip selection: a lifted surface, never a focus ring. */
+[data-clip][data-selected="true"] {
+  background: var(--w-selection-surface);
+  border-color: var(--foreground);
+}
+
+[data-clip][data-selected="false"] {
+  background: var(--w-surface-raised);
+}

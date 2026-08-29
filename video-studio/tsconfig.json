@@ -1,0 +1,77 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": [
+      "ES2024",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@diffusionstudio/assets": [
+        "./vendor/diffusionstudio/assets/src/index.ts"
+      ],
+      "@diffusionstudio/assets/*": [
+        "./vendor/diffusionstudio/assets/src/*"
+      ],
+      "@diffusionstudio/encoder": [
+        "./vendor/diffusionstudio/encoder/src/index.ts"
+      ],
+      "@diffusionstudio/encoder/*": [
+        "./vendor/diffusionstudio/encoder/src/*"
+      ],
+      "@diffusionstudio/jsx": [
+        "./vendor/diffusionstudio/jsx/src/index.ts"
+      ],
+      "@diffusionstudio/jsx/*": [
+        "./vendor/diffusionstudio/jsx/src/*"
+      ],
+      "@diffusionstudio/reconciler": [
+        "./vendor/diffusionstudio/reconciler/src/index.ts"
+      ],
+      "@diffusionstudio/reconciler/*": [
+        "./vendor/diffusionstudio/reconciler/src/*"
+      ],
+      "@diffusionstudio/runtime": [
+        "./vendor/diffusionstudio/runtime/src/index.ts"
+      ],
+      "@diffusionstudio/runtime/*": [
+        "./vendor/diffusionstudio/runtime/src/*"
+      ]
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules"
+    ],
+    "types": [
+      "node",
+      "@webgpu/types",
+      "audioworklet"
+    ],
+    "exactOptionalPropertyTypes": true
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "vendor",
+    "node_modules",
+    "dist",
+    "tmp"
+  ]
+}

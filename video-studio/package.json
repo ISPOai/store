@@ -1,0 +1,18 @@
+{
+  "name": "@ispo-store/video-studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline video editor for ISPO (Solid target). The editing engine under vendor/diffusionstudio is adapted from Diffusion Studio (MPL-2.0); see ATTRIBUTION.md and PROVENANCE.json. Solid itself is host-provided (target framework palette) and is intentionally absent, matching the other Store apps.",
+  "dependencies": {
+    "animejs": "4.5.0",
+    "colord": "2.9.3",
+    "koota": "file:vendor/koota",
+    "mediabunny": "1.50.6"
+  },
+  "devDependencies": {
+    "@types/audioworklet": "0.0.92",
+    "@types/node": "22.10.2",
+    "@webgpu/types": "^0.1.71"
+  }
+}

@@ -1,0 +1,1119 @@
+{
+  "schemaVersion": 1,
+  "app": "@ispo-store/video-studio",
+  "upstream": {
+    "repository": "https://github.com/diffusionstudio/editor",
+    "commit": "aeb873bfc6c239a05821c9af307fca34a06e8928",
+    "version": "0.200.0",
+    "revisionDate": "2026-08-27",
+    "license": "MPL-2.0"
+  },
+  "license": {
+    "vendoredCode": "MPL-2.0",
+    "notice": "MPL notices preserved in every vendored file; full text in LICENSE-MPL-2.0.txt",
+    "fonts": [
+      {
+        "file": "assets/fonts/inter-variable.ttf",
+        "license": "SIL-OFL-1.1"
+      }
+    ]
+  },
+  "excluded": [
+    "apps/desktop (Electron shell, updater, deep links, brand assets)",
+    "apps/cli (dapi Unix-socket CLI)",
+    "apps/web (hosted-service editor UI: auth, Supabase, billing, generation, telemetry)",
+    "packages/koota-solid (unused by this adaptation)",
+    "node_modules, dist, lockfiles from upstream"
+  ],
+  "files": [
+    {
+      "path": "vendor/diffusionstudio/assets/package.json",
+      "sha256": "6103a187653e27b07417fe4a0bae9be4d648ff7f23ec416e599b500a31b776f9",
+      "upstreamPath": "packages/assets/package.json",
+      "upstreamSha256": "6103a187653e27b07417fe4a0bae9be4d648ff7f23ec416e599b500a31b776f9",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/assets/src/browser.ts",
+      "sha256": "d6b0e62a3ff41cb8382be4680108728325cbeb42811af95560ea404cf9705a80",
+      "upstreamPath": "packages/assets/src/browser.ts",
+      "upstreamSha256": "2cc78af2ebbb4cb48ae0ead17cea59e80a325defec13712e56225cc4653331af",
+      "relation": "adapted"
+    },
+    {
+      "path": "vendor/diffusionstudio/assets/src/cache.ts",
+      "sha256": "ad048367a99d303e1984e01e3945324fd846b835afc477788ec8300b90a4c37e",
+      "upstreamPath": "packages/assets/src/cache.ts",
+      "upstreamSha256": "ad048367a99d303e1984e01e3945324fd846b835afc477788ec8300b90a4c37e",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/assets/src/derive/peaks.ts",
+      "sha256": "cb4f18522c15caeffe3fc421e7347f4dc45efd977b7751778ba878295b232894",
+      "upstreamPath": "packages/assets/src/derive/peaks.ts",
+      "upstreamSha256": "cb4f18522c15caeffe3fc421e7347f4dc45efd977b7751778ba878295b232894",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/assets/src/derive/thumbnail.ts",
+      "sha256": "db9a027a2ef8b8108cfffb2356c9f1ad42cca1ecd349e4240091393fa55bdb16",
+      "upstreamPath": "packages/assets/src/derive/thumbnail.ts",
+      "upstreamSha256": "db9a027a2ef8b8108cfffb2356c9f1ad42cca1ecd349e4240091393fa55bdb16",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/assets/src/derive/waveform-worker.ts",
+      "sha256": "8124b95b6a77cefc554a5c95d85bbef2be577bc316e5c3030b06e212b4e259eb",
+      "upstreamPath": "packages/assets/src/derive/waveform-worker.ts",
+      "upstreamSha256": "8124b95b6a77cefc554a5c95d85bbef2be577bc316e5c3030b06e212b4e259eb",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/assets/src/derive/waveform.ts",
+      "sha256": "df7144d12747fb94948cea56ddc5b00adab5c7c24212a3ec713fc73e06186137",
+      "upstreamPath": "packages/assets/src/derive/waveform.ts",
+      "upstreamSha256": "df7144d12747fb94948cea56ddc5b00adab5c7c24212a3ec713fc73e06186137",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/assets/src/fs.ts",
+      "sha256": "f12e84532e1d07c87dee795cde8758e6ee335a5d8a5fe6965fc18513239b7293",
+      "upstreamPath": "packages/assets/src/fs.ts",
+      "upstreamSha256": "f12e84532e1d07c87dee795cde8758e6ee335a5d8a5fe6965fc18513239b7293",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/assets/src/hash.ts",
+      "sha256": "a722c8bf931d7dfc75fc8a0caaf92c005c56bb633f6f763b218366028df3ad0d",
+      "upstreamPath": "packages/assets/src/hash.ts",
+      "upstreamSha256": "a722c8bf931d7dfc75fc8a0caaf92c005c56bb633f6f763b218366028df3ad0d",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/assets/src/index.ts",
+      "sha256": "e453a9d6055a5d617a344a669ba8934d51c11b986ebda4099fafae88e561f6db",
+      "upstreamPath": "packages/assets/src/index.ts",
+      "upstreamSha256": "e453a9d6055a5d617a344a669ba8934d51c11b986ebda4099fafae88e561f6db",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/assets/src/library.ts",
+      "sha256": "14e660f53623878966df5db8c2b135dc47150c226725a56300623e196c92eac4",
+      "upstreamPath": "packages/assets/src/library.ts",
+      "upstreamSha256": "0da28606e4f89f3e1e9dbcb2f2a84d971d89ddaad8a73f910f88accba89e271a",
+      "relation": "adapted"
+    },
+    {
+      "path": "vendor/diffusionstudio/assets/src/manifest.ts",
+      "sha256": "952886305d15f4c9174638821434c68ee254971db48c00273d35df282db3c508",
+      "upstreamPath": "packages/assets/src/manifest.ts",
+      "upstreamSha256": "952886305d15f4c9174638821434c68ee254971db48c00273d35df282db3c508",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/assets/src/probe.ts",
+      "sha256": "93bfabf5633594d40c1460a76a1699e1e81748094b2e5ab7bc7162af1e12013a",
+      "upstreamPath": "packages/assets/src/probe.ts",
+      "upstreamSha256": "93bfabf5633594d40c1460a76a1699e1e81748094b2e5ab7bc7162af1e12013a",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/assets/src/types.ts",
+      "sha256": "6c9e78e1aa04d9e479055b62bb06308945befba44599d699305007a87db51b3d",
+      "upstreamPath": "packages/assets/src/types.ts",
+      "upstreamSha256": "6c9e78e1aa04d9e479055b62bb06308945befba44599d699305007a87db51b3d",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/encoder/package.json",
+      "sha256": "c0a3ccbf620d5ec0bbf656d57893c73aba6d276f32d45436c7b1652f45120c18",
+      "upstreamPath": "packages/encoder/package.json",
+      "upstreamSha256": "c0a3ccbf620d5ec0bbf656d57893c73aba6d276f32d45436c7b1652f45120c18",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/encoder/src/buffer.ts",
+      "sha256": "73b52882269caf590c2dad4bd9d8b21d53e813d5bcb54df3787668c011038519",
+      "upstreamPath": "packages/encoder/src/buffer.ts",
+      "upstreamSha256": "73b52882269caf590c2dad4bd9d8b21d53e813d5bcb54df3787668c011038519",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/encoder/src/contact-sheet.ts",
+      "sha256": "0d6641f8a81d0dff1e8acee6a6cbdbbcb573ec6d85d7bc30045b0b70337454f1",
+      "upstreamPath": "packages/encoder/src/contact-sheet.ts",
+      "upstreamSha256": "0d6641f8a81d0dff1e8acee6a6cbdbbcb573ec6d85d7bc30045b0b70337454f1",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/encoder/src/encoder.ts",
+      "sha256": "970b9141cedc48ba6b9567cbf2210cff649f19643864e996ce243ea111d41043",
+      "upstreamPath": "packages/encoder/src/encoder.ts",
+      "upstreamSha256": "970b9141cedc48ba6b9567cbf2210cff649f19643864e996ce243ea111d41043",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/encoder/src/format.ts",
+      "sha256": "cddb13ce6a8f7ec8a7bbdd2e284c5905ce46684afed26cc07bfcca39d112f327",
+      "upstreamPath": "packages/encoder/src/format.ts",
+      "upstreamSha256": "cddb13ce6a8f7ec8a7bbdd2e284c5905ce46684afed26cc07bfcca39d112f327",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/encoder/src/image-encoder.ts",
+      "sha256": "dbf8b10bb45bc3b438aa0b0d0d718f700a9f104b167845cbdc7e602dc8daeb76",
+      "upstreamPath": "packages/encoder/src/image-encoder.ts",
+      "upstreamSha256": "dbf8b10bb45bc3b438aa0b0d0d718f700a9f104b167845cbdc7e602dc8daeb76",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/encoder/src/index.ts",
+      "sha256": "ed6babb118fc2a0238470a861b5f40c34445dc6822a8d8a79b3dacf1bf732cfa",
+      "upstreamPath": "packages/encoder/src/index.ts",
+      "upstreamSha256": "ed6babb118fc2a0238470a861b5f40c34445dc6822a8d8a79b3dacf1bf732cfa",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/encoder/src/interfaces.ts",
+      "sha256": "c119123f9456306fbb393c82fb1be8b15aa1195b2b1b8e77a39f8505d72e6e89",
+      "upstreamPath": "packages/encoder/src/interfaces.ts",
+      "upstreamSha256": "c119123f9456306fbb393c82fb1be8b15aa1195b2b1b8e77a39f8505d72e6e89",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/encoder/src/types.ts",
+      "sha256": "07ac030e0568b81e724043d9519650527bbd3e9743eefbc1f4b747dc19b72ed7",
+      "upstreamPath": "packages/encoder/src/types.ts",
+      "upstreamSha256": "07ac030e0568b81e724043d9519650527bbd3e9743eefbc1f4b747dc19b72ed7",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/encoder/src/utils.ts",
+      "sha256": "02debe6c2a7d8cc1eeb817500eb9051bcc8af77eb35f81fc1ea50e7ede34d984",
+      "upstreamPath": "packages/encoder/src/utils.ts",
+      "upstreamSha256": "02debe6c2a7d8cc1eeb817500eb9051bcc8af77eb35f81fc1ea50e7ede34d984",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/jsx/package.json",
+      "sha256": "666d50293f64a418ec511105cc692ae6b3ce12ea1aa09b9a0c15ebc9af0718a9",
+      "upstreamPath": "packages/jsx/package.json",
+      "upstreamSha256": "666d50293f64a418ec511105cc692ae6b3ce12ea1aa09b9a0c15ebc9af0718a9",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/jsx/src/generate.ts",
+      "sha256": "9817271815a42d79afc2e9e6d84f4d2547ce3bea93553482e48fb179bd818838",
+      "upstreamPath": "packages/jsx/src/generate.ts",
+      "upstreamSha256": "9817271815a42d79afc2e9e6d84f4d2547ce3bea93553482e48fb179bd818838",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/jsx/src/hooks.ts",
+      "sha256": "36b6f755a7aad9cce2c0131841f379c7fb81f54cccc52d63f97f2b4ec2aa2606",
+      "upstreamPath": "packages/jsx/src/hooks.ts",
+      "upstreamSha256": "36b6f755a7aad9cce2c0131841f379c7fb81f54cccc52d63f97f2b4ec2aa2606",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/jsx/src/index.ts",
+      "sha256": "e12c3a2168985dd33657bf6097a6761992711156f1b5c9918414fc1f6895fbdb",
+      "upstreamPath": "packages/jsx/src/index.ts",
+      "upstreamSha256": "e12c3a2168985dd33657bf6097a6761992711156f1b5c9918414fc1f6895fbdb",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/jsx/src/jsx-runtime.ts",
+      "sha256": "d84bdf5e08224585c6f41397a27415449a10101f8eea98fe02455746e54d1e88",
+      "upstreamPath": "packages/jsx/src/jsx-runtime.ts",
+      "upstreamSha256": "d84bdf5e08224585c6f41397a27415449a10101f8eea98fe02455746e54d1e88",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/jsx/src/source.ts",
+      "sha256": "572ce722cafcbab05c8893273640f582eecaa7e66facc1af573c9e44c144c6bc",
+      "upstreamPath": "packages/jsx/src/source.ts",
+      "upstreamSha256": "572ce722cafcbab05c8893273640f582eecaa7e66facc1af573c9e44c144c6bc",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/jsx/src/time.ts",
+      "sha256": "2c2e46b52357b1faafbc72727f31c247aca6e7c29d93887cb1f5625874f53911",
+      "upstreamPath": "packages/jsx/src/time.ts",
+      "upstreamSha256": "2c2e46b52357b1faafbc72727f31c247aca6e7c29d93887cb1f5625874f53911",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/jsx/src/types.ts",
+      "sha256": "7ef4d358f9f02ca05388e9995e347277336661734a77058bffe55ce9096c4037",
+      "upstreamPath": "packages/jsx/src/types.ts",
+      "upstreamSha256": "7ef4d358f9f02ca05388e9995e347277336661734a77058bffe55ce9096c4037",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/reconciler/package.json",
+      "sha256": "3140b021d20c82f1ad49389b2a5c29261a8a8236bc4e703a68c3c82f5aca30fc",
+      "upstreamPath": "packages/reconciler/package.json",
+      "upstreamSha256": "3140b021d20c82f1ad49389b2a5c29261a8a8236bc4e703a68c3c82f5aca30fc",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/reconciler/src/document.ts",
+      "sha256": "952c4b6794dc7b6dd3544fdf9acd77d5427925936f3955c59dc0fd81a7ac45a9",
+      "upstreamPath": "packages/reconciler/src/document.ts",
+      "upstreamSha256": "952c4b6794dc7b6dd3544fdf9acd77d5427925936f3955c59dc0fd81a7ac45a9",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/reconciler/src/elements.ts",
+      "sha256": "07de3d46ec9ebf8d5d1ef50658c97139228a6afa69895804b01aa9bd3211735a",
+      "upstreamPath": "packages/reconciler/src/elements.ts",
+      "upstreamSha256": "07de3d46ec9ebf8d5d1ef50658c97139228a6afa69895804b01aa9bd3211735a",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/reconciler/src/evaluate.ts",
+      "sha256": "b9444adfc0effa460c8721f2141234ea34e64ca924feb6c39a6cf8534b80448a",
+      "upstreamPath": "packages/reconciler/src/evaluate.ts",
+      "upstreamSha256": "b9444adfc0effa460c8721f2141234ea34e64ca924feb6c39a6cf8534b80448a",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/reconciler/src/host.ts",
+      "sha256": "9505948fae9c0f86e2be79a8fcb3a8739a99c197d77b63a2c66a93932d160c10",
+      "upstreamPath": "packages/reconciler/src/host.ts",
+      "upstreamSha256": "9505948fae9c0f86e2be79a8fcb3a8739a99c197d77b63a2c66a93932d160c10",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/reconciler/src/index.ts",
+      "sha256": "6a811abe390e060cc21ae29c8de634b57e88584c1fa9557ee3e7510e417bbe3a",
+      "upstreamPath": "packages/reconciler/src/index.ts",
+      "upstreamSha256": "6a811abe390e060cc21ae29c8de634b57e88584c1fa9557ee3e7510e417bbe3a",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/reconciler/src/mount.ts",
+      "sha256": "3a10d090ca5335ee4d99a22b69dddf59e2a1339b3220b39ae947e7686fcf9e09",
+      "upstreamPath": "packages/reconciler/src/mount.ts",
+      "upstreamSha256": "3a10d090ca5335ee4d99a22b69dddf59e2a1339b3220b39ae947e7686fcf9e09",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/reconciler/src/renderer.ts",
+      "sha256": "59f9472891da1054bd94123076e366c22bee18f8bb0a6949f912a33e26c5fff7",
+      "upstreamPath": "packages/reconciler/src/renderer.ts",
+      "upstreamSha256": "59f9472891da1054bd94123076e366c22bee18f8bb0a6949f912a33e26c5fff7",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/reconciler/src/runtime.ts",
+      "sha256": "3664d6d5976a50ffe1b7b9182d775085426e1e50e54f4f7d44628e30f8aca3a3",
+      "upstreamPath": "packages/reconciler/src/runtime.ts",
+      "upstreamSha256": "3664d6d5976a50ffe1b7b9182d775085426e1e50e54f4f7d44628e30f8aca3a3",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/package.json",
+      "sha256": "334189b58e9662c49c549a0d2720f5a4a8a77cd0018cc54ecbeace546c06a9f1",
+      "upstreamPath": "packages/runtime/package.json",
+      "upstreamSha256": "334189b58e9662c49c549a0d2720f5a4a8a77cd0018cc54ecbeace546c06a9f1",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/assets.ts",
+      "sha256": "ebff9c16ffb4a4e1e6cbfc9b2fef382890d5553275c2b6597c067a7b969dba8d",
+      "upstreamPath": "packages/runtime/src/actions/assets.ts",
+      "upstreamSha256": "ebff9c16ffb4a4e1e6cbfc9b2fef382890d5553275c2b6597c067a7b969dba8d",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/cache.ts",
+      "sha256": "a70c05a5e73801b9a688f46326a6fecb139fd9d65456cfc4eb3defc8f5e8367b",
+      "upstreamPath": "packages/runtime/src/actions/cache.ts",
+      "upstreamSha256": "a70c05a5e73801b9a688f46326a6fecb139fd9d65456cfc4eb3defc8f5e8367b",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/camera.ts",
+      "sha256": "3d319a8103b39339d1c33dec762c786700f1c3bb2506e2cef24c536169198ef5",
+      "upstreamPath": "packages/runtime/src/actions/camera.ts",
+      "upstreamSha256": "3d319a8103b39339d1c33dec762c786700f1c3bb2506e2cef24c536169198ef5",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/clipboard.ts",
+      "sha256": "2f298744b40fd572279d582a0d31a3f8ab3e3c7c452aa88627da11c9f4bb8d46",
+      "upstreamPath": "packages/runtime/src/actions/clipboard.ts",
+      "upstreamSha256": "2f298744b40fd572279d582a0d31a3f8ab3e3c7c452aa88627da11c9f4bb8d46",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/entities.ts",
+      "sha256": "ee13a5dee1adc3a1c7ba554a18468303c227647d9e569e33f848d07544d8e5cc",
+      "upstreamPath": "packages/runtime/src/actions/entities.ts",
+      "upstreamSha256": "ee13a5dee1adc3a1c7ba554a18468303c227647d9e569e33f848d07544d8e5cc",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/frame.ts",
+      "sha256": "a725dd75a3724e40dd6d22da8fecaddddf3dbc2fa1e98d2126a0d110ef331666",
+      "upstreamPath": "packages/runtime/src/actions/frame.ts",
+      "upstreamSha256": "a725dd75a3724e40dd6d22da8fecaddddf3dbc2fa1e98d2126a0d110ef331666",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/group.ts",
+      "sha256": "8954b4dda0f690b1aea559730647aa8a3d1ecbfd3fb5c0e4c5bc0323adedddda",
+      "upstreamPath": "packages/runtime/src/actions/group.ts",
+      "upstreamSha256": "8954b4dda0f690b1aea559730647aa8a3d1ecbfd3fb5c0e4c5bc0323adedddda",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/hierarchy.ts",
+      "sha256": "f03056a7339a445a356c92091f7303ec3f4d1bf0275a765d3fdbf56298f1b054",
+      "upstreamPath": "packages/runtime/src/actions/hierarchy.ts",
+      "upstreamSha256": "f03056a7339a445a356c92091f7303ec3f4d1bf0275a765d3fdbf56298f1b054",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/index.ts",
+      "sha256": "7f58254611f80892250e7f16be00465896167bc9a37df9ef525e5010457e2c7e",
+      "upstreamPath": "packages/runtime/src/actions/index.ts",
+      "upstreamSha256": "7f58254611f80892250e7f16be00465896167bc9a37df9ef525e5010457e2c7e",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/interactive.ts",
+      "sha256": "6044833aee31feae2dc56a6a36afae5eac78b65aa82ea4318510680bbd8f0370",
+      "upstreamPath": "packages/runtime/src/actions/interactive.ts",
+      "upstreamSha256": "6044833aee31feae2dc56a6a36afae5eac78b65aa82ea4318510680bbd8f0370",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/keyframe.ts",
+      "sha256": "a8935c565122e302fc276873ee9c37819bd409527f57c5bf5e99e6b23bfa00d1",
+      "upstreamPath": "packages/runtime/src/actions/keyframe.ts",
+      "upstreamSha256": "a8935c565122e302fc276873ee9c37819bd409527f57c5bf5e99e6b23bfa00d1",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/overlap.ts",
+      "sha256": "4f3a066cb976bdd9350e319c0402d863a205365eccefd466e85490db1b2cc70f",
+      "upstreamPath": "packages/runtime/src/actions/overlap.ts",
+      "upstreamSha256": "4f3a066cb976bdd9350e319c0402d863a205365eccefd466e85490db1b2cc70f",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/playback.ts",
+      "sha256": "4a9b28710bd75f7b39671bbf1bc535f161f82125d5f69249d542805ed6baba90",
+      "upstreamPath": "packages/runtime/src/actions/playback.ts",
+      "upstreamSha256": "4a9b28710bd75f7b39671bbf1bc535f161f82125d5f69249d542805ed6baba90",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/resize.ts",
+      "sha256": "ab5450e2766f699c8138828ca247a042189caf039c3e898b5bc8d28a487c5b16",
+      "upstreamPath": "packages/runtime/src/actions/resize.ts",
+      "upstreamSha256": "ab5450e2766f699c8138828ca247a042189caf039c3e898b5bc8d28a487c5b16",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/actions/timing.ts",
+      "sha256": "37bec2f220d13f6be9dea11cecf587ef6c41d3a5529d628b29d5a4bd5a106350",
+      "upstreamPath": "packages/runtime/src/actions/timing.ts",
+      "upstreamSha256": "37bec2f220d13f6be9dea11cecf587ef6c41d3a5529d628b29d5a4bd5a106350",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/ai.ts",
+      "sha256": "c24154fcc62584f016dde1393528c6acfb4b270e8d3ec925fe9e59365c7b5ce7",
+      "upstreamPath": "packages/runtime/src/ai.ts",
+      "upstreamSha256": "c24154fcc62584f016dde1393528c6acfb4b270e8d3ec925fe9e59365c7b5ce7",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/constants.ts",
+      "sha256": "5e50127a65408bfe159ab471939fbf0b95fb9eeead394db5646be4b46c21a3d3",
+      "upstreamPath": "packages/runtime/src/constants.ts",
+      "upstreamSha256": "5e50127a65408bfe159ab471939fbf0b95fb9eeead394db5646be4b46c21a3d3",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/fonts/fixtures.ts",
+      "sha256": "192f3ba32ca4a0dd8b81952c82a997d27e6a1237cc03a0688f912bd86fe6fa28",
+      "upstreamPath": "packages/runtime/src/fonts/fixtures.ts",
+      "upstreamSha256": "192f3ba32ca4a0dd8b81952c82a997d27e6a1237cc03a0688f912bd86fe6fa28",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/fonts/index.ts",
+      "sha256": "9b75c06158db2802b8e7201bb2b416769ef9681e6b4b999a8a0fecfaf1c5d2c8",
+      "upstreamPath": "packages/runtime/src/fonts/index.ts",
+      "upstreamSha256": "9b75c06158db2802b8e7201bb2b416769ef9681e6b4b999a8a0fecfaf1c5d2c8",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/fonts/types.ts",
+      "sha256": "f86f842fbd126e362a2a14496b800e0c03700b44ce4fd8583188f5149d730084",
+      "upstreamPath": "packages/runtime/src/fonts/types.ts",
+      "upstreamSha256": "f86f842fbd126e362a2a14496b800e0c03700b44ce4fd8583188f5149d730084",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/fonts/utils.ts",
+      "sha256": "08a63118684e25f33ff589e4963af6a6c16d6acefc652b11918946b070873db8",
+      "upstreamPath": "packages/runtime/src/fonts/utils.ts",
+      "upstreamSha256": "aee325639930b8718306ded89e27a3e932f749d581cfae3be8849cd1d642923e",
+      "relation": "adapted"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/index.ts",
+      "sha256": "5ebfdb99c1b0114150052584daf354cdeeb5767c03fae7c2c94ead1d4ea509c1",
+      "upstreamPath": "packages/runtime/src/index.ts",
+      "upstreamSha256": "5ebfdb99c1b0114150052584daf354cdeeb5767c03fae7c2c94ead1d4ea509c1",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/math/aabb.ts",
+      "sha256": "f7b2c4949ae953a7e22d8e4aa2ca1c24c970c613c0e3b23b8c15883b8b7ce3f0",
+      "upstreamPath": "packages/runtime/src/math/aabb.ts",
+      "upstreamSha256": "f7b2c4949ae953a7e22d8e4aa2ca1c24c970c613c0e3b23b8c15883b8b7ce3f0",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/math/common.ts",
+      "sha256": "e6df8f0e88b723a8622ce65c92f307d1ed29d4ff8122ab19fe3603c9ea4ae92b",
+      "upstreamPath": "packages/runtime/src/math/common.ts",
+      "upstreamSha256": "e6df8f0e88b723a8622ce65c92f307d1ed29d4ff8122ab19fe3603c9ea4ae92b",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/math/index.ts",
+      "sha256": "77ee817cc7a12ec75f35701851276a4f688532f251e59f5aa6952cb897b745fe",
+      "upstreamPath": "packages/runtime/src/math/index.ts",
+      "upstreamSha256": "77ee817cc7a12ec75f35701851276a4f688532f251e59f5aa6952cb897b745fe",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/math/matrix2d.ts",
+      "sha256": "f0789595de0b01848c402f4ced4b2fc27707ce2de91d3fc76c279a8d15f2823e",
+      "upstreamPath": "packages/runtime/src/math/matrix2d.ts",
+      "upstreamSha256": "f0789595de0b01848c402f4ced4b2fc27707ce2de91d3fc76c279a8d15f2823e",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/audio-bus.ts",
+      "sha256": "ff64a097ef3e08f19307997c0bc368a8afad22a90b8d0731f4ac0346d74516fb",
+      "upstreamPath": "packages/runtime/src/media/audio-bus.ts",
+      "upstreamSha256": "ff64a097ef3e08f19307997c0bc368a8afad22a90b8d0731f4ac0346d74516fb",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/audio-peaks.ts",
+      "sha256": "e8c81c81bc4e0a60884f598c44d1451d845f96c0ce01b3e49034f0238ff4033a",
+      "upstreamPath": "packages/runtime/src/media/audio-peaks.ts",
+      "upstreamSha256": "c46e571cc419ba69b96797eca2389b6c07e0c27f2fc1893cddf88f73f5ac082d",
+      "relation": "adapted"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/audio-sync.ts",
+      "sha256": "d7810bc061b9fe5ee85c5407a4c9f9a7123601cecc7fc11c43c5d5c2ce9a6041",
+      "upstreamPath": "packages/runtime/src/media/audio-sync.ts",
+      "upstreamSha256": "d7810bc061b9fe5ee85c5407a4c9f9a7123601cecc7fc11c43c5d5c2ce9a6041",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/audio.ts",
+      "sha256": "205426c9b73eadea998080d12f6cf44c1aa84b32645c3f4905c319b11e0e7598",
+      "upstreamPath": "packages/runtime/src/media/audio.ts",
+      "upstreamSha256": "205426c9b73eadea998080d12f6cf44c1aa84b32645c3f4905c319b11e0e7598",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/caption/cascade.ts",
+      "sha256": "db783c50f27d7df31d4b1d8f47b56eb271f441b343e3e853a26336421ef8b2f0",
+      "upstreamPath": "packages/runtime/src/media/caption/cascade.ts",
+      "upstreamSha256": "db783c50f27d7df31d4b1d8f47b56eb271f441b343e3e853a26336421ef8b2f0",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/caption/classic.ts",
+      "sha256": "a9d68937b35acbed808150773b360300cd45d25b9000d63cb7fcbd45f3633747",
+      "upstreamPath": "packages/runtime/src/media/caption/classic.ts",
+      "upstreamSha256": "a9d68937b35acbed808150773b360300cd45d25b9000d63cb7fcbd45f3633747",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/caption/guinea.ts",
+      "sha256": "7815a066e2cdd6936cf88b1e5ff197db60cda0bdad55f276ec52bd6cd0fa66f0",
+      "upstreamPath": "packages/runtime/src/media/caption/guinea.ts",
+      "upstreamSha256": "7815a066e2cdd6936cf88b1e5ff197db60cda0bdad55f276ec52bd6cd0fa66f0",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/caption/index.ts",
+      "sha256": "a6076bafcd8245bcdc391066e18902fe891163640135792a8b5b3bc9d4f6067c",
+      "upstreamPath": "packages/runtime/src/media/caption/index.ts",
+      "upstreamSha256": "a6076bafcd8245bcdc391066e18902fe891163640135792a8b5b3bc9d4f6067c",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/caption/paper.ts",
+      "sha256": "0d366f9e62e5dd1b449ed874469e25da601643da6302536f901ffb7e6d02c85e",
+      "upstreamPath": "packages/runtime/src/media/caption/paper.ts",
+      "upstreamSha256": "0d366f9e62e5dd1b449ed874469e25da601643da6302536f901ffb7e6d02c85e",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/caption/position.ts",
+      "sha256": "6fdde408e5b4dffd68eb6b12573b7346e30c5f2be61c5a04d5c1d2ceeacb2c5d",
+      "upstreamPath": "packages/runtime/src/media/caption/position.ts",
+      "upstreamSha256": "6fdde408e5b4dffd68eb6b12573b7346e30c5f2be61c5a04d5c1d2ceeacb2c5d",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/caption/spotlight.ts",
+      "sha256": "daccfbd9b117dfc80548d9e08d6ad13e3887b7d59581f5efef5927f938781522",
+      "upstreamPath": "packages/runtime/src/media/caption/spotlight.ts",
+      "upstreamSha256": "daccfbd9b117dfc80548d9e08d6ad13e3887b7d59581f5efef5927f938781522",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/caption/stark.ts",
+      "sha256": "7525bcc0432138f90070bb7c33f4b35bb965e7c95d37980b4c1854f8de2362fe",
+      "upstreamPath": "packages/runtime/src/media/caption/stark.ts",
+      "upstreamSha256": "7525bcc0432138f90070bb7c33f4b35bb965e7c95d37980b4c1854f8de2362fe",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/caption/subtitles.ts",
+      "sha256": "78de082cb87e781131b5b7dc3cd8ff9183ae8e67ceec468906baffb8613d7543",
+      "upstreamPath": "packages/runtime/src/media/caption/subtitles.ts",
+      "upstreamSha256": "78de082cb87e781131b5b7dc3cd8ff9183ae8e67ceec468906baffb8613d7543",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/caption/types.ts",
+      "sha256": "f5b08c77d62597984cb2407b08f661d254503c3a37c6ea96d6d9acd172503f4c",
+      "upstreamPath": "packages/runtime/src/media/caption/types.ts",
+      "upstreamSha256": "f5b08c77d62597984cb2407b08f661d254503c3a37c6ea96d6d9acd172503f4c",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/caption/utils.ts",
+      "sha256": "80e0db229e9635603752fdadff6e8954954bcc402d21aae47a6fdce3bd6c6853",
+      "upstreamPath": "packages/runtime/src/media/caption/utils.ts",
+      "upstreamSha256": "80e0db229e9635603752fdadff6e8954954bcc402d21aae47a6fdce3bd6c6853",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/caption/whisper.ts",
+      "sha256": "91dc1cc136400502342ae017a195c43a727704bc1a923607d32f3524aa99d7f3",
+      "upstreamPath": "packages/runtime/src/media/caption/whisper.ts",
+      "upstreamSha256": "91dc1cc136400502342ae017a195c43a727704bc1a923607d32f3524aa99d7f3",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/dispose.ts",
+      "sha256": "949c3abd4d4ec683ba492c0edecd00f09a1a24d3cf9f5d872e74669bd009a1ad",
+      "upstreamPath": "packages/runtime/src/media/dispose.ts",
+      "upstreamSha256": "949c3abd4d4ec683ba492c0edecd00f09a1a24d3cf9f5d872e74669bd009a1ad",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/frame-cache.ts",
+      "sha256": "3cec35229404f2d1446021f56806ac61ab60028c828824859a92b298aae76427",
+      "upstreamPath": "packages/runtime/src/media/frame-cache.ts",
+      "upstreamSha256": "3cec35229404f2d1446021f56806ac61ab60028c828824859a92b298aae76427",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/handoff.ts",
+      "sha256": "820c3cb464baea2560fefbaffacf367cfa9587d1c254509b96fb7e4355b35252",
+      "upstreamPath": "packages/runtime/src/media/handoff.ts",
+      "upstreamSha256": "820c3cb464baea2560fefbaffacf367cfa9587d1c254509b96fb7e4355b35252",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/html.ts",
+      "sha256": "fa150e859878dc5471716b9778dd9b839f5d7fde932b01492960b42ddb039eff",
+      "upstreamPath": "packages/runtime/src/media/html.ts",
+      "upstreamSha256": "fa150e859878dc5471716b9778dd9b839f5d7fde932b01492960b42ddb039eff",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/image.ts",
+      "sha256": "df78283f991b2257a722d327134065539ee60aab053c7a01cf1726c3a76812d7",
+      "upstreamPath": "packages/runtime/src/media/image.ts",
+      "upstreamSha256": "df78283f991b2257a722d327134065539ee60aab053c7a01cf1726c3a76812d7",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/index.ts",
+      "sha256": "0fca12577b767f7c9395cedcaea4565c5b8aa69b19500de91b97450173539bb7",
+      "upstreamPath": "packages/runtime/src/media/index.ts",
+      "upstreamSha256": "0fca12577b767f7c9395cedcaea4565c5b8aa69b19500de91b97450173539bb7",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/keyframe-index.ts",
+      "sha256": "9dd8d16e6d7bba1edee949022430584ebe6cd5f659434e2e0cffd19c590ebb80",
+      "upstreamPath": "packages/runtime/src/media/keyframe-index.ts",
+      "upstreamSha256": "9dd8d16e6d7bba1edee949022430584ebe6cd5f659434e2e0cffd19c590ebb80",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/sequence.ts",
+      "sha256": "54612f2945aa14da5c7474752a5e83e20d8dc144bf6beb2290e2773122ee7376",
+      "upstreamPath": "packages/runtime/src/media/sequence.ts",
+      "upstreamSha256": "54612f2945aa14da5c7474752a5e83e20d8dc144bf6beb2290e2773122ee7376",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/shader.ts",
+      "sha256": "18701f45f70a6f4cf766db8609524c6be51425c0bd06cc08b762348db52cde0b",
+      "upstreamPath": "packages/runtime/src/media/shader.ts",
+      "upstreamSha256": "18701f45f70a6f4cf766db8609524c6be51425c0bd06cc08b762348db52cde0b",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/time-stretcher.ts",
+      "sha256": "d16d5663fbebb09d05e2734d66ccd1ef9c3a616270d6e0a88e18850e7fa783cb",
+      "upstreamPath": "packages/runtime/src/media/time-stretcher.ts",
+      "upstreamSha256": "d16d5663fbebb09d05e2734d66ccd1ef9c3a616270d6e0a88e18850e7fa783cb",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/transcode.ts",
+      "sha256": "7ddfa475ff4d77b26082eeaf8bdb7921e7229948d6ef13aba4ed061d341ee10a",
+      "upstreamPath": "packages/runtime/src/media/transcode.ts",
+      "upstreamSha256": "7c61ca16fe151bf0966abf797ffcbaddeaf5da083ae42ca6cb027831157b617c",
+      "relation": "adapted"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/media/video.ts",
+      "sha256": "9bbe2d4cebfa35c029508e830b255bfc158aa8246908a278e8a7faf9d72ed0ac",
+      "upstreamPath": "packages/runtime/src/media/video.ts",
+      "upstreamSha256": "9bbe2d4cebfa35c029508e830b255bfc158aa8246908a278e8a7faf9d72ed0ac",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/queries/camera.ts",
+      "sha256": "0b71f6d33d0bc69bd48d09b703335cd4323f53646abd237de8e77f2fce7d9947",
+      "upstreamPath": "packages/runtime/src/queries/camera.ts",
+      "upstreamSha256": "0b71f6d33d0bc69bd48d09b703335cd4323f53646abd237de8e77f2fce7d9947",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/queries/hierarchy.ts",
+      "sha256": "cccd26fd9f371f12886903b7633d33dc27fa7a0ec5f2ffce6dcdcd312e1ac96f",
+      "upstreamPath": "packages/runtime/src/queries/hierarchy.ts",
+      "upstreamSha256": "cccd26fd9f371f12886903b7633d33dc27fa7a0ec5f2ffce6dcdcd312e1ac96f",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/queries/hit-test.ts",
+      "sha256": "fb8cf37c8935cceb213188475b955813f7e99b11d6fe2c980260eb6585d4ed71",
+      "upstreamPath": "packages/runtime/src/queries/hit-test.ts",
+      "upstreamSha256": "fb8cf37c8935cceb213188475b955813f7e99b11d6fe2c980260eb6585d4ed71",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/queries/index.ts",
+      "sha256": "f85685e87b7d748160d07b313fceba084363cadd111c84da2888ab9a08852f4a",
+      "upstreamPath": "packages/runtime/src/queries/index.ts",
+      "upstreamSha256": "f85685e87b7d748160d07b313fceba084363cadd111c84da2888ab9a08852f4a",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/queries/interaction.ts",
+      "sha256": "08fea3eef02cdf99c21b93019de563c72c685e4a44947b555da8a27561103fb8",
+      "upstreamPath": "packages/runtime/src/queries/interaction.ts",
+      "upstreamSha256": "08fea3eef02cdf99c21b93019de563c72c685e4a44947b555da8a27561103fb8",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/queries/predicates.ts",
+      "sha256": "850ae8604ee25bee28de3658ee387f54f5eb93f0c5af9aa69f583114e768db4d",
+      "upstreamPath": "packages/runtime/src/queries/predicates.ts",
+      "upstreamSha256": "850ae8604ee25bee28de3658ee387f54f5eb93f0c5af9aa69f583114e768db4d",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/queries/timeline-index.ts",
+      "sha256": "0dad73020e6c7e40b9311dcc40b23caef1635381c069444a9b957b92f607034d",
+      "upstreamPath": "packages/runtime/src/queries/timeline-index.ts",
+      "upstreamSha256": "0dad73020e6c7e40b9311dcc40b23caef1635381c069444a9b957b92f607034d",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/systems/assets.ts",
+      "sha256": "ccf548154154545b9fbcae58072e8a9a4b369805c3127feb32ae7cce26ae51b8",
+      "upstreamPath": "packages/runtime/src/systems/assets.ts",
+      "upstreamSha256": "ccf548154154545b9fbcae58072e8a9a4b369805c3127feb32ae7cce26ae51b8",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/systems/gradients.ts",
+      "sha256": "60a4e07fb15ad99c249c786b459731486cbbfa3079e7bcb49d3ecede62438cda",
+      "upstreamPath": "packages/runtime/src/systems/gradients.ts",
+      "upstreamSha256": "60a4e07fb15ad99c249c786b459731486cbbfa3079e7bcb49d3ecede62438cda",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/systems/index.ts",
+      "sha256": "10225703febb8a8223f1c186e7a489e720435ba8f12281447bf5d14759a5d1df",
+      "upstreamPath": "packages/runtime/src/systems/index.ts",
+      "upstreamSha256": "10225703febb8a8223f1c186e7a489e720435ba8f12281447bf5d14759a5d1df",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/systems/motion.ts",
+      "sha256": "0c5136eace8a8df130df8524812d6bfe1e08d869422a8bfb7308639c1d23d2da",
+      "upstreamPath": "packages/runtime/src/systems/motion.ts",
+      "upstreamSha256": "0c5136eace8a8df130df8524812d6bfe1e08d869422a8bfb7308639c1d23d2da",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/systems/playback.ts",
+      "sha256": "43615da60ee4d06ece32cb3d7a632b13b497bf4545a389f39d26c9ae874269f3",
+      "upstreamPath": "packages/runtime/src/systems/playback.ts",
+      "upstreamSha256": "43615da60ee4d06ece32cb3d7a632b13b497bf4545a389f39d26c9ae874269f3",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/systems/render.ts",
+      "sha256": "aceb20b954b10010cceb8af7431c0b70cd10c8ebc9a32b1021ece20a89d4c42a",
+      "upstreamPath": "packages/runtime/src/systems/render.ts",
+      "upstreamSha256": "aceb20b954b10010cceb8af7431c0b70cd10c8ebc9a32b1021ece20a89d4c42a",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/systems/transform.ts",
+      "sha256": "14761da8d413ffe95841f74b38a67cb49e700715dc3102a8df9a65bea8212dce",
+      "upstreamPath": "packages/runtime/src/systems/transform.ts",
+      "upstreamSha256": "14761da8d413ffe95841f74b38a67cb49e700715dc3102a8df9a65bea8212dce",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/traits/audio.ts",
+      "sha256": "7bb4b94377eac23ccaf6b26d4252504b3738aa4f312cf1f853361e4939c041dd",
+      "upstreamPath": "packages/runtime/src/traits/audio.ts",
+      "upstreamSha256": "7bb4b94377eac23ccaf6b26d4252504b3738aa4f312cf1f853361e4939c041dd",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/traits/derived.ts",
+      "sha256": "b18c02dba7327d01bb41cca3835b6a7a9eb6b06037365eb0dc3109a65023a882",
+      "upstreamPath": "packages/runtime/src/traits/derived.ts",
+      "upstreamSha256": "b18c02dba7327d01bb41cca3835b6a7a9eb6b06037365eb0dc3109a65023a882",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/traits/document.ts",
+      "sha256": "8d00f91fae1b4b2e62a74884d3893d864cbfc213787e90342579d53dcfc06539",
+      "upstreamPath": "packages/runtime/src/traits/document.ts",
+      "upstreamSha256": "8d00f91fae1b4b2e62a74884d3893d864cbfc213787e90342579d53dcfc06539",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/traits/index.ts",
+      "sha256": "8e46931867745eb5abe3c68900f2d73d433a51c772efcedf6d39a294e8912336",
+      "upstreamPath": "packages/runtime/src/traits/index.ts",
+      "upstreamSha256": "8e46931867745eb5abe3c68900f2d73d433a51c772efcedf6d39a294e8912336",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/traits/interaction.ts",
+      "sha256": "ca9cdf612641052875e13975c830a1ac6189914fcbc8050247d07d4f712e7fb4",
+      "upstreamPath": "packages/runtime/src/traits/interaction.ts",
+      "upstreamSha256": "ca9cdf612641052875e13975c830a1ac6189914fcbc8050247d07d4f712e7fb4",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/traits/media.ts",
+      "sha256": "03ff466cc9dc5c3583f4a8e15ee966e2b3e73b8aa4c9f2183c09c102548e2615",
+      "upstreamPath": "packages/runtime/src/traits/media.ts",
+      "upstreamSha256": "03ff466cc9dc5c3583f4a8e15ee966e2b3e73b8aa4c9f2183c09c102548e2615",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/traits/motion.ts",
+      "sha256": "109911ab1a4e666eb86634bcd00d5be1945f78985b2206e5b09d1a48627683ad",
+      "upstreamPath": "packages/runtime/src/traits/motion.ts",
+      "upstreamSha256": "109911ab1a4e666eb86634bcd00d5be1945f78985b2206e5b09d1a48627683ad",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/traits/node.ts",
+      "sha256": "c2b730e5570e045e77f261583ad9449571389c75b9d72959b608cef4167deb8f",
+      "upstreamPath": "packages/runtime/src/traits/node.ts",
+      "upstreamSha256": "c2b730e5570e045e77f261583ad9449571389c75b9d72959b608cef4167deb8f",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/traits/relations.ts",
+      "sha256": "eb31f5b268747d538ee72641aeb7cc28ce6411bfbc206399cc33699317dd11c8",
+      "upstreamPath": "packages/runtime/src/traits/relations.ts",
+      "upstreamSha256": "eb31f5b268747d538ee72641aeb7cc28ce6411bfbc206399cc33699317dd11c8",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/traits/style.ts",
+      "sha256": "fb6855ac28d1c064171bf1f7e66bdc792cea49228a24780d391ed6c9273de6cd",
+      "upstreamPath": "packages/runtime/src/traits/style.ts",
+      "upstreamSha256": "fb6855ac28d1c064171bf1f7e66bdc792cea49228a24780d391ed6c9273de6cd",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/traits/text.ts",
+      "sha256": "7478650cb1203a0256e455303e8a6982a7da5684f634b453226ef4a84f5d2cae",
+      "upstreamPath": "packages/runtime/src/traits/text.ts",
+      "upstreamSha256": "7478650cb1203a0256e455303e8a6982a7da5684f634b453226ef4a84f5d2cae",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/traits/timing.ts",
+      "sha256": "4f0a1672ab0889d048efa54c7078a245888face123a8f2845660ca90a08f096e",
+      "upstreamPath": "packages/runtime/src/traits/timing.ts",
+      "upstreamSha256": "4f0a1672ab0889d048efa54c7078a245888face123a8f2845660ca90a08f096e",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/traits/transform.ts",
+      "sha256": "6fb4c4164cc4a07a1a0476adc5b46eceb2c23aa3030b17d312d09174ed7d9af4",
+      "upstreamPath": "packages/runtime/src/traits/transform.ts",
+      "upstreamSha256": "6fb4c4164cc4a07a1a0476adc5b46eceb2c23aa3030b17d312d09174ed7d9af4",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/traits/world.ts",
+      "sha256": "2edfcce3883948ba73198bb9c233a8f6b6860747ffb2fca36ab7eeeea6a5a7cb",
+      "upstreamPath": "packages/runtime/src/traits/world.ts",
+      "upstreamSha256": "2edfcce3883948ba73198bb9c233a8f6b6860747ffb2fca36ab7eeeea6a5a7cb",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/utils/assert.ts",
+      "sha256": "26d143702fed7b9b51afbeec17865e7ae52c9ce84cc3fc21899028b373b8c27f",
+      "upstreamPath": "packages/runtime/src/utils/assert.ts",
+      "upstreamSha256": "26d143702fed7b9b51afbeec17865e7ae52c9ce84cc3fc21899028b373b8c27f",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/utils/async.ts",
+      "sha256": "9348ac91a519a0bb3f6fd255597a8a398dc0e8ca9ef1e32ac9b78c7cc4267d89",
+      "upstreamPath": "packages/runtime/src/utils/async.ts",
+      "upstreamSha256": "9348ac91a519a0bb3f6fd255597a8a398dc0e8ca9ef1e32ac9b78c7cc4267d89",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/utils/color.ts",
+      "sha256": "719b3bfa5aec38901811e0613235e67fbbea5bdc5017ad9f492ea36593c9d95b",
+      "upstreamPath": "packages/runtime/src/utils/color.ts",
+      "upstreamSha256": "719b3bfa5aec38901811e0613235e67fbbea5bdc5017ad9f492ea36593c9d95b",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/utils/generating.ts",
+      "sha256": "dd1884c20b467f92a79094ad997c28f4397ab689d9131a244f21b86139e563ee",
+      "upstreamPath": "packages/runtime/src/utils/generating.ts",
+      "upstreamSha256": "dd1884c20b467f92a79094ad997c28f4397ab689d9131a244f21b86139e563ee",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/utils/index.ts",
+      "sha256": "884c1b47364f71bf3f86140e67390dc1735bbb46de7423e3268c0624a97be9a3",
+      "upstreamPath": "packages/runtime/src/utils/index.ts",
+      "upstreamSha256": "884c1b47364f71bf3f86140e67390dc1735bbb46de7423e3268c0624a97be9a3",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/utils/sort.ts",
+      "sha256": "036a8b53bb95cbef2e50ba1f0b35f0927cc344759b00d9da421c033a54001a73",
+      "upstreamPath": "packages/runtime/src/utils/sort.ts",
+      "upstreamSha256": "036a8b53bb95cbef2e50ba1f0b35f0927cc344759b00d9da421c033a54001a73",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/utils/stroke.ts",
+      "sha256": "03315be493e8bcc194541de7d67217efaa85c97236d8307ba356df772af01bd6",
+      "upstreamPath": "packages/runtime/src/utils/stroke.ts",
+      "upstreamSha256": "03315be493e8bcc194541de7d67217efaa85c97236d8307ba356df772af01bd6",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/utils/text-motion.ts",
+      "sha256": "697024296ab3489d929079fe26d28c417c68d6fe4ce8c385c39b45d08543e9a9",
+      "upstreamPath": "packages/runtime/src/utils/text-motion.ts",
+      "upstreamSha256": "697024296ab3489d929079fe26d28c417c68d6fe4ce8c385c39b45d08543e9a9",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/utils/text.ts",
+      "sha256": "228a0fea9f1ad934ef7e9c8c1121e642c338ea19db22ed1844eef3a9dd5f0482",
+      "upstreamPath": "packages/runtime/src/utils/text.ts",
+      "upstreamSha256": "228a0fea9f1ad934ef7e9c8c1121e642c338ea19db22ed1844eef3a9dd5f0482",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/utils/time.ts",
+      "sha256": "9dfb0e6ef0b78df7560ed2163811c893b2e77b4b96c1ead263ad10155d3a70b5",
+      "upstreamPath": "packages/runtime/src/utils/time.ts",
+      "upstreamSha256": "9dfb0e6ef0b78df7560ed2163811c893b2e77b4b96c1ead263ad10155d3a70b5",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/utils/transition.ts",
+      "sha256": "977140912a1f631dc22346a84ded7b585c9eaf210d5a2283f924ab1eab30d69b",
+      "upstreamPath": "packages/runtime/src/utils/transition.ts",
+      "upstreamSha256": "977140912a1f631dc22346a84ded7b585c9eaf210d5a2283f924ab1eab30d69b",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/world/create-world.ts",
+      "sha256": "c6bf02d5a62a3beb7f19233727b9912fd70ae1e9474ad7f770809f1e6f3be1f9",
+      "upstreamPath": "packages/runtime/src/world/create-world.ts",
+      "upstreamSha256": "c6bf02d5a62a3beb7f19233727b9912fd70ae1e9474ad7f770809f1e6f3be1f9",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/world/observers.ts",
+      "sha256": "c1bde93a82bf831a64a6e46a259c5f1420169557a59061dd3103dcaba910beb4",
+      "upstreamPath": "packages/runtime/src/world/observers.ts",
+      "upstreamSha256": "c1bde93a82bf831a64a6e46a259c5f1420169557a59061dd3103dcaba910beb4",
+      "relation": "unmodified"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/world/serialize.ts",
+      "sha256": "8a88e0ada5a8d1d3c00676603cfc6341719e97e70eb969486d927f64475752f4",
+      "upstreamPath": "packages/runtime/src/world/serialize.ts",
+      "upstreamSha256": "968bc14a186921b658d44fafc43fc3dd3ba97a3b030add1dc16e8a0641c8bd4c",
+      "relation": "adapted"
+    },
+    {
+      "path": "vendor/diffusionstudio/runtime/src/world/store.ts",
+      "sha256": "2a7d7d040e8145186e1a1d32589317cc0d3b1bf7475635a08591e36a76eb36b0",
+      "upstreamPath": "packages/runtime/src/world/store.ts",
+      "upstreamSha256": "2a7d7d040e8145186e1a1d32589317cc0d3b1bf7475635a08591e36a76eb36b0",
+      "relation": "unmodified"
+    }
+  ],
+  "vendoredPackages": {
+    "koota": {
+      "upstream": {
+        "registry": "https://registry.npmjs.org/koota/-/koota-0.6.6.tgz",
+        "tarballSha256": "16c00c0209499cd29ff43586d0cb73b46fe4c88d89495f17a7349a5a4f4f5f61",
+        "repository": "https://github.com/pmndrs/koota",
+        "version": "0.6.6",
+        "license": "ISC"
+      },
+      "reason": "koota 0.6.6 generates its SoA trait accessors with `new Function`, which the sandboxed project-frame CSP (script-src 'self' 'wasm-unsafe-eval') refuses at module scope, crashing app boot. Vendored as a file: dependency with only the four accessor factories rewritten to semantically identical closures; verified against the pristine registry tarball.",
+      "patch": "dist/chunk-ZWIGMIL4.js, dist/index.cjs, dist/react.cjs: createSoASetFunction, createSoAFastSetFunction, createSoAFastSetChangeFunction, createSoAGetFunction rewritten from `new Function` code generation to closures with identical semantics (partial-merge set, unconditional fastSet, per-key strict-inequality change detection, fresh-object get in Object.keys order). package.json: upstream build-only devDependencies and scripts removed (private-registry refs); runtime exports untouched.",
+      "excluded": [
+        "react/ source folder shipped in the tarball (dist/react.* covers the subpath; unused by this app)"
+      ],
+      "files": [
+        {
+          "path": "vendor/koota/LICENSE",
+          "sha256": "4aca3373f1677ae2cba83e44f30b313992fbce6727ce2e172907d56ac43b0137",
+          "upstreamPath": "LICENSE",
+          "upstreamSha256": "4aca3373f1677ae2cba83e44f30b313992fbce6727ce2e172907d56ac43b0137",
+          "relation": "unmodified"
+        },
+        {
+          "path": "vendor/koota/README.md",
+          "sha256": "ee302e16207914c84f812960852cab26ef80bffdf037bd7acd37883567a0d243",
+          "upstreamPath": "README.md",
+          "upstreamSha256": "ee302e16207914c84f812960852cab26ef80bffdf037bd7acd37883567a0d243",
+          "relation": "unmodified"
+        },
+        {
+          "path": "vendor/koota/dist/chunk-ZWIGMIL4.js",
+          "sha256": "44c800ab06e2e4444fd5ccc1a4448fb23b72fe46744da9efafb43719d16ec7d5",
+          "upstreamPath": "dist/chunk-ZWIGMIL4.js",
+          "upstreamSha256": "bbc3fef6a0258031714bb9cca84dabec2fc6fd484ecf1360d092ea6d15903091",
+          "relation": "patched"
+        },
+        {
+          "path": "vendor/koota/dist/index.cjs",
+          "sha256": "0faabcb7250fd39eebcd7fbf8658c68407d57479a24bb28e20d09da70eaf2d51",
+          "upstreamPath": "dist/index.cjs",
+          "upstreamSha256": "802bf3a8c2c40d0d0307f3d240ace00e0757d8c8178176b18fbfe1c9cd282789",
+          "relation": "patched"
+        },
+        {
+          "path": "vendor/koota/dist/index.d.cts",
+          "sha256": "115e801559efe9ac9073232b72d70d49d8d1dd73d543f759afd632d0ad0226a0",
+          "upstreamPath": "dist/index.d.cts",
+          "upstreamSha256": "115e801559efe9ac9073232b72d70d49d8d1dd73d543f759afd632d0ad0226a0",
+          "relation": "unmodified"
+        },
+        {
+          "path": "vendor/koota/dist/index.d.ts",
+          "sha256": "c689be9c66fce6a73063425354e08072ec6f8aaed56142827d11ea5c59d40372",
+          "upstreamPath": "dist/index.d.ts",
+          "upstreamSha256": "c689be9c66fce6a73063425354e08072ec6f8aaed56142827d11ea5c59d40372",
+          "relation": "unmodified"
+        },
+        {
+          "path": "vendor/koota/dist/index.js",
+          "sha256": "96299ec950fece9ffe1f345670514dfb22c8994bd3ff8b84eba0ab4a3cd9b9cd",
+          "upstreamPath": "dist/index.js",
+          "upstreamSha256": "96299ec950fece9ffe1f345670514dfb22c8994bd3ff8b84eba0ab4a3cd9b9cd",
+          "relation": "unmodified"
+        },
+        {
+          "path": "vendor/koota/dist/react.cjs",
+          "sha256": "9b17fa9088697564260b0d8f2035c3fece86bc98a3ec959903b9d69384554ae5",
+          "upstreamPath": "dist/react.cjs",
+          "upstreamSha256": "40c2c518d593c0ee6e137cb3e4e2307f2f03c0e3dbad9e4b27b82a07752f9aec",
+          "relation": "patched"
+        },
+        {
+          "path": "vendor/koota/dist/react.d.cts",
+          "sha256": "6f8caa77b35a29e0fa2140947f13314eff64612da21e4b3deadb5c47347f084f",
+          "upstreamPath": "dist/react.d.cts",
+          "upstreamSha256": "6f8caa77b35a29e0fa2140947f13314eff64612da21e4b3deadb5c47347f084f",
+          "relation": "unmodified"
+        },
+        {
+          "path": "vendor/koota/dist/react.d.ts",
+          "sha256": "1ef5e7a13013953ef97afdb0c00b757901b3e2deff16cc9959d24b2aada7f282",
+          "upstreamPath": "dist/react.d.ts",
+          "upstreamSha256": "1ef5e7a13013953ef97afdb0c00b757901b3e2deff16cc9959d24b2aada7f282",
+          "relation": "unmodified"
+        },
+        {
+          "path": "vendor/koota/dist/react.js",
+          "sha256": "620cf97614ebd97f4fda6917f13a4afad7a312451273a7846e1a193d4a7b1d14",
+          "upstreamPath": "dist/react.js",
+          "upstreamSha256": "620cf97614ebd97f4fda6917f13a4afad7a312451273a7846e1a193d4a7b1d14",
+          "relation": "unmodified"
+        },
+        {
+          "path": "vendor/koota/dist/types-DONaXEhM.d.cts",
+          "sha256": "6347ab3b8b98849be07f61d9282d47c8bf4b2db91ef8f6b7efa38896aceea5cc",
+          "upstreamPath": "dist/types-DONaXEhM.d.cts",
+          "upstreamSha256": "6347ab3b8b98849be07f61d9282d47c8bf4b2db91ef8f6b7efa38896aceea5cc",
+          "relation": "unmodified"
+        },
+        {
+          "path": "vendor/koota/dist/types-DONaXEhM.d.ts",
+          "sha256": "6347ab3b8b98849be07f61d9282d47c8bf4b2db91ef8f6b7efa38896aceea5cc",
+          "upstreamPath": "dist/types-DONaXEhM.d.ts",
+          "upstreamSha256": "6347ab3b8b98849be07f61d9282d47c8bf4b2db91ef8f6b7efa38896aceea5cc",
+          "relation": "unmodified"
+        },
+        {
+          "path": "vendor/koota/package.json",
+          "sha256": "96b26470db5bed196e25d7c72f6e05520eff135a4af5e8d6a54730fc046fd323",
+          "upstreamPath": "package.json",
+          "upstreamSha256": "e3711a164e65f93373539b1251aa2fa357b33e3b928b41441dd63d6004e4e957",
+          "relation": "patched"
+        }
+      ]
+    }
+  }
+}

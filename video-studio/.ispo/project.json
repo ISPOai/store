@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "name": "Video Studio",
+  "version": "0.1.0",
+  "target": "solid",
+  "appEntry": "src/main.tsx",
+  "mode": "edit",
+  "root": "",
+  "requests": {
+    "fs": "none",
+    "ui": [],
+    "agent": [],
+    "files": [
+      "pick"
+    ],
+    "chrome": [],
+    "dialog": [
+      "saveAs"
+    ],
+    "promptHistory": [],
+    "entities": {
+      "video.project": ["create", "read", "query", "update", "delete"],
+      "video.composition": ["create", "read", "query", "update", "delete"],
+      "video.asset": ["create", "read", "query", "update", "delete"],
+      "video.asset-folder": ["create", "read", "query", "update", "delete"],
+      "video.export-job": ["create", "read", "query", "update"]
+    },
+    "devices": [],
+    "connectors": {
+      "google.calendar": [],
+      "google.mail": []
+    }
+  },
+  "env": [],
+  "entityTypes": [
+    {
+      "id": "video.project",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "width", "height", "fps", "order"],
+        "properties": {
+          "title": { "type": "string", "minLength": 1, "maxLength": 80 },
+          "width": { "type": "integer", "minimum": 16, "maximum": 7680 },
+          "height": { "type": "integer", "minimum": 16, "maximum": 4320 },
+          "fps": { "type": "integer", "minimum": 1, "maximum": 120 },
+          "order": { "type": "number" },
+          "activeCompositionId": { "type": ["string", "null"], "maxLength": 128 }
+        }
+      },
+      "indexes": [{ "fields": ["order"], "unique": false }],
+      "display": { "labelField": "title", "summaryFields": ["fps", "width", "height"] }
+    },
+    {
+      "id": "video.composition",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "revision", "document"],
+        "properties": {
+          "title": { "type": "string", "minLength": 1, "maxLength": 80 },
+          "revision": { "type": "integer", "minimum": 0, "maximum": 100000000 },
+          "document": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["schemaVersion", "stage", "scenes"],
+            "properties": {
+              "schemaVersion": { "type": "integer", "minimum": 1, "maximum": 1 },
+              "stage": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["width", "height"],
+                "properties": {
+                  "width": { "type": "integer", "minimum": 16, "maximum": 7680 },
+                  "height": { "type": "integer", "minimum": 16, "maximum": 4320 },
+                  "background": { "type": "string", "maxLength": 16 }
+                }
+              },
+              "scenes": {
+                "type": "array",
+                "items": { "type": "object" },
+                "maxItems": 64
+              }
+            }
+          }
+        }
+      },
+      "indexes": [],
+      "display": { "labelField": "title", "summaryFields": ["revision"] }
+    },
+    {
+      "id": "video.asset",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "mimeType", "kind", "url"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+          "mimeType": { "type": "string", "minLength": 3, "maxLength": 100 },
+          "kind": { "type": "string", "enum": ["image", "video", "audio", "other"] },
+          "url": { "type": "string", "minLength": 8, "maxLength": 512 },
+          "sizeBytes": { "type": "integer", "minimum": 0, "maximum": 1099511627776 }
+        }
+      },
+      "indexes": [],
+      "display": { "labelField": "name", "summaryFields": ["mimeType", "kind"] }
+    },
+    {
+      "id": "video.asset-folder",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "order", "assetIds"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+          "order": { "type": "number" },
+          "assetIds": {
+            "type": "array",
+            "maxItems": 500,
+            "items": { "type": "string", "minLength": 1, "maxLength": 128 }
+          }
+        }
+      },
+      "indexes": [{ "fields": ["order"], "unique": false }],
+      "display": { "labelField": "name", "summaryFields": ["order"] }
+    },
+    {
+      "id": "video.export-job",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["format", "state", "progress", "compositionId"],
+        "properties": {
+          "format": { "type": "string", "enum": ["mp4", "webm"] },
+          "state": {
+            "type": "string",
+            "enum": ["pending", "running", "succeeded", "failed", "canceled"]
+          },
+          "progress": { "type": "number", "minimum": 0, "maximum": 1 },
+          "compositionId": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "resultPath": { "type": ["string", "null"], "maxLength": 512 },
+          "resultPublicId": { "type": ["string", "null"], "maxLength": 128 },
+          "error": { "type": ["string", "null"], "maxLength": 400 }
+        }
+      },
+      "indexes": [],
+      "display": { "labelField": "format", "summaryFields": ["state", "progress"] }
+    }
+  ],
+  "egress": {
+    "connect": []
+  }
+}

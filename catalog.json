@@ -45,6 +45,15 @@
       "category": "Productivity",
       "icon": "icon.png",
       "capabilitySummary": "Requests private project data, file picker access, and publishing decks to Files."
+    },
+    {
+      "id": "video-studio",
+      "name": "Video Studio",
+      "description": "Edit offline video compositions on a timeline and export them through the Files save dialog.",
+      "subpath": "video-studio",
+      "category": "Video",
+      "icon": "icon.png",
+      "capabilitySummary": "Requests entity storage for projects, compositions, assets, and export jobs, the file picker for media imports, and the off-platform save dialog for exports."
     }
   ]
 }
