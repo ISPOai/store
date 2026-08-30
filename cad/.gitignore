@@ -1,0 +1,12 @@
+dist/
+node_modules/
+.venv/
+.ispo/cache/
+.ispo/scratch/
+*.egg-info/
+__pycache__/
+*.py[cod]
+.DS_Store
+*.log
+.claude/skills/
+.agents/skills/
