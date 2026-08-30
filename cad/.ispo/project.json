@@ -1,0 +1,515 @@
+{
+  "schemaVersion": 1,
+  "platformApiVersion": 1,
+  "name": "CAD",
+  "version": "0.0.1",
+  "target": "react",
+  "appEntry": "src/main.tsx",
+  "mode": "edit",
+  "root": "",
+  "requests": {
+    "fs": "none",
+    "folders": [],
+    "ui": [
+      "notify",
+      "navigate"
+    ],
+    "agent": [
+      "dispatch"
+    ],
+    "dialog": [],
+    "files": [
+      "publish",
+      "pick"
+    ],
+    "assets": [],
+    "chrome": [],
+    "capability": [],
+    "spec": [],
+    "promptHistory": [],
+    "cloud": [],
+    "entities": {
+      "store.cad.model": [
+        "create",
+        "read",
+        "query",
+        "update",
+        "watch"
+      ],
+      "store.cad.generation": [
+        "create",
+        "read",
+        "query",
+        "update",
+        "watch"
+      ],
+      "store.cad.migration": [
+        "create",
+        "read",
+        "query"
+      ]
+    },
+    "devices": [],
+    "connectors": {}
+  },
+  "env": [],
+  "entityTypes": [
+    {
+      "id": "store.cad.model",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "prompt",
+          "status",
+          "activeGenerationId",
+          "previewRef",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          },
+          "prompt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8192
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "generating",
+              "ready",
+              "failed"
+            ]
+          },
+          "activeGenerationId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 512
+          },
+          "previewRef": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 2048
+          },
+          "createdAt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "updatedAt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          }
+        }
+      },
+      "indexes": [
+        {
+          "fields": [
+            "title"
+          ],
+          "unique": false
+        },
+        {
+          "fields": [
+            "status"
+          ],
+          "unique": false
+        },
+        {
+          "fields": [
+            "updatedAt"
+          ],
+          "unique": false
+        }
+      ],
+      "display": {
+        "labelField": "title",
+        "summaryFields": [
+          "status",
+          "updatedAt"
+        ],
+        "icon": "box"
+      }
+    },
+    {
+      "id": "store.cad.generation",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "modelId",
+          "agent",
+          "terminalId",
+          "status",
+          "summary",
+          "error",
+          "workspaceKey",
+          "artifactNames",
+          "publishedArtifacts",
+          "validation",
+          "startedAt",
+          "completedAt",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "modelId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "agent": {
+            "type": "string",
+            "const": "codex"
+          },
+          "terminalId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 512
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "waiting",
+              "processing",
+              "publishing",
+              "completed",
+              "failed",
+              "cancelled",
+              "outcome-unknown"
+            ]
+          },
+          "summary": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 4096
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 4096
+          },
+          "workspaceKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 96
+          },
+          "artifactNames": {
+            "type": "array",
+            "maxItems": 32,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          },
+          "publishedArtifacts": {
+            "type": "array",
+            "maxItems": 32,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "kind",
+                "mimeType",
+                "size",
+                "filesPath",
+                "filesRef"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "source",
+                    "step",
+                    "glb",
+                    "snapshot",
+                    "validation",
+                    "topology",
+                    "reference",
+                    "other"
+                  ]
+                },
+                "mimeType": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "size": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1000000000
+                },
+                "filesPath": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 2048
+                },
+                "filesRef": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "maxLength": 2048
+                }
+              }
+            }
+          },
+          "validation": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": false,
+            "required": [
+              "status",
+              "summary",
+              "checkCount",
+              "passedCount",
+              "failedCount",
+              "warningCount"
+            ],
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "passed",
+                  "failed",
+                  "partial",
+                  "not-run"
+                ]
+              },
+              "summary": {
+                "type": "string",
+                "maxLength": 4096
+              },
+              "checkCount": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 10000
+              },
+              "passedCount": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 10000
+              },
+              "failedCount": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 10000
+              },
+              "warningCount": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 10000
+              }
+            }
+          },
+          "startedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 64
+          },
+          "completedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 64
+          },
+          "createdAt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "updatedAt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          }
+        }
+      },
+      "indexes": [
+        {
+          "fields": [
+            "modelId"
+          ],
+          "unique": false
+        },
+        {
+          "fields": [
+            "status"
+          ],
+          "unique": false
+        },
+        {
+          "fields": [
+            "createdAt"
+          ],
+          "unique": false
+        },
+        {
+          "fields": [
+            "workspaceKey"
+          ],
+          "unique": true
+        }
+      ],
+      "display": {
+        "labelField": "workspaceKey",
+        "summaryFields": [
+          "status",
+          "agent",
+          "createdAt"
+        ],
+        "icon": "activity"
+      }
+    },
+    {
+      "id": "store.cad.migration",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key",
+          "state",
+          "importedAt",
+          "workspaceCount",
+          "artifactCount"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "const": "cad-fs-self-v1"
+          },
+          "state": {
+            "type": "string",
+            "const": "completed"
+          },
+          "importedAt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "workspaceCount": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 500
+          },
+          "artifactCount": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 16000
+          }
+        }
+      },
+      "indexes": [
+        {
+          "fields": [
+            "key"
+          ],
+          "unique": true
+        }
+      ],
+      "display": {
+        "labelField": "key",
+        "summaryFields": [
+          "state",
+          "importedAt"
+        ],
+        "icon": "database"
+      }
+    }
+  ],
+  "egress": {
+    "connect": []
+  },
+  "runtime": {
+    "processes": [
+      {
+        "id": "cad-api",
+        "role": "api",
+        "cwd": ".",
+        "command": "node",
+        "args": [
+          "server/server.mjs"
+        ],
+        "readiness": {
+          "kind": "http",
+          "path": "/health",
+          "timeoutMs": 30000
+        }
+      }
+    ],
+    "display": {
+      "kind": "none",
+      "apiProcess": "cad-api"
+    },
+    "packageManager": "pip",
+    "install": [
+      {
+        "id": "venv",
+        "role": "setup",
+        "cwd": ".",
+        "command": "python3.13",
+        "args": [
+          "-m",
+          "venv",
+          ".venv"
+        ]
+      },
+      {
+        "id": "cad-deps",
+        "role": "setup",
+        "cwd": "vendor/text-to-cad/cad-runtime",
+        "command": "bash",
+        "args": [
+          "--noprofile",
+          "--norc",
+          "-c",
+          "../../../.venv/bin/python -m pip install --upgrade pip && ../../../.venv/bin/python -m pip install -r requirements.txt"
+        ]
+      }
+    ],
+    "startOrder": [
+      "cad-api"
+    ],
+    "stopOrder": [
+      "cad-api"
+    ]
+  }
+}

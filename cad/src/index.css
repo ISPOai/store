@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@ispo/design/tokens.css";
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border, currentColor);
+  }
+  body {
+    background: transparent;
+    color: var(--color-foreground);
+    min-width: 320px;
+    overflow: hidden;
+  }
+}
