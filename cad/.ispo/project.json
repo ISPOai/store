@@ -29,21 +29,21 @@
     "promptHistory": [],
     "cloud": [],
     "entities": {
-      "cad.model": [
+      "store.cad.model": [
         "create",
         "read",
         "query",
         "update",
         "watch"
       ],
-      "cad.generation": [
+      "store.cad.generation": [
         "create",
         "read",
         "query",
         "update",
         "watch"
       ],
-      "cad.migration": [
+      "store.cad.migration": [
         "create",
         "read",
         "query"
@@ -55,7 +55,7 @@
   "env": [],
   "entityTypes": [
     {
-      "id": "cad.model",
+      "id": "store.cad.model",
       "schemaVersion": 1,
       "schema": {
         "type": "object",
@@ -145,7 +145,7 @@
       }
     },
     {
-      "id": "cad.generation",
+      "id": "store.cad.generation",
       "schemaVersion": 1,
       "schema": {
         "type": "object",
@@ -399,7 +399,7 @@
       }
     },
     {
-      "id": "cad.migration",
+      "id": "store.cad.migration",
       "schemaVersion": 1,
       "schema": {
         "type": "object",

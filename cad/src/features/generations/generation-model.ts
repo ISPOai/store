@@ -1,5 +1,5 @@
-export const MODEL_TYPE = "cad.model";
-export const GENERATION_TYPE = "cad.generation";
+export const MODEL_TYPE = "store.cad.model";
+export const GENERATION_TYPE = "store.cad.generation";
 
 type ProjectLocation = Pick<Location, "protocol" | "hostname" | "pathname">;
 

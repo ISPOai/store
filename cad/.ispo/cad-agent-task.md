@@ -48,8 +48,8 @@ At minimum publish `model.py`, `model.step`, `model.glb`, `snapshot.png`, and
 `validation.json` with the ISPO `files_publish` tool. Verify the returned Files
 paths/refs. Valuable output must not remain only in private state.
 
-Update the `cad.generation` entity identified by `generationId` with the real
+Update the `store.cad.generation` entity identified by `generationId` with the real
 status, a bounded summary, artifact names and Files metadata, validation
-counts, and timestamps. Update the `cad.model` record identified by `modelId`
+counts, and timestamps. Update the `store.cad.model` record identified by `modelId`
 to `ready` only after Files publication succeeds. Preserve a truthful `failed`,
 `cancelled`, or `outcome-unknown` state otherwise.
