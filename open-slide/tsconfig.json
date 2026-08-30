@@ -1,0 +1,154 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/app/*"
+      ],
+      "virtual:open-slide/slides": [
+        "./src/virtual/slides.ts"
+      ],
+      "virtual:open-slide/config": [
+        "./src/virtual/config.ts"
+      ],
+      "virtual:open-slide/folders": [
+        "./src/virtual/folders.ts"
+      ],
+      "virtual:open-slide/themes": [
+        "./src/virtual/themes.ts"
+      ],
+      "react-router-dom": [
+        "./vendor/dist/react-router-dom.js"
+      ],
+      "next-themes": [
+        "./vendor/dist/next-themes.js"
+      ],
+      "lucide-react": [
+        "./vendor/dist/lucide-react.js"
+      ],
+      "sonner": [
+        "./vendor/dist/sonner.js"
+      ],
+      "cmdk": [
+        "./vendor/dist/cmdk.js"
+      ],
+      "@base-ui/react": [
+        "./vendor/dist/base-ui__react.js"
+      ],
+      "@dnd-kit/core": [
+        "./vendor/dist/dnd-kit__core.js"
+      ],
+      "@dnd-kit/sortable": [
+        "./vendor/dist/dnd-kit__sortable.js"
+      ],
+      "@dnd-kit/utilities": [
+        "./vendor/dist/dnd-kit__utilities.js"
+      ],
+      "clsx": [
+        "./vendor/dist/clsx.js"
+      ],
+      "tailwind-merge": [
+        "./vendor/dist/tailwind-merge.js"
+      ],
+      "class-variance-authority": [
+        "./vendor/dist/class-variance-authority.js"
+      ],
+      "emoji-picker-react": [
+        "./vendor/dist/emoji-picker-react.js"
+      ],
+      "react-image-crop": [
+        "./vendor/dist/react-image-crop.js"
+      ],
+      "html-to-image": [
+        "./vendor/dist/html-to-image.js"
+      ],
+      "fflate": [
+        "./vendor/dist/fflate.js"
+      ],
+      "use-sync-external-store": [
+        "./vendor/shims/use-sync-external-store-shim.js"
+      ],
+      "use-sync-external-store/shim": [
+        "./vendor/shims/use-sync-external-store-shim.js"
+      ],
+      "@babel/parser": [
+        "./vendor/dist/babel__parser.js"
+      ],
+      "@babel/types": [
+        "./vendor/dist/babel__types.js"
+      ],
+      "@base-ui/react/button": [
+        "./vendor/dist/base-ui__react__button.js"
+      ],
+      "@base-ui/react/context-menu": [
+        "./vendor/dist/base-ui__react__context-menu.js"
+      ],
+      "@base-ui/react/dialog": [
+        "./vendor/dist/base-ui__react__dialog.js"
+      ],
+      "@base-ui/react/menu": [
+        "./vendor/dist/base-ui__react__menu.js"
+      ],
+      "@base-ui/react/merge-props": [
+        "./vendor/dist/base-ui__react__merge-props.js"
+      ],
+      "@base-ui/react/popover": [
+        "./vendor/dist/base-ui__react__popover.js"
+      ],
+      "@base-ui/react/progress": [
+        "./vendor/dist/base-ui__react__progress.js"
+      ],
+      "@base-ui/react/scroll-area": [
+        "./vendor/dist/base-ui__react__scroll-area.js"
+      ],
+      "@base-ui/react/select": [
+        "./vendor/dist/base-ui__react__select.js"
+      ],
+      "@base-ui/react/separator": [
+        "./vendor/dist/base-ui__react__separator.js"
+      ],
+      "@base-ui/react/slider": [
+        "./vendor/dist/base-ui__react__slider.js"
+      ],
+      "@base-ui/react/tabs": [
+        "./vendor/dist/base-ui__react__tabs.js"
+      ],
+      "@base-ui/react/toggle": [
+        "./vendor/dist/base-ui__react__toggle.js"
+      ],
+      "@base-ui/react/tooltip": [
+        "./vendor/dist/base-ui__react__tooltip.js"
+      ],
+      "@base-ui/react/use-render": [
+        "./vendor/dist/base-ui__react__use-render.js"
+      ],
+      "@base-ui/react/toggle-group": [
+        "./vendor/dist/base-ui__react__toggle-group.js"
+      ],
+      "use-sync-external-store/shim/with-selector": [
+        "./vendor/shims/use-sync-external-store-with-selector.js"
+      ],
+      "@open-slide/core": [
+        "./src/core/index.ts"
+      ]
+    }
+  },
+  "include": [
+    "src"
+  ]
+}
