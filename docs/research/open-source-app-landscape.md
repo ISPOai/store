@@ -37,11 +37,21 @@ For conservative planning, MIT, Apache-2.0, and BSD projects are the default gre
 
 | Priority | Audience | Ready app workflow | Why it is easy to support | Remaining boundary |
 |---|---|---|---|---|
-| **1** | **Brand and social-content creators** | Moodboard → Excalidraw → [miniPaint](https://github.com/viliusle/miniPaint) → [SVG-Edit](https://github.com/SVG-Edit/svgedit) → OpenCut/OpenSlides | The new editors are complete browser apps under MIT; the rest already exist in the Store. This supports references, sketches, raster/vector assets, short videos, and presentations. | Publishing to social platforms remains an external connector workflow. |
-| **2** | **Podcasters and audio-clip producers** | [AudioMass](https://github.com/pkalogiros/AudioMass) → [BeepBox](https://github.com/johnnesky/beepbox) → [miniPaint](https://github.com/viliusle/miniPaint) → OpenCut | AudioMass is a complete browser recorder/editor, BeepBox is a complete browser music editor, and both use MIT. Artwork and promotional clips are also covered. | Podcast-feed hosting and distribution remain external. |
-| **3** | **Pixel-art and game-asset creators** | Moodboard/Excalidraw → [Piskel](https://github.com/piskelapp/piskel) → [BeepBox](https://github.com/johnnesky/beepbox) → [miniPaint](https://github.com/viliusle/miniPaint) → OpenCut | Piskel is a complete Apache-2.0 browser sprite editor; BeepBox and miniPaint are complete MIT apps. The workflow produces sprites, loops, artwork, and trailers. | Market this as an asset studio, not a complete game-development environment. |
-| **4** | **Diagram and presentation creators** | Excalidraw → [SVG-Edit](https://github.com/SVG-Edit/svgedit) → miniPaint → OpenSlides; optionally [draw.io](https://github.com/jgraph/drawio) | The core path is already present or MIT-licensed and browser-complete. It serves educators, consultants, workshop facilitators, and internal communicators. | draw.io is optional until its stencil terms, trademarks, and bundled assets pass review. |
-| **5** | **Parametric 3D-print creators** | Excalidraw → [JSCAD](https://github.com/jscad/OpenJSCAD.org) → miniPaint/OpenSlides | JSCAD provides a self-hostable browser UI and is MIT-licensed; the workflow covers sketches, scripted printable models, previews, and presentation assets. | Treat as a second-wave integration because its monorepo and package boundaries still need a packaging prototype. |
+| **1** | **Brand and social-content creators** | Moodboard → Excalidraw → [miniPaint](https://github.com/viliusle/miniPaint) / [JS Paint](https://github.com/1j01/jspaint) / [BitMappery](https://github.com/igorski/bitmappery) → [SVG-Edit](https://github.com/SVG-Edit/svgedit) → OpenCut/OpenSlides | The creation tools are complete browser apps under MIT; the rest already exist in the Store. This covers references, sketches, raster/vector assets, short videos, and presentations. | Social publishing, scheduling, channel analytics, and a dedicated brand-kit/template manager are still missing. |
+| **2** | **Diagram and presentation creators** | Excalidraw → [Mermaid Live Editor](https://github.com/mermaid-js/mermaid-live-editor) → SVG-Edit/miniPaint → OpenSlides; optionally [draw.io](https://github.com/jgraph/drawio) | Mermaid Live Editor is a complete MIT browser app, so text-to-diagram no longer requires ISPO to build a UI. The rest of the core path is existing or browser-complete. | Data-driven chart authoring is still library-based; draw.io remains conditional on asset and trademark review. |
+| **3** | **Pixel-art and game-asset creators** | Moodboard/Excalidraw → [Piskel](https://github.com/piskelapp/piskel) / [BitMappery](https://github.com/igorski/bitmappery) → [BeepBox](https://github.com/johnnesky/beepbox) / [Efflux](https://github.com/igorski/efflux-tracker) → miniPaint → OpenCut | The ready apps cover sprites, spritesheets, animation, music/loops, supporting artwork, and trailers with MIT or Apache-2.0 licenses. | There is still no easy permissive bundle for complete game assembly, 3D asset creation, level editing, or team asset/version management. |
+| **4** | **Parametric 3D-print creators** | Excalidraw → [JSCAD](https://github.com/jscad/OpenJSCAD.org) → [Online 3D Viewer](https://github.com/kovacsv/Online3DViewer) → [Kiri:Moto/Mesh:Tool](https://github.com/GridSpace/grid-apps) → miniPaint/OpenSlides | The newly identified MIT apps add multi-format inspection, mesh repair, slicing, and G-code generation. Kiri:Moto also documents an iframe messaging API. | Packaging, workers, CSP, and the iframe API still require prototypes; general-purpose sculpting and printer-fleet management are outside the workflow. |
+| **5** | **Podcasters and audio-clip producers** | [AudioMass](https://github.com/pkalogiros/AudioMass) → [BeepBox](https://github.com/johnnesky/beepbox) / [Efflux](https://github.com/igorski/efflux-tracker) → miniPaint → OpenCut | Recording, multitrack editing, music, artwork, and promotional clips are covered by complete MIT browser apps. | This is a **second-wave audience**: mature script/show-note authoring, automatic transcription/caption correction, RSS hosting, distribution, and analytics remain missing. |
+
+### Missing ready software for the selected audiences
+
+| Selected audience | What ready apps cover | Missing ready software | Honest launch scope |
+|---|---|---|---|
+| **Brand and social-content creators** | Visual direction, drawing, raster/vector editing, short-video editing, presentations | Social publishing/scheduling, channel analytics, brand-kit and reusable-template management | Launch as a **content-production studio**, not a social-media operations suite. |
+| **Diagram and presentation creators** | Freehand diagrams, text-to-diagram, vector/raster assets, slide authoring | Complete spreadsheet/chart authoring from data; draw.io still needs asset/trademark clearance | Launch as a **diagram-to-deck studio**; exclude BI and advanced data presentations. |
+| **Pixel-art and game-asset creators** | Sprites, spritesheets, animation, music/loops, artwork, trailers | Full game editor, permissive ready 3D editor, level editor, shared asset library/versioning | Launch as a **2D game-asset studio**, not an indie-game development studio. |
+| **Parametric 3D-print creators** | Scripted models, format inspection/conversion, mesh repair, slicing, G-code | General-purpose modeling/sculpting, printer control/fleet management; integration prototypes are not yet complete | Candidate for launch **after JSCAD, Online 3D Viewer, and Kiri:Moto prototypes pass**. |
+| **Podcasters and audio-clip producers** | Recording, waveform/multitrack editing, music, cover artwork, promotional video | Mature ready script/show-note editor, transcription/caption editor, podcast RSS hosting/distribution/analytics | Do **not** call this end-to-end yet; launch only as an **audio-production and promo studio**. |
 
 ### Ready-app license gate
 
@@ -52,7 +62,13 @@ For conservative planning, MIT, Apache-2.0, and BSD projects are the default gre
 | [AudioMass](https://github.com/pkalogiros/AudioMass) | Complete browser audio recorder/editor | MIT for original code; retain and audit third-party notices | **GREEN WITH NOTICE AUDIT** |
 | [Piskel](https://github.com/piskelapp/piskel) | Complete browser sprite editor with offline builds | Apache-2.0 | **GREEN**; confirm maintenance and browser behavior during integration. |
 | [BeepBox](https://github.com/johnnesky/beepbox) | Complete TypeScript browser music editor | MIT | **GREEN WITH DEPENDENCY AUDIT**; vendor or review the optional MP3-export dependency. |
+| [JS Paint](https://github.com/1j01/jspaint) | Complete browser paint application | MIT | **GREEN WITH EGRESS REVIEW**; disable or remove third-party upload features. |
+| [BitMappery](https://github.com/igorski/bitmappery) | Complete browser editor with layers, masking, animation, and spritesheets | MIT | **GREEN WITH STORAGE REVIEW**; retain local mode and disable unneeded cloud integration. |
+| [Efflux](https://github.com/igorski/efflux-tracker) | Complete browser music tracker/DAW with MIDI | MIT | **GREEN WITH STORAGE REVIEW**; prototype local-only project persistence. |
+| [Mermaid Live Editor](https://github.com/mermaid-js/mermaid-live-editor) | Complete Svelte browser diagram editor | MIT | **GREEN WITH EGRESS REVIEW**; disable external renderer, sharing, analytics, and promotional endpoints. |
 | [JSCAD](https://github.com/jscad/OpenJSCAD.org) | Self-hostable browser UI | MIT unless a subcomponent states otherwise | **GREEN AFTER PACKAGING PROTOTYPE** |
+| [Online 3D Viewer](https://github.com/kovacsv/Online3DViewer) | Complete browser model viewer, converter, and explorer | MIT | **GREEN WITH DEPENDENCY AUDIT**; test workers, large files, and format-loader licenses. |
+| [Kiri:Moto/Mesh:Tool](https://github.com/GridSpace/grid-apps) | Complete browser slicer and mesh-repair apps with iframe messaging API | MIT | **GREEN AFTER PACKAGING PROTOTYPE**; test workers, CSP, export, and frame messaging. |
 | [draw.io](https://github.com/jgraph/drawio) | Complete client-side browser editor | Apache-2.0 code; separate stencil, template, icon, and trademark terms | **YELLOW**; legal/asset review before Store inclusion. |
 | Blockbench, Twine, GridSound | Complete or substantial browser apps | GPL-3.0 or AGPL-3.0 | **NOT IN EASY-INTEGRATION SHORTLIST** pending distribution review. |
 | GDevelop, Pixelorama, Slidev, Motion Canvas | Browser-capable projects | Permissive licenses, but heavy integration/build assumptions | **NOT IN EASY-INTEGRATION SHORTLIST** because they are not simple packaging jobs. |
@@ -102,17 +118,23 @@ The relevant sources are [`import-repo.ts`](https://github.com/ISPOai/ispo/blob/
 |---|---|---|---|---|
 | [AudioMass](https://github.com/pkalogiros/AudioMass) | Audio/waveform editing | JavaScript, Web Audio | MIT | **READY** |
 | [miniPaint](https://github.com/viliusle/miniPaint) | Layered raster image editing | JavaScript, Canvas | MIT | **READY** |
+| [JS Paint](https://github.com/1j01/jspaint) | Lightweight painting and image editing | JavaScript, Canvas | MIT | **READY**; remove or disable third-party upload actions. |
+| [BitMappery](https://github.com/igorski/bitmappery) | Layered image, animation, and spritesheet editing | TypeScript/Vue, Canvas | MIT | **READY / REVIEW**; test local-only storage. |
 | [SVG-Edit](https://github.com/SVG-Edit/svgedit) | Vector editing | JavaScript, SVG | MIT | **READY** |
 | [draw.io](https://github.com/jgraph/drawio) | Diagrams and whiteboards | JavaScript | Apache-2.0 code | **READY**; review stencil and trademark terms. |
+| [Mermaid Live Editor](https://github.com/mermaid-js/mermaid-live-editor) | Text-to-diagram editing and preview | TypeScript/Svelte | MIT | **READY / REVIEW**; build with external renderers, analytics, and promotions disabled. |
 | [Piskel](https://github.com/piskelapp/piskel) | Sprites and pixel art | JavaScript | Apache-2.0 | **READY** |
 | [Blockbench](https://github.com/JannisX11/blockbench) | Low-poly 3D models | JavaScript, WebGL | GPL-3.0 | **READY** |
 | [Twine](https://github.com/klembot/twinejs) | Branching interactive stories | TypeScript | GPL-3.0 | **READY** |
 | [BeepBox](https://github.com/johnnesky/beepbox) | Music sketching | TypeScript, Web Audio | MIT | **READY** |
+| [Efflux](https://github.com/igorski/efflux-tracker) | Browser music tracker/DAW | TypeScript/Vue, Web Audio/Web MIDI | MIT | **READY / REVIEW**; retain local-only project storage. |
 | [GridSound](https://github.com/gridsound/daw) | Browser DAW | JavaScript, Web Audio | AGPL-3.0 | **HEAVY ADAPTATION**; audit its “half open-source” statement, assets, and submodules. |
 | [Starboard Notebook](https://github.com/gzuidhof/starboard-notebook) | Browser notebook | TypeScript | MPL-2.0 | **READY / REVIEW** |
 | [GDevelop](https://github.com/4ian/GDevelop) | No-code game editor | React/JavaScript UI with browser-compiled core | MIT | **HEAVY ADAPTATION**; keep only if its browser distribution can be sealed and bridged. |
 | [Pixelorama](https://github.com/Orama-Interactive/Pixelorama) | Pixel art and animation | Existing Godot web export with JS/Wasm loader | MIT | **HEAVY ADAPTATION**; canvas-level integration, not DOM-native. Piskel is the safer first choice. |
 | [JSCAD](https://github.com/jscad/OpenJSCAD.org) | Scripted parametric CAD | JavaScript, WebGL | MIT | **READY / ADAPT** |
+| [Online 3D Viewer](https://github.com/kovacsv/Online3DViewer) | 3D model viewing, inspection, and conversion | JavaScript/WebGL | MIT | **READY / REVIEW**; audit format-loader dependencies and workers. |
+| [Kiri:Moto/Mesh:Tool](https://github.com/GridSpace/grid-apps) | 3D slicing, mesh repair, CAM, and laser preparation | JavaScript, Web Workers/WebGL | MIT | **READY / ADAPT**; iframe API exists, but packaging and CSP need a prototype. |
 
 ### JS/TS foundations that need a custom ISPO app
 
@@ -358,23 +380,23 @@ This section keeps the important benchmark names even when a JavaScript app cove
 
 ## Best next integrations
 
-1. AudioMass
-2. miniPaint
-3. Editor.js
-4. Mermaid
-5. Piskel
-6. Transformers.js transcription/caption app
-7. Univer-based Sheets app
-8. DuckDB-Wasm data explorer
-9. Perspective/Vega-Lite visualization app
-10. JSON Forms form builder
-11. Blockbench
-12. Twine
-13. BeepBox
-14. JSCAD
-15. PDF.js + pdf-lib document app
+This list now contains only complete browser apps with permissive licenses. It intentionally excludes libraries that require ISPO to build a new product UI and GPL/AGPL projects awaiting distribution review.
 
-After those, prototype GDevelop, Pixelorama, GridSound, Motion Canvas, and Slidev individually before promising them as Store integrations.
+1. miniPaint
+2. AudioMass
+3. SVG-Edit
+4. Piskel
+5. Mermaid Live Editor
+6. BeepBox
+7. JS Paint
+8. BitMappery
+9. Efflux
+10. Online 3D Viewer
+11. JSCAD
+12. Kiri:Moto/Mesh:Tool
+13. draw.io, only after its asset and trademark review
+
+Prototype the apps individually before treating an audience bundle as complete. In particular, the 3D workflow requires worker/CSP testing, and the podcast workflow remains incomplete without transcription and publishing.
 
 ## Investor-safe narrative
 
