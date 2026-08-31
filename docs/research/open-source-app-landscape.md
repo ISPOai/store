@@ -21,6 +21,51 @@ This report therefore uses two explicit result types:
 
 Keeping the names in the gap rows is intentional. It shows investors and product planners the quality bar the missing browser app would need to match.
 
+## Strict launch shortlist: easiest audiences to support
+
+The launch shortlist is intentionally narrower than the full research catalog. An app counts toward an easy-to-support audience only when it:
+
+1. already provides a complete browser user interface;
+2. can be self-hosted without a mandatory application server or database;
+3. needs packaging and SDK integration, not a new product UI;
+4. uses a permissive license, or is an existing Store app that has already been reviewed; and
+5. has no obvious asset, model, trademark, or dependency issue that blocks redistribution.
+
+For conservative planning, MIT, Apache-2.0, and BSD projects are the default green zone. MPL projects require a file-level compliance plan. GPL and AGPL projects do not count as easy integrations until counsel approves the exact distribution and linking model. This is a product-screening rule, not legal advice.
+
+### Primary launch audiences
+
+| Priority | Audience | Ready app workflow | Why it is easy to support | Remaining boundary |
+|---|---|---|---|---|
+| **1** | **Brand and social-content creators** | Moodboard → Excalidraw → [miniPaint](https://github.com/viliusle/miniPaint) → [SVG-Edit](https://github.com/SVG-Edit/svgedit) → OpenCut/OpenSlides | The new editors are complete browser apps under MIT; the rest already exist in the Store. This supports references, sketches, raster/vector assets, short videos, and presentations. | Publishing to social platforms remains an external connector workflow. |
+| **2** | **Podcasters and audio-clip producers** | [AudioMass](https://github.com/pkalogiros/AudioMass) → [BeepBox](https://github.com/johnnesky/beepbox) → [miniPaint](https://github.com/viliusle/miniPaint) → OpenCut | AudioMass is a complete browser recorder/editor, BeepBox is a complete browser music editor, and both use MIT. Artwork and promotional clips are also covered. | Podcast-feed hosting and distribution remain external. |
+| **3** | **Pixel-art and game-asset creators** | Moodboard/Excalidraw → [Piskel](https://github.com/piskelapp/piskel) → [BeepBox](https://github.com/johnnesky/beepbox) → [miniPaint](https://github.com/viliusle/miniPaint) → OpenCut | Piskel is a complete Apache-2.0 browser sprite editor; BeepBox and miniPaint are complete MIT apps. The workflow produces sprites, loops, artwork, and trailers. | Market this as an asset studio, not a complete game-development environment. |
+| **4** | **Diagram and presentation creators** | Excalidraw → [SVG-Edit](https://github.com/SVG-Edit/svgedit) → miniPaint → OpenSlides; optionally [draw.io](https://github.com/jgraph/drawio) | The core path is already present or MIT-licensed and browser-complete. It serves educators, consultants, workshop facilitators, and internal communicators. | draw.io is optional until its stencil terms, trademarks, and bundled assets pass review. |
+| **5** | **Parametric 3D-print creators** | Excalidraw → [JSCAD](https://github.com/jscad/OpenJSCAD.org) → miniPaint/OpenSlides | JSCAD provides a self-hostable browser UI and is MIT-licensed; the workflow covers sketches, scripted printable models, previews, and presentation assets. | Treat as a second-wave integration because its monorepo and package boundaries still need a packaging prototype. |
+
+### Ready-app license gate
+
+| App | Readiness | License posture | Launch decision |
+|---|---|---|---|
+| [miniPaint](https://github.com/viliusle/miniPaint) | Complete browser image editor with documented iframe embedding | MIT | **GREEN** |
+| [SVG-Edit](https://github.com/SVG-Edit/svgedit) | Complete browser vector editor | MIT | **GREEN** |
+| [AudioMass](https://github.com/pkalogiros/AudioMass) | Complete browser audio recorder/editor | MIT for original code; retain and audit third-party notices | **GREEN WITH NOTICE AUDIT** |
+| [Piskel](https://github.com/piskelapp/piskel) | Complete browser sprite editor with offline builds | Apache-2.0 | **GREEN**; confirm maintenance and browser behavior during integration. |
+| [BeepBox](https://github.com/johnnesky/beepbox) | Complete TypeScript browser music editor | MIT | **GREEN WITH DEPENDENCY AUDIT**; vendor or review the optional MP3-export dependency. |
+| [JSCAD](https://github.com/jscad/OpenJSCAD.org) | Self-hostable browser UI | MIT unless a subcomponent states otherwise | **GREEN AFTER PACKAGING PROTOTYPE** |
+| [draw.io](https://github.com/jgraph/drawio) | Complete client-side browser editor | Apache-2.0 code; separate stencil, template, icon, and trademark terms | **YELLOW**; legal/asset review before Store inclusion. |
+| Blockbench, Twine, GridSound | Complete or substantial browser apps | GPL-3.0 or AGPL-3.0 | **NOT IN EASY-INTEGRATION SHORTLIST** pending distribution review. |
+| GDevelop, Pixelorama, Slidev, Motion Canvas | Browser-capable projects | Permissive licenses, but heavy integration/build assumptions | **NOT IN EASY-INTEGRATION SHORTLIST** because they are not simple packaging jobs. |
+| Editor.js, Mermaid, DuckDB-Wasm, Perspective, Transformers.js, and other foundations | Libraries or engines rather than complete Store apps | Mostly permissive | **NOT IN EASY-INTEGRATION SHORTLIST** because ISPO must build the missing application UI. |
+
+### Audiences to defer
+
+- **Full game developers:** the easy, permissively licensed apps cover asset creation, not a complete game-authoring workflow.
+- **Online-course producers:** the useful foundations are strong, but script authoring, AI generation, captions, publishing, and LMS delivery are not all ready-app integrations.
+- **Researchers and data teams:** most of the data stack is a collection of libraries that still needs custom product UI.
+- **Viral AI video agencies:** image/video generation depends on Python/GPU backends, so the central production stage is not a current Store app.
+- **Office, sales, consulting, and product teams:** their critical systems of record, project management, scheduling, signatures, and portals require backend products or new apps.
+
 ## Runtime boundary
 
 ```text
