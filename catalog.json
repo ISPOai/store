@@ -27,6 +27,15 @@
       "category": "Design",
       "icon": "icon.webp",
       "capabilitySummary": "Requests file picker access and notifications."
+    },
+    {
+      "id": "bento-slides",
+      "name": "Bento Slides",
+      "description": "Build and present slide decks with morph transitions, built-in charts, and speaker notes.",
+      "subpath": "bento-slides",
+      "category": "Productivity",
+      "icon": "icon.png",
+      "capabilitySummary": "Requests private project data, file picker access, and publishing decks to Files."
     }
   ]
 }

@@ -93,9 +93,22 @@ Required bookkeeping (see `open-slide/UPSTREAM.md` for the shape):
 - Keep upstream's LICENSE file when you vendor substantial code (Excalidraw
   does this).
 
+**Keep upstream's directory shape, and put `appEntry` in a shim.** A port that
+spans two upstream directories (an app plus a shared kernel, say) reaches
+across them with relative imports — `../../kernel/src/x.ts` from one depth,
+`../../../kernel/src/x.ts` from another. Vendor them as SIBLINGS under your app
+folder exactly as upstream has them, and NOT ONE import needs rewriting; a
+file-by-file diff against upstream also stays readable, which is what makes the
+next refresh and the human's review cheap. Then make `src/main.ts` a thin
+ISPO entry that imports the real one. Bento Slides is
+`bento-slides/{src,slides/src,kernel/src}` for exactly this reason.
+
 Never copy into the store: `node_modules/`, `dist/`, build output, lockfiles
 for package managers we don't use, CI configs, or upstream's agent/skill
-directories.
+directories. Drop upstream code that is only reachable through a feature you
+dropped — Bento's 22 downloadable language catalogues (~500 KB) came out with
+the release channel that fetched them, and nothing in the bundle imported them
+afterwards.
 
 ## Phase 2 — Decide the permission envelope
 
@@ -190,6 +203,15 @@ you. These are hard errors, verified by hitting each one:
    retrying state ("waiting for file access"), never as an empty library — and
    make sure a failed *seed* can run again after access is granted. Every app
    with `fs` hits this on its literal first launch.
+   **Tell "absent" from "refused" by the error text, not by `catch`.** Only a
+   message containing `not found:` means the file genuinely is not there
+   (`scoped-fs.ts` maps ENOENT to `<label> not found: <path>`); every other
+   failure — a held grant, a refusal — must route to the waiting state.
+   Treating them alike is what puts an empty starter document in front of
+   someone whose real work is on disk, and the next autosave makes that
+   permanent. Retry on a timer AND offer a button (a grant deferred to the
+   Approval Center lands at a time the app cannot predict), and leave the
+   waiting screen without a reload when it lands.
 6. **Layout must survive hidden frames.** A backgrounded/occluded iframe gets
    no rendering steps: no ResizeObserver callbacks, no rAF. Anything that
    measures its container must re-measure on the props that change layout, and
@@ -203,6 +225,47 @@ you. These are hard errors, verified by hitting each one:
    shouldn't); no `<StrictMode>` (double-mount breaks one-time seeding);
    folder name must match `/^[a-z0-9][a-z0-9-]*$/` and equal the catalog
    `subpath`; include a `tsconfig.json` (copy Moodboard's).
+9. **`alert`, `confirm` and `prompt` DO NOTHING — silently.** The project
+   iframe is sandboxed `allow-scripts allow-same-origin allow-forms` and NOT
+   `allow-modals`, so Chromium ignores `alert()`, returns **false** from
+   `confirm()` and **null** from `prompt()`, with only a console warning. The
+   app sees a user who declined every confirmation and typed nothing into
+   every prompt — so `if (!confirm('Delete this?')) return` becomes "you can
+   never delete", and every text prompt becomes "cancelled". Nothing throws
+   and nothing is logged by the app. **Grep any port for all three before you
+   build** and replace them with in-page `<dialog>` elements (`showModal()`
+   works fine — it is a DOM element, not a browser modal). Note the
+   replacements are async, so their call sites have to become async too; a
+   synchronous handler that must decide *now* has to be restructured, not made
+   to guess. There is no host-provided confirm/prompt to fall back on.
+10. **The generated shell is theme-neutral; your UA-styled surfaces are not.**
+    The host's `dist/index.html` sets `:root { color-scheme: dark light }`, so
+    any element that takes the USER-AGENT surface — `<dialog>` above all, plus
+    bare form controls — paints from the viewer's OS mode, not from your CSS.
+    An app whose upstream `index.html` declared `content="only light"` loses
+    that declaration on the way in, and its dialogs render dark-on-dark. Pin
+    `background` and `color` explicitly on every such element, from your theme
+    tokens.
+11. **`requestFullscreen()` is denied.** `fullscreen` is not in the iframe's
+    `allow=` Permissions Policy (`AUTO_ALLOW_FEATURES` in
+    `project-frame-permissions.ts`), so the promise rejects. A present mode, a
+    lightbox or a zoomed editor must fill the PANE with its own overlay and
+    treat true fullscreen as a bonus. Bento's `overlay.requestFullscreen?.().catch(() => {})`
+    is the right shape: ask, ignore the refusal, and lay out for the pane.
+12. **The host generates the mount node, and it is `#root`.** An upstream app
+    that mounts on its own id (`#app`) finds nothing there. Create the node in
+    your entry rather than teaching the app a second id, and remember `body`
+    is `position: fixed; inset: 0` with `#root` owning the viewport.
+13. **If you export commands that write durable state, adopt their writes.** A
+    headless command can change the document on disk while the editor is open;
+    without a re-read the UI renders a stale copy and the next save destroys
+    the command's work — a data loss the app's own command surface caused.
+    Re-read when the pane comes forward, and **not** behind a
+    `document.visibilityState === 'visible'` guard: switching ISPO panes never
+    changes document visibility. Listen for `ispo:focus-project` (the SDK's
+    `DOM_EVENT_FOCUS_PROJECT`, dispatched on `window`) alongside `focus` and
+    `visibilitychange`. A dirty document must win — say the deck changed and
+    leave the author's edit alone.
 
 ## Phase 4 — Catalog entry and icon
 
@@ -223,6 +286,44 @@ implementation; every app shipped so far had at least one bug only this phase
 caught (wrong-scale present mode, permission-race deadlock, browser-download
 gate, lockfile rejection).
 
+### Before you take the host: the mocked-SDK smoke run
+
+The live host is a shared, single-instance resource — one `--user-data-dir`, an
+Electron single-instance lock, and often another agent's validation already in
+it. Do not spend it on bugs a browser tab would have found.
+
+Build your entry with the SDK aliased to a small in-memory stand-in and open it
+in Chrome:
+
+```bash
+esbuild src/main.ts --bundle --format=esm --target=chrome140 --splitting \
+  --outdir=/tmp/smoke --entry-names=main --chunk-names='chunk-[hash]' \
+  --main-fields=module,browser,main --loader:.woff2=file --loader:.svg=file \
+  --alias:@ispo/sdk=/tmp/mock/ispo-sdk-mock.ts \
+  --define:process.env.NODE_ENV='"production"'
+```
+
+A ~120-line mock of `fs` (a `Map`), `files.pick`/`files.save`, and
+`commands.define`/`expose` is enough to drive first-run seeding, the whole core
+loop, every command handler, and the import/export paths. Give the mock a
+switch that makes every `fs` call refuse (a `?deny` query param works) and you
+can exercise the permission-race gate too. Serve the bundle beside a copy of
+the host's generated `index.html` (`build-html.ts`) so the shell's `#root`,
+fixed `body` and `color-scheme` are the real ones.
+
+Four real bugs in the Bento Slides port were found this way, before the host
+was touched: dark-on-dark dialogs, a slide-outline heuristic that returned page
+numbers, save-state copy that named the wrong storage, and an
+external-change watcher wired to the wrong event. Each would have cost a full
+install cycle to find live.
+
+Two things the mock CANNOT tell you, so they still belong to the host run: the
+real permission ledger, and anything about the install itself. And one trap:
+served over `http://`, an app that branches on `location.protocol` takes its
+web-origin path (Bento showed a "this page always starts a new deck" gate that
+never appears under `project://`). Read a surprise there as a harness artifact
+before reading it as a bug.
+
 ### Harness
 
 Run the host from the `ispo` repo with the local-store seam so installs read
@@ -236,7 +337,18 @@ pnpm dev
 ```
 
 (There is a `run-with-local-store.sh` wrapper one level above the repos that
-also seeds the gallery cache.) The host exposes CDP on a loopback port; every
+also seeds the gallery cache.)
+
+Two things about the seam that bite. It **copies your WORKING TREE** — `cp -r`
+of `<storeRoot>/<subpath>`, not a git export — so a local `node_modules/` rides
+into the installed project and the host never runs its own dependency install;
+move it aside before the install if you want to test the lockfile path (you do:
+that is guide rule 4). And the host takes a **single-instance lock** on a shared
+`--user-data-dir`, so a second `pnpm dev` only focuses the running one: you
+cannot validate alongside another agent's session, and the store root the
+running host is pointed at is fixed at launch. Check
+`ps eww <pid> | tr ' ' '\n' | grep ISPO_E2E_STORE_ROOT` before assuming the
+host in front of you is reading your tree. The host exposes CDP on a loopback port; every
 check below is scriptable through `ispo/scripts/cdp/eval.mjs`,
 `click.mjs`, and `screenshot.mjs`. Find targets via
 `curl http://127.0.0.1:<port>/json/list` — the host page plus one iframe per
@@ -246,11 +358,26 @@ project.
 
 Each check has a pass condition an agent can assert, not eyeball.
 
-1. **Fresh install succeeds.** Delete any prior copy (delete the project AND
-   `rm -rf ~/ISPO/<folder>` — a failed install can leave an unregistered
-   folder that blocks the next attempt), then
-   `installFromStore({ appId, folderName })`. Pass: a `projectId` comes back;
-   no "Needs adaptation".
+1. **Fresh install succeeds.** Delete any prior copy (delete the project, AND
+   `rm -rf ~/ISPO/<folder>` — a failed install can leave an unregistered folder
+   that blocks the next attempt — AND `rm -rf ~/ISPO/.state/<projectId>`, which
+   `deleteProjectAndFiles` does NOT remove). Then install.
+
+   **Install through the Store UI's Install button, and finish the review the
+   way the UI does** — accept the access dialog's *Done*, then the Approval
+   Center's *Mark reviewed*, exactly as
+   `packages/e2e/tests/app-store-install.spec.ts` walks it. Calling
+   `installFromStore(...)` over IPC and answering the `fs` ask with
+   `permissionRequests.respond(...)` is faster and **wedges the host**: the
+   project keeps `reviewPendingReason: "first-permission-review"`, which raises
+   the proactive access batch, which sets `accessConfirmOpen`, which inerts the
+   ACTIVE app frame (`pointer-events: none`) with no modal rendered and no way
+   to clear it — through restarts, because the review stays pending. You will
+   spend an hour deciding whether your app broke the host. It did not; the
+   harness did. (Written up as a host finding: a blocking flag that outlives its
+   modal is an unrecoverable state, whatever set it.)
+
+   Pass: a `projectId` comes back; no "Needs adaptation".
 2. **Command catalog derived.** `~/ISPO/<folder>/dist/ispo-project-commands.json`
    lists exactly your command ids.
 3. **Host discovery.** `agentSession.capabilityCandidates({scope:'home'})`
@@ -313,6 +440,15 @@ install.
 
 - CDP screenshots only work on top-level targets — screenshot the host page
   with the app pane active, not the iframe.
+- **`Input` events on the FRAME's own CDP target bypass the parent's
+  `pointer-events`.** That is how you drive the app, but it also means your
+  clicks keep working while a real user's do not — you can validate a whole app
+  without noticing the pane is inert. Check
+  `getComputedStyle(document.querySelector('.frame-slot.active iframe')).pointerEvents`
+  once per session. And always select `.frame-slot.active iframe`: the pool
+  keeps warm, `opacity: 0` frames mounted at the same rect AHEAD of the active
+  one, so a bare `querySelector('iframe')` reads the wrong element. `iframe.inert`
+  is never set on the DOM node and always reads false.
 - The install-time access-review dialog blocks the app pane; "Done" defers
   undecided rows to the Approval Center (it grants nothing).
 - The E2E seams make the host window invisible unless
@@ -397,8 +533,12 @@ Phase 2  □ requests/egress/env minimal, justified per key  □ capabilitySumma
 Phase 3  □ command export + ready()  □ no <a download>  □ handlers use ctx.sdk
          □ lockfile installs under pnpm 10 (or no manifest)  □ first-run access race handled
          □ layout survives hidden frames  □ entry/folder/tsconfig conventions
+         □ no alert/confirm/prompt anywhere  □ dialogs/controls pin their own colours
+         □ no reliance on requestFullscreen  □ mount node created (#root, not #app)
+         □ command writes are adopted by the open UI
 Phase 4  □ raster icon ≤128KiB, magic bytes match  □ catalog entry, subpath = folder
-Phase 5  □ all 11 checks pass on a live host, from a scratch install
+Phase 5  □ mocked-SDK smoke run in a browser FIRST (cheap bugs found there)
+         □ all 11 checks pass on a live host, from a scratch install
          □ reference build of upstream running from .reference/ at the recorded SHA
 Phase 6  □ PR report: plan + envelope + transcript + warts + hand-validation script
          □ host findings (or an explicit "none")  □ parity table + reference build location

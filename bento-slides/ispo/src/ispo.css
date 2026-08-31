@@ -1,0 +1,314 @@
+/* SPDX-License-Identifier: MIT
+ * Copyright (c) 2026 The Bento authors
+ *
+ * ISPO PORT — styling for the surfaces this port adds: the substitute modals
+ * (ispo/src/dialogs.ts) and the boot gate that waits for file access
+ * (ispo/src/boot.ts). Everything here rides on the editor's existing
+ * `ed-pwdialog` shell, so the additions read as part of the app.
+ */
+
+/* Colours come from the chrome tokens (styles.css `:root` / `[data-theme]`),
+ * never from literals: these dialogs must follow the editor into dark mode,
+ * and a hardcoded navy-on-white is exactly the bug the base dialog had. */
+dialog.ed-ispo-dialog {
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+dialog.ed-ispo-dialog h2 {
+  color: var(--ink);
+}
+
+dialog.ed-ispo-dialog textarea.ed-ispo-field,
+dialog.ed-ispo-dialog input.ed-ispo-field {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--field);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+}
+
+.ed-ispo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 44vh;
+  overflow: auto;
+  margin: 10px 0 2px;
+}
+
+button.ed-ispo-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+button.ed-ispo-row {
+  color: var(--ink);
+}
+
+button.ed-ispo-row:hover,
+button.ed-ispo-row:focus {
+  background: var(--chrome-2);
+}
+
+.ed-ispo-row-label {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ed-ispo-row-hint {
+  flex: none;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+button.ed-ispo-action {
+  margin-right: auto;
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ————— boot gate: shown while the first fs read is still being decided ————— */
+
+.ed-ispo-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: var(--chrome, #f5f7fa);
+  font-family: inherit;
+}
+
+.ed-ispo-gate-card {
+  width: min(420px, calc(100vw - 40px));
+  padding: 26px 28px;
+  border-radius: 16px;
+  background: var(--surface, #fff);
+  box-shadow: 0 18px 50px rgb(15 23 36 / 0.16);
+  text-align: center;
+  color: var(--ink, #22304a);
+}
+
+.ed-ispo-gate-card h1 {
+  margin: 0 0 8px;
+  font-size: 17px;
+}
+
+.ed-ispo-gate-card p {
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--muted, #667);
+}
+
+.ed-ispo-gate-card button {
+  padding: 9px 20px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #FFB29B, #ED8266);
+  color: #0D1B2E;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ed-ispo-gate-err {
+  margin-top: 12px;
+  font-size: 12px;
+  color: #C33;
+  overflow-wrap: anywhere;
+}
+
+/* ————— the deck library: the page this app opens on ————— */
+
+.ed-ispo-library {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  background: var(--chrome, #f5f7fa);
+  color: var(--ink, #22304a);
+  font-family: inherit;
+}
+
+.ed-ispo-lib-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 22px 26px 14px;
+}
+
+.ed-ispo-lib-head h1 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.ed-ispo-lib-spacer { flex: 1; }
+
+button.ed-ispo-lib-btn {
+  padding: 8px 15px;
+  border: 1px solid var(--line, #ccd);
+  border-radius: 999px;
+  background: var(--surface, #fff);
+  color: var(--ink, #22304a);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button.ed-ispo-lib-btn.ed-ispo-primary {
+  border: 0;
+  color: #0D1B2E;
+  background: linear-gradient(180deg, #FFB29B, #ED8266);
+}
+
+.ed-ispo-lib-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+  padding: 8px 26px 32px;
+}
+
+.ed-ispo-lib-empty {
+  grid-column: 1 / -1;
+  margin: 30px 0;
+  color: var(--muted, #667);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.ed-ispo-lib-card {
+  position: relative;
+  border-radius: 12px;
+}
+
+button.ed-ispo-lib-face {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--line, #ccd);
+  border-radius: 12px;
+  background: var(--surface, #fff);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+button.ed-ispo-lib-face:hover,
+button.ed-ispo-lib-face:focus {
+  border-color: #ED8266;
+  box-shadow: 0 6px 22px rgb(15 23 36 / 0.14);
+}
+
+.ed-ispo-lib-card.is-open button.ed-ispo-lib-face {
+  border-color: #ED8266;
+  box-shadow: 0 0 0 2px color-mix(in srgb, #ED8266 45%, transparent);
+}
+
+.ed-ispo-lib-shot {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--chrome-2, #eceff4);
+}
+
+.ed-ispo-lib-shot.is-locked {
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+}
+
+.ed-ispo-lib-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 12px 12px;
+}
+
+.ed-ispo-lib-name {
+  flex: 1;
+  font-weight: 600;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ed-ispo-lib-sub {
+  width: 100%;
+  margin-top: 2px;
+  color: var(--muted, #667);
+  font-size: 12px;
+}
+
+.ed-ispo-lib-meta { flex-wrap: wrap; }
+
+.ed-ispo-lib-badge {
+  flex: none;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: #ED8266;
+  color: #0D1B2E;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+button.ed-ispo-lib-del {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(15 23 36 / 0.55);
+  color: #fff;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.ed-ispo-lib-card:hover button.ed-ispo-lib-del,
+button.ed-ispo-lib-del:focus { opacity: 1; }
+
+button.ed-ispo-lib-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+button.ed-ispo-lib-btn.is-busy {
+  opacity: 1;
+  font-style: italic;
+}
