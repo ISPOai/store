@@ -137,20 +137,7 @@ Each stage states who does the work, what they do, and which app they use. The r
 
 ### Course Studio
 
-| Step | Use now | Non-JS alternative or missing product |
-|---|---|---|
-| Outline, scripts, quizzes | Editor.js or BlockNote | — |
-| Diagrams | Mermaid, Excalidraw, draw.io | — |
-| Storyboard and visual direction | Moodboard | — |
-| Raster/vector editing | miniPaint, SVG-Edit | [Krita](https://github.com/KDE/krita) / [Inkscape](https://gitlab.com/inkscape/inkscape) |
-| AI image generation | — | [InvokeAI](https://github.com/invoke-ai/InvokeAI) / [ComfyUI](https://github.com/comfy-org/comfyui) |
-| Narration/TTS | Transformers.js mini-app | [Piper](https://github.com/rhasspy/piper) / [OpenVoice](https://github.com/myshell-ai/OpenVoice) |
-| Audio cleanup | AudioMass | [Audacity](https://github.com/audacity/audacity) |
-| Video editing | OpenCut | [Kdenlive](https://invent.kde.org/multimedia/kdenlive) / [Shotcut](https://github.com/mltframework/shotcut) |
-| Captions | Transformers.js Whisper mini-app | [Subtitle Edit](https://github.com/SubtitleEdit/subtitleedit) |
-| Slides | OpenSlides, Reveal.js/Marp export | — |
-| Publishing | — | [MediaCMS](https://github.com/mediacms-io/mediacms) / [PeerTube](https://github.com/Chocobozzz/PeerTube) |
-| LMS and learners | — | [Moodle](https://github.com/moodle/moodle) / [Open edX](https://github.com/openedx/edx-platform) |
+The expanded role-by-role workflow, common commercial tools, general open-source alternatives, and JS/TS alternatives are maintained in the dedicated [`Course Studio` audience file](./course-studio.md).
 
 ### Indie Game Studio
 
