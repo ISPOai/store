@@ -29,6 +29,15 @@
       "capabilitySummary": "Requests file picker access and notifications."
     },
     {
+      "id": "cad",
+      "name": "CAD",
+      "description": "Generate, inspect, and preview STEP-first CAD models with agent-assisted workflows.",
+      "subpath": "cad",
+      "category": "Design",
+      "icon": "icon.webp",
+      "capabilitySummary": "Uses CAD records, starts Codex agents, opens and publishes files, posts notifications, and runs a reviewed local CAD service with Python dependencies."
+    },
+    {
       "id": "bento-slides",
       "name": "Bento Slides",
       "description": "Build and present slide decks with morph transitions, built-in charts, and speaker notes.",

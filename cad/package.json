@@ -1,0 +1,18 @@
+{
+  "type": "module",
+  "dependencies": {
+    "cadjs": "file:vendor/text-to-cad/packages/cadjs",
+    "gifenc": "^1.0.3",
+    "three": "0.160.0"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test server/*.test.mjs",
+    "test:vendor": "node vendor/text-to-cad/packages/cadjs/scripts/run-tests.mjs && node --test vendor/text-to-cad/viewer/src/server/catalog/*.test.mjs vendor/text-to-cad/viewer/src/server/step/*.test.mjs"
+  },
+  "peerDependencies": {
+    "@ispo/sdk": "*",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "packageManager": "pnpm@9.15.9"
+}

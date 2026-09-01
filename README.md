@@ -43,8 +43,16 @@ the app in the store gallery.
 2. On install, the host **sparse-clones only that app's folder** out of this repo
    (`git clone --depth=1 --filter=blob:none --sparse` + `git sparse-checkout set <subpath>`),
    discards the store's `.git`, and materializes the folder as its own project under `~/ISPO/`.
-3. The app lands `origin:'imported'`, **quarantined**, with fresh receiver-side grants — same trust
-   model as any imported repo. Curation does not auto-elevate trust.
+3. The app lands `origin: 'store'`, **Sandboxed**, in its own isolated `project://` origin with
+   fresh receiver-side grants. First-party curation lifts the app out of the Quarantined posture
+   used for arbitrary imported repositories, but it does not seed grants or promote the app into
+   the shared workspace pool.
+
+Every Store app has a browser-rendered entry, but that does not require the entire implementation
+to run inside the iframe. A curated descriptor may request a reviewed runtime plan for a
+host-supervised local service, including a sealed same-origin `/api` helper. Runtime commands,
+network access, environment values, Docker, and other privileged execution remain independently
+reviewed host policy; Store provenance grants none of them automatically.
 
 ## `catalog.json` schema
 

@@ -1,0 +1,42 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: false
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      cadjs:
+        specifier: file:vendor/text-to-cad/packages/cadjs
+        version: file:vendor/text-to-cad/packages/cadjs
+      gifenc:
+        specifier: ^1.0.3
+        version: 1.0.3
+      three:
+        specifier: 0.160.0
+        version: 0.160.0
+
+packages:
+
+  cadjs@file:vendor/text-to-cad/packages/cadjs:
+    resolution: {directory: vendor/text-to-cad/packages/cadjs, type: directory}
+    name: cadjs
+
+  gifenc@1.0.3:
+    resolution: {integrity: sha512-xdr6AdrfGBcfzncONUOlXMBuc5wJDtOueE3c5rdG0oNgtINLD+f2iFZltrBRZYzACRbKr+mSVU/x98zv2u3jmw==}
+
+  three@0.160.0:
+    resolution: {integrity: sha512-DLU8lc0zNIPkM7rH5/e1Ks1Z8tWCGRq6g8mPowdDJpw1CFBJMU7UoJjC6PefXW7z//SSl0b2+GCw14LB+uDhng==}
+
+snapshots:
+
+  cadjs@file:vendor/text-to-cad/packages/cadjs:
+    dependencies:
+      gifenc: 1.0.3
+      three: 0.160.0
+
+  gifenc@1.0.3: {}
+
+  three@0.160.0: {}
