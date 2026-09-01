@@ -6,7 +6,9 @@ engine, motion paths, speaker notes, review comments, hidden interactive
 states, and a present mode with a presenter view.
 
 Ported from [nyblnet/bento](https://github.com/nyblnet/bento) — see
-[UPSTREAM.md](UPSTREAM.md) for provenance and what was left behind.
+[UPSTREAM.md](UPSTREAM.md) for provenance and what was left behind, and
+[CASE-STUDY.md](CASE-STUDY.md) for what the port cost: the premise that could
+not survive, the seams that replaced it, and every failure hit on the way.
 
 ## What a deck is here
 
