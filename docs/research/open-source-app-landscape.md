@@ -208,25 +208,7 @@ Each stage states who does the work, what they do, and which app they use. The r
 
 ### Viral AI Video Studio
 
-| Step | Use now | Non-JS alternative or missing product |
-|---|---|---|
-| Creative brief and production plan | Editor.js or BlockNote | — |
-| Trend references and visual direction | Moodboard | — |
-| Script, hooks, dialogue, and shot descriptions | Editor.js or BlockNote | — |
-| Storyboard and shot map | Excalidraw, Mermaid | — |
-| AI keyframes and visual assets | — | [ComfyUI](https://github.com/comfy-org/comfyui) / [InvokeAI](https://github.com/invoke-ai/InvokeAI) |
-| Text-to-video and image-to-video generation | — | [ComfyUI](https://github.com/comfy-org/comfyui) / [Wan2.2](https://github.com/Wan-Video/Wan2.2) |
-| Recurring presenter or portrait animation | — | [LivePortrait](https://github.com/KwaiVGI/LivePortrait) |
-| Voice generation, transcription, and translation draft | Transformers.js | AI model licenses and voice-consent rules require separate review |
-| Voice cleanup | AudioMass | [Audacity](https://github.com/audacity/audacity) |
-| Music sketch | BeepBox, GridSound | — |
-| Animated titles and graphic sequences | Motion Canvas | — |
-| Variant assembly and final edit | OpenCut | [Kdenlive](https://invent.kde.org/multimedia/kdenlive) / [Shotcut](https://github.com/mltframework/shotcut) |
-| Captions and localization | Transformers.js plus a custom caption UI | [Subtitle Edit](https://github.com/SubtitleEdit/subtitleedit) |
-| Thumbnail and cover image | miniPaint | [Krita](https://github.com/KDE/krita) |
-| Publishing, scheduling, and channel analytics | — | [PeerTube](https://github.com/Chocobozzz/PeerTube) / [MediaCMS](https://github.com/mediacms-io/mediacms) / [Owncast](https://github.com/owncast/owncast) plus platform connectors |
-
-**Shared-context example:** the producer approves a structured brief; the scriptwriter turns it into scenes; the storyboard artist adds shot IDs; AI creators attach generated clips to those IDs; OpenCut consumes the approved clips; caption and thumbnail roles derive their work from the final edit; the growth manager receives the finished video, metadata, captions, and cover as one release package.
+The expanded role-by-role workflow, common commercial tools, general open-source alternatives, and JS/TS alternatives are maintained in the dedicated [`Viral AI Video Studio` audience file](./viral-ai-video-studio.md).
 
 ### Design and Brand Studio
 
