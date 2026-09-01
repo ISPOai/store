@@ -136,6 +136,15 @@ imports the real one.
   shipped upstream feature with a designed state on every affected surface, so
   one line in `kernel/src/net.ts` turned "this cannot work here" into copy the
   authors already wrote. Deleting the code would have left blank affordances.
+- **Deleting the relay, not just disabling it.** `sync/online.ts` (735 lines) and
+  `sync/blobs.ts` (311) were first kept whole and unreachable, on the theory
+  that dead code is cheaper than a diff. Wrong twice: it left
+  `wss://sync.bento.page` in the bundle of an app whose whole claim is that it
+  has no network, and "unreachable" rested on one pinned boolean rather than on
+  the code. Cut to 156 and 93 lines — what survives is the part that was never
+  networking (local key minting at document creation; `data:`-URI helpers). The
+  blob cache went with it, which removed **the app's last use of browser
+  storage**: every durable byte now lives on an SDK plane.
 - **Replacing the bottom of the save layer, not its callers.** `kernel/src/save.ts`
   keeps its exported surface — `saveFile`, `writeUpdatedFile`, `hasFileHandle`,
   `openedFileName` — so ~20k lines above it never learned that a "file" is now
@@ -182,10 +191,8 @@ the sanctioned shape for an agent asking the app to build a deck
 ## Still open
 
 PDF export is vendored and **untested**: it calls `window.print()`, the same API
-class as the modals in issue 1, so it may well be a no-op. `kernel/src/sync/online.ts`
-is vendored but unreachable and still contains `wss://sync.bento.page` as a
-string — dead code worth deleting. `check-deck` runs with `measure: false` to
-stay headless, so it reports no text-overflow findings. The `agent-task` route —
+class as the modals in issue 1, so it may well be a no-op. `check-deck` runs
+with `measure: false` to stay headless, so it reports no text-overflow findings. The `agent-task` route —
 a reasoning agent *inside* the app composing a deck from a brief, rather than an
 outside agent driving `add-slide` — waits on §25's direct completion-artifact
 delivery, which the spec marks as later work.
