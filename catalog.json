@@ -36,6 +36,15 @@
       "category": "Design",
       "icon": "icon.webp",
       "capabilitySummary": "Uses CAD records, starts Codex agents, opens and publishes files, posts notifications, and runs a reviewed local CAD service with Python dependencies."
+    },
+    {
+      "id": "bento-slides",
+      "name": "Bento Slides",
+      "description": "Build and present slide decks with morph transitions, built-in charts, and speaker notes.",
+      "subpath": "bento-slides",
+      "category": "Productivity",
+      "icon": "icon.png",
+      "capabilitySummary": "Requests private project data, file picker access, and publishing decks to Files."
     }
   ]
 }

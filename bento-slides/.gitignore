@@ -1,0 +1,7 @@
+dist/
+node_modules/
+.DS_Store
+*.log
+.claude/skills/
+.agents/skills/
+tsconfig.typecheck.json

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "name": "Bento Slides",
+  "version": "1.0.18",
+  "target": "react",
+  "appEntry": "src/main.ts",
+  "mode": "edit",
+  "root": "",
+  "requests": {
+    "fs": "self",
+    "ui": [],
+    "agent": [],
+    "dialog": [],
+    "files": [
+      "pick",
+      "publish"
+    ],
+    "chrome": [],
+    "promptHistory": [],
+    "entities": {},
+    "devices": []
+  },
+  "env": [],
+  "entityTypes": [],
+  "egress": {
+    "connect": []
+  }
+}

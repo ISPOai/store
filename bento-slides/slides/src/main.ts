@@ -1,0 +1,397 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 The Bento authors
+// Ported to ISPO from nyblnet/bento slides/src/main.ts (see UPSTREAM.md).
+//
+// Boot sequence.
+//
+// ISPO PORT — the boot is a FUNCTION now, not a module body.
+//
+// Upstream the document is already in the page (`#bento-doc`), so booting is
+// synchronous and the module can simply run. Here the document lives in
+// project storage and reading it is an RPC that can be REFUSED — the first
+// `fs.read` of a freshly installed app fires while the user is still looking
+// at the access review. Whether that read succeeded, failed, or found nothing
+// decides what the reader sees, and only the caller knows: ispo/src/boot.ts
+// resolves it and calls `bootBento` with the answer.
+//
+// The distinction it protects is the one upstream's own dash boot dispatcher
+// calls the most important twenty lines in the app: "no document" must mean
+// ABSENT, never "could not read". Booting the starter deck over a deck that
+// was merely unreadable is a loss the first ⌘S makes permanent.
+
+import './styles.css'
+import { anim } from './anim'
+import { configureApp, appConfig } from '../../kernel/src/app.ts'
+import { startTheme } from '../../kernel/src/theme.ts'
+import { startNetGuard } from '../../kernel/src/net.ts'
+import {
+  capturePristine, serializeFile, exportDeckToFiles,
+  parseEnvelope, decryptEnvelope, setEncryptionPassword,
+  registerPreview, canWriteInPlace, hostCan,
+} from './save'
+import { maybeShowReturnGate } from './editor/returngate'
+import { buildSlidePreview } from './preview'
+import { APP_VERSION, checkForUpdates } from './update'
+import { i18nApi, t, applyDirection } from './i18n'
+import { parseDoc, type BentoDoc, type TextElement } from './model'
+import { validateDoc, type ValidateOpts } from './validate'
+import { resolveThemeRefs } from './palette'
+import { measureText, measureElement, type TextMeasureSpec } from './measure'
+import { starterDoc } from './starterdeck'
+import { injectFonts } from './fonts'
+import { Store } from './store'
+import {
+  addSlideCommand, checkDeckCommand, listSlidesCommand, newDeckCommand,
+} from './ispo/commands'
+import { setActiveEditor } from './ispo/active-editor'
+import { Editor } from './editor/editor'
+import { startPresentation } from './present'
+import { SyncSession } from './sync/session'
+import { onlineTransport, startSharing, stopSharing } from './sync/online'
+
+// Tell the kernel who this app is — must precede any kernel module use
+// (window title suffix, save-picker label, update manifest + its `app` check).
+configureApp({
+  appId: 'bento-slides',
+  appName: 'bento/slides',
+  manifestUrl: 'https://bento.page/releases/slides/manifest.json',
+})
+
+// Every save writes a static rendering of page one into the shell, so file
+// managers thumbnail the deck instead of the boot splash (src/preview.ts).
+// Registered before capturePristine only for tidiness — nothing serializes
+// this early — but it must be registered before the first save.
+registerPreview((doc) => buildSlidePreview(doc as BentoDoc))
+
+capturePristine()
+
+/**
+ * Open a document, or the starter deck when there genuinely is none.
+ *
+ * `body` is the document JSON exactly as a `#bento-doc` block carries it (or a
+ * bento/enc envelope). `null` means the project has no deck yet — and it means
+ * ONLY that: a read that failed never reaches here (ispo/src/boot.ts holds the
+ * reader on a retry instead).
+ */
+export function bootBento(body: string | null, docIsFresh: boolean): void {
+  startBentoRuntime()
+  const envelope = body ? parseEnvelope(body) : null
+  if (envelope) {
+    void passwordGate(envelope)
+    return
+  }
+  const parsed = body ? parseDoc(body) : null
+  if (body && !parsed) {
+    // Somebody's data that this build cannot parse. Upstream refuses and offers
+    // the bytes back rather than replacing them; here the deck stays on disk
+    // untouched and the reader is told which file to look at.
+    throw new Error('This deck could not be parsed. It has been left on disk untouched.')
+  }
+  bootWith(parsed || starterDoc(), docIsFresh && !parsed)
+}
+
+function startBentoRuntime(): void {
+
+// Theme: after capturePristine, before the first paint.
+//
+// AFTER, because capturePristine clones the LIVE document and saves
+// re-serialize that clone — so `data-theme` and `color-scheme` on <html> must
+// not exist yet, or a viewer's preference would travel inside every file they
+// save. Same rule applyDirection follows two lines below for dir/lang.
+//
+// BEFORE the paint, because applying it later renders the interface light and
+// then flips it, which reads as a bug rather than a preference. Nothing here
+// lays anything out — it sets two attributes on the root element.
+startTheme()
+
+// Watch the offline switch in OTHER tabs. `storage` fires only in the tabs
+// that did not make the change — which is precisely the set that has an open
+// socket it does not yet know to close (GHSA-5c3x-xqp6-g94r).
+startNetGuard()
+
+// Chrome direction follows the VIEWER's language (Arabic/Hebrew/… get an RTL
+// interface). Deliberately AFTER capturePristine: saves re-serialize the
+// pristine clone, so the dir/lang attributes never reach a saved file — the
+// same viewer-scoped rule as 'bento-lang' and reduced motion. The DOCUMENT
+// never mirrors; styles.css pins every slide surface back to direction: ltr.
+applyDirection()
+
+} // startBentoRuntime
+
+// --- boot gates: password-encrypted decks, read-only player decks -----------
+
+/** Encrypted deck: ask for the password (looping on failure), then boot. */
+async function passwordGate(envelope: NonNullable<ReturnType<typeof parseEnvelope>>) {
+  const gate = document.createElement('div')
+  gate.className = 'ed-pwgate'
+  gate.innerHTML =
+    `<div class="ed-pwcard"><div class="ed-pwmark">🔒</div>` +
+    `<h1>${t('This file is encrypted.')}</h1>` +
+    `<p>${t('Enter password to open this deck')}</p>` +
+    `<input type="password" autocomplete="current-password">` +
+    `<button>${t('Unlock')}</button><div class="ed-pwerr"></div></div>`
+  document.body.appendChild(gate)
+  document.getElementById('bento-splash')?.remove()
+  const input = gate.querySelector('input')!
+  const button = gate.querySelector('button')!
+  const err = gate.querySelector<HTMLElement>('.ed-pwerr')!
+  const tryUnlock = async () => {
+    const pass = input.value
+    if (!pass) return
+    button.setAttribute('disabled', '')
+    const json = await decryptEnvelope(envelope, pass)
+    button.removeAttribute('disabled')
+    if (json === null) {
+      err.textContent = t('Wrong password — try again')
+      input.select()
+      return
+    }
+    const doc = parseDoc(json)
+    if (!doc) {
+      err.textContent = t('Wrong password — try again')
+      return
+    }
+    setEncryptionPassword(pass) // saves + updates keep writing encrypted
+    gate.remove()
+    bootWith(doc)
+  }
+  button.addEventListener('click', () => void tryUnlock())
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') void tryUnlock()
+  })
+  input.focus()
+}
+
+function bootWith(doc: BentoDoc, docIsFresh = false) {
+  // Derive palette-referenced colours once before anything renders. A file
+  // saved by this app already carries correct literals, so this is normally a
+  // no-op — it matters for a document whose JSON was written by hand or by an
+  // agent, where the refs may be right and the literals stale. Editing later
+  // re-derives through the editor's `doc` hook; nothing else would visit a
+  // player file at all.
+  resolveThemeRefs(doc)
+  if (doc.readonly) playerMode(doc)
+  else editorMode(doc, docIsFresh)
+}
+
+/**
+ * Read-only files are PLAYER files: they open straight into the show and
+ * never expose the editor. Leaving the presentation lands on a minimal card.
+ */
+function playerMode(doc: BentoDoc) {
+  document.title = `${doc.title} — ${appConfig().appName}`
+  if (doc.fonts?.length) injectFonts(doc)
+  document.getElementById('bento-splash')?.remove()
+  const card = document.createElement('div')
+  card.className = 'ed-player'
+  card.innerHTML =
+    `<div class="ed-playercard"><h1>${doc.title.replace(/</g, '&lt;')}</h1>` +
+    `<p>${t('This is a presentation package — view and present only.')}</p>` +
+    `<button class="ed-playgo">▶&nbsp; ${t('Present')}</button>` +
+    `<button class="ed-playcopy">⤓&nbsp; ${t('Save a copy')}</button></div>`
+  document.body.appendChild(card)
+  const start = () => {
+    card.style.display = 'none'
+    startPresentation(doc, 0, () => {
+      card.style.display = ''
+    })
+  }
+  card.querySelector('.ed-playgo')!.addEventListener('click', start)
+  card.querySelector('.ed-playcopy')!.addEventListener('click', () => {
+    // ISPO PORT: upstream downloads the copy. A browser download is a hard
+    // build error here (spec §25), and the right destination in ISPO is the
+    // user's Files library, reached through the host's own grantless powerbox.
+    void exportDeckToFiles(doc)
+  })
+  ;(window as any).bento = { format: doc.format, doc, readonly: true }
+  start()
+}
+
+function editorMode(doc: BentoDoc, docIsFresh = false) {
+
+document.title = `${doc.title} — ${appConfig().appName}`
+
+// Embedded fonts: register @font-face rules from the asset table so text
+// elements can use bundled families in the editor, presenter and thumbnails.
+if (doc.fonts?.length) injectFonts(doc)
+
+const store = new Store(doc)
+const editor = new Editor(document.getElementById('app')!, store)
+
+// ISPO PORT: this project exposes headless commands that write the deck on
+// disk. Watch for that so the editor never renders a stale document — see
+// Editor.watchForExternalDeckChanges.
+editor.watchForExternalDeckChanges()
+
+// ISPO PORT: the deck library reopens decks through THIS editor rather than
+// building a second one — see ispo/active-editor.ts for why that matters.
+setActiveEditor(editor)
+
+// A returning visitor who saved from this origin before is told so, rather
+// than handed a silent blank starter that reads as lost work. No-ops off the
+// web, for a first-time visitor, and over any real document.
+maybeShowReturnGate({ docIsFresh, fsAccess: canWriteInPlace(), canWrite: hostCan('write') })
+
+// Live collaboration (bento-sync): same-machine tabs sync automatically over
+// BroadcastChannel; the online relay transport joins via the Share UI.
+const session = new SyncSession(store)
+editor.connectSync(session)
+
+// Opening a link ending in #present starts the show immediately (player mode).
+if (location.hash === '#present') {
+  editor.present(true)
+}
+
+// Dismiss the boot splash (inline in index.html so it paints before this
+// bundle parses). Hold it briefly so the assemble animation reads as a
+// brand moment instead of a flicker; the pristine capture ran before this,
+// so saved files keep the splash for their own next boot.
+{
+  const splash = document.getElementById('bento-splash')
+  if (splash) {
+    const wait = Math.max(0, 1250 - performance.now())
+    setTimeout(() => {
+      splash.classList.add('done')
+      setTimeout(() => splash.remove(), 550)
+    }, wait)
+  }
+}
+
+// Small scripting surface for tooling and automation: read/replace the
+// document model and serialize the full .bento.html file.
+;(window as any).bento = {
+  format: doc.format,
+  get doc() {
+    return store.doc
+  },
+  serialize: () => {
+    session.stampInto(store.doc)
+    return serializeFile(store.doc)
+  },
+  undo: () => store.undo(),
+  redo: () => store.redo(),
+  get selection() {
+    return store.selection.slice()
+  },
+  /** animation engine, exposed for scripting/diagnostics */
+  anim,
+  /** i18n: t/locale/setLocale/choices — setLocale('x-pseudo') audits the sweep */
+  i18n: i18nApi,
+  /** live-collaboration session: actor id, connected peers, force a diff-flush */
+  sync: {
+    get actor() {
+      return session.actor
+    },
+    peers: () => session.peers(),
+    flush: () => session.flush(),
+    transports: () => session.transportKinds,
+    /** start an online session (mints doc.collab, connects the relay) */
+    share: () => {
+      void startSharing(session, store)
+      return store.doc.collab
+    },
+    unshare: () => stopSharing(session, store),
+    online: () => onlineTransport()?.status ?? 'off',
+  },
+  /**
+   * AI/tooling round-trip: replace the whole document from a JSON string
+   * (the contents of #bento-doc). Validates via parseDoc; returns false and
+   * changes nothing on invalid input. Undoable in the editor.
+   */
+  loadDoc(json: string): boolean {
+    const next = parseDoc(json)
+    if (!next) return false
+    store.replaceDoc(next)
+    return true
+  },
+  /**
+   * Report what the runtime would otherwise swallow: unknown keys, text that
+   * overflows its box, elements off the canvas, effects that can never run,
+   * broken links and asset refs, chart options charts-lite ignores. Read-only
+   * — it never changes the document. Pass a doc to check one you have not
+   * loaded; defaults to the open one.
+   */
+  validate(target?: BentoDoc, opts?: ValidateOpts) {
+    return validateDoc(target ?? store.doc, opts)
+  },
+  /**
+   * How tall does this text need to be? The format is absolute pixels, so
+   * without a screen the height of a string is a guess — this answers it by
+   * rendering through the real renderer.
+   *
+   * Pass an element id to measure one that exists, or a spec
+   * ({html, w, fontSize, …}) to size text BEFORE creating the element, which
+   * is the point: an agent can lay a slide out correctly the first time
+   * instead of writing it, checking, and correcting.
+   *
+   * Returns {height, width, lines} — plus {fits, overflow} when you supply `h`.
+   */
+  measure(target: string | TextMeasureSpec, opts?: { doc?: BentoDoc }) {
+    const doc = opts?.doc ?? store.doc
+    if (typeof target !== 'string') return measureText(target, doc)
+    for (const s of doc.slides) {
+      const el = s.elements.find((e) => e.id === target && e.type === 'text')
+      if (el) return measureElement(el as TextElement, doc)
+    }
+    return null
+  },
+  /**
+   * ISPO PORT: what is left of the self-update surface. `build`/`apply`
+   * downloaded a new app shell with this document inside it; ISPO owns app
+   * lifecycle and this app has no network, so both are gone and `check()`
+   * answers 'current' (see kernel/src/update.ts). `version` stays because
+   * tooling reads it to know which document format it is talking to.
+   */
+  updates: {
+    version: APP_VERSION,
+    check: (url?: string) => checkForUpdates(url),
+  },
+  /**
+   * ISPO PORT: the project's command handlers, callable from here.
+   *
+   * ONE HANDLER, TWO ENTRY POINTS — the pattern the store guide asks for. The
+   * host invokes these through §25; this is the same closure, reachable by the
+   * scripting surface the rest of `window.bento` already is. It means an agent
+   * with a page handle and the host itself run identical code, so the two can
+   * never drift.
+   *
+   * They read and write the deck ON DISK, not `store.doc`, exactly as they do
+   * under host dispatch. The editor picks the change up when the pane comes
+   * forward (Editor.watchForExternalDeckChanges).
+   */
+  commands: {
+    listSlides: (input: { limit?: number } = {}) => listSlidesCommand.run(input),
+    addSlide: (input: { title: string; bullets?: string[]; notes?: string; position?: number }) =>
+      addSlideCommand.run(input),
+    newDeck: (input: { title: string; slideTitles?: string[] }) => newDeckCommand.run(input),
+    checkDeck: (input: { limit?: number } = {}) => checkDeckCommand.run(input),
+  },
+
+  /**
+   * Flat list of every review comment thread — the entry point for tooling
+   * and AI agents processing the deck ("fix everything people flagged"):
+   * each item carries the slide, a typed anchor (element / point / slide),
+   * author, text, replies and resolved state.
+   */
+  comments() {
+    return store.doc.slides.flatMap((s, slideIndex) =>
+      (s.comments ?? []).map((c) => ({
+        slideId: s.id,
+        slideIndex,
+        id: c.id,
+        anchor: c.elementId
+          ? { type: 'element' as const, elementId: c.elementId }
+          : typeof c.x === 'number'
+            ? { type: 'point' as const, x: c.x, y: c.y }
+            : { type: 'slide' as const },
+        author: c.author,
+        at: c.at,
+        text: c.text,
+        replies: c.replies ?? [],
+        resolved: !!c.resolved,
+      })),
+    )
+  },
+}
+
+} // editorMode
