@@ -6,6 +6,8 @@ import { guessExtension, extToMime, isAllowedImage, newImageId } from '../lib/im
 import { imagePath, sharedUrl } from '../lib/shared-paths'
 import { screenToBoard, type Viewport } from '../lib/transform'
 
+export type ImageInput = { file: File; url?: string }
+
 const MAX_BYTES = 20 * 1024 * 1024 // 20 MB — generous for moodboard assets
 // Default on-board display box for a freshly dropped image. The stored bytes
 // are full-resolution and untouched; this only sizes the card (object-fit:
@@ -54,8 +56,10 @@ export function useImageIngest(opts: {
   // `at` is the drop point in client coords; omitted for the "Browse" path,
   // which drops onto the centre of the visible surface instead.
   const ingest = useCallback(
-    async (fileList: FileList | File[], at?: { clientX: number; clientY: number }) => {
-      const files = Array.from(fileList)
+    async (fileList: FileList | (File | ImageInput)[], at?: { clientX: number; clientY: number }) => {
+      const files = Array.from<File | ImageInput>(fileList).map((input): ImageInput =>
+        input instanceof File ? { file: input } : input,
+      )
       if (files.length === 0) return
 
       const surface = surfaceRef.current
@@ -66,7 +70,7 @@ export function useImageIngest(opts: {
 
       const skipped: string[] = []
       const oversized: string[] = []
-      const accepted = files.filter((f) => {
+      const accepted = files.filter(({ file: f }) => {
         if (!isAllowedImage(f)) {
           skipped.push(f.name || 'unnamed file')
           return false
@@ -80,24 +84,23 @@ export function useImageIngest(opts: {
 
       const baseZ = topZ()
       const built = await Promise.all(
-        accepted.map(async (file, i): Promise<BoardItem | null> => {
+        accepted.map(async ({ file, url }, i): Promise<BoardItem | null> => {
           const ext = guessExtension(file)
           if (!ext) return null
           const id = newImageId()
-          const requestPath = imagePath(id, ext)
-          const bytes = new Uint8Array(await file.arrayBuffer())
-          // The host scopes writes to THIS app's own shared subtree, so it
-          // returns the RESOLVED path (prefixed with the projectId, e.g.
-          // `<projectId>/moodboard/images/<id>.png`). That resolved path — NOT
-          // the relative one we asked to write — is what the `shared://` URL must
-          // address; a hand-built `shared://moodboard/...` reads the flat root
-          // where the bytes do NOT live (→ broken image).
-          let path: string
+          // Powerbox already minted a renderable reference for the selected image.
+          // Keep the legacy write path only for local drag/drop inputs.
+          let path: string | undefined
           try {
-            const written = await shared.writeBinary(requestPath, bytes)
-            path = written?.path ?? requestPath
+            if (!url) {
+              const requestPath = imagePath(id, ext)
+              const bytes = new Uint8Array(await file.arrayBuffer())
+              const written = await shared.writeBinary(requestPath, bytes)
+              path = written.path
+              url = sharedUrl(path)
+            }
           } catch (err) {
-            console.warn('[canvas] shared.writeBinary failed:', requestPath, err)
+            console.warn('[canvas] shared.writeBinary failed:', file.name, err)
             await notify(
               'Shared storage denied',
               'Grant the Shared files write permission from the Access panel, then drop again.',
@@ -107,10 +110,9 @@ export function useImageIngest(opts: {
           const { w, h } = await measure(file)
           // Centre each image on the drop point, cascading multi-drops so they
           // don't land in one opaque stack.
-          return {
+          const item: BoardItem = {
             id,
-            src: sharedUrl(path),
-            path,
+            src: url,
             mimeType: file.type || extToMime(ext),
             bytes: file.size,
             originalName: file.name || `image${ext}`,
@@ -121,6 +123,8 @@ export function useImageIngest(opts: {
             h,
             z: baseZ + 1 + i,
           }
+          if (path) item.path = path
+          return item
         }),
       )
 
