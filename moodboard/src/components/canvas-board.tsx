@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { files as filesApi, fs, ui } from '@ispo/sdk'
+import { files as filesApi, ui } from '@ispo/sdk'
 import { cn } from '../lib/cn'
 import { IDENTITY, type Viewport } from '../lib/transform'
 import { useBoard } from '../hooks/use-board'
@@ -82,28 +82,20 @@ export function CanvasBoard() {
       const picked = Array.isArray(selection) ? selection[0] : selection
       if (!picked) return
 
-      // Small Files picks arrive as a private project copy (`path`). Larger
-      // images can instead arrive as a controlled `url`. Both are valid
-      // powerbox results, so normalize either form into a File for ingest.
-      let content: Uint8Array | Blob
-      if (picked.path) {
-        content = await fs.readBinary(picked.path)
-      } else if (picked.url) {
-        const response = await fetch(picked.url)
-        if (!response.ok) {
-          throw new Error(`Files attachment read failed (${response.status})`)
-        }
-        content = await response.blob()
-      } else {
-        throw new Error('Files attachment did not include readable content')
+      if (!picked.url) throw new Error('Files attachment did not include a URL')
+      const response = await fetch(picked.url)
+      if (!response.ok) {
+        throw new Error(`Files attachment read failed (${response.status})`)
       }
+      const content = await response.blob()
 
       const file = new File(
         [content],
         picked.name || 'files-image',
         { type: picked.mimeType || 'application/octet-stream' },
       )
-      await ingest([file])
+      // Keep the host-issued reference: shared:// paths are not renderable.
+      await ingest([{ file, url: picked.url }])
     } catch (err) {
       console.warn('[canvas] files.pick import failed:', err)
       try {

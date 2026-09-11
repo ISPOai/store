@@ -2,13 +2,13 @@
 // transient metadata the ingest pipeline carries before it becomes a card.
 
 // Only the host-CSP-allowed image set. guessExtension never returns anything
-// outside this union, so BoardItem.path is always a servable shared:// URL.
+// outside this union.
 export type ImageExt = '.png' | '.jpg' | '.webp' | '.gif' | '.svg' | '.avif'
 
 export type BoardItem = {
   id: string // crypto.randomUUID()
-  src: string // 'shared://<projectId>/moodboard/images/<id>.<ext>' (host-resolved write path)
-  path: string // host-resolved shared path returned by writeBinary (projectId-prefixed)
+  src: string // Controlled URL returned by Powerbox, or a legacy shared URL.
+  path?: string // Present only for legacy shared-storage images.
   mimeType: string // 'image/png', 'image/jpeg', ...
   bytes: number // original file size
   originalName: string // dropped file's name; shown as the caption pill
