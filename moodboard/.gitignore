@@ -4,3 +4,8 @@ node_modules/
 *.log
 .claude/skills/
 .agents/skills/
+.cache/
+**/.ispo/runtime*.log
+.ispo-store-install-transaction
+.env
+.env.*
