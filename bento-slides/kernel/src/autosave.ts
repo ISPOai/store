@@ -8,14 +8,12 @@
 //   · versions  — a capped, throttled timeline of snapshots per docId, for the
 //     "Version history" restore UI.
 //
-// ISPO PORT — the backing store is `fs`, not IndexedDB.
+// ISPO PORT — the backing store is Entities, not IndexedDB.
 //
 // Upstream this is IndexedDB, because a `.bento.html` has nowhere else to put
-// a backstop: the browser origin is all it has. Here the app owns private,
-// project-scoped storage that is backed up and moved with the project, and the
-// port guide is explicit that browser storage belongs on an SDK plane. So each
-// snapshot is a file under `.autosave/`, which buys three things beyond
-// compliance:
+// a backstop: the browser origin is all it has. Here the app owns records in
+// the ISPO database that are backed up and moved with the project, which buys
+// three things beyond compliance:
 //
 //   · the backstop survives what IndexedDB does not — a cleared origin, a
 //     different device the project syncs to;
@@ -27,8 +25,11 @@
 //     deletes them, rather than leaving plaintext documents in a browser
 //     origin after the app is gone.
 //
-// One snapshot per file rather than one index: `addVersion` runs on a timer and
-// rewriting a single index would rewrite every retained version each time.
+// NOTHING HERE DELETES A RECORD. Every entity delete asks the user to confirm,
+// and a backstop that interrupts the author on a timer is worse than none. So
+// the version timeline is a RING of MAX_VERSIONS slot records per doc, each
+// overwritten in turn, and "clearing" a snapshot blanks it (`json: ''`,
+// `at: 0`) in place. A blank snapshot reads as absent everywhere.
 //
 // Unchanged from upstream: snapshots hold the plain document JSON, and
 // ENCRYPTED DECKS ARE NEVER SNAPSHOTTED here — the editor clears both stores
@@ -36,11 +37,10 @@
 // encryption the author just turned on.
 
 import type { KernelDoc } from './doc.ts'
-import { fs } from '@ispo/sdk'
+import { entities, type EntityRecord } from '@ispo/sdk'
 
-const ROOT = '.autosave'
-const RECOVERY_DIR = `${ROOT}/recovery`
-const VERSIONS_DIR = `${ROOT}/versions`
+const RECOVERY_TYPE = 'bento.recovery'
+const VERSION_TYPE = 'bento.version'
 const MAX_VERSIONS = 20 // per doc
 const PRUNE_DAYS = 30
 
@@ -52,32 +52,23 @@ export interface Snapshot {
   json: string
 }
 
-/** A docId as a path segment. UUIDs pass through; hand-written ids are tamed. */
-const seg = (docId: string): string =>
-  (docId.replace(/[^A-Za-z0-9_-]/g, '_').slice(0, 100) || 'unknown')
+type SnapshotRecord = EntityRecord<Snapshot>
 
-const isMissing = (err: unknown): boolean =>
-  (err instanceof Error ? err.message : String(err ?? '')).includes('not found:')
+const isBlank = (snap: Snapshot): boolean => snap.json === ''
 
-async function readJson<T>(path: string): Promise<T | null> {
-  try {
-    return JSON.parse(await fs.read(path)) as T
-  } catch (err) {
-    // Missing is ordinary. Anything else — a refused grant during the first-run
-    // race, half-written JSON — is also survivable HERE: this is a backstop, and
-    // a backstop that throws would take down the save it exists to protect.
-    if (!isMissing(err)) console.warn('[bento autosave] could not read', path, err)
-    return null
-  }
+const BLANK = { at: 0, title: '', json: '' } as const
+
+async function recoveryRecord(docId: string): Promise<SnapshotRecord | null> {
+  const { records } = await entities.query<Snapshot>(RECOVERY_TYPE, { where: { docId }, limit: 1 })
+  return records[0] ?? null
 }
 
-async function listDir(path: string): Promise<string[]> {
-  try {
-    return (await fs.list(path)).filter((name) => name.endsWith('.json'))
-  } catch (err) {
-    if (!isMissing(err)) console.warn('[bento autosave] could not list', path, err)
-    return []
-  }
+async function versionRecords(docId: string): Promise<SnapshotRecord[]> {
+  const { records } = await entities.query<Snapshot>(VERSION_TYPE, {
+    where: { docId },
+    limit: MAX_VERSIONS,
+  })
+  return records
 }
 
 /**
@@ -86,7 +77,7 @@ async function listDir(path: string): Promise<string[]> {
  * Returns whether it ACTUALLY stored — the editor tells the author their work
  * is backed up, and claiming a backstop that isn't there would be worse than
  * saying nothing. Under ISPO the honest answer is available: a refused or
- * failed `fs.write` is a rejected promise, not a silent null.
+ * failed write is a rejected promise, not a silent null.
  */
 export async function putRecovery(doc: KernelDoc): Promise<boolean> {
   const snap: Snapshot = {
@@ -96,7 +87,9 @@ export async function putRecovery(doc: KernelDoc): Promise<boolean> {
     json: JSON.stringify(doc),
   }
   try {
-    await fs.write(`${RECOVERY_DIR}/${seg(doc.docId)}.json`, JSON.stringify(snap))
+    const existing = await recoveryRecord(doc.docId)
+    if (existing) await entities.update<Snapshot>(RECOVERY_TYPE, existing.id, snap)
+    else await entities.create<Snapshot>(RECOVERY_TYPE, snap)
     return true
   } catch {
     return false
@@ -104,96 +97,113 @@ export async function putRecovery(doc: KernelDoc): Promise<boolean> {
 }
 
 export async function getRecovery(docId: string): Promise<Snapshot | null> {
-  return readJson<Snapshot>(`${RECOVERY_DIR}/${seg(docId)}.json`)
+  try {
+    const record = await recoveryRecord(docId)
+    return record && !isBlank(record.data) ? record.data : null
+  } catch (err) {
+    // A backstop that throws would take down the open it exists to protect.
+    console.warn('[bento autosave] could not read recovery for', docId, err)
+    return null
+  }
 }
 
 export async function clearRecovery(docId: string): Promise<void> {
   try {
-    await fs.delete(`${RECOVERY_DIR}/${seg(docId)}.json`)
+    const record = await recoveryRecord(docId)
+    if (record && !isBlank(record.data)) await entities.update<Snapshot>(RECOVERY_TYPE, record.id, BLANK)
   } catch {
     /* nothing to clear */
   }
 }
 
 /**
- * Delete every version-history snapshot for a docId. Used when a deck is
+ * Blank every version-history snapshot for a docId. Used when a deck is
  * encrypted: the plaintext snapshots written before encryption was enabled
  * must not linger.
  */
 export async function clearVersions(docId: string): Promise<void> {
-  const dir = `${VERSIONS_DIR}/${seg(docId)}`
-  for (const name of await listDir(dir)) {
+  let records: SnapshotRecord[]
+  try {
+    records = await versionRecords(docId)
+  } catch {
+    return
+  }
+  for (const record of records) {
+    if (isBlank(record.data)) continue
     try {
-      await fs.delete(`${dir}/${name}`)
+      await entities.update<Snapshot>(VERSION_TYPE, record.id, BLANK)
     } catch {
       /* best effort */
     }
   }
+  slots.delete(docId)
 }
 
+/** Each doc's ring of slot records, learned on first use and kept current. */
+const slots = new Map<string, Array<{ id: string; at: number }>>()
+
 export async function addVersion(doc: KernelDoc): Promise<void> {
-  const dir = `${VERSIONS_DIR}/${seg(doc.docId)}`
-  const at = Date.now()
-  const snap: Snapshot = { docId: doc.docId, at, title: doc.title, json: JSON.stringify(doc) }
+  const snap: Snapshot = { docId: doc.docId, at: Date.now(), title: doc.title, json: JSON.stringify(doc) }
   try {
-    await fs.write(`${dir}/${at}.json`, JSON.stringify(snap))
-  } catch {
-    return // a version that could not be written is not worth failing the edit
-  }
-  // prune to the newest MAX_VERSIONS for this doc
-  const names = (await listDir(dir)).sort((a, b) => Number.parseInt(b, 10) - Number.parseInt(a, 10))
-  for (const name of names.slice(MAX_VERSIONS)) {
-    try {
-      await fs.delete(`${dir}/${name}`)
-    } catch {
-      /* best effort */
+    let ring = slots.get(doc.docId)
+    if (!ring) {
+      ring = (await versionRecords(doc.docId)).map((r) => ({ id: r.id, at: r.data.at }))
+      slots.set(doc.docId, ring)
     }
+    if (ring.length < MAX_VERSIONS) {
+      const created = await entities.create<Snapshot>(VERSION_TYPE, snap)
+      ring.push({ id: created.id, at: snap.at })
+      return
+    }
+    // The oldest slot — a blanked one has `at: 0` and goes first.
+    const oldest = ring.reduce((a, b) => (b.at < a.at ? b : a))
+    await entities.update<Snapshot>(VERSION_TYPE, oldest.id, snap)
+    oldest.at = snap.at
+  } catch {
+    // A version that could not be written is not worth failing the edit, and
+    // the ring is re-learned next time rather than trusted half-updated.
+    slots.delete(doc.docId)
   }
 }
 
 export async function listVersions(docId: string): Promise<Snapshot[]> {
-  const dir = `${VERSIONS_DIR}/${seg(docId)}`
-  const names = await listDir(dir)
-  const out: Snapshot[] = []
-  for (const name of names) {
-    const snap = await readJson<Snapshot>(`${dir}/${name}`)
+  let records: SnapshotRecord[]
+  try {
+    records = await versionRecords(docId)
+  } catch (err) {
+    console.warn('[bento autosave] could not list versions for', docId, err)
+    return []
+  }
+  return records
+    .map((r) => r.data)
+    .filter((snap) => !isBlank(snap))
     // `id` is what the editor's restore list keys rows on. Upstream it is the
     // IndexedDB autoincrement; here the timestamp already is a per-doc unique
     // key, and using it keeps the rows stable across a reload.
-    if (snap) out.push({ ...snap, id: snap.at })
-  }
-  return out.sort((a, b) => b.at - a.at) // newest first
+    .map((snap) => ({ ...snap, id: snap.at }))
+    .sort((a, b) => b.at - a.at) // newest first
 }
 
-/** Drop snapshots older than PRUNE_DAYS across all docs (housekeeping). */
+/** Blank snapshots older than PRUNE_DAYS across all docs (housekeeping). */
 export async function pruneOld(): Promise<void> {
   const cutoff = Date.now() - PRUNE_DAYS * 24 * 60 * 60 * 1000
-  for (const name of await listDir(RECOVERY_DIR)) {
-    const snap = await readJson<Snapshot>(`${RECOVERY_DIR}/${name}`)
-    if (snap && snap.at < cutoff) {
+  for (const type of [RECOVERY_TYPE, VERSION_TYPE]) {
+    let records: SnapshotRecord[]
+    try {
+      ;({ records } = await entities.query<Snapshot>(type, {
+        where: { at: { gt: 0, lt: cutoff } },
+        limit: 1000,
+      }))
+    } catch {
+      continue
+    }
+    for (const record of records) {
       try {
-        await fs.delete(`${RECOVERY_DIR}/${name}`)
+        await entities.update<Snapshot>(type, record.id, BLANK)
       } catch {
         /* best effort */
       }
     }
   }
-  let docDirs: string[] = []
-  try {
-    docDirs = (await fs.list(VERSIONS_DIR)).filter((n) => n.endsWith('/')).map((n) => n.slice(0, -1))
-  } catch {
-    return
-  }
-  for (const docDir of docDirs) {
-    const dir = `${VERSIONS_DIR}/${docDir}`
-    for (const name of await listDir(dir)) {
-      if (Number.parseInt(name, 10) < cutoff) {
-        try {
-          await fs.delete(`${dir}/${name}`)
-        } catch {
-          /* best effort */
-        }
-      }
-    }
-  }
+  slots.clear()
 }

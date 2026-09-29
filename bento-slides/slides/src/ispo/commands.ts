@@ -9,8 +9,8 @@
 // deck to do without a human driving the editor.
 //
 // THE RULE THESE FOLLOW is that a handler is HEADLESS. It never touches the
-// editor, the canvas, or the mounted document — it reads the deck from disk
-// through `ctx.sdk.fs`, works on the JSON, and writes it back. So a host call
+// editor, the canvas, or the mounted document — it reads the deck record
+// through `ctx.sdk.entities`, works on the JSON, and writes it back. So a host call
 // is served identically whether the app is on screen, in a background frame,
 // or was never opened in this session. That is also why they use `ctx.sdk`
 // rather than the ambient SDK import: the scoped facade carries the host's
@@ -33,15 +33,21 @@ import {
   type TextElement,
 } from '../model'
 import { validateDoc } from '../validate'
-import { DECK_DIR, DECK_EXT, sanitize } from '../../../ispo/src/store.ts'
+import {
+  DECK_EXT,
+  freshDeckPath,
+  isNotFound,
+  lastOpenedDeck,
+  listDecks,
+  patchSession,
+  putDeck,
+  readDeck,
+  sanitize,
+} from '../../../ispo/src/store.ts'
 
 type Sdk = ProjectCommandSdk
 
-const SESSION = 'session.json'
 const MAX_ROWS = 200
-
-const isMissing = (err: unknown): boolean =>
-  (err instanceof Error ? err.message : String(err ?? '')).includes('not found:')
 
 /** Plain text of a text element, tags stripped — what a slide is "called". */
 function plainText(el: TextElement): string {
@@ -86,35 +92,21 @@ function slideTitle(slide: Slide, doc: BentoDoc): string {
   return best ? plainText(best).slice(0, 120) : ''
 }
 
-async function readJson(sdk: Sdk, path: string): Promise<string | null> {
+async function readBody(sdk: Sdk, path: string): Promise<string | null> {
   try {
-    return await sdk.fs.read(path)
+    return await readDeck(path, sdk.entities)
   } catch (err) {
-    if (isMissing(err)) return null
+    if (isNotFound(err)) return null
     throw err
   }
 }
 
 /** The deck the app has open, or the only/first one if the pointer is stale. */
 async function openDeckPath(sdk: Sdk): Promise<string | null> {
-  const raw = await readJson(sdk, SESSION)
-  if (raw) {
-    try {
-      const pointer = (JSON.parse(raw) as { deck?: unknown }).deck
-      if (typeof pointer === 'string' && (await readJson(sdk, pointer)) !== null) return pointer
-    } catch {
-      /* fall through to the directory */
-    }
-  }
-  let entries: string[]
-  try {
-    entries = await sdk.fs.list(DECK_DIR)
-  } catch (err) {
-    if (isMissing(err)) return null
-    throw err
-  }
-  const decks = entries.filter((n) => n.endsWith(DECK_EXT)).sort((a, b) => a.localeCompare(b))
-  return decks.length ? `${DECK_DIR}/${decks[0]}` : null
+  const decks = await listDecks(sdk.entities)
+  const pointer = await lastOpenedDeck(sdk.entities)
+  if (pointer && decks.some((d) => d.path === pointer)) return pointer
+  return decks[0]?.path ?? null
 }
 
 interface OpenDeck {
@@ -132,7 +124,7 @@ interface OpenDeck {
 async function loadOpenDeck(sdk: Sdk): Promise<OpenDeck | null> {
   const path = await openDeckPath(sdk)
   if (!path) return null
-  const body = await readJson(sdk, path)
+  const body = await readBody(sdk, path)
   if (body === null) return null
   const doc = parseDoc(body)
   if (!doc) {
@@ -147,7 +139,7 @@ async function loadOpenDeck(sdk: Sdk): Promise<OpenDeck | null> {
 
 async function writeDoc(sdk: Sdk, path: string, doc: BentoDoc): Promise<void> {
   doc.modified = new Date().toISOString()
-  await sdk.fs.write(path, JSON.stringify(doc))
+  await putDeck(path, JSON.stringify(doc), sdk.entities)
 }
 
 // --- list-slides ------------------------------------------------------------
@@ -411,18 +403,9 @@ export const newDeckCommand = commands.define(
     }
     // A name that is free. Two decks called "Roadmap" is a thing people do,
     // and the second must not land on top of the first.
-    let taken: string[] = []
-    try {
-      taken = await ctx.sdk.fs.list(DECK_DIR)
-    } catch (err) {
-      if (!isMissing(err)) throw err
-    }
-    const base = sanitize(doc.title)
-    let name = `${base}${DECK_EXT}`
-    for (let n = 2; taken.includes(name) && n < 1000; n++) name = `${base}-${n}${DECK_EXT}`
-    const path = `${DECK_DIR}/${name}`
+    const path = await freshDeckPath(doc.title, ctx.sdk.entities)
     await writeDoc(ctx.sdk, path, doc)
-    await ctx.sdk.fs.write(SESSION, `${JSON.stringify({ v: 1, deck: path })}\n`)
+    await patchSession({ deck: path }, ctx.sdk.entities)
     return {
       kind: 'json' as const,
       data: { deck: path, title: doc.title, count: doc.slides.length },

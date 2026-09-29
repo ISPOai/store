@@ -1,13 +1,15 @@
 {
   "schemaVersion": 1,
   "name": "Bento Slides",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "target": "react",
   "appEntry": "src/main.ts",
   "mode": "edit",
   "root": "",
   "requests": {
-    "fs": "self",
+    "fs": "none",
+    "folders": [],
+    "ai": [],
     "ui": [],
     "agent": [],
     "dialog": [],
@@ -15,13 +17,209 @@
       "pick",
       "publish"
     ],
+    "assets": [],
+    "sites": [],
     "chrome": [],
+    "capability": [],
+    "spec": [],
+    "evaluations": [],
     "promptHistory": [],
-    "entities": {},
-    "devices": []
+    "cloud": [],
+    "community": [],
+    "assistant": [],
+    "entities": {
+      "bento.deck": [
+        "create",
+        "read",
+        "query",
+        "update",
+        "delete"
+      ],
+      "bento.session": [
+        "create",
+        "read",
+        "query",
+        "update"
+      ],
+      "bento.recovery": [
+        "create",
+        "read",
+        "query",
+        "update"
+      ],
+      "bento.version": [
+        "create",
+        "read",
+        "query",
+        "update"
+      ]
+    },
+    "devices": [],
+    "connectors": {
+      "google.calendar": [],
+      "google.mail": []
+    }
   },
   "env": [],
-  "entityTypes": [],
+  "entityTypes": [
+    {
+      "id": "bento.deck",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "required": [
+          "path",
+          "name",
+          "body",
+          "updatedAt"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "indexes": [
+        {
+          "fields": [
+            "path"
+          ]
+        }
+      ],
+      "display": {
+        "labelField": "name",
+        "summaryFields": [
+          "updatedAt"
+        ]
+      }
+    },
+    {
+      "id": "bento.session",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "required": [
+          "deck",
+          "seededAt",
+          "legacyImportedAt"
+        ],
+        "properties": {
+          "deck": {
+            "type": "string"
+          },
+          "seededAt": {
+            "type": "number"
+          },
+          "legacyImportedAt": {
+            "type": "number"
+          }
+        }
+      },
+      "indexes": [],
+      "display": {
+        "labelField": "deck"
+      }
+    },
+    {
+      "id": "bento.recovery",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "required": [
+          "docId",
+          "at",
+          "title",
+          "json"
+        ],
+        "properties": {
+          "docId": {
+            "type": "string"
+          },
+          "at": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "json": {
+            "type": "string"
+          }
+        }
+      },
+      "indexes": [
+        {
+          "fields": [
+            "docId"
+          ]
+        },
+        {
+          "fields": [
+            "at"
+          ]
+        }
+      ],
+      "display": {
+        "labelField": "title",
+        "summaryFields": [
+          "at"
+        ]
+      }
+    },
+    {
+      "id": "bento.version",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "required": [
+          "docId",
+          "at",
+          "title",
+          "json"
+        ],
+        "properties": {
+          "docId": {
+            "type": "string"
+          },
+          "at": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "json": {
+            "type": "string"
+          }
+        }
+      },
+      "indexes": [
+        {
+          "fields": [
+            "docId"
+          ]
+        },
+        {
+          "fields": [
+            "at"
+          ]
+        }
+      ],
+      "display": {
+        "labelField": "title",
+        "summaryFields": [
+          "at"
+        ]
+      }
+    }
+  ],
   "egress": {
     "connect": []
   }

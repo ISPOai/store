@@ -4,8 +4,8 @@
 // ISPO PORT — deciding what to open, and what to do when we cannot look.
 //
 // Upstream there is nothing to decide: the document is in the page. Here the
-// deck is in project storage behind an `fs` grant, and on a FRESHLY INSTALLED
-// app the first read races the access review the user is still reading. The
+// deck is an Entity record behind the host's access review, and on a FRESHLY
+// INSTALLED app the first read races the review the user is still reading. The
 // host may hold that call, or refuse it outright.
 //
 // Three answers, three different things to show, and conflating any two of
@@ -28,19 +28,16 @@ import { starterDoc } from '../starterdeck'
 import {
   currentDeck,
   deckPath,
-  isNotFound,
   lastOpenedDeck,
   listDecks,
   readDeck,
   noteLoaded,
+  patchSession,
+  readSession,
   refFor,
   setCurrentDeck,
   writeDeck,
 } from '../../../ispo/src/store.ts'
-import { fs } from '@ispo/sdk'
-
-/** Marker recording that the one-time starter deck has been planted. */
-const SEEDED = '.seeded'
 
 /** What the app should open, once storage has actually answered. */
 export type Opening =
@@ -67,7 +64,7 @@ export async function resolveOpening(): Promise<Opening> {
   // documents. The starter deck is the product's feature tour and is worth
   // planting exactly once; bringing it back every time the author empties
   // their storage would be the app arguing with them.
-  const seeded = await hasSeeded()
+  const seeded = ((await readSession())?.seededAt ?? 0) > 0
   if (seeded) {
     return { kind: 'fresh', body: JSON.stringify(newDoc()) }
   }
@@ -76,19 +73,9 @@ export async function resolveOpening(): Promise<Opening> {
   const body = JSON.stringify(starter)
   const path = deckPath(starter.title)
   await writeDeck(path, body)
-  await fs.write(SEEDED, `${JSON.stringify({ v: 1, at: Date.now() })}\n`)
+  await patchSession({ seededAt: Date.now() })
   setCurrentDeck(refFor(path))
   return { kind: 'deck', body }
-}
-
-async function hasSeeded(): Promise<boolean> {
-  try {
-    await fs.read(SEEDED)
-    return true
-  } catch (err) {
-    if (isNotFound(err)) return false
-    throw err // a refused read is NOT "never seeded" — let the gate handle it
-  }
 }
 
 /**
@@ -138,10 +125,10 @@ function showGate(onRetry: () => void): HTMLElement {
   const card = document.createElement('div')
   card.className = 'ed-ispo-gate-card'
   const h = document.createElement('h1')
-  h.textContent = t('Waiting for file access')
+  h.textContent = t('Waiting for access to your decks')
   const p = document.createElement('p')
   p.textContent = t(
-    'This app keeps your decks in its own private storage. Approve file access in the access review to open them — this screen goes away by itself once you do.',
+    'Bento could not open your decks yet. If ISPO is asking you to review access for this app, approve it — this screen goes away by itself once you do.',
   )
   const button = document.createElement('button')
   button.textContent = t('Try again')

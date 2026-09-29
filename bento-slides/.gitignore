@@ -5,3 +5,8 @@ node_modules/
 .claude/skills/
 .agents/skills/
 tsconfig.typecheck.json
+.cache/
+**/.ispo/runtime*.log
+.ispo-store-install-transaction
+.env
+.env.*
