@@ -10,6 +10,7 @@
   "requests": {
     "fs": "none",
     "folders": [],
+    "ai": [],
     "ui": [
       "notify",
       "navigate"
@@ -23,11 +24,15 @@
       "pick"
     ],
     "assets": [],
+    "sites": [],
     "chrome": [],
     "capability": [],
     "spec": [],
+    "evaluations": [],
     "promptHistory": [],
     "cloud": [],
+    "community": [],
+    "assistant": [],
     "entities": {
       "store.cad.model": [
         "create",
@@ -50,7 +55,10 @@
       ]
     },
     "devices": [],
-    "connectors": {}
+    "connectors": {
+      "google.calendar": [],
+      "google.mail": []
+    }
   },
   "env": [],
   "entityTypes": [
@@ -119,20 +127,17 @@
         {
           "fields": [
             "title"
-          ],
-          "unique": false
+          ]
         },
         {
           "fields": [
             "status"
-          ],
-          "unique": false
+          ]
         },
         {
           "fields": [
             "updatedAt"
-          ],
-          "unique": false
+          ]
         }
       ],
       "display": {
@@ -366,20 +371,17 @@
         {
           "fields": [
             "modelId"
-          ],
-          "unique": false
+          ]
         },
         {
           "fields": [
             "status"
-          ],
-          "unique": false
+          ]
         },
         {
           "fields": [
             "createdAt"
-          ],
-          "unique": false
+          ]
         },
         {
           "fields": [

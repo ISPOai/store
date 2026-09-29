@@ -42,6 +42,8 @@ export function CadGenerationStatus({
     );
   }
   const terminalId = generation?.data.terminalId ?? null;
+  const activeSummary =
+    generation?.id === model.data.activeGenerationId ? generation?.data.summary ?? null : null;
 
   return (
     <div className="flex flex-col gap-5">
@@ -52,7 +54,16 @@ export function CadGenerationStatus({
             {statusLabel(model.data.status)}
           </Badge>
         </div>
-        <p className="text-sm leading-relaxed text-muted-foreground">{model.data.prompt}</p>
+        {/* The active revision's committed summary describes the model as it now stands; the
+            create prompt only describes the revision that first made it, so it is the fallback. */}
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          {activeSummary || model.data.prompt}
+        </p>
+        {activeSummary ? (
+          <p className="text-sm leading-relaxed text-muted-foreground opacity-[0.72]">
+            Originally requested: {model.data.prompt}
+          </p>
+        ) : null}
         <CopyRow label="Model ID" value={model.id} onCopy={onCopy} />
       </section>
 
@@ -65,7 +76,8 @@ export function CadGenerationStatus({
               <Badge variant="outline">{statusLabel(generation.data.status)}</Badge>
             </div>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              {generation.data.summary || statusMessage(generation.data.status)}
+              {(activeSummary ? null : generation.data.summary) ||
+                statusMessage(generation.data.status)}
             </p>
             {generation.data.error ? (
               <Alert variant="destructive">

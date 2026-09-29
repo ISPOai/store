@@ -10,3 +10,8 @@ __pycache__/
 *.log
 .claude/skills/
 .agents/skills/
+.cache/
+**/.ispo/runtime*.log
+.ispo-store-install-transaction
+.env
+.env.*
