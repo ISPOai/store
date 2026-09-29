@@ -8,6 +8,8 @@
   "root": "",
   "requests": {
     "fs": "none",
+    "folders": [],
+    "ai": [],
     "ui": [
       "notify"
     ],
@@ -17,9 +19,22 @@
       "pick",
       "edit"
     ],
+    "assets": [],
+    "sites": [],
+    "chrome": [],
+    "capability": [],
+    "spec": [],
+    "evaluations": [],
     "promptHistory": [],
+    "cloud": [],
+    "community": [],
+    "assistant": [],
     "entities": {},
-    "devices": []
+    "devices": [],
+    "connectors": {
+      "google.calendar": [],
+      "google.mail": []
+    }
   },
   "env": [],
   "entityTypes": [],
