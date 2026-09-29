@@ -10,10 +10,12 @@ import type { MediaAsset } from "@/media/types";
 import { applyAudioMasteringToBuffer } from "@/media/audio-mastering";
 import type { AudioCapableElement } from "@/timeline/audio-state";
 import {
+	getElementReverb,
 	hasAnimatedVolume,
 	isElementMuted,
 	resolveEffectiveAudioGain,
 } from "@/timeline/audio-state";
+import { renderReverbSend } from "@/media/reverb";
 import { doesElementHaveEnabledAudio } from "@/timeline/audio-separation";
 import { canElementHaveAudio, hasMediaId } from "@/timeline/element-utils";
 import { canTrackHaveAudio } from "@/timeline";
@@ -654,8 +656,28 @@ export async function createTimelineAudioBuffer({
 		sampleRate,
 	);
 
+	// One send buffer per distinct room. Clips mix their dry signal into
+	// outputBuffer as usual and their wet contribution into the matching send;
+	// each send is convolved exactly once after the loop, so a timeline where
+	// every voice shares a room costs one convolution, not one per clip.
+	const reverbSends = new Map<number, AudioBuffer>();
+
 	for (const element of audioElements) {
 		if (element.muted) continue;
+
+		const reverb = getElementReverb({ element: element.timelineElement });
+		let sendBuffer: AudioBuffer | undefined;
+		if (reverb) {
+			sendBuffer = reverbSends.get(reverb.decaySeconds);
+			if (!sendBuffer) {
+				sendBuffer = context.createBuffer(
+					outputChannels,
+					outputLength,
+					sampleRate,
+				);
+				reverbSends.set(reverb.decaySeconds, sendBuffer);
+			}
+		}
 
 		const renderedBuffer = shouldMaintainPitch({
 			rate: element.retime?.rate ?? 1,
@@ -679,7 +701,26 @@ export async function createTimelineAudioBuffer({
 			outputBuffer,
 			outputLength,
 			sampleRate,
+			sendBuffer,
+			sendGain: reverb?.wet,
 		});
+	}
+
+	for (const [decaySeconds, sendBuffer] of reverbSends) {
+		const wetBuffer = await renderReverbSend({
+			buffer: sendBuffer,
+			decaySeconds,
+		});
+		for (let channel = 0; channel < outputChannels; channel++) {
+			const outputData = outputBuffer.getChannelData(channel);
+			const wetData = wetBuffer.getChannelData(
+				Math.min(channel, wetBuffer.numberOfChannels - 1),
+			);
+			const length = Math.min(outputLength, wetData.length);
+			for (let index = 0; index < length; index++) {
+				outputData[index] += wetData[index];
+			}
+		}
 	}
 
 	return await applyAudioMasteringToBuffer({ audioBuffer: outputBuffer });
@@ -819,6 +860,8 @@ function mixAudioChannels({
 	outputBuffer,
 	outputLength,
 	sampleRate,
+	sendBuffer,
+	sendGain,
 }: {
 	element: CollectedAudioElement;
 	buffer: AudioBuffer;
@@ -827,6 +870,8 @@ function mixAudioChannels({
 	outputBuffer: AudioBuffer;
 	outputLength: number;
 	sampleRate: number;
+	sendBuffer?: AudioBuffer;
+	sendGain?: number;
 }): void {
 	const { startTime, duration: elementDuration } = element;
 
@@ -838,6 +883,8 @@ function mixAudioChannels({
 		const outputData = outputBuffer.getChannelData(channel);
 		const sourceChannel = Math.min(channel, buffer.numberOfChannels - 1);
 		const sourceData = buffer.getChannelData(sourceChannel);
+		const sendData =
+			sendBuffer && sendGain ? sendBuffer.getChannelData(channel) : null;
 
 		for (let i = 0; i < renderedLength; i++) {
 			const outputIndex = outputStartSample + i;
@@ -845,7 +892,7 @@ function mixAudioChannels({
 
 			const clipTime = i / sampleRate;
 			const sourceTime =
-				trimStart + getSourceTimeAtClipTime({ clipTime, retime });
+				trimStart + getSourceTimeAtClipTime({ clipTime, retime, clipDuration: elementDuration });
 			const sourceIndex = sourceTime * buffer.sampleRate;
 			if (sourceIndex >= sourceData.length) break;
 
@@ -858,10 +905,13 @@ function mixAudioChannels({
 						localTime: clipTime,
 					})
 				: element.volume;
-			outputData[outputIndex] +=
+			const value =
 				(sourceData[lowerIndex] * (1 - fraction) +
 					sourceData[upperIndex] * fraction) *
 				gain;
+			outputData[outputIndex] += value;
+			// Post-fader send: the room follows the clip's volume envelope.
+			if (sendData && sendGain) sendData[outputIndex] += value * sendGain;
 		}
 	}
 }

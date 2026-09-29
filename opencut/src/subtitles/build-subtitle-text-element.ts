@@ -26,6 +26,7 @@ function quoteFontFamily({ fontFamily }: { fontFamily: string }): string {
 }
 
 function createMeasurementContext(): CanvasRenderingContext2D | null {
+	if (globalThis.document === undefined) return null;
 	const canvas = document.createElement("canvas");
 	canvas.width = MEASUREMENT_CANVAS_SIZE;
 	canvas.height = MEASUREMENT_CANVAS_SIZE;

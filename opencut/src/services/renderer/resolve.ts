@@ -14,12 +14,20 @@ import {
 } from "@/graphics";
 import {
 	buildTextBackgroundFromElement,
+	buildTextEffectsFromElement,
 	getTextMeasurementContext,
 	measureTextElement,
 } from "@/text/measure-element";
-import { resolveColorAtTime, resolveOpacityAtTime } from "@/animation/values";
+import {
+	resolveColorAtTime,
+	resolveNumberAtTime,
+	resolveOpacityAtTime,
+} from "@/animation/values";
 import { resolveTransformAtTime } from "@/rendering/animation-values";
+import { buildTransformFromParams, type Transform } from "@/rendering";
 import { videoCache } from "@/services/video-cache/service";
+import { transitionsRegistry } from "@/transitions";
+import { imageFitScale, cropSourceDimensions } from "./image-fit";
 import type { CanvasRenderer } from "./canvas-renderer";
 import type { AnyBaseNode } from "./nodes/base-node";
 import {
@@ -39,6 +47,11 @@ import { ImageNode, loadImageSource } from "./nodes/image-node";
 import { StickerNode, loadStickerSource } from "./nodes/sticker-node";
 import { TextNode, type ResolvedTextNodeState } from "./nodes/text-node";
 import { VideoNode } from "./nodes/video-node";
+import {
+	TransitionNode,
+	type ResolvedTransitionNodeState,
+	type TransitionSource,
+} from "./nodes/transition-node";
 import type {
 	ResolvedVisualNodeState,
 	ResolvedVisualSourceNodeState,
@@ -89,6 +102,8 @@ async function resolveNode({
 		node.resolved = await resolveBlurBackgroundNode({ node, context });
 	} else if (node instanceof EffectLayerNode) {
 		node.resolved = resolveEffectLayerNode({ node, context });
+	} else if (node instanceof TransitionNode) {
+		node.resolved = await resolveTransitionNode({ node, context });
 	}
 
 	await Promise.all(
@@ -124,6 +139,7 @@ function resolveEffectPassGroups({
 				effectParams: resolvedParams,
 				width,
 				height,
+				time: localTime,
 			});
 		});
 }
@@ -133,14 +149,24 @@ function resolveVisualState({
 	context,
 	sourceWidth,
 	sourceHeight,
+	fit,
+	crop,
 }: {
 	params: VisualNodeParams;
 	context: ResolveContext;
 	sourceWidth: number;
 	sourceHeight: number;
+	fit?: "cover" | "contain";
+	crop?: VisualNodeParams["crop"];
 }): ResolvedVisualNodeState | null {
 	const clipTime = context.time - params.timeOffset;
 	if (clipTime < 0 || clipTime >= params.duration) {
+		return null;
+	}
+
+	const skipHead = params.skipHead ?? 0;
+	const skipTail = params.skipTail ?? 0;
+	if (clipTime < skipHead || clipTime >= params.duration - skipTail) {
 		return null;
 	}
 
@@ -159,15 +185,21 @@ function resolveVisualState({
 		animations: params.animations,
 		localTime,
 	});
-	const containScale = Math.min(
-		context.renderer.width / sourceWidth,
-		context.renderer.height / sourceHeight,
-	);
+	const fitSource = crop
+		? cropSourceDimensions({ sourceWidth, sourceHeight, crop })
+		: { width: sourceWidth, height: sourceHeight };
+	const containScale = imageFitScale({
+		canvasWidth: context.renderer.width,
+		canvasHeight: context.renderer.height,
+		sourceWidth: fitSource.width,
+		sourceHeight: fitSource.height,
+		fit,
+	});
 	const effectWidth = Math.round(
-		Math.abs(sourceWidth * containScale * transform.scaleX),
+		Math.abs(fitSource.width * containScale * transform.scaleX),
 	);
 	const effectHeight = Math.round(
-		Math.abs(sourceHeight * containScale * transform.scaleY),
+		Math.abs(fitSource.height * containScale * transform.scaleY),
 	);
 
 	return {
@@ -201,6 +233,7 @@ async function resolveVideoNode({
 		getSourceTimeAtClipTime({
 			clipTime,
 			retime: node.params.retime,
+			clipDuration: node.params.duration,
 		});
 	const frame = await videoCache.getFrameAt({
 		mediaId: node.params.mediaId,
@@ -216,6 +249,7 @@ async function resolveVideoNode({
 		context,
 		sourceWidth: frame.canvas.width,
 		sourceHeight: frame.canvas.height,
+		crop: node.params.crop,
 	});
 	if (!visualState) {
 		return null;
@@ -245,6 +279,8 @@ async function resolveImageNode({
 		context,
 		sourceWidth: source.width,
 		sourceHeight: source.height,
+		fit: node.params.fit,
+		crop: node.params.crop,
 	});
 	if (!visualState) {
 		return null;
@@ -332,6 +368,7 @@ function resolveTextNode({
 		elementDuration: node.params.duration,
 	});
 	const background = buildTextBackgroundFromElement({ element: node.params });
+	const textEffects = buildTextEffectsFromElement({ element: node.params });
 
 	return {
 		transform: resolveTransformAtTime({
@@ -359,6 +396,62 @@ function resolveTextNode({
 			propertyPath: "background.color",
 			localTime,
 		}),
+		textEffects: {
+			stroke: {
+				color: resolveColorAtTime({
+					baseColor: textEffects.stroke.color,
+					animations: node.params.animations,
+					propertyPath: "stroke.color",
+					localTime,
+				}),
+				width: resolveNumberAtTime({
+					baseValue: textEffects.stroke.width,
+					animations: node.params.animations,
+					propertyPath: "stroke.width",
+					localTime,
+				}),
+			},
+			shadow: {
+				color: resolveColorAtTime({
+					baseColor: textEffects.shadow.color,
+					animations: node.params.animations,
+					propertyPath: "shadow.color",
+					localTime,
+				}),
+				x: resolveNumberAtTime({
+					baseValue: textEffects.shadow.x,
+					animations: node.params.animations,
+					propertyPath: "shadow.x",
+					localTime,
+				}),
+				y: resolveNumberAtTime({
+					baseValue: textEffects.shadow.y,
+					animations: node.params.animations,
+					propertyPath: "shadow.y",
+					localTime,
+				}),
+				blur: resolveNumberAtTime({
+					baseValue: textEffects.shadow.blur,
+					animations: node.params.animations,
+					propertyPath: "shadow.blur",
+					localTime,
+				}),
+			},
+			glow: {
+				color: resolveColorAtTime({
+					baseColor: textEffects.glow.color,
+					animations: node.params.animations,
+					propertyPath: "glow.color",
+					localTime,
+				}),
+				radius: resolveNumberAtTime({
+					baseValue: textEffects.glow.radius,
+					animations: node.params.animations,
+					propertyPath: "glow.radius",
+					localTime,
+				}),
+			},
+		},
 		effectPasses: resolveEffectPassGroups({
 			effects: node.params.effects,
 			animations: node.params.animations,
@@ -422,6 +515,7 @@ async function resolveBackdropSource({
 			getSourceTimeAtClipTime({
 				clipTime,
 				retime: node.params.retime,
+				clipDuration: node.params.duration,
 			});
 		const frame = await videoCache.getFrameAt({
 			mediaId: node.params.mediaId,
@@ -463,11 +557,17 @@ function resolveEffectLayerNode({
 	}
 
 	const definition = effectsRegistry.get(node.params.effectType);
+	const localTime = getElementLocalTime({
+		timelineTime: time,
+		elementStartTime: node.params.timeOffset,
+		elementDuration: node.params.duration,
+	});
 	const passes = resolveEffectPasses({
 		definition,
 		effectParams: node.params.effectParams,
 		width: context.renderer.width,
 		height: context.renderer.height,
+		time: localTime,
 	});
 	if (passes.length === 0) {
 		return null;
@@ -476,4 +576,197 @@ function resolveEffectLayerNode({
 	return {
 		passes,
 	};
+}
+
+const PREVIEW_MAX_TRANSITION_IMAGE_SIZE = 2048;
+
+type TransitionSideSample = {
+	source: CanvasImageSource;
+	sourceWidth: number;
+	sourceHeight: number;
+	transform: Transform;
+};
+
+async function resolveTransitionNode({
+	node,
+	context,
+}: {
+	node: TransitionNode;
+	context: ResolveContext;
+}): Promise<ResolvedTransitionNodeState | null> {
+	const { transition, startTime, duration, canvasWidth, canvasHeight } =
+		node.params;
+	const time = context.time;
+	if (time < startTime - 1e-6 || time >= startTime + duration + 1e-6) {
+		return null;
+	}
+
+	const progress = Math.min(
+		1,
+		Math.max(0, (time - startTime) / Math.max(duration, 1)),
+	);
+
+	const outgoing = await sampleTransitionSource({
+		source: node.params.outgoing,
+		time,
+		isPreview: node.params.isPreview,
+	});
+	const incoming = await sampleTransitionSource({
+		source: node.params.incoming,
+		time,
+		isPreview: node.params.isPreview,
+	});
+	if (!outgoing || !incoming) {
+		return null;
+	}
+
+	const composite = new OffscreenCanvas(canvasWidth, canvasHeight);
+	const ctx = composite.getContext("2d");
+	if (!ctx) {
+		return null;
+	}
+
+	const definition = transitionsRegistry.get(transition.type);
+	definition.compose({
+		ctx,
+		a: drawTransitionSide({
+			sample: outgoing,
+			width: canvasWidth,
+			height: canvasHeight,
+			fit:
+				node.params.outgoing.element.type === "image"
+					? node.params.outgoing.element.fit
+					: undefined,
+		}),
+		b: drawTransitionSide({
+			sample: incoming,
+			width: canvasWidth,
+			height: canvasHeight,
+			fit:
+				node.params.incoming.element.type === "image"
+					? node.params.incoming.element.fit
+					: undefined,
+		}),
+		progress,
+		width: canvasWidth,
+		height: canvasHeight,
+	});
+
+	return { composite };
+}
+
+async function sampleTransitionSource({
+	source,
+	time,
+	isPreview,
+}: {
+	source: TransitionSource;
+	time: number;
+	isPreview?: boolean;
+}): Promise<TransitionSideSample | null> {
+	const { element, mediaAsset } = source;
+	const clipTime = Math.min(
+		Math.max(0, time - element.startTime),
+		Math.max(0, element.duration - 1e-6),
+	);
+	const localTime = getElementLocalTime({
+		timelineTime: time,
+		elementStartTime: element.startTime,
+		elementDuration: element.duration,
+	});
+	const transform = resolveTransformAtTime({
+		baseTransform: buildTransformFromParams({ params: element.params }),
+		animations: element.animations,
+		localTime: Math.max(0, localTime),
+	});
+
+	if (element.type === "video") {
+		if (!mediaAsset.file || !mediaAsset.url) {
+			return null;
+		}
+		const sourceTimeTicks =
+			element.trimStart +
+			getSourceTimeAtClipTime({
+				clipTime,
+				retime: element.retime,
+			});
+		const frame = await videoCache.getFrameAt({
+			mediaId: element.mediaId,
+			file: mediaAsset.file,
+			time: mediaTimeToSeconds({ time: roundMediaTime({ time: sourceTimeTicks }) }),
+		});
+		if (!frame) {
+			return null;
+		}
+		return {
+			source: frame.canvas,
+			sourceWidth: frame.canvas.width,
+			sourceHeight: frame.canvas.height,
+			transform,
+		};
+	}
+
+	if (!mediaAsset.url) {
+		return null;
+	}
+	const loaded = await loadImageSource({
+		url: mediaAsset.url,
+		maxSourceSize: isPreview ? PREVIEW_MAX_TRANSITION_IMAGE_SIZE : undefined,
+	});
+	return {
+		source: loaded.source,
+		sourceWidth: loaded.width,
+		sourceHeight: loaded.height,
+		transform,
+	};
+}
+
+function drawTransitionSide({
+	sample,
+	width,
+	height,
+	fit,
+}: {
+	sample: TransitionSideSample;
+	width: number;
+	height: number;
+	fit?: "cover" | "contain";
+}): OffscreenCanvas {
+	const canvas = new OffscreenCanvas(width, height);
+	const ctx = canvas.getContext("2d");
+	if (!ctx) {
+		return canvas;
+	}
+
+	const containScale = imageFitScale({
+		canvasWidth: width,
+		canvasHeight: height,
+		sourceWidth: sample.sourceWidth,
+		sourceHeight: sample.sourceHeight,
+		fit,
+	});
+	const scaledWidth = sample.sourceWidth * containScale * sample.transform.scaleX;
+	const scaledHeight =
+		sample.sourceHeight * containScale * sample.transform.scaleY;
+	const absWidth = Math.abs(scaledWidth);
+	const absHeight = Math.abs(scaledHeight);
+	const centerX = width / 2 + sample.transform.position.x;
+	const centerY = height / 2 + sample.transform.position.y;
+	const flipX = scaledWidth < 0 ? -1 : 1;
+	const flipY = scaledHeight < 0 ? -1 : 1;
+
+	ctx.save();
+	ctx.translate(centerX, centerY);
+	ctx.rotate((sample.transform.rotate * Math.PI) / 180);
+	ctx.scale(flipX, flipY);
+	ctx.translate(-centerX, -centerY);
+	ctx.drawImage(
+		sample.source,
+		centerX - absWidth / 2,
+		centerY - absHeight / 2,
+		absWidth,
+		absHeight,
+	);
+	ctx.restore();
+	return canvas;
 }

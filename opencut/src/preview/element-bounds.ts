@@ -8,6 +8,8 @@ import {
 } from "@/animation";
 import { resolveTransformAtTime } from "@/rendering/animation-values";
 import { buildTransformFromParams } from "@/rendering";
+import { readCropFromParams } from "@/crop/crop";
+import { cropSourceDimensions } from "@/services/renderer/image-fit";
 
 export interface ElementBounds {
 	cx: number;
@@ -130,11 +132,17 @@ function getElementBounds({
 		});
 		const sourceWidth = mediaAsset?.width ?? canvasWidth;
 		const sourceHeight = mediaAsset?.height ?? canvasHeight;
+		const crop = readCropFromParams({ params: element.params });
+		const fitSource = cropSourceDimensions({
+			sourceWidth,
+			sourceHeight,
+			crop,
+		});
 		return getVisualElementBounds({
 			canvasWidth,
 			canvasHeight,
-			sourceWidth,
-			sourceHeight,
+			sourceWidth: fitSource.width,
+			sourceHeight: fitSource.height,
 			transform,
 		});
 	}

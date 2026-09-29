@@ -24,6 +24,12 @@ import {
 import { canDeleteScene, getMainScene } from "@/timeline/scenes";
 import { toast } from "sonner";
 import { useEditor } from "@/editor/use-editor";
+import {
+	Tabs,
+	TabsContent,
+	TabsList,
+	TabsTrigger,
+} from "@/components/ui/tabs";
 
 export function ScenesView({ children }: { children: React.ReactNode }) {
 	const editor = useEditor();
@@ -93,80 +99,86 @@ export function ScenesView({ children }: { children: React.ReactNode }) {
 	return (
 		<Sheet>
 			<SheetTrigger asChild>{children}</SheetTrigger>
-			<SheetContent>
+			<SheetContent className="overflow-y-auto sm:max-w-xl">
 				<SheetHeader>
-					<SheetTitle>
-						{isSelectMode ? `Select scenes (${selectedScenes.size})` : "Scenes"}
-					</SheetTitle>
+					<SheetTitle>Edit structure</SheetTitle>
 					<SheetDescription>
-						{isSelectMode
-							? "Select scenes to delete"
-							: "Switch between scenes in your project"}
+						Manage scenes or accept the script and ordered shot plan.
 					</SheetDescription>
 				</SheetHeader>
-				<div className="flex flex-col gap-4 py-4">
-					<div className="flex items-center gap-2">
-						<Button
-							className="rounded-md"
-							variant={isSelectMode ? "default" : "outline"}
-							size="sm"
-							onClick={handleSelectMode}
-						>
-							<ListCheck />
-							{isSelectMode ? "Cancel" : "Select"}
-						</Button>
-						{isSelectMode && (
-							<DeleteDialog
-								count={selectedScenes.size}
-								onDelete={handleDeleteSelected}
-								disabled={isMainSceneSelected}
-								trigger={
-									<Button
-										className="rounded-md"
-										variant="destructive"
-										disabled={isMainSceneSelected}
-										size="sm"
-									>
-										<Trash2 />
-										Delete ({selectedScenes.size})
-									</Button>
-								}
-							/>
-						)}
-					</div>
-					{scenes.length === 0 ? (
-						<div className="text-muted-foreground text-sm">
-							No scenes available
-						</div>
-					) : (
-						<div className="space-y-2">
-							{scenes.map((scene) => (
+				<Tabs className="mt-4" defaultValue="scenes" variant="underline">
+					<TabsList>
+						<TabsTrigger value="scenes">Scenes</TabsTrigger>
+						<TabsTrigger value="production">Production</TabsTrigger>
+					</TabsList>
+					<TabsContent className="px-0" value="scenes">
+						<div className="flex flex-col gap-4 py-4">
+							<div className="flex items-center gap-2">
 								<Button
-									key={scene.id}
-									variant="outline"
-									className={cn(
-										"w-full justify-between font-normal",
-										currentScene?.id === scene.id &&
-											!isSelectMode &&
-											"border-primary !text-primary",
-										isSelectMode &&
-											selectedScenes.has(scene.id) &&
-											"bg-accent border-foreground/30",
-									)}
-									onClick={() => handleSceneSwitch(scene.id)}
+									className="rounded-md"
+									variant={isSelectMode ? "default" : "outline"}
+									size="sm"
+									onClick={handleSelectMode}
 								>
-									<span>{scene.name}</span>
-									<div className="flex items-center gap-2">
-										{((isSelectMode && selectedScenes.has(scene.id)) ||
-											(!isSelectMode && currentScene?.id === scene.id)) && (
-											<Check className="size-4" />
-										)}
-									</div>
+									<ListCheck />
+									{isSelectMode ? "Cancel" : "Select"}
 								</Button>
-							))}
+								{isSelectMode && (
+									<DeleteDialog
+										count={selectedScenes.size}
+										onDelete={handleDeleteSelected}
+										disabled={isMainSceneSelected}
+										trigger={
+											<Button
+												className="rounded-md"
+												variant="destructive"
+												disabled={isMainSceneSelected}
+												size="sm"
+											>
+												<Trash2 />
+												Delete ({selectedScenes.size})
+											</Button>
+										}
+									/>
+								)}
+							</div>
+							{scenes.length === 0 ? (
+								<div className="text-muted-foreground text-sm">
+									No scenes available
+								</div>
+							) : (
+								<div className="flex flex-col gap-2">
+									{scenes.map((scene) => (
+										<Button
+											key={scene.id}
+											variant="outline"
+											className={cn(
+												"w-full justify-between font-normal",
+												currentScene?.id === scene.id &&
+													!isSelectMode &&
+													"ui-row-selected",
+												isSelectMode &&
+													selectedScenes.has(scene.id) &&
+													"bg-accent border-foreground/30",
+											)}
+											onClick={() => handleSceneSwitch(scene.id)}
+										>
+											<span>{scene.name}</span>
+											<div className="flex items-center gap-2">
+												{((isSelectMode && selectedScenes.has(scene.id)) ||
+													(!isSelectMode && currentScene?.id === scene.id)) && (
+													<Check className="size-4" />
+												)}
+											</div>
+										</Button>
+									))}
+								</div>
+							)}
 						</div>
-					)}
-				</div>
+					</TabsContent>
+					<TabsContent className="px-0" value="production">
+					</TabsContent>
+				</Tabs>
 			</SheetContent>
 		</Sheet>
 	);

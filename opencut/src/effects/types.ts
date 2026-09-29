@@ -9,9 +9,17 @@ export interface Effect {
 
 export type EffectUniformValue = number | number[];
 
+export interface EffectLutData {
+	size: number;
+	data: number[];
+	domainMin: number;
+	domainMax: number;
+}
+
 export interface EffectPass {
 	shader: string;
 	uniforms: Record<string, EffectUniformValue>;
+	lut?: EffectLutData;
 }
 
 export interface EffectPassTemplate {
@@ -20,6 +28,7 @@ export interface EffectPassTemplate {
 		effectParams: ParamValues;
 		width: number;
 		height: number;
+		time: number;
 	}): Record<string, EffectUniformValue>;
 }
 
@@ -29,6 +38,7 @@ export interface EffectRendererConfig {
 		effectParams: ParamValues;
 		width: number;
 		height: number;
+		time: number;
 	}) => EffectPass[];
 }
 
@@ -38,4 +48,6 @@ export interface EffectDefinition {
 	keywords: string[];
 	params: ParamDefinition[];
 	renderer: EffectRendererConfig;
+	/** Hide from the generic Assets → Effects grid; presented by a dedicated surface instead. */
+	hidden?: boolean;
 }

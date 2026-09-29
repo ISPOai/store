@@ -5,6 +5,7 @@ import { useEditor } from "@/editor/use-editor";
 import { useAssetsPanelStore } from "@/components/editor/panels/assets/assets-panel-store";
 import { AudioWaveform, WAVEFORM_GAIN_SAMPLE_COUNT } from "./audio-waveform";
 import { AudioVolumeLine } from "./audio-volume-line";
+import { BeatGrid } from "./beat-grid";
 import { useElementPreview } from "@/timeline/hooks/use-element-preview";
 import {
 	useKeyframeDrag,
@@ -47,10 +48,14 @@ import {
 	getSourceAudioActionLabel,
 	isSourceAudioSeparated,
 } from "@/timeline/audio-separation";
-import { buildWaveformGainSamples, isElementMuted } from "@/timeline/audio-state";
+import {
+	buildWaveformGainSamples,
+	getFadeSeconds,
+	isElementMuted,
+} from "@/timeline/audio-state";
 import { getTimelinePixelsPerSecond } from "@/timeline";
 import { buildWaveformSourceKey } from "@/media/waveform-summary";
-import { addMediaTime, type MediaTime, TICKS_PER_SECOND } from "@/wasm";
+import { addMediaTime, mediaTime, type MediaTime, TICKS_PER_SECOND } from "@/wasm";
 import {
 	getActionDefinition,
 	type TAction,
@@ -77,7 +82,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { uppercase } from "@/utils/string";
-import { useMemo, type ComponentProps, type ReactNode } from "react";
+import { useMemo, useRef, type ComponentProps, type ReactNode } from "react";
 import type { SelectedKeyframeRef, ElementKeyframe } from "@/animation/types";
 import { cn } from "@/utils/ui";
 import { usePropertiesStore } from "@/components/editor/panels/properties/stores/properties-store";
@@ -404,6 +409,18 @@ export function TimelineElement({
 							onResizeStart={onResizeStart}
 							isDropTarget={isDropTarget}
 						/>
+						<TransitionDurationHandles
+							element={element}
+							track={track}
+							zoomLevel={zoomLevel}
+							baseTrackHeight={baseTrackHeight}
+						/>
+						<FadeDurationHandles
+							element={element}
+							track={track}
+							zoomLevel={zoomLevel}
+							isSelected={isSelected}
+						/>
 						{isSelected && (
 							<div
 								className="pointer-events-none absolute inset-x-0 top-0 overflow-hidden"
@@ -548,6 +565,8 @@ function ElementInner({
 	isDropTarget?: boolean;
 }) {
 	const visibleElement = displayElement ?? element;
+	const beatGridEnabled = useTimelineStore((s) => s.beatGridEnabled);
+	const pixelsPerSecond = useContext(PixelsPerSecondContext);
 	const isReducedOpacity =
 		(canElementBeHidden(visibleElement) && visibleElement.hidden) ||
 		isDropTarget;
@@ -578,7 +597,7 @@ function ElementInner({
 					<button
 						type="button"
 						tabIndex={-1}
-						className="absolute inset-0 size-full flex flex-col"
+        className="absolute inset-0 size-full flex flex-col overflow-hidden rounded-sm border border-border bg-muted"
 						onClick={(event) => onElementClick({ event, element })}
 						onMouseDown={(event) => onElementMouseDown({ event, element })}
 					>
@@ -594,8 +613,14 @@ function ElementInner({
 							)}
 							style={{ height: `${baseTrackHeight}px` }}
 						>
-							<div className="flex flex-1 min-h-0 h-full items-center overflow-hidden">
+							<div className="relative flex flex-1 min-h-0 h-full items-center overflow-hidden">
 								<ElementContent element={visibleElement} track={track} />
+								{beatGridEnabled && pixelsPerSecond !== null && (
+									<BeatGrid
+										element={visibleElement}
+										pixelsPerSecond={pixelsPerSecond}
+									/>
+								)}
 							</div>
 						</div>
 						{expandedContent}
@@ -651,6 +676,222 @@ function ResizeHandle({
 			onClick={(event) => event.stopPropagation()}
 			aria-label={`${isLeft ? "Left" : "Right"} resize handle`}
 		></button>
+	);
+}
+
+function TransitionDurationHandles({
+	element,
+	track,
+	zoomLevel,
+	baseTrackHeight,
+}: {
+	element: TimelineElementType;
+	track: TimelineTrack;
+	zoomLevel: number;
+	baseTrackHeight: number;
+}) {
+	const editor = useEditor();
+
+	if (element.type !== "video" && element.type !== "image") {
+		return null;
+	}
+
+	const pixelsPerSecond = getTimelinePixelsPerSecond({ zoomLevel });
+	const edges: Array<"in" | "out"> = [];
+	if (element.transitionIn) edges.push("in");
+	if (element.transitionOut) edges.push("out");
+	if (edges.length === 0) return null;
+
+	const handleDragStart = (edge: "in" | "out") => (event: React.MouseEvent) => {
+		event.preventDefault();
+		event.stopPropagation();
+
+		const transition =
+			edge === "in" ? element.transitionIn : element.transitionOut;
+		if (!transition) return;
+
+		const startX = event.clientX;
+		const startDuration = transition.duration;
+		const direction = edge === "out" ? 1 : -1;
+		const minDurationTicks = Math.round(TICKS_PER_SECOND * 0.1);
+		let pendingDuration: MediaTime = startDuration;
+
+		const onMove = (moveEvent: MouseEvent) => {
+			const deltaTicks = Math.round(
+				((moveEvent.clientX - startX) / pixelsPerSecond) * TICKS_PER_SECOND,
+			);
+			pendingDuration = mediaTime({
+				ticks: Math.max(
+					minDurationTicks,
+					startDuration + direction * deltaTicks,
+				),
+			});
+			editor.timeline.previewElements({
+				updates: [
+					{
+						trackId: track.id,
+						elementId: element.id,
+						updates: {
+							[edge === "in" ? "transitionIn" : "transitionOut"]: {
+								...transition,
+								duration: pendingDuration,
+							},
+						},
+					},
+				],
+			});
+		};
+
+		const onUp = () => {
+			window.removeEventListener("mousemove", onMove);
+			window.removeEventListener("mouseup", onUp);
+			editor.timeline.setClipTransition({
+				trackId: track.id,
+				elementId: element.id,
+				edge,
+				transitionType: transition.type,
+				duration: pendingDuration,
+			});
+		};
+
+		window.addEventListener("mousemove", onMove);
+		window.addEventListener("mouseup", onUp);
+	};
+
+	return (
+		<>
+			{edges.map((edge) => (
+				<div
+					key={edge}
+					className="absolute top-0 z-10 flex items-center justify-center"
+					style={{
+						height: `${baseTrackHeight}px`,
+						width: "10px",
+						left: edge === "in" ? "-5px" : undefined,
+						right: edge === "out" ? "-5px" : undefined,
+					}}
+					onMouseDown={handleDragStart(edge)}
+					onClick={(event) => event.stopPropagation()}
+					aria-label={`${edge === "in" ? "In" : "Out"} transition handle`}
+				>
+					<div
+						className={cn(
+							"pointer-events-none rounded-sm",
+							edge === "in" ? "border-l-2" : "border-r-2",
+							"border-primary",
+						)}
+						style={{
+							width: "6px",
+							height: "60%",
+							backgroundColor: "var(--primary)",
+							opacity: 0.9,
+						}}
+					/>
+				</div>
+			))}
+		</>
+	);
+}
+
+const FADE_HANDLE_INSET_PX = 6;
+
+function FadeDurationHandles({
+	element,
+	track,
+	zoomLevel,
+	isSelected,
+}: {
+	element: TimelineElementType;
+	track: TimelineTrack;
+	zoomLevel: number;
+	isSelected: boolean;
+}) {
+	const editor = useEditor();
+
+	if (!isSelected || !canElementHaveAudio(element)) {
+		return null;
+	}
+
+	const pixelsPerSecond = getTimelinePixelsPerSecond({ zoomLevel });
+	const durationSeconds = element.duration / TICKS_PER_SECOND;
+	const clampFade = (value: number) =>
+		Math.max(0, Math.min(durationSeconds, value));
+
+	const handleDragStart =
+		(edge: "in" | "out") => (event: React.MouseEvent) => {
+			event.preventDefault();
+			event.stopPropagation();
+
+			const startX = event.clientX;
+			const startDuration = getFadeSeconds({ element, edge });
+			const direction = edge === "in" ? 1 : -1;
+			let pendingDuration = startDuration;
+
+			const onMove = (moveEvent: MouseEvent) => {
+				const deltaSeconds = (moveEvent.clientX - startX) / pixelsPerSecond;
+				pendingDuration = clampFade(startDuration + direction * deltaSeconds);
+				editor.timeline.previewElements({
+					updates: [
+						{
+							trackId: track.id,
+							elementId: element.id,
+							updates: {
+								params: {
+									...element.params,
+									[edge === "in" ? "fadeInSeconds" : "fadeOutSeconds"]:
+										pendingDuration,
+								},
+							},
+						},
+					],
+				});
+			};
+
+			const onUp = () => {
+				window.removeEventListener("mousemove", onMove);
+				window.removeEventListener("mouseup", onUp);
+				editor.timeline.setClipFade({
+					trackId: track.id,
+					elementId: element.id,
+					edge,
+					durationSeconds: pendingDuration,
+				});
+			};
+
+			window.addEventListener("mousemove", onMove);
+			window.addEventListener("mouseup", onUp);
+		};
+
+	return (
+		<>
+			{(["in", "out"] as const).map((edge) => (
+				<div
+					key={edge}
+					className="absolute top-0 z-10 flex cursor-ew-resize items-start justify-center"
+					style={{
+						width: "14px",
+						height: "12px",
+						left: edge === "in" ? `${FADE_HANDLE_INSET_PX}px` : undefined,
+						right: edge === "out" ? `${FADE_HANDLE_INSET_PX}px` : undefined,
+					}}
+					onMouseDown={handleDragStart(edge)}
+					onClick={(event) => event.stopPropagation()}
+					aria-label={`${edge === "in" ? "Fade in" : "Fade out"} handle`}
+				>
+					<div
+						className="pointer-events-none"
+						style={{
+							width: 0,
+							height: 0,
+							borderLeft: "7px solid transparent",
+							borderRight: "7px solid transparent",
+							borderTop: "9px solid var(--primary)",
+							opacity: 0.85,
+						}}
+					/>
+				</div>
+			))}
+		</>
 	);
 }
 

@@ -8,7 +8,7 @@ import { generateUUID } from "@/utils/id";
 import { EditorCore } from "@/core";
 import { isRetimableElement } from "@/timeline";
 import { splitAnimationsAtTime } from "@/animation";
-import { getSourceSpanAtClipTime } from "@/retime";
+import { getSourceSpanAtClipTime, splitRetimeAtClipTime } from "@/retime";
 import {
 	addMediaTime,
 	type MediaTime,
@@ -91,6 +91,11 @@ export class SplitElementsCommand extends Command {
 				const retimeRef = isRetimableElement(element)
 					? element.retime
 					: undefined;
+				const splitRetime = splitRetimeAtClipTime({
+					retime: retimeRef,
+					splitClipTime: relativeTime,
+					clipDuration: element.duration,
+				});
 				// Snap the source-side split point exactly once and derive the right
 				// half from it. Independently rounding both spans (left and total)
 				// would let a 1-tick rounding error desynchronise them, breaking the
@@ -100,12 +105,14 @@ export class SplitElementsCommand extends Command {
 					time: getSourceSpanAtClipTime({
 						clipTime: leftVisibleDuration,
 						retime: retimeRef,
+						clipDuration: element.duration,
 					}),
 				});
 				const totalSourceSpan = roundMediaTime({
 					time: getSourceSpanAtClipTime({
 						clipTime: element.duration,
 						retime: retimeRef,
+						clipDuration: element.duration,
 					}),
 				});
 				const rightSourceSpan = subMediaTime({
@@ -136,7 +143,9 @@ export class SplitElementsCommand extends Command {
 							trimEnd: leftTrimEnd,
 							name: `${element.name} (left)`,
 							animations: leftAnimations,
-							...(retimeRef !== undefined ? { retime: retimeRef } : {}),
+							...(splitRetime.left !== undefined
+								? { retime: splitRetime.left }
+								: {}),
 						},
 					];
 				} else if (this.retainSide === "right") {
@@ -154,7 +163,9 @@ export class SplitElementsCommand extends Command {
 							trimStart: rightTrimStart,
 							name: `${element.name} (right)`,
 							animations: rightAnimations,
-							...(retimeRef !== undefined ? { retime: retimeRef } : {}),
+							...(splitRetime.right !== undefined
+								? { retime: splitRetime.right }
+								: {}),
 						},
 					];
 				} else {
@@ -170,7 +181,9 @@ export class SplitElementsCommand extends Command {
 							trimEnd: leftTrimEnd,
 							name: `${element.name} (left)`,
 							animations: leftAnimations,
-							...(retimeRef !== undefined ? { retime: retimeRef } : {}),
+							...(splitRetime.left !== undefined
+								? { retime: splitRetime.left }
+								: {}),
 						},
 						{
 							...element,
@@ -180,7 +193,9 @@ export class SplitElementsCommand extends Command {
 							trimStart: rightTrimStart,
 							name: `${element.name} (right)`,
 							animations: rightAnimations,
-							...(retimeRef !== undefined ? { retime: retimeRef } : {}),
+							...(splitRetime.right !== undefined
+								? { retime: splitRetime.right }
+								: {}),
 						},
 					];
 				}

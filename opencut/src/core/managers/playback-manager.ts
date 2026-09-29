@@ -8,12 +8,16 @@ import {
 	ZERO_MEDIA_TIME,
 } from "@/wasm";
 
+export const MIN_PLAYBACK_RATE = 0.1;
+export const MAX_PLAYBACK_RATE = 8;
+
 export class PlaybackManager {
 	private isPlaying = false;
 	private currentTime: MediaTime = ZERO_MEDIA_TIME;
 	private volume = 1;
 	private muted = false;
 	private previousVolume = 1;
+	private playbackRate = 1;
 	private isScrubbing = false;
 	private listeners = new Set<() => void>();
 	private updateListeners = new Set<(time: MediaTime) => void>();
@@ -86,6 +90,25 @@ export class PlaybackManager {
 			this.previousVolume = clampedVolume;
 		}
 		this.notify();
+	}
+
+	setPlaybackRate({ rate }: { rate: number }): void {
+		const clampedRate = Math.max(
+			MIN_PLAYBACK_RATE,
+			Math.min(MAX_PLAYBACK_RATE, rate),
+		);
+		if (clampedRate === this.playbackRate) return;
+		if (this.isPlaying) {
+			// Rebase the clock so the playhead continues from where it is now.
+			this.playbackStartWallTime = performance.now();
+			this.playbackStartTime = this.currentTime;
+		}
+		this.playbackRate = clampedRate;
+		this.notify();
+	}
+
+	getPlaybackRate(): number {
+		return this.playbackRate;
 	}
 
 	mute(): void {
@@ -215,7 +238,8 @@ export class PlaybackManager {
 
 		const fps = this.editor.project.getActive()?.settings.fps;
 		const elapsedSeconds =
-			(performance.now() - this.playbackStartWallTime) / 1000;
+			((performance.now() - this.playbackStartWallTime) / 1000) *
+			this.playbackRate;
 		const rawTime = addMediaTime({
 			a: this.playbackStartTime,
 			b: mediaTimeFromSeconds({ seconds: elapsedSeconds }),

@@ -43,9 +43,10 @@ export function ReleaseArticle({
 }
 
 export function ReleaseMeta({ release }: { release: Release }) {
+	const date = String(release.date ?? "");
 	return (
 		<span className="text-sm font-medium tracking-widest text-muted-foreground">
-			{release.version} — {release.date}
+			{release.version} — {date}
 		</span>
 	);
 }
@@ -86,8 +87,10 @@ export function ReleaseDescription({ children }: { children: ReactNode }) {
 }
 
 export function ReleaseChanges({ release }: { release: Release }) {
+	// The desktop candidate intentionally has no bundled changelog collection.
+	const changes: Change[] = [];
 	const { grouped, orderedTypes } = groupAndOrderChanges({
-		changes: release.changes,
+		changes,
 	});
 
 	return (

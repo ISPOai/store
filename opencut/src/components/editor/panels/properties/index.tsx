@@ -14,6 +14,7 @@ import { usePropertiesStore } from "./stores/properties-store";
 import { getPropertiesConfig } from "./registry";
 import { cn } from "@/utils/ui";
 import { EmptyView } from "./empty-view";
+import { LoudnessNormalizeSection } from "./components/loudness-normalize-section";
 
 export function PropertiesPanel() {
 	const editor = useEditor();
@@ -24,7 +25,7 @@ export function PropertiesPanel() {
 
 	if (selectedElements.length === 0) {
 		return (
-			<div className="panel bg-background flex h-full flex-col items-center justify-center overflow-hidden rounded-sm border">
+			<div className="bg-background flex h-full flex-col items-center justify-center overflow-hidden">
 				<EmptyView />
 			</div>
 		);
@@ -32,10 +33,13 @@ export function PropertiesPanel() {
 
 	if (selectedElements.length > 1) {
 		return (
-			<div className="panel bg-background flex h-full flex-col items-center justify-center overflow-hidden rounded-sm border">
-				<p className="text-muted-foreground text-sm">
-					{selectedElements.length} elements selected.0
-				</p>
+			<div className="bg-background flex h-full flex-col overflow-hidden">
+				<div className="flex items-center justify-center py-6">
+					<p className="text-muted-foreground text-sm">
+						{selectedElements.length} elements selected
+					</p>
+				</div>
+				<LoudnessNormalizeSection targets={selectedElements} />
 			</div>
 		);
 	}
@@ -62,7 +66,7 @@ export function PropertiesPanel() {
 	if (!activeTab) return null;
 
 	return (
-		<div className="panel bg-background flex h-full overflow-hidden rounded-sm border">
+		<div className="bg-background flex h-full overflow-hidden">
 			<TooltipProvider delayDuration={0}>
 				<div className="flex shrink-0 flex-col gap-0.5 border-r p-1 scrollbar-hidden overflow-y-auto">
 					{visibleTabs.map((tab) => (

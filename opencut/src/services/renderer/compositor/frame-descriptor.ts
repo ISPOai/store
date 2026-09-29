@@ -16,6 +16,7 @@ import { RootNode } from "../nodes/root-node";
 import { StickerNode } from "../nodes/sticker-node";
 import { renderTextToContext, TextNode } from "../nodes/text-node";
 import { VideoNode } from "../nodes/video-node";
+import { TransitionNode } from "../nodes/transition-node";
 import type { ResolvedVisualSourceNodeState } from "../nodes/visual-node";
 import type {
 	FrameDescriptor,
@@ -26,6 +27,7 @@ import type {
 	TextureUploadDescriptor,
 } from "./types";
 import { DEFAULT_GRAPHIC_SOURCE_SIZE } from "@/graphics";
+import { imageFitScale, cropSourceRect, isCropActive } from "../image-fit";
 
 export async function buildFrameDescriptor({
 	node,
@@ -131,6 +133,31 @@ async function collectNode({
 		return;
 	}
 
+	if (node instanceof TransitionNode) {
+		if (!node.resolved) {
+			return;
+		}
+		const textureId = `${path}:transition`;
+		const { width, height } = renderer;
+		textures.set(textureId, {
+			kind: "external",
+			id: textureId,
+			source: node.resolved.composite,
+			width,
+			height,
+		});
+		items.push({
+			type: "layer",
+			textureId,
+			transform: fullCanvasTransform(renderer),
+			opacity: 1,
+			blendMode: "normal",
+			effectPassGroups: [],
+			mask: null,
+		});
+		return;
+	}
+
 	if (node instanceof BlurBackgroundNode) {
 		if (!node.resolved) {
 			return;
@@ -230,29 +257,70 @@ async function collectVisualSourceNode({
 		return;
 	}
 
-	const sourceWidth =
+	const rawSourceWidth =
 		node instanceof GraphicNode
 			? DEFAULT_GRAPHIC_SOURCE_SIZE
 			: (node.resolved as ResolvedVisualSourceNodeState).sourceWidth;
-	const sourceHeight =
+	const rawSourceHeight =
 		node instanceof GraphicNode
 			? DEFAULT_GRAPHIC_SOURCE_SIZE
 			: (node.resolved as ResolvedVisualSourceNodeState).sourceHeight;
 
+	const crop =
+		(node instanceof VideoNode || node instanceof ImageNode) &&
+		isCropActive({ crop: node.params.crop })
+			? node.params.crop
+			: undefined;
+
 	const textureId = `${path}:source`;
-	textures.set(textureId, {
-		kind: "external",
-		id: textureId,
-		source,
-		width: sourceWidth,
-		height: sourceHeight,
-	});
+	let sourceWidth = rawSourceWidth;
+	let sourceHeight = rawSourceHeight;
+	if (crop) {
+		const rect = cropSourceRect({
+			sourceWidth: rawSourceWidth,
+			sourceHeight: rawSourceHeight,
+			crop,
+		});
+		sourceWidth = rect.width;
+		sourceHeight = rect.height;
+		textures.set(textureId, {
+			kind: "rendered",
+			id: textureId,
+			contentHash: `crop:${identityKey(source)}:${rect.x}:${rect.y}:${rect.width}:${rect.height}:${JSON.stringify(crop)}`,
+			width: rect.width,
+			height: rect.height,
+			draw: (ctx) => {
+				ctx.drawImage(
+					source,
+					rect.x,
+					rect.y,
+					rect.width,
+					rect.height,
+					0,
+					0,
+					rect.width,
+					rect.height,
+				);
+			},
+		});
+	} else {
+		textures.set(textureId, {
+			kind: "external",
+			id: textureId,
+			source,
+			width: sourceWidth,
+			height: sourceHeight,
+		});
+	}
 
 	const transform = computeVisualTransform({
 		renderer,
 		resolved: node.resolved,
 		sourceWidth,
 		sourceHeight,
+		fit: node instanceof ImageNode ? node.params.fit : undefined,
+		flipX: node.params.flipX,
+		flipY: node.params.flipY,
 	});
 	const { mask, strokeLayer } = buildMaskArtifacts({
 		node,
@@ -329,16 +397,25 @@ function computeVisualTransform({
 	resolved,
 	sourceWidth,
 	sourceHeight,
+	fit,
+	flipX,
+	flipY,
 }: {
 	renderer: CanvasRenderer;
 	resolved: ResolvedVisualSourceNodeState | ResolvedGraphicNodeState;
 	sourceWidth: number;
 	sourceHeight: number;
+	fit?: "cover" | "contain";
+	flipX?: boolean;
+	flipY?: boolean;
 }): QuadTransformDescriptor {
-	const containScale = Math.min(
-		renderer.width / sourceWidth,
-		renderer.height / sourceHeight,
-	);
+	const containScale = imageFitScale({
+		canvasWidth: renderer.width,
+		canvasHeight: renderer.height,
+		sourceWidth,
+		sourceHeight,
+		fit,
+	});
 	const scaledWidth = sourceWidth * containScale * resolved.transform.scaleX;
 	const scaledHeight = sourceHeight * containScale * resolved.transform.scaleY;
 	const absWidth = Math.abs(scaledWidth);
@@ -350,8 +427,8 @@ function computeVisualTransform({
 		width: absWidth,
 		height: absHeight,
 		rotationDegrees: resolved.transform.rotate,
-		flipX: scaledWidth < 0,
-		flipY: scaledHeight < 0,
+		flipX: (scaledWidth < 0) !== Boolean(flipX),
+		flipY: (scaledHeight < 0) !== Boolean(flipY),
 	};
 }
 

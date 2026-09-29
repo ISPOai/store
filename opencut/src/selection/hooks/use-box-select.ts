@@ -9,6 +9,8 @@ import type {
 
 interface SelectionBoxState<TId> extends BoxSelectionSnapshot<TId> {
 	startPos: { x: number; y: number };
+	/** Scroll offset of `scrollContainerRef` when the drag began. */
+	startScroll: { left: number; top: number };
 	currentPos: { x: number; y: number };
 	bounds: SelectionBoxBounds | null;
 	isActive: boolean;
@@ -47,8 +49,14 @@ export function useBoxSelect<TId>({
 	shouldStartSelection,
 	getIsAdditiveSelection,
 	isEnabled = true,
+	scrollContainerRef,
 }: {
 	containerRef: React.RefObject<HTMLElement | null>;
+	/**
+	 * When the items live in a scroller, the box anchor is pinned to content so
+	 * wheel/auto-scroll during a drag extends the selection instead of dropping it.
+	 */
+	scrollContainerRef?: React.RefObject<HTMLElement | null>;
 	resolveIntersections: ResolveIntersections<TId>;
 	selectedIds: TId[];
 	anchorId: TId | null;
@@ -65,6 +73,12 @@ export function useBoxSelect<TId>({
 	const [selectionBox, setSelectionBox] =
 		useState<SelectionBoxState<TId> | null>(null);
 	const justFinishedSelectingRef = useRef(false);
+	const lastMousePosRef = useRef({ x: 0, y: 0 });
+
+	const readScroll = useCallback(() => {
+		const scroller = scrollContainerRef?.current;
+		return { left: scroller?.scrollLeft ?? 0, top: scroller?.scrollTop ?? 0 };
+	}, [scrollContainerRef]);
 
 	const handleMouseDown = useCallback(
 		(event: React.MouseEvent<Element>) => {
@@ -76,9 +90,11 @@ export function useBoxSelect<TId>({
 			}
 
 			const startPos = { x: event.clientX, y: event.clientY };
+			lastMousePosRef.current = startPos;
 			const container = containerRef.current;
 			setSelectionBox({
 				startPos,
+				startScroll: readScroll(),
 				currentPos: startPos,
 				bounds: container
 					? getSelectionBoxBounds({
@@ -100,6 +116,7 @@ export function useBoxSelect<TId>({
 			containerRef,
 			getIsAdditiveSelection,
 			isEnabled,
+			readScroll,
 			selectedIds,
 			shouldStartSelection,
 		],
@@ -132,10 +149,20 @@ export function useBoxSelect<TId>({
 			return;
 		}
 
-		const handleMouseMove = ({ clientX, clientY }: MouseEvent) => {
-			const currentPos = { x: clientX, y: clientY };
-			const deltaX = Math.abs(clientX - selectionBox.startPos.x);
-			const deltaY = Math.abs(clientY - selectionBox.startPos.y);
+		// The anchor as it currently appears on screen: the start point shifted
+		// by however far the content has scrolled since the drag began.
+		const getAnchorPos = () => {
+			const scroll = readScroll();
+			return {
+				x: selectionBox.startPos.x - (scroll.left - selectionBox.startScroll.left),
+				y: selectionBox.startPos.y - (scroll.top - selectionBox.startScroll.top),
+			};
+		};
+
+		const refresh = (currentPos: { x: number; y: number }) => {
+			const anchorPos = getAnchorPos();
+			const deltaX = Math.abs(currentPos.x - anchorPos.x);
+			const deltaY = Math.abs(currentPos.y - anchorPos.y);
 			const container = containerRef.current;
 			const nextSelectionBox = {
 				...selectionBox,
@@ -143,7 +170,7 @@ export function useBoxSelect<TId>({
 				bounds: container
 					? getSelectionBoxBounds({
 							container,
-							startPos: selectionBox.startPos,
+							startPos: anchorPos,
 							currentPos,
 						})
 					: null,
@@ -156,8 +183,15 @@ export function useBoxSelect<TId>({
 				return;
 			}
 
-			updateSelection(nextSelectionBox);
+			updateSelection({ ...nextSelectionBox, startPos: anchorPos });
 		};
+
+		const handleMouseMove = ({ clientX, clientY }: MouseEvent) => {
+			lastMousePosRef.current = { x: clientX, y: clientY };
+			refresh(lastMousePosRef.current);
+		};
+
+		const handleScroll = () => refresh(lastMousePosRef.current);
 
 		const handleMouseUp = () => {
 			if (selectionBox.isActive) {
@@ -170,14 +204,17 @@ export function useBoxSelect<TId>({
 			setSelectionBox(null);
 		};
 
+		const scroller = scrollContainerRef?.current;
 		window.addEventListener("mousemove", handleMouseMove);
 		window.addEventListener("mouseup", handleMouseUp);
+		scroller?.addEventListener("scroll", handleScroll, { passive: true });
 
 		return () => {
 			window.removeEventListener("mousemove", handleMouseMove);
 			window.removeEventListener("mouseup", handleMouseUp);
+			scroller?.removeEventListener("scroll", handleScroll);
 		};
-	}, [containerRef, selectionBox, updateSelection]);
+	}, [containerRef, readScroll, scrollContainerRef, selectionBox, updateSelection]);
 
 	useEffect(() => {
 		if (!selectionBox) {
@@ -205,6 +242,8 @@ export function useBoxSelect<TId>({
 		return justFinishedSelectingRef.current;
 	}, []);
 
+	const getLastMouseClientX = useCallback(() => lastMousePosRef.current.x, []);
+
 	return {
 		selectionBox:
 			selectionBox?.isActive && selectionBox.bounds
@@ -213,5 +252,6 @@ export function useBoxSelect<TId>({
 		handleMouseDown,
 		isSelecting: selectionBox?.isActive ?? false,
 		shouldIgnoreClick,
+		getLastMouseClientX,
 	};
 }

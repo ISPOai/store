@@ -11,22 +11,16 @@ import type { SceneTracks } from "@/timeline";
 export class RemoveMediaAssetCommand extends Command {
 	private savedAssets: MediaAsset[] | null = null;
 	private savedTracks: SceneTracks | null = null;
-	private removedAsset: MediaAsset | null = null;
+	private removedAssets: MediaAsset[] = [];
 
-	constructor({
-		projectId,
-		assetId,
-	}: {
-		projectId: string;
-		assetId: string;
-	}) {
+	constructor(input: { projectId: string } & ({ assetId: string } | { assetIds: string[] })) {
 		super();
-		this.projectId = projectId;
-		this.assetId = assetId;
+		this.projectId = input.projectId;
+		this.assetIds = new Set("assetIds" in input ? input.assetIds : [input.assetId]);
 	}
 
 	private projectId: string;
-	private assetId: string;
+	private assetIds: Set<string>;
 
 	execute(): CommandResult | undefined {
 		const editor = EditorCore.getInstance();
@@ -35,32 +29,18 @@ export class RemoveMediaAssetCommand extends Command {
 		this.savedAssets = [...assets];
 		this.savedTracks = editor.scenes.getActiveScene().tracks;
 
-		this.removedAsset =
-			assets.find((media) => media.id === this.assetId) ?? null;
-
-		if (!this.removedAsset) {
-			console.error("Media asset not found:", this.assetId);
-			return;
+		this.removedAssets = assets.filter((media) => this.assetIds.has(media.id));
+		if (this.removedAssets.length !== this.assetIds.size) {
+			throw new Error("One or more selected media assets no longer exist");
 		}
 
-		if (this.removedAsset.url) {
-			URL.revokeObjectURL(this.removedAsset.url);
+		for (const asset of this.removedAssets) {
+			if (asset.url) URL.revokeObjectURL(asset.url);
+			if (asset.thumbnailUrl) URL.revokeObjectURL(asset.thumbnailUrl);
+			videoCache.clearVideo({ mediaId: asset.id });
+			waveformCache.clearSource({ sourceKey: buildWaveformSourceKey({ kind: "media", id: asset.id }) });
 		}
-		if (this.removedAsset.thumbnailUrl) {
-			URL.revokeObjectURL(this.removedAsset.thumbnailUrl);
-		}
-
-		videoCache.clearVideo({ mediaId: this.assetId });
-		waveformCache.clearSource({
-			sourceKey: buildWaveformSourceKey({
-				kind: "media",
-				id: this.assetId,
-			}),
-		});
-
-		editor.media.setAssets({
-			assets: assets.filter((media) => media.id !== this.assetId),
-		});
+		editor.media.setAssets({ assets: assets.filter((media) => !this.assetIds.has(media.id)) });
 
 		const elementsToRemove: Array<{ trackId: string; elementId: string }> = [];
 
@@ -70,7 +50,7 @@ export class RemoveMediaAssetCommand extends Command {
 			...this.savedTracks.audio,
 		]) {
 			for (const element of track.elements) {
-				if (hasMediaId(element) && element.mediaId === this.assetId) {
+				if (hasMediaId(element) && this.assetIds.has(element.mediaId)) {
 					elementsToRemove.push({ trackId: track.id, elementId: element.id });
 				}
 			}
@@ -81,35 +61,25 @@ export class RemoveMediaAssetCommand extends Command {
 		}
 
 		storageService
-			.deleteMediaAsset({ projectId: this.projectId, id: this.assetId })
+			.deleteMediaAssets({ projectId: this.projectId, ids: [...this.assetIds] })
 			.catch((error) => {
 				console.error("Failed to delete media item:", error);
 			});
+		return undefined;
 	}
 
 	undo(): void {
 		const editor = EditorCore.getInstance();
 
-		if (this.savedAssets && this.removedAsset) {
-			const restoredAsset: MediaAsset = {
-				...this.removedAsset,
-				url: URL.createObjectURL(this.removedAsset.file),
-			};
-
-			editor.media.setAssets({
-				assets: this.savedAssets.map((a) =>
-					a.id === this.assetId ? restoredAsset : a,
-				),
-			});
-
-			storageService
-				.saveMediaAsset({
-					projectId: this.projectId,
-					mediaAsset: restoredAsset,
-				})
-				.catch((error) => {
-					console.error("Failed to restore media item on undo:", error);
-				});
+		if (this.savedAssets) {
+			const restoredAssets = this.savedAssets.map((asset) => this.assetIds.has(asset.id)
+				? { ...asset, url: URL.createObjectURL(asset.file) }
+				: asset);
+			editor.media.setAssets({ assets: restoredAssets });
+			for (const asset of restoredAssets.filter((item) => this.assetIds.has(item.id))) {
+				storageService.saveMediaAsset({ projectId: this.projectId, mediaAsset: asset })
+					.catch((error) => console.error("Failed to restore media item on undo:", error));
+			}
 		}
 
 		if (this.savedTracks) {

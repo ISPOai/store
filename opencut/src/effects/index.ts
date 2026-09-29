@@ -13,18 +13,21 @@ export function resolveEffectPasses({
 	effectParams,
 	width,
 	height,
+	time,
 }: {
 	definition: EffectDefinition;
 	effectParams: ParamValues;
 	width: number;
 	height: number;
+	time?: number;
 }): EffectPass[] {
+	const localTime = time ?? 0;
 	if (definition.renderer.buildPasses) {
-		return definition.renderer.buildPasses({ effectParams, width, height });
+		return definition.renderer.buildPasses({ effectParams, width, height, time: localTime });
 	}
 	return definition.renderer.passes.map((pass) => ({
 		shader: pass.shader,
-		uniforms: pass.uniforms({ effectParams, width, height }),
+		uniforms: pass.uniforms({ effectParams, width, height, time: localTime }),
 	}));
 }
 

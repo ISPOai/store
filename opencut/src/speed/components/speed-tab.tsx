@@ -21,6 +21,7 @@ import {
 	SectionHeader,
 	SectionTitle,
 } from "@/components/section";
+import { SpeedCurveEditor } from "@/speed/components/speed-curve-editor";
 import { usePropertyDraft } from "@/components/editor/panels/properties/hooks/use-property-draft";
 import {
 	formatNumberForDisplay,
@@ -109,48 +110,58 @@ export function SpeedTab({
 	});
 
 	return (
-		<Section collapsible sectionKey={`${element.id}:speed`}>
-			<SectionHeader>
-				<SectionTitle>Speed</SectionTitle>
-			</SectionHeader>
-			<SectionContent>
-				<SectionFields>
-					<SectionField label="Speed">
-						<NumberField
-							icon={<HugeiconsIcon icon={DashboardSpeed02Icon} />}
-							value={speedDraft.displayValue}
-							suffix="x"
-							scrubRanges={[
-								{ from: 0.01, to: 1, pixelsPerUnit: 160 },
-								{ from: 1, to: 5, pixelsPerUnit: 48 },
-							]}
-							scrubClamp={{ min: MIN_RETIME_RATE, max: MAX_RETIME_RATE }}
-							onFocus={() => {
-								pendingRateRef.current = rate;
-								speedDraft.onFocus();
-							}}
-							onChange={speedDraft.onChange}
-							onBlur={speedDraft.onBlur}
-							onScrub={speedDraft.scrubTo}
-							onScrubEnd={speedDraft.commitScrub}
-							onReset={() =>
-								commitRetime({ rate: DEFAULT_RETIME_RATE, maintainPitch })
-							}
-							isDefault={rate === DEFAULT_RETIME_RATE}
-						/>
-					</SectionField>
-					<div className="flex items-center justify-between">
-						<span className="text-sm">Change pitch</span>
-						<Switch
-							checked={!maintainPitch}
-							disabled={!isPitchPreserveAvailable}
-							onCheckedChange={(checked) =>
-								commitRetime({ rate, maintainPitch: !checked })
-							}
-						/>
-					</div>
-				</SectionFields>
-			</SectionContent>
-		</Section>
+		<>
+			<Section collapsible sectionKey={`${element.id}:speed`}>
+				<SectionHeader>
+					<SectionTitle>Speed</SectionTitle>
+				</SectionHeader>
+				<SectionContent>
+					<SectionFields>
+						<SectionField label="Speed">
+							<NumberField
+								icon={<HugeiconsIcon icon={DashboardSpeed02Icon} />}
+								value={speedDraft.displayValue}
+								suffix="x"
+								scrubRanges={[
+									{ from: 0.01, to: 1, pixelsPerUnit: 160 },
+									{ from: 1, to: 5, pixelsPerUnit: 48 },
+								]}
+								scrubClamp={{ min: MIN_RETIME_RATE, max: MAX_RETIME_RATE }}
+								onFocus={() => {
+									pendingRateRef.current = rate;
+									speedDraft.onFocus();
+								}}
+								onChange={speedDraft.onChange}
+								onBlur={speedDraft.onBlur}
+								onScrub={speedDraft.scrubTo}
+								onScrubEnd={speedDraft.commitScrub}
+								onReset={() =>
+									commitRetime({ rate: DEFAULT_RETIME_RATE, maintainPitch })
+								}
+								isDefault={rate === DEFAULT_RETIME_RATE}
+							/>
+						</SectionField>
+						<div className="flex items-center justify-between">
+							<span className="text-sm">Change pitch</span>
+							<Switch
+								checked={!maintainPitch}
+								disabled={!isPitchPreserveAvailable}
+								onCheckedChange={(checked) =>
+									commitRetime({ rate, maintainPitch: !checked })
+								}
+							/>
+						</div>
+					</SectionFields>
+				</SectionContent>
+			</Section>
+			<Section collapsible sectionKey={`${element.id}:speed-curve`} showTopBorder>
+				<SectionHeader>
+					<SectionTitle>Speed curve</SectionTitle>
+				</SectionHeader>
+				<SectionContent>
+					<SpeedCurveEditor element={element} trackId={trackId} />
+				</SectionContent>
+			</Section>
+		</>
 	);
 }

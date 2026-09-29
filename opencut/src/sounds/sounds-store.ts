@@ -1,51 +1,25 @@
 import { create } from "zustand";
-import type { SoundEffect, SavedSound } from "@/sounds/types";
+import type { SavedSound, SoundEffect } from "@/sounds/types";
 import { storageService } from "@/services/storage/service";
 import { toast } from "sonner";
 import { EditorCore } from "@/core";
-import { buildLibraryAudioElement } from "@/timeline/element-utils";
+import { soundEffectWav } from "@/media/sound-effects";
+import { processMediaAssets } from "@/media/processing";
+import { buildElementFromMedia, buildLibraryAudioElement } from "@/timeline/element-utils";
 import { mediaTimeFromSeconds } from "@/wasm";
+import { AddMediaAssetCommand } from "@/commands/media";
+import { InsertElementCommand } from "@/commands/timeline";
+import { BatchCommand } from "@/commands";
+import { LOCAL_SOUND_EFFECTS } from "@/sounds/local-effects";
 
 interface SoundsStore {
-	topSoundEffects: SoundEffect[];
-	isLoading: boolean;
-	error: string | null;
-	hasLoaded: boolean;
-	showCommercialOnly: boolean;
-	toggleCommercialFilter: () => void;
-	searchQuery: string;
-	searchResults: SoundEffect[];
-	isSearching: boolean;
-	searchError: string | null;
-	lastSearchQuery: string;
-	scrollPosition: number;
-	currentPage: number;
-	hasNextPage: boolean;
-	totalCount: number;
-	isLoadingMore: boolean;
+	localSoundEffects: SoundEffect[];
 	savedSounds: SavedSound[];
 	isSavedSoundsLoaded: boolean;
 	isLoadingSavedSounds: boolean;
 	savedSoundsError: string | null;
 
 	addSoundToTimeline: ({ sound }: { sound: SoundEffect }) => Promise<boolean>;
-	setTopSoundEffects: ({ sounds }: { sounds: SoundEffect[] }) => void;
-	setLoading: ({ loading }: { loading: boolean }) => void;
-	setError: ({ error }: { error: string | null }) => void;
-	setHasLoaded: ({ loaded }: { loaded: boolean }) => void;
-	setSearchQuery: ({ query }: { query: string }) => void;
-	setSearchResults: ({ results }: { results: SoundEffect[] }) => void;
-	setSearching: ({ searching }: { searching: boolean }) => void;
-	setSearchError: ({ error }: { error: string | null }) => void;
-	setLastSearchQuery: ({ query }: { query: string }) => void;
-	setScrollPosition: ({ position }: { position: number }) => void;
-	setCurrentPage: ({ page }: { page: number }) => void;
-	setHasNextPage: ({ hasNext }: { hasNext: boolean }) => void;
-	setTotalCount: ({ count }: { count: number }) => void;
-	setLoadingMore: ({ loading }: { loading: boolean }) => void;
-	appendSearchResults: ({ results }: { results: SoundEffect[] }) => void;
-	appendTopSounds: ({ results }: { results: SoundEffect[] }) => void;
-	resetPagination: () => void;
 	loadSavedSounds: () => Promise<void>;
 	saveSoundEffect: ({
 		soundEffect,
@@ -63,64 +37,11 @@ interface SoundsStore {
 }
 
 export const useSoundsStore = create<SoundsStore>((set, get) => ({
-	topSoundEffects: [],
-	isLoading: false,
-	error: null,
-	hasLoaded: false,
-	showCommercialOnly: true,
-
-	toggleCommercialFilter: () => {
-		set((state) => ({ showCommercialOnly: !state.showCommercialOnly }));
-	},
-
-	searchQuery: "",
-	searchResults: [],
-	isSearching: false,
-	searchError: null,
-	lastSearchQuery: "",
-	scrollPosition: 0,
-	currentPage: 1,
-	hasNextPage: false,
-	totalCount: 0,
-	isLoadingMore: false,
+	localSoundEffects: [...LOCAL_SOUND_EFFECTS],
 	savedSounds: [],
 	isSavedSoundsLoaded: false,
 	isLoadingSavedSounds: false,
 	savedSoundsError: null,
-
-	setTopSoundEffects: ({ sounds }) => set({ topSoundEffects: sounds }),
-	setLoading: ({ loading }) => set({ isLoading: loading }),
-	setError: ({ error }) => set({ error }),
-	setHasLoaded: ({ loaded }) => set({ hasLoaded: loaded }),
-	setSearchQuery: ({ query }) => set({ searchQuery: query }),
-	setSearchResults: ({ results }) =>
-		set({ searchResults: results, currentPage: 1 }),
-	setSearching: ({ searching }) => set({ isSearching: searching }),
-	setSearchError: ({ error }) => set({ searchError: error }),
-	setLastSearchQuery: ({ query }) => set({ lastSearchQuery: query }),
-	setScrollPosition: ({ position }) => set({ scrollPosition: position }),
-	setCurrentPage: ({ page }) => set({ currentPage: page }),
-	setHasNextPage: ({ hasNext }) => set({ hasNextPage: hasNext }),
-	setTotalCount: ({ count }) => set({ totalCount: count }),
-	setLoadingMore: ({ loading }) => set({ isLoadingMore: loading }),
-
-	appendSearchResults: ({ results }) =>
-		set((state) => ({
-			searchResults: [...state.searchResults, ...results],
-		})),
-
-	appendTopSounds: ({ results }) =>
-		set((state) => ({
-			topSoundEffects: [...state.topSoundEffects, ...results],
-		})),
-
-	resetPagination: () =>
-		set({
-			currentPage: 1,
-			hasNextPage: false,
-			totalCount: 0,
-			isLoadingMore: false,
-		}),
 
 	loadSavedSounds: async () => {
 		if (get().isSavedSoundsLoaded) return;
@@ -207,15 +128,58 @@ export const useSoundsStore = create<SoundsStore>((set, get) => ({
 	},
 
 	addSoundToTimeline: async ({ sound }) => {
-		const audioUrl = sound.previewUrl;
-		if (!audioUrl) {
-			toast.error("Sound file not available");
+		const editor = EditorCore.getInstance();
+		const activeProject = editor.project.getActive();
+		if (!activeProject) {
+			toast.error("No active project");
 			return false;
 		}
+		const currentTime = editor.playback.getCurrentTime();
 
 		try {
-			const editor = EditorCore.getInstance();
-			const currentTime = editor.playback.getCurrentTime();
+			if (sound.kind) {
+				const { bytes, seconds } = soundEffectWav(sound.kind);
+				const file = new File([bytes], `${sound.name}.wav`, {
+					type: "audio/wav",
+				});
+
+				const [asset] = await processMediaAssets({ files: [file] });
+				if (!asset) throw new Error("Could not process sound effect");
+
+				const addMediaCmd = new AddMediaAssetCommand({
+					projectId: activeProject.metadata.id,
+					asset,
+				});
+				const assetId = addMediaCmd.getAssetId();
+				const duration =
+					asset.duration != null
+						? mediaTimeFromSeconds({ seconds: asset.duration })
+						: mediaTimeFromSeconds({ seconds });
+
+				const element = buildElementFromMedia({
+					mediaId: assetId,
+					mediaType: "audio",
+					name: asset.name,
+					duration,
+					startTime: currentTime,
+				});
+
+				const insertCmd = new InsertElementCommand({
+					element,
+					placement: { mode: "auto", trackType: "audio" },
+				});
+
+				editor.command.execute({
+					command: new BatchCommand([addMediaCmd, insertCmd]),
+				});
+				return true;
+			}
+
+			const audioUrl = sound.previewUrl;
+			if (!audioUrl) {
+				toast.error("Sound file not available");
+				return false;
+			}
 
 			const response = await fetch(audioUrl);
 			if (!response.ok)

@@ -1,7 +1,5 @@
-import type { ShortcutKey } from "@/actions/keybinding";
-import { isShortcutKey } from "@/actions/keybinding";
-import type { TActionWithOptionalArgs } from "@/actions";
-import { isActionWithOptionalArgs } from "@/actions";
+import { ACTIONS, type TActionWithOptionalArgs } from "@/actions";
+import { isKey, type ModifierKeys, type ShortcutKey } from "@/actions/keybinding";
 import { runMigrations } from "./migrations";
 import {
 	getPersistedKeybindingsState,
@@ -11,6 +9,34 @@ import {
 export interface DecodedKeybindingsState {
 	keybindings: Map<ShortcutKey, TActionWithOptionalArgs>;
 	isCustomized: boolean;
+}
+
+const MODIFIER_KEYS: ReadonlySet<string> = new Set<ModifierKeys>([
+	"ctrl",
+	"alt",
+	"shift",
+	"ctrl+shift",
+	"alt+shift",
+	"ctrl+alt",
+	"ctrl+alt+shift",
+]);
+
+const ACTIONS_REQUIRING_ARGS: ReadonlySet<string> = new Set([
+	"remove-media-asset",
+	"remove-media-assets",
+]);
+
+function isShortcutKey(value: string): value is ShortcutKey {
+	const parts = value.split("+");
+	const key = parts.pop();
+	if (!key || !isKey(key)) return false;
+	return parts.length === 0 || MODIFIER_KEYS.has(parts.join("+"));
+}
+
+function isActionWithOptionalArgs(
+	value: string,
+): value is TActionWithOptionalArgs {
+	return Object.hasOwn(ACTIONS, value) && !ACTIONS_REQUIRING_ARGS.has(value);
 }
 
 export function serializeKeybindingsState({

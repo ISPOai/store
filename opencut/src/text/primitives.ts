@@ -239,3 +239,105 @@ export function strokeMeasuredTextLayout({
 		ctx.strokeText(layout.lines[index], 0, lineY);
 	}
 }
+
+export interface TextStrokeDrawing {
+	color: string;
+	width: number;
+}
+
+export interface TextShadowDrawing {
+	color: string;
+	x: number;
+	y: number;
+	blur: number;
+}
+
+export interface TextGlowDrawing {
+	color: string;
+	radius: number;
+}
+
+export function drawMeasuredTextLayoutWithEffects({
+	ctx,
+	layout,
+	textColor,
+	background,
+	backgroundColor,
+	textBaseline = "middle",
+	stroke,
+	shadow,
+	glow,
+}: {
+	ctx: TextCanvasContext;
+	layout: MeasuredTextLayout;
+	textColor: string;
+	background?: ResolvedTextBackgroundLike | null;
+	backgroundColor?: string;
+	textBaseline?: CanvasTextBaseline;
+	stroke?: TextStrokeDrawing | null;
+	shadow?: TextShadowDrawing | null;
+	glow?: TextGlowDrawing | null;
+}): void {
+	ctx.font = layout.fontString;
+	ctx.textAlign = layout.textAlign;
+	ctx.textBaseline = textBaseline;
+	setCanvasLetterSpacing({ ctx, letterSpacingPx: layout.letterSpacing });
+
+	const fillGlyphs = ({
+		fillStyle,
+		offsetX = 0,
+		offsetY = 0,
+		blur = 0,
+	}: {
+		fillStyle: string;
+		offsetX?: number;
+		offsetY?: number;
+		blur?: number;
+	}) => {
+		ctx.save();
+		ctx.fillStyle = fillStyle;
+		if (offsetX !== 0 || offsetY !== 0) {
+			ctx.translate(offsetX, offsetY);
+		}
+		if (blur > 0 && "filter" in ctx) {
+			ctx.filter = `blur(${blur}px)`;
+		}
+		for (let index = 0; index < layout.lines.length; index++) {
+			const lineY = index * layout.lineHeightPx - layout.block.visualCenterOffset;
+			ctx.fillText(layout.lines[index], 0, lineY);
+		}
+		ctx.restore();
+	};
+
+	if (shadow && (shadow.x !== 0 || shadow.y !== 0 || shadow.blur > 0)) {
+		fillGlyphs({
+			fillStyle: shadow.color,
+			offsetX: shadow.x,
+			offsetY: shadow.y,
+			blur: shadow.blur,
+		});
+	}
+
+	if (glow && glow.radius > 0) {
+		fillGlyphs({ fillStyle: glow.color, blur: glow.radius });
+	}
+
+	drawMeasuredTextLayout({
+		ctx,
+		layout,
+		textColor,
+		background,
+		backgroundColor,
+		textBaseline,
+	});
+
+	if (stroke && stroke.width > 0) {
+		strokeMeasuredTextLayout({
+			ctx,
+			layout,
+			strokeColor: stroke.color,
+			strokeWidth: stroke.width,
+			textBaseline,
+		});
+	}
+}

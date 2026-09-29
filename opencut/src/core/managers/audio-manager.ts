@@ -5,12 +5,15 @@ import type { AudioClipSource } from "@/media/audio";
 import { createAudioContext, collectAudioClips } from "@/media/audio";
 import {
 	buildAudioGainAutomation,
+	getElementReverb,
 	hasAnimatedVolume,
 } from "@/timeline/audio-state";
+import { createImpulseResponse } from "@/media/reverb";
 import { createAudioMasteringChain } from "@/media/audio-mastering";
 import {
 	getClipTimeAtSourceTime,
 	getSourceTimeAtClipTime,
+	isSpeedCurvePresent,
 	renderRetimedBuffer,
 } from "@/retime";
 import {
@@ -40,9 +43,16 @@ export class AudioManager {
 	private queuedSources = new Set<AudioBufferSourceNode>();
 	private preparedClipBuffers = new Map<string, Promise<AudioBuffer | null>>();
 	private decodedBuffers = new Map<string, Promise<AudioBuffer | null>>();
+	// One convolver per distinct room, keyed by quantized decay, shared by every
+	// clip sending into it — mirrors the export mixdown's send-bus shape.
+	private reverbBuses = new Map<number, GainNode>();
 	private playbackSessionId = 0;
 	private lastIsPlaying = false;
 	private lastVolume = 1;
+	// Preview speed captured when the current playback session started; a rate
+	// change restarts the session so every scheduled source uses one rate.
+	private playbackSpeed = 1;
+	private lastPlaybackRate = 1;
 	private playbackLatencyCompensationSeconds = 0;
 	private unsubscribers: Array<() => void> = [];
 
@@ -66,6 +76,7 @@ export class AudioManager {
 		this.disposeSinks();
 		this.preparedClipBuffers.clear();
 		this.decodedBuffers.clear();
+		this.reverbBuses.clear();
 		if (this.audioContext) {
 			void this.audioContext.close();
 			this.audioContext = null;
@@ -73,13 +84,58 @@ export class AudioManager {
 		}
 	}
 
+	// Lazily builds (and reuses) the convolver bus for one room, then hangs a
+	// post-fader send off the clip's gain node. Dry stays at full level; the send
+	// adds the room on top, so wet is a send level, not a crossfade.
+	private connectClipReverbSend({
+		audioContext,
+		clip,
+		clipGain,
+	}: {
+		audioContext: AudioContext;
+		clip: AudioClipSource;
+		clipGain: GainNode;
+	}): void {
+		const reverb = getElementReverb({ element: clip.timelineElement });
+		if (!reverb) return;
+
+		let bus = this.reverbBuses.get(reverb.decaySeconds);
+		if (!bus) {
+			const convolver = audioContext.createConvolver();
+			convolver.normalize = true;
+			convolver.buffer = createImpulseResponse({
+				audioContext,
+				decaySeconds: reverb.decaySeconds,
+			});
+			bus = audioContext.createGain();
+			bus.connect(convolver);
+			convolver.connect(this.masterGain ?? audioContext.destination);
+			this.reverbBuses.set(reverb.decaySeconds, bus);
+		}
+
+		const send = audioContext.createGain();
+		send.gain.value = reverb.wet;
+		clipGain.connect(send);
+		send.connect(bus);
+	}
+
 	private handlePlaybackChange = (): void => {
 		const isPlaying = this.editor.playback.getIsPlaying();
 		const volume = this.editor.playback.getVolume();
+		const playbackRate = this.editor.playback.getPlaybackRate();
 
 		if (volume !== this.lastVolume) {
 			this.lastVolume = volume;
 			this.updateGain();
+		}
+
+		if (playbackRate !== this.lastPlaybackRate) {
+			this.lastPlaybackRate = playbackRate;
+			if (isPlaying && isPlaying === this.lastIsPlaying) {
+				void this.startPlayback({
+					time: this.editor.playback.getCurrentTime() / TICKS_PER_SECOND,
+				});
+			}
 		}
 
 		if (isPlaying !== this.lastIsPlaying) {
@@ -143,7 +199,7 @@ export class AudioManager {
 		if (!this.audioContext) return this.playbackStartTime;
 		const elapsed =
 			this.audioContext.currentTime - this.playbackStartContextTime;
-		return this.playbackStartTime + elapsed;
+		return this.playbackStartTime + elapsed * this.playbackSpeed;
 	}
 
 	private async startPlayback({ time }: { time: number }): Promise<void> {
@@ -169,6 +225,7 @@ export class AudioManager {
 
 		this.playbackStartTime = time;
 		this.playbackStartContextTime = audioContext.currentTime;
+		this.playbackSpeed = this.editor.playback.getPlaybackRate();
 
 		this.scheduleUpcomingClips();
 
@@ -183,7 +240,7 @@ export class AudioManager {
 		if (!this.editor.playback.getIsPlaying()) return;
 
 		const currentTime = this.getPlaybackTime();
-		const windowEnd = currentTime + this.lookaheadSeconds;
+		const windowEnd = currentTime + this.lookaheadSeconds * this.playbackSpeed;
 
 		for (const clip of this.clips) {
 			if (clip.muted) continue;
@@ -263,6 +320,7 @@ export class AudioManager {
 			getSourceTimeAtClipTime({
 				clipTime: iteratorStartTime - clip.startTime,
 				retime: clip.retime,
+				clipDuration: clip.duration,
 			});
 
 		const iterator = sink.buffers(sourceStartTime);
@@ -278,29 +336,32 @@ export class AudioManager {
 				getClipTimeAtSourceTime({
 					sourceTime: timestamp - clip.trimStart,
 					retime: clip.retime,
+					clipDuration: clip.duration,
 				});
 			if (timelineTime >= clipEnd) break;
 
 			const node = audioContext.createBufferSource();
 			node.buffer = buffer;
-			if (clip.retime) {
-				node.playbackRate.value = clampRetimeRate({ rate: clip.retime.rate });
-			}
+			const nodeRate =
+				(clip.retime ? clampRetimeRate({ rate: clip.retime.rate }) : 1) *
+				this.playbackSpeed;
+			node.playbackRate.value = nodeRate;
 			const clipGain = audioContext.createGain();
 			clipGain.gain.value = clip.volume;
 			node.connect(clipGain);
 			clipGain.connect(this.masterGain ?? audioContext.destination);
+			this.connectClipReverbSend({ audioContext, clip, clipGain });
 
 			const startTimestamp =
 				this.playbackStartContextTime +
 				this.playbackLatencyCompensationSeconds +
-				(timelineTime - this.playbackStartTime);
+				(timelineTime - this.playbackStartTime) / this.playbackSpeed;
 
 			if (startTimestamp >= audioContext.currentTime) {
 				node.start(startTimestamp);
 				consecutiveDroppedBufferCount = 0;
 			} else {
-				const offset = audioContext.currentTime - startTimestamp;
+				const offset = (audioContext.currentTime - startTimestamp) * nodeRate;
 				if (offset < buffer.duration) {
 					node.start(audioContext.currentTime, offset);
 					consecutiveDroppedBufferCount = 0;
@@ -338,8 +399,9 @@ export class AudioManager {
 			});
 
 			const aheadTime = timelineTime - this.getPlaybackTime();
-			if (aheadTime >= 1) {
-				await this.waitUntilCaughtUp({ timelineTime, targetAhead: 1 });
+			const targetAhead = this.playbackSpeed;
+			if (aheadTime >= targetAhead) {
+				await this.waitUntilCaughtUp({ timelineTime, targetAhead });
 				if (sessionId !== this.playbackSessionId) return;
 			}
 		}
@@ -379,14 +441,16 @@ export class AudioManager {
 
 		const node = audioContext.createBufferSource();
 		node.buffer = buffer;
+		node.playbackRate.value = this.playbackSpeed;
 		const clipGain = audioContext.createGain();
 		node.connect(clipGain);
 		clipGain.connect(this.masterGain ?? audioContext.destination);
+		this.connectClipReverbSend({ audioContext, clip, clipGain });
 
 		const startTimestamp =
 			this.playbackStartContextTime +
 			this.playbackLatencyCompensationSeconds +
-			(effectiveStartTime - this.playbackStartTime);
+			(effectiveStartTime - this.playbackStartTime) / this.playbackSpeed;
 		const clipOffset = effectiveStartTime - clipStart;
 		let actualStartTimestamp = startTimestamp;
 		let actualClipOffset = clipOffset;
@@ -396,7 +460,7 @@ export class AudioManager {
 		} else {
 			const lateOffset = audioContext.currentTime - startTimestamp;
 			actualStartTimestamp = audioContext.currentTime;
-			actualClipOffset = clipOffset + lateOffset;
+			actualClipOffset = clipOffset + lateOffset * this.playbackSpeed;
 			node.start(actualStartTimestamp, actualClipOffset);
 		}
 
@@ -470,8 +534,7 @@ export class AudioManager {
 	}
 
 	private hasCurveRetime({ clip }: { clip: AudioClipSource }): boolean {
-		const mode = (clip.retime as { mode?: unknown } | undefined)?.mode;
-		return mode === "curve";
+		return isSpeedCurvePresent({ curve: clip.retime?.curve });
 	}
 
 	private scheduleClipGainAutomation({
@@ -508,7 +571,8 @@ export class AudioManager {
 		for (let index = 1; index < points.length; index++) {
 			const point = points[index];
 			const pointTimestamp =
-				startTimestamp + (point.localTime - startLocalTime);
+				startTimestamp +
+				(point.localTime - startLocalTime) / this.playbackSpeed;
 			if (pointTimestamp < audioContext.currentTime) {
 				continue;
 			}

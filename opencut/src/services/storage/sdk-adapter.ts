@@ -1,117 +1,214 @@
-import { fs } from "@ispo/sdk";
+import {
+	entities,
+	files,
+	type EntityApi,
+	type EntityQueryResult,
+	type EntityRecord,
+	type FilesApi,
+	type FilesListEntry,
+} from "@ispo/sdk";
 import type { StorageAdapter } from "./types";
 
-// ───────────────────────────────────────────────────────────────────────────
-// ISPO SDK-backed storage adapters.
-//
-// These replace `IndexedDBAdapter` (JSON values) and `OPFSAdapter` (binary
-// blobs) by routing every read/write through `@ispo/sdk`'s `fs` surface
-// against the project's scoped data root (~/ISPO/opencut/data/).
-//
-// Path scheme
-//   The SDK fs is path-based; the OpenCut storage layer is key-based. We map
-//   key → `<directory>/<key>.json` for SdkAdapter (so the user sees readable
-//   JSON files in Finder under ~/ISPO/opencut/data/) and key → `<directory>/<key>`
-//   for SdkBinaryAdapter (no extension; opaque blob).
-//
-// Error translation
-//   SDK fs.read/fs.readBinary THROW on missing files, but the OpenCut
-//   StorageAdapter<T> contract returns `null`. Each get() catches the
-//   not-found error and translates; any other error propagates.
-//
-// File wrapping (binary only)
-//   OPFSAdapter is typed `StorageAdapter<File>` — callers consume a browser
-//   File object. The SDK delivers Uint8Array, so SdkBinaryAdapter wraps
-//   bytes in `new File([bytes], key, ...)`. We don't have lastModified or
-//   MIME type from the SDK side; the synthesized File carries `Date.now()`
-//   and an empty type. Inspect the actual callers under `src/media/` if
-//   either field turns out to matter.
-//
-// Atomicity
-//   fs.write / fs.writeBinary are atomic on the host side (tmp + rename),
-//   so set() is safe under crashes. We do NOT need a write lock.
-// ───────────────────────────────────────────────────────────────────────────
+const ENTITY_PAGE_SIZE = 100;
 
-// SDK fs.read throws on missing files. The underlying scoped-fs guard emits
-// messages containing "project file not found:" or "project directory not found:".
-// When the call crosses Electron IPC the message gets wrapped as
-//   "Error invoking remote method 'project-call': Error: project file not found: foo"
-// and — depending on how the SDK re-throws — may arrive as a non-Error value
-// (string, plain object) rather than an actual Error instance. Match on the
-// message field directly without an `instanceof` gate.
-function errorMessage(err: unknown): string {
-	if (err == null) return "";
-	if (typeof err === "string") return err;
-	const candidate = (err as { message?: unknown }).message;
-	return typeof candidate === "string" ? candidate : String(err);
+export interface StoredEntityValue<T> {
+	storageKey: string;
+	value: T;
 }
 
-function isFileNotFound(err: unknown): boolean {
-	return errorMessage(err).includes("project file not found:");
-}
+export type EntityStorageApi = Pick<
+	EntityApi,
+	"create" | "delete" | "query" | "subscribeQuery" | "update"
+>;
 
-function isDirNotFound(err: unknown): boolean {
-	return errorMessage(err).includes("project directory not found:");
-}
+export type FilesStorageApi = Pick<FilesApi, "list" | "publish">;
 
-// ───────────────────────────────────────────────────────────────────────────
-// SdkAdapter<T> — JSON-serialized values via fs.read / fs.write.
-// Mirrors IndexedDBAdapter's public surface.
-// ───────────────────────────────────────────────────────────────────────────
+interface StoredFileLink {
+	storageKey: string;
+	publicId: string;
+	name: string;
+	mimeType: string;
+	size: number;
+	lastModified: number;
+}
 
 export interface SdkAdapterOptions {
-	/** Subdirectory under the project data root, e.g. "projects" or "saved-sounds". */
-	directory: string;
+	entityType: string;
+	keyPrefix?: string;
+	entityApi?: EntityStorageApi;
+}
+
+async function queryAllRecords<T>(
+	entityApi: EntityStorageApi,
+	entityType: string,
+): Promise<Array<EntityRecord<T>>> {
+	const records: Array<EntityRecord<T>> = [];
+	let cursor: string | null = null;
+
+	do {
+		const page: EntityQueryResult<T> = await entityApi.query<T>(entityType, {
+			limit: ENTITY_PAGE_SIZE,
+			cursor,
+		});
+		records.push(...page.records);
+		cursor = page.cursor;
+	} while (cursor);
+
+	return records;
 }
 
 export class SdkAdapter<T> implements StorageAdapter<T> {
-	private readonly directory: string;
+	private readonly entityType: string;
+	private readonly keyPrefix: string;
+	private readonly entityApi: EntityStorageApi;
 
-	constructor(options: SdkAdapterOptions) {
-		// Normalize trailing slash so pathFor() can concatenate without thinking.
-		this.directory = options.directory.replace(/\/+$/, "");
+	constructor({
+		entityType,
+		keyPrefix = "",
+		entityApi = entities,
+	}: SdkAdapterOptions) {
+		this.entityType = entityType;
+		this.keyPrefix = keyPrefix;
+		this.entityApi = entityApi;
 	}
 
-	/** Map a logical key to the on-disk JSON path. */
-	private pathFor(key: string): string {
-		return `${this.directory}/${key}.json`;
+	private storageKey(key: string): string {
+		return `${this.keyPrefix}${key}`;
 	}
 
-	/**
-	 * Worked example: shows the path mapping + JSON serialization pattern that
-	 * the other methods follow. fs.write is atomic on the host side, so we
-	 * don't need a tmp-and-rename dance here.
-	 */
+	async readRecord(
+		key: string,
+	): Promise<EntityRecord<StoredEntityValue<T>> | null> {
+		const result = await this.entityApi.query<StoredEntityValue<T>>(
+			this.entityType,
+			{
+			where: { storageKey: this.storageKey(key) },
+			limit: 1,
+			},
+		);
+		return result.records[0] ?? null;
+	}
+
+	async createRecord({
+		key,
+		value,
+		id,
+		idempotencyKey,
+	}: {
+		key: string;
+		value: T;
+		id: string;
+		idempotencyKey: string;
+	}): Promise<EntityRecord<StoredEntityValue<T>>> {
+		return this.entityApi.create<StoredEntityValue<T>>(
+			this.entityType,
+			{ storageKey: this.storageKey(key), value },
+			{ id, idempotencyKey },
+		);
+	}
+
+	async compareAndSet({
+		key,
+		value,
+		entityId,
+		expectedVersion,
+		idempotencyKey,
+	}: {
+		key: string;
+		value: T;
+		entityId: string;
+		expectedVersion: number;
+		idempotencyKey: string;
+	}): Promise<EntityRecord<StoredEntityValue<T>>> {
+		return this.entityApi.update<StoredEntityValue<T>>(
+			this.entityType,
+			entityId,
+			{ storageKey: this.storageKey(key), value },
+			{ expectedVersion, idempotencyKey },
+		);
+	}
+
+	subscribe(
+		key: string,
+		onChange: () => void,
+	): { close(): void } {
+		return this.entityApi.subscribeQuery<StoredEntityValue<T>>(
+			this.entityType,
+			{ where: { storageKey: this.storageKey(key) }, limit: 1 },
+			() => onChange(),
+		);
+	}
+
 	async set({ key, value }: { key: string; value: T }): Promise<void> {
-		await fs.write(this.pathFor(key), JSON.stringify(value));
+		const storageKey = this.storageKey(key);
+		const current = await this.readRecord(key);
+		const data: StoredEntityValue<T> = { storageKey, value };
+
+		if (current) {
+			await this.entityApi.update<StoredEntityValue<T>>(
+				this.entityType,
+				current.id,
+				data,
+				{ expectedVersion: current.version },
+			);
+			return;
+		}
+
+		await this.entityApi.create<StoredEntityValue<T>>(this.entityType, data);
+	}
+
+	async setIfAbsent({ key, value }: { key: string; value: T }): Promise<boolean> {
+		if (await this.readRecord(key)) return false;
+		await this.set({ key, value });
+		return true;
 	}
 
 	async get(key: string): Promise<T | null> {
-		let text: string;
-		try {
-			text = await fs.read(this.pathFor(key));
-		} catch (err) {
-			if (isFileNotFound(err)) return null;
-			throw err;
-		}
-		return JSON.parse(text) as T;
+		const record = await this.readRecord(key);
+		return record?.data.value ?? null;
+	}
+
+	async getAll(): Promise<T[]> {
+		const records = await this.listRecords();
+		return records
+			.filter((record) => record.data.storageKey.startsWith(this.keyPrefix))
+			.map((record) => record.data.value);
+	}
+
+	async listRecords(): Promise<Array<EntityRecord<StoredEntityValue<T>>>> {
+		const records = await queryAllRecords<StoredEntityValue<T>>(
+			this.entityApi,
+			this.entityType,
+		);
+		return records.filter((record) =>
+			record.data.storageKey.startsWith(this.keyPrefix),
+		);
+	}
+
+	/** One query for every record this adapter owns, keyed without the prefix.
+	 * Bulk callers use this instead of a per-key read round trip. */
+	async listEntries(): Promise<Array<{ key: string; value: T; version: number }>> {
+		const records = await this.listRecords();
+		return records.map((record) => ({
+			key: record.data.storageKey.slice(this.keyPrefix.length),
+			value: record.data.value,
+			version: record.version,
+		}));
 	}
 
 	async remove(key: string): Promise<void> {
-		await fs.delete(this.pathFor(key));
+		const current = await this.readRecord(key);
+		if (!current) {
+			throw new Error(`Entity-backed storage value not found: ${this.storageKey(key)}`);
+		}
+		await this.entityApi.delete<StoredEntityValue<T>>(this.entityType, current.id);
 	}
 
 	async list(): Promise<string[]> {
-		let entries: string[];
-		try {
-			entries = await fs.list(this.directory);
-		} catch (err) {
-			if (isDirNotFound(err)) return [];
-			throw err;
-		}
-		return entries
-			.filter((name) => name.endsWith(".json") && !name.endsWith("/"))
-			.map((name) => name.slice(0, -".json".length));
+		const records = await this.listRecords();
+		return records
+			.map((record) => record.data.storageKey)
+			.map((storageKey) => storageKey.slice(this.keyPrefix.length));
 	}
 
 	async clear(): Promise<void> {
@@ -120,63 +217,140 @@ export class SdkAdapter<T> implements StorageAdapter<T> {
 	}
 }
 
-// ───────────────────────────────────────────────────────────────────────────
-// SdkBinaryAdapter — binary blobs via fs.readBinary / fs.writeBinary.
-// Mirrors OPFSAdapter's public surface (StorageAdapter<File>).
-// ───────────────────────────────────────────────────────────────────────────
+/** A Files folder, either fixed or resolved at publish time (per-edit folders
+ * need the edit's display name, which may not be loaded when the adapter is
+ * constructed). */
+export type FilesFolderRef = string | (() => string | Promise<string>);
+
+export interface SdkBinaryAdapterOptions extends SdkAdapterOptions {
+	folder: FilesFolderRef;
+	filesApi?: FilesStorageApi;
+}
 
 export class SdkBinaryAdapter implements StorageAdapter<File> {
-	private readonly directory: string;
+	private readonly links: SdkAdapter<StoredFileLink>;
+	private readonly folder: FilesFolderRef;
+	private readonly filesApi: FilesStorageApi;
 
-	constructor(directory: string) {
-		this.directory = directory.replace(/\/+$/, "");
+	constructor({
+		entityType,
+		keyPrefix,
+		folder,
+		entityApi,
+		filesApi = files,
+	}: SdkBinaryAdapterOptions) {
+		this.links = new SdkAdapter<StoredFileLink>({
+			entityType,
+			keyPrefix,
+			entityApi,
+		});
+		this.folder = folder;
+		this.filesApi = filesApi;
 	}
 
-	/** Binary keys carry no extension — the file IS the value. */
-	private pathFor(key: string): string {
-		return `${this.directory}/${key}`;
+	/** One query for every file link this adapter owns, for bulk hydration. */
+	async listLinks(): Promise<Array<{ key: string; link: StoredFileLink }>> {
+		const entries = await this.links.listEntries();
+		return entries.map(({ key, value }) => ({ key, link: value }));
 	}
 
-	/**
-	 * Worked example: shows the File-to-Uint8Array conversion at the write
-	 * boundary. `await file.arrayBuffer()` materializes the whole file; that's
-	 * fine for the import flow (one-shot writes after the user picks a clip)
-	 * but would be wrong for streaming. The SDK fs surface is full-file
-	 * anyway, so streaming would need a different SDK extension.
-	 */
+	/** Every file-link Entity record this adapter owns (with Entity ids), so a
+	 * bulk delete can retire them in one `entities.deleteMany` selection. */
+	async listRecords(): Promise<Array<EntityRecord<StoredEntityValue<StoredFileLink>>>> {
+		return this.links.listRecords();
+	}
+
+	/** One Files listing shared by a whole media hydration pass. */
+	listPublishedFiles(): Promise<FilesListEntry[]> {
+		return this.filesApi.list();
+	}
+
+	private sameFile(link: StoredFileLink, file: File): boolean {
+		return (
+			link.name === file.name &&
+			link.mimeType === file.type &&
+			link.size === file.size &&
+			link.lastModified === file.lastModified
+		);
+	}
+
+	private async findPublishedFile(
+		link: StoredFileLink,
+	): Promise<FilesListEntry | null> {
+		const ownFiles = await this.filesApi.list();
+		return ownFiles.find((entry) => entry.publicId === link.publicId) ?? null;
+	}
+
 	async set({ key, value }: { key: string; value: File }): Promise<void> {
+		const current = await this.links.get(key);
+		if (current && this.sameFile(current, value)) {
+			const published = await this.findPublishedFile(current);
+			if (published) return;
+		}
+
 		const bytes = new Uint8Array(await value.arrayBuffer());
-		await fs.writeBinary(this.pathFor(key), bytes);
+		const folder =
+			typeof this.folder === "function" ? await this.folder() : this.folder;
+		const published = value.type
+			? await this.filesApi.publish({
+					content: bytes,
+					name: value.name,
+					mimeType: value.type,
+					folder,
+				})
+			: await this.filesApi.publish({
+					content: bytes,
+					name: value.name,
+					folder,
+				});
+
+		const link: StoredFileLink = {
+			storageKey: key,
+			publicId: published.publicId,
+			name: value.name,
+			mimeType: value.type,
+			size: value.size,
+			lastModified: value.lastModified,
+		};
+		await this.links.set({ key, value: link });
+	}
+
+	async setIfAbsent({ key, value }: { key: string; value: File }): Promise<boolean> {
+		const current = await this.links.get(key);
+		if (current && (await this.findPublishedFile(current))) return false;
+		await this.set({ key, value });
+		return true;
 	}
 
 	async get(key: string): Promise<File | null> {
-		let bytes: Uint8Array;
-		try {
-			bytes = await fs.readBinary(this.pathFor(key));
-		} catch (err) {
-			if (isFileNotFound(err)) return null;
-			throw err;
+		const link = await this.links.get(key);
+		if (!link) return null;
+
+		const published = await this.findPublishedFile(link);
+		if (!published) return null;
+
+		const response = await fetch(published.url);
+		if (!response.ok) {
+			throw new Error(`Could not load published media: ${published.name}`);
 		}
-		return new File([bytes], key, { lastModified: Date.now() });
+		const content = await response.blob();
+		return new File([content], link.name, {
+			type: link.mimeType || content.type,
+			lastModified: link.lastModified,
+		});
 	}
 
 	async remove(key: string): Promise<void> {
-		await fs.delete(this.pathFor(key));
+		// Removing media from a project retires only OpenCut's Entity reference.
+		// The user-meaningful Files artifact remains available in the Files app.
+		await this.links.remove(key);
 	}
 
 	async list(): Promise<string[]> {
-		let entries: string[];
-		try {
-			entries = await fs.list(this.directory);
-		} catch (err) {
-			if (isDirNotFound(err)) return [];
-			throw err;
-		}
-		return entries.filter((name) => !name.endsWith("/"));
+		return this.links.list();
 	}
 
 	async clear(): Promise<void> {
-		const keys = await this.list();
-		await Promise.all(keys.map((key) => this.remove(key)));
+		await this.links.clear();
 	}
 }

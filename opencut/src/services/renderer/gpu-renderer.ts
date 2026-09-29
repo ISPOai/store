@@ -82,6 +82,7 @@ function serializeEffectPasses(passes: EffectPass[]) {
 			name,
 			value: normalizeUniformValue(value),
 		})),
+		...(pass.lut ? { lut: pass.lut } : {}),
 	}));
 }
 

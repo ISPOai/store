@@ -46,13 +46,15 @@ export function ChangelogNotification() {
 	}, []);
 
 	if (!release) return null;
+	const title = String(release.title ?? "What’s new");
+	const summary = release.summary == null ? null : String(release.summary);
 
 	return (
 		<div className="fixed bottom-5 left-5 z-50 flex w-72 flex-col gap-3 rounded-xl border bg-card p-4 shadow-lg">
 			<div className="flex items-start justify-between gap-2">
 				<div className="flex flex-col gap-1">
 					<span className="text-sm font-semibold leading-snug">
-						{release.title}
+						{title}
 					</span>
 					<span className="text-xs text-muted-foreground">
 						v{release.version}
@@ -69,9 +71,9 @@ export function ChangelogNotification() {
 				</Button>
 			</div>
 
-			{release.summary && (
+			{summary && (
 				<p className="text-xs leading-relaxed text-muted-foreground">
-					{release.summary}
+					{summary}
 				</p>
 			)}
 

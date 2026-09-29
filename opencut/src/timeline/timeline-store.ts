@@ -10,6 +10,8 @@ interface TimelineStore {
 	snappingEnabled: boolean;
 	toggleSnapping: () => void;
 	rippleEditingEnabled: boolean;
+	beatGridEnabled: boolean;
+	toggleBeatGrid: () => void;
 	toggleRippleEditing: () => void;
 	expandedElementIds: Set<string>;
 	toggleElementExpanded: (elementId: string) => void;
@@ -32,6 +34,12 @@ export const useTimelineStore = create<TimelineStore>()(
 				}));
 			},
 
+			beatGridEnabled: true,
+
+			toggleBeatGrid: () => {
+				set((state) => ({ beatGridEnabled: !state.beatGridEnabled }));
+			},
+
 			expandedElementIds: new Set<string>(),
 
 			toggleElementExpanded: (elementId) => {
@@ -51,6 +59,7 @@ export const useTimelineStore = create<TimelineStore>()(
 			partialize: (state) => ({
 				snappingEnabled: state.snappingEnabled,
 				rippleEditingEnabled: state.rippleEditingEnabled,
+				beatGridEnabled: state.beatGridEnabled,
 			}),
 		},
 	),

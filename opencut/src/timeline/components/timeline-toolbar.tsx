@@ -35,6 +35,7 @@ import {
 	SnowIcon,
 	ScissorIcon,
 	MagnetIcon,
+	MusicNote01Icon,
 	SearchAddIcon,
 	SearchMinusIcon,
 	Copy01Icon,
@@ -285,6 +286,8 @@ function ToolbarRightSection({
 	const rippleEditingEnabled = useTimelineStore((s) => s.rippleEditingEnabled);
 	const toggleSnapping = useTimelineStore((s) => s.toggleSnapping);
 	const toggleRippleEditing = useTimelineStore((s) => s.toggleRippleEditing);
+	const beatGridEnabled = useTimelineStore((s) => s.beatGridEnabled);
+	const toggleBeatGrid = useTimelineStore((s) => s.toggleBeatGrid);
 
 	return (
 		<div className="flex items-center gap-1">
@@ -303,6 +306,13 @@ function ToolbarRightSection({
 					isActive={rippleEditingEnabled}
 					tooltip="Ripple editing"
 					onClick={() => toggleRippleEditing()}
+				/>
+
+				<ToolbarButton
+					icon={<HugeiconsIcon icon={MusicNote01Icon} />}
+					isActive={beatGridEnabled}
+					tooltip="Beat grid"
+					onClick={() => toggleBeatGrid()}
 				/>
 			</TooltipProvider>
 

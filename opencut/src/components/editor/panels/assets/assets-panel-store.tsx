@@ -12,6 +12,7 @@ import {
 	Settings01Icon,
 	SlidersHorizontalIcon,
 	ColorsIcon,
+	FilterIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 
@@ -21,6 +22,8 @@ export const TAB_KEYS = [
 	"text",
 	"stickers",
 	"effects",
+	"luts",
+	"filters",
 	"transitions",
 	"captions",
 	"adjustment",
@@ -55,6 +58,14 @@ export const tabs = {
 	effects: {
 		icon: createHugeiconsIcon({ icon: MagicWand05Icon }),
 		label: "Effects",
+	},
+	luts: {
+		icon: createHugeiconsIcon({ icon: ColorsIcon }),
+		label: "LUTs",
+	},
+	filters: {
+		icon: createHugeiconsIcon({ icon: FilterIcon }),
+		label: "Filters",
 	},
 	transitions: {
 		icon: createHugeiconsIcon({ icon: ArrowRightDoubleIcon }),

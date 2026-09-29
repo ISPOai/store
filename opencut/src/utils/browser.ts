@@ -1,10 +1,10 @@
 import { files } from "@ispo/sdk";
 
-// ISPO: user artifacts leave this app through the Files powerbox, never a
-// browser download. A downloaded file lands outside the platform's storage
-// planes — invisible to Files, to other projects, and to agents — so the host
-// build rejects `<a download>` exits (spec §25). The picker is the consent
-// surface; `false` means the user cancelled, which is an ordinary outcome.
+/**
+ * Save a blob through the host powerbox Save dialog (`files.save`) so the
+ * user places it in their Files library. Resolves `true` when saved, `false`
+ * when the user cancelled the dialog.
+ */
 export async function saveBlobToFiles({
 	blob,
 	filename,
@@ -12,10 +12,11 @@ export async function saveBlobToFiles({
 	blob: Blob;
 	filename: string;
 }): Promise<boolean> {
+	const accept = blob.type ? [`${blob.type.split("/")[0]}/`] : undefined;
 	const saved = await files.save({
 		content: new Uint8Array(await blob.arrayBuffer()),
 		name: filename,
-		...(blob.type ? { accept: [blob.type] } : {}),
+		...(accept ? { accept } : {}),
 	});
 	return saved !== null;
 }

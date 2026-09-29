@@ -11,7 +11,11 @@ import { SelectionManager } from "./managers/selection-manager";
 import { ClipboardManager } from "./managers/clipboard-manager";
 import { DiagnosticsManager } from "./managers/diagnostics-manager";
 import { registerDefaultEffects } from "@/effects";
+import { registerBundledLuts } from "@/effects/lut/registry";
+import { BUNDLED_LUT_SOURCES } from "@/effects/lut/bundled-luts";
+import { useLutStore } from "@/effects/lut/lut-store";
 import { registerDefaultMasks } from "@/masks";
+import { registerDefaultTransitions } from "@/transitions";
 import { registerTranscriptionDiagnostics } from "@/transcription/diagnostics";
 
 export class EditorCore {
@@ -31,7 +35,9 @@ export class EditorCore {
 
 	private constructor() {
 		registerDefaultEffects();
+		registerBundledLuts({ sources: BUNDLED_LUT_SOURCES });
 		registerDefaultMasks();
+		registerDefaultTransitions();
 		this.command = new CommandManager(this);
 		this.timeline = new TimelineManager(this);
 		this.playback = new PlaybackManager(this);

@@ -1,8 +1,10 @@
 "use client";
 
-import { Separator } from "@/components/ui/separator";
-import { type Tab, useAssetsPanelStore } from "@/components/editor/panels/assets/assets-panel-store";
-import { TabBar } from "./tabbar";
+import {
+	type Tab,
+	useAssetsPanelStore,
+} from "@/components/editor/panels/assets/assets-panel-store";
+import { AssetsTabSwitcher } from "@/components/editor/panels/assets/tab-switcher";
 import { Captions } from "@/subtitles/components/assets-view";
 import { MediaView } from "./views/assets";
 import { SettingsView } from "./views/settings";
@@ -10,9 +12,24 @@ import { SoundsView } from "@/sounds/components/assets-view";
 import { StickersView } from "@/stickers/components/assets-view";
 import { TextView } from "@/text/components/assets-view";
 import { EffectsView } from "@/effects/components/assets-view";
+import { LutsView } from "@/effects/components/luts-view";
+import { FiltersView } from "@/effects/components/filters-view";
+import { TransitionsView } from "@/transitions/components/assets-view";
+
+/** Tabs whose view renders its own PanelView header (which hosts the switcher). */
+const TABS_WITH_PANEL_HEADER: ReadonlySet<Tab> = new Set<Tab>([
+	"media",
+	"text",
+	"effects",
+	"luts",
+	"filters",
+	"transitions",
+	"captions",
+	"settings",
+]);
 
 export function AssetsPanel() {
-	const { activeTab } = useAssetsPanelStore();
+	const activeTab = useAssetsPanelStore((state) => state.activeTab);
 
 	const viewMap: Record<Tab, React.ReactNode> = {
 		media: <MediaView />,
@@ -20,11 +37,9 @@ export function AssetsPanel() {
 		text: <TextView />,
 		stickers: <StickersView />,
 		effects: <EffectsView />,
-		transitions: (
-			<div className="text-muted-foreground p-4">
-				Transitions view coming soon...
-			</div>
-		),
+		luts: <LutsView />,
+		filters: <FiltersView />,
+		transitions: <TransitionsView />,
 		captions: <Captions />,
 		adjustment: (
 			<div className="text-muted-foreground p-4">
@@ -35,10 +50,13 @@ export function AssetsPanel() {
 	};
 
 	return (
-		<div className="panel bg-background flex h-full rounded-sm border overflow-hidden">
-			<TabBar />
-			<Separator orientation="vertical" />
-			<div className="flex-1 overflow-hidden">{viewMap[activeTab]}</div>
+		<div className="bg-background flex h-full flex-col overflow-hidden">
+			{!TABS_WITH_PANEL_HEADER.has(activeTab) && (
+				<div className="flex h-11 shrink-0 items-center border-b pl-3 pr-2">
+					<AssetsTabSwitcher />
+				</div>
+			)}
+			<div className="min-h-0 flex-1 overflow-hidden">{viewMap[activeTab]}</div>
 		</div>
 	);
 }

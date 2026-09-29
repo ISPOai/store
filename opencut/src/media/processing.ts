@@ -159,6 +159,8 @@ export async function processMediaAssets({
 					toast.error(`Couldn't process ${file.name}`, {
 						description: message,
 					});
+					URL.revokeObjectURL(url);
+					continue;
 				}
 			} else if (fileType === "audio") {
 				duration = await getMediaDuration({ file });

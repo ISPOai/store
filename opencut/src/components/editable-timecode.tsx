@@ -130,9 +130,9 @@ export function EditableTimecode({
 				onBlur={handleBlur}
 				className={cn(
 					"-mx-1 border border-transparent bg-transparent px-1 font-mono text-xs outline-none",
-					"focus:bg-background focus:border-primary focus:rounded",
+					" ",
 					"text-primary tabular-nums",
-					hasError && "text-destructive focus:border-destructive",
+					hasError && "text-destructive ",
 					className,
 				)}
 				style={{ width: `${formattedTime.length + 1}ch` }}

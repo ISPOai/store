@@ -17,6 +17,7 @@ import {
 } from "@/timeline/snapping";
 import { getBookmarkSnapPoints } from "../snap-source";
 import { getElementEdgeSnapPoints } from "@/timeline/element-snap-source";
+import { getBeatSnapPoints } from "@/timeline/beat-source";
 import { getPlayheadSnapPoints } from "@/timeline/playhead-snap-source";
 import { getAnimationKeyframeSnapPointsForTimeline } from "@/timeline/animation-snap-points";
 import type { Bookmark } from "@/timeline";
@@ -108,6 +109,7 @@ export function useBookmarkDrag({
 					() => getPlayheadSnapPoints({ playheadTime }),
 					() => getBookmarkSnapPoints({ bookmarks, excludeBookmarkTime }),
 					() => getAnimationKeyframeSnapPointsForTimeline({ tracks }),
+					() => getBeatSnapPoints({ tracks }),
 				],
 			});
 			const result = resolveTimelineSnap({

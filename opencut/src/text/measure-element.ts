@@ -223,6 +223,67 @@ export function buildTextBackgroundFromElement({
 	};
 }
 
+export interface TextEffects {
+	stroke: { color: string; width: number };
+	shadow: { color: string; x: number; y: number; blur: number };
+	glow: { color: string; radius: number };
+}
+
+export function buildTextEffectsFromElement({
+	element,
+}: {
+	element: TextElement;
+}): TextEffects {
+	return {
+		stroke: {
+			color: readStringParam({
+				params: element.params,
+				key: "stroke.color",
+				fallback: DEFAULTS.text.stroke.color,
+			}),
+			width: readNumberParam({
+				params: element.params,
+				key: "stroke.width",
+				fallback: DEFAULTS.text.stroke.width,
+			}),
+		},
+		shadow: {
+			color: readStringParam({
+				params: element.params,
+				key: "shadow.color",
+				fallback: DEFAULTS.text.shadow.color,
+			}),
+			x: readNumberParam({
+				params: element.params,
+				key: "shadow.x",
+				fallback: DEFAULTS.text.shadow.x,
+			}),
+			y: readNumberParam({
+				params: element.params,
+				key: "shadow.y",
+				fallback: DEFAULTS.text.shadow.y,
+			}),
+			blur: readNumberParam({
+				params: element.params,
+				key: "shadow.blur",
+				fallback: DEFAULTS.text.shadow.blur,
+			}),
+		},
+		glow: {
+			color: readStringParam({
+				params: element.params,
+				key: "glow.color",
+				fallback: DEFAULTS.text.glow.color,
+			}),
+			radius: readNumberParam({
+				params: element.params,
+				key: "glow.radius",
+				fallback: DEFAULTS.text.glow.radius,
+			}),
+		},
+	};
+}
+
 function readStringParam({
 	params,
 	key,

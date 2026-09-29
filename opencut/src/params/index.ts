@@ -178,6 +178,8 @@ interface BaseParamDefinition<TKey extends string = string> {
 	group?: ParamGroup;
 	keyframable?: boolean;
 	dependencies?: Array<{ param: string; equals: ParamValue }>;
+	/** Hide from generic field-list rendering; a dedicated editor (e.g. Adjust tab) presents it. */
+	hidden?: boolean;
 }
 
 export interface NumberParamDefinition<TKey extends string = string>

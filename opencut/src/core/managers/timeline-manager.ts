@@ -6,12 +6,21 @@ import type {
 	TrackType,
 	TimelineTrack,
 	TimelineElement,
+	TextElement,
 	RetimeConfig,
 } from "@/timeline";
 import { calculateTotalDuration } from "@/timeline";
+import type { Transition } from "@/transitions";
+import { buildDefaultTransition } from "@/transitions";
+import { generateUUID } from "@/utils/id";
 import { TimelineDragSource } from "@/timeline/drag-source";
 import { findTrackInSceneTracks } from "@/timeline/track-element-update";
-import { lastFrameMediaTime, type MediaTime, ZERO_MEDIA_TIME } from "@/wasm";
+import {
+	lastFrameMediaTime,
+	mediaTimeToSeconds,
+	type MediaTime,
+	ZERO_MEDIA_TIME,
+} from "@/wasm";
 import {
 	canElementBeHidden,
 	canElementHaveAudio,
@@ -28,6 +37,17 @@ import {
 	resolveAnimationPathValueAtTime,
 } from "@/animation";
 import { resolveAnimationTarget } from "@/timeline/animation-targets";
+import {
+	buildTextAnimationPresetKeyframes,
+	getTextAnimationPresetDefinition,
+	getTextAnimationPresetPaths,
+	mergePresetAnimations,
+	removeAnimationPaths,
+	type TextAnimationPhase,
+	type TextAnimationPresetBinding,
+	type TextAnimationPresetName,
+} from "@/animation/presets";
+import { buildPresetAnimations } from "@/animation/preset-to-animations";
 import { BatchCommand } from "@/commands";
 import {
 	AddTrackCommand,
@@ -301,15 +321,18 @@ export class TimelineManager {
 		trackId,
 		elementId,
 		effectType,
+		params,
 	}: {
 		trackId: string;
 		elementId: string;
 		effectType: string;
+		params?: Partial<ParamValues>;
 	}): string {
 		const command = new AddClipEffectCommand({
 			trackId,
 			elementId,
 			effectType,
+			params,
 		});
 		this.editor.command.execute({ command });
 		return command.getEffectId() ?? "";
@@ -330,6 +353,236 @@ export class TimelineManager {
 			effectId,
 		});
 		this.editor.command.execute({ command });
+	}
+
+	setClipTransition({
+		trackId,
+		elementId,
+		edge,
+		transitionType,
+		duration,
+	}: {
+		trackId: string;
+		elementId: string;
+		edge: "in" | "out";
+		transitionType: string;
+		duration?: MediaTime;
+	}): void {
+		const element = this.getElementByRef({ trackId, elementId });
+		if (!element || (element.type !== "video" && element.type !== "image")) {
+			return;
+		}
+
+		const existing =
+			edge === "in" ? element.transitionIn : element.transitionOut;
+		const transition: Transition = {
+			id: existing?.id ?? generateUUID(),
+			type: transitionType as Transition["type"],
+			duration:
+				duration ??
+				existing?.duration ??
+				buildDefaultTransition({ type: transitionType as Transition["type"] })
+					.duration,
+		};
+
+		this.updateElements({
+			updates: [
+				{
+					trackId,
+					elementId,
+					patch: {
+						[edge === "in" ? "transitionIn" : "transitionOut"]: transition,
+					},
+				},
+			],
+		});
+	}
+
+	removeClipTransition({
+		trackId,
+		elementId,
+		edge,
+	}: {
+		trackId: string;
+		elementId: string;
+		edge: "in" | "out";
+	}): void {
+		this.updateElements({
+			updates: [
+				{
+					trackId,
+					elementId,
+					patch: {
+						[edge === "in" ? "transitionIn" : "transitionOut"]: undefined,
+					},
+				},
+			],
+		});
+	}
+
+	applyTextAnimationPreset({
+		trackId,
+		elementId,
+		phase,
+		presetName,
+		durationSeconds,
+	}: {
+		trackId: string;
+		elementId: string;
+		phase: TextAnimationPhase;
+		presetName: TextAnimationPresetName;
+		durationSeconds: number;
+	}): void {
+		const element = this.getElementByRef({ trackId, elementId });
+		if (!element || element.type !== "text") {
+			return;
+		}
+
+		const definition = getTextAnimationPresetDefinition(presetName);
+		if (!definition.phases.includes(phase)) {
+			return;
+		}
+
+		const project = this.editor.project.getActive();
+		const canvasSize = project?.settings.canvasSize ?? {
+			width: 1920,
+			height: 1080,
+		};
+
+		const presetAnimations = buildPresetAnimations({
+			keyframes: buildTextAnimationPresetKeyframes({
+				name: presetName,
+				phase,
+				durationSeconds,
+				elementDurationSeconds: mediaTimeToSeconds({ time: element.duration }),
+				canvasWidth: canvasSize.width,
+				canvasHeight: canvasSize.height,
+			}),
+		});
+
+		const previousBinding = this.getTextAnimationBinding({ element, phase });
+		const merged = mergePresetAnimations({
+			animations: element.animations,
+			removePaths: previousBinding
+				? getTextAnimationPresetPaths(previousBinding.preset)
+				: [],
+			presetAnimations,
+		});
+
+		this.updateElements({
+			updates: [
+				{
+					trackId,
+					elementId,
+					patch: {
+						animations: merged,
+						[this.getTextAnimationBindingField(phase)]: {
+							preset: presetName,
+							durationSeconds,
+						} satisfies TextAnimationPresetBinding,
+					},
+				},
+			],
+		});
+	}
+
+	setClipFade({
+		trackId,
+		elementId,
+		edge,
+		durationSeconds,
+	}: {
+		trackId: string;
+		elementId: string;
+		edge: "in" | "out";
+		durationSeconds: number;
+	}): void {
+		const element = this.getElementByRef({ trackId, elementId });
+		if (!element || !canElementHaveAudio(element)) {
+			return;
+		}
+
+		const clamped = Math.max(
+			0,
+			Number.isFinite(durationSeconds) ? durationSeconds : 0,
+		);
+		this.updateElements({
+			updates: [
+				{
+					trackId,
+					elementId,
+					patch: {
+						params: {
+							[edge === "in" ? "fadeInSeconds" : "fadeOutSeconds"]: clamped,
+						},
+					},
+				},
+			],
+		});
+	}
+
+	removeTextAnimationPreset({
+		trackId,
+		elementId,
+		phase,
+	}: {
+		trackId: string;
+		elementId: string;
+		phase: TextAnimationPhase;
+	}): void {
+		const element = this.getElementByRef({ trackId, elementId });
+		if (!element || element.type !== "text") {
+			return;
+		}
+
+		const previousBinding = this.getTextAnimationBinding({ element, phase });
+		if (!previousBinding) {
+			return;
+		}
+
+		this.updateElements({
+			updates: [
+				{
+					trackId,
+					elementId,
+					patch: {
+						animations: removeAnimationPaths({
+							animations: element.animations,
+							paths: getTextAnimationPresetPaths(previousBinding.preset),
+						}),
+						[this.getTextAnimationBindingField(phase)]: undefined,
+					},
+				},
+			],
+		});
+	}
+
+	private getTextAnimationBindingField(phase: TextAnimationPhase): "textAnimationIn" | "textAnimationOut" | "textAnimationLoop" {
+		switch (phase) {
+			case "in":
+				return "textAnimationIn";
+			case "out":
+				return "textAnimationOut";
+			case "loop":
+				return "textAnimationLoop";
+		}
+	}
+
+	private getTextAnimationBinding({
+		element,
+		phase,
+	}: {
+		element: TextElement;
+		phase: TextAnimationPhase;
+	}): TextAnimationPresetBinding | undefined {
+		switch (phase) {
+			case "in":
+				return element.textAnimationIn;
+			case "out":
+				return element.textAnimationOut;
+			case "loop":
+				return element.textAnimationLoop;
+		}
 	}
 
 	removeMask({

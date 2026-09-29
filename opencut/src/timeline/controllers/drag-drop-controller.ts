@@ -28,6 +28,7 @@ import type {
 	CreateTimelineElement,
 } from "@/timeline";
 import type { TimelineDragData } from "@/timeline/drag";
+import type { ParamValues } from "@/params";
 import type { MediaAsset } from "@/media/types";
 import type { ProcessedMediaAsset } from "@/media/processing";
 import { roundFrameTime, type MediaTime } from "@/wasm";
@@ -58,6 +59,13 @@ export interface DragDropConfig {
 		trackId: string;
 		elementId: string;
 		effectType: string;
+		params?: Partial<ParamValues>;
+	}) => void;
+	setClipTransition: (args: {
+		trackId: string;
+		elementId: string;
+		edge: "in" | "out";
+		transitionType: string;
 	}) => void;
 }
 
@@ -96,6 +104,8 @@ function elementTypeFromDrag({
 			return "sticker";
 		case "effect":
 			return "effect";
+		case "transition":
+			return "video";
 		case "media":
 			return dragData.mediaType;
 	}
@@ -107,6 +117,7 @@ function getTargetElementTypesForDrag({
 	dragData: TimelineDragData;
 }): string[] | undefined {
 	if (dragData.type === "effect") return dragData.targetElementTypes;
+	if (dragData.type === "transition") return dragData.targetElementTypes;
 	if (dragData.type === "media") return dragData.targetElementTypes;
 	return undefined;
 }
@@ -228,6 +239,12 @@ export class DragDropController {
 		target.xPosition = fps
 			? roundFrameTime({ time: target.xPosition, fps })
 			: target.xPosition;
+
+		if (dragData.type === "transition" && !target.targetElement) {
+			event.dataTransfer.dropEffect = "none";
+			this.setOver({ dropTarget: null, elementType });
+			return;
+		}
 
 		this.setOver({ dropTarget: target, elementType });
 		event.dataTransfer.dropEffect = "copy";
@@ -371,6 +388,9 @@ export class DragDropController {
 			case "effect":
 				this.executeEffectDrop({ target, dragData });
 				return;
+			case "transition":
+				this.executeTransitionDrop({ target, dragData });
+				return;
 			case "media":
 				this.executeMediaDrop({ target, dragData });
 				return;
@@ -466,6 +486,7 @@ export class DragDropController {
 				trackId: target.targetElement.trackId,
 				elementId: target.targetElement.elementId,
 				effectType: dragData.effectType,
+				params: dragData.params,
 			});
 			return;
 		}
@@ -473,6 +494,7 @@ export class DragDropController {
 		const element = buildEffectElement({
 			effectType: dragData.effectType,
 			startTime: target.xPosition,
+			params: dragData.params,
 		});
 
 		const existingEffectTrack = orderedTracks({
@@ -488,6 +510,41 @@ export class DragDropController {
 		}
 
 		this.insertAtTarget({ element, target, trackType: "effect" });
+	}
+
+	private executeTransitionDrop({
+		target,
+		dragData,
+	}: {
+		target: DropTarget;
+		dragData: Extract<TimelineDragData, { type: "transition" }>;
+	}): void {
+		const targetElement = target.targetElement;
+		if (!targetElement) {
+			return;
+		}
+
+		const track = orderedTracks({ sceneTracks: this.config.getSceneTracks() }).find(
+			(candidate) => candidate.id === targetElement.trackId,
+		);
+		const element = track?.elements.find(
+			(candidate) => candidate.id === targetElement.elementId,
+		);
+		if (!element) {
+			return;
+		}
+
+		const edge: "in" | "out" =
+			target.xPosition < element.startTime + element.duration / 2
+				? "in"
+				: "out";
+
+		this.config.setClipTransition({
+			trackId: targetElement.trackId,
+			elementId: targetElement.elementId,
+			edge,
+			transitionType: dragData.transitionType,
+		});
 	}
 
 	private async executeFileDrop({

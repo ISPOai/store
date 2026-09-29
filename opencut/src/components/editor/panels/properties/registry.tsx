@@ -21,13 +21,29 @@ import {
 	MusicNote03Icon,
 	MagicWand05Icon,
 	DashboardSpeed02Icon,
+	ArrowRightDoubleIcon,
+	SlidersVerticalIcon,
+	CropIcon,
+	Motion02Icon,
+	ColorsIcon,
+	FilterIcon,
 } from "@hugeicons/core-free-icons";
 import { ElementParamsTab } from "./components/element-params-tab";
 import { ClipEffectsTab, StandaloneEffectTab } from "@/effects/components/effects-tab";
+import { AdjustTab, StandaloneAdjustTab } from "@/effects/components/adjust-tab";
+import { LutTab } from "@/effects/components/lut-tab";
+import { ChromaKeyTab } from "@/effects/components/chroma-key-tab";
+import { FilterTab } from "@/effects/components/filter-tab";
 import { MasksTab } from "@/masks/components/masks-tab";
 import { SpeedTab } from "@/speed/components/speed-tab";
 import { GraphicTab } from "@/graphics/components/graphic-tab";
+import { TransitionTab } from "@/transitions/components/transition-tab";
+import { TextAnimationTab } from "@/animation/components/text-animation-tab";
+import { LoudnessNormalizeSection } from "./components/loudness-normalize-section";
 import { OcShapesIcon } from "@/components/icons";
+import { CROP_PARAM_KEYS, FLIP_PARAM_KEYS } from "@/crop/crop";
+
+const CROP_TAB_PARAM_KEYS = [...CROP_PARAM_KEYS, ...FLIP_PARAM_KEYS] as const;
 
 const TRANSFORM_PARAM_KEYS = [
 	"transform.positionX",
@@ -38,7 +54,12 @@ const TRANSFORM_PARAM_KEYS = [
 ] as const;
 
 const BLENDING_PARAM_KEYS = ["opacity", "blendMode"] as const;
-const AUDIO_PARAM_KEYS = ["volume", "muted"] as const;
+const AUDIO_PARAM_KEYS = [
+	"volume",
+	"muted",
+	"fadeInSeconds",
+	"fadeOutSeconds",
+] as const;
 const TEXT_PARAM_KEYS = [
 	"content",
 	"fontFamily",
@@ -57,6 +78,14 @@ const TEXT_PARAM_KEYS = [
 	"background.paddingY",
 	"background.offsetX",
 	"background.offsetY",
+	"stroke.color",
+	"stroke.width",
+	"shadow.color",
+	"shadow.x",
+	"shadow.y",
+	"shadow.blur",
+	"glow.color",
+	"glow.radius",
 ] as const;
 
 export type TabContentProps = {
@@ -125,12 +154,17 @@ function buildAudioTab({
 		label: "Audio",
 		icon: <HugeiconsIcon icon={MusicNote03Icon} size={16} />,
 		content: ({ trackId }) => (
-			<ElementParamsTab
-				element={element}
-				trackId={trackId}
-				paramKeys={AUDIO_PARAM_KEYS}
-				sectionKey="audio"
-			/>
+			<>
+				<ElementParamsTab
+					element={element}
+					trackId={trackId}
+					paramKeys={AUDIO_PARAM_KEYS}
+					sectionKey="audio"
+				/>
+				<LoudnessNormalizeSection
+					targets={[{ trackId, elementId: element.id }]}
+				/>
+			</>
 		),
 	};
 }
@@ -161,6 +195,26 @@ function buildMasksTab({
 	};
 }
 
+function buildCropTab({
+	element,
+}: {
+	element: VideoElement | ImageElement;
+}): PropertiesTabDef {
+	return {
+		id: "crop",
+		label: "Crop",
+		icon: <HugeiconsIcon icon={CropIcon} size={16} />,
+		content: ({ trackId }) => (
+			<ElementParamsTab
+				element={element}
+				trackId={trackId}
+				paramKeys={CROP_TAB_PARAM_KEYS}
+				sectionKey="crop"
+			/>
+		),
+	};
+}
+
 function buildClipEffectsTab({
 	element,
 }: {
@@ -172,6 +226,73 @@ function buildClipEffectsTab({
 		icon: <HugeiconsIcon icon={MagicWand05Icon} size={16} />,
 		content: ({ trackId }) => (
 			<ClipEffectsTab element={element} trackId={trackId} />
+		),
+	};
+}
+
+function buildAdjustTab({
+	element,
+}: {
+	element: VideoElement | ImageElement;
+}): PropertiesTabDef {
+	return {
+		id: "adjust",
+		label: "Adjust",
+		icon: <HugeiconsIcon icon={SlidersVerticalIcon} size={16} />,
+		content: ({ trackId }) => <AdjustTab element={element} trackId={trackId} />,
+	};
+}
+
+function buildLutTab({
+	element,
+}: {
+	element: VideoElement | ImageElement;
+}): PropertiesTabDef {
+	return {
+		id: "lut",
+		label: "LUT",
+		icon: <HugeiconsIcon icon={ColorsIcon} size={16} />,
+		content: ({ trackId }) => <LutTab element={element} trackId={trackId} />,
+	};
+}
+
+function buildChromaKeyTab({
+	element,
+}: {
+	element: VideoElement | ImageElement;
+}): PropertiesTabDef {
+	return {
+		id: "chroma-key",
+		label: "Chroma Key",
+		icon: <HugeiconsIcon icon={MagicWand05Icon} size={16} />,
+		content: ({ trackId }) => <ChromaKeyTab element={element} trackId={trackId} />,
+	};
+}
+
+function buildFilterTab({
+	element,
+}: {
+	element: VideoElement | ImageElement;
+}): PropertiesTabDef {
+	return {
+		id: "filter",
+		label: "Filter",
+		icon: <HugeiconsIcon icon={FilterIcon} size={16} />,
+		content: ({ trackId }) => <FilterTab element={element} trackId={trackId} />,
+	};
+}
+
+function buildTransitionTab({
+	element,
+}: {
+	element: VideoElement | ImageElement;
+}): PropertiesTabDef {
+	return {
+		id: "transitions",
+		label: "Transitions",
+		icon: <HugeiconsIcon icon={ArrowRightDoubleIcon} size={16} />,
+		content: ({ trackId }) => (
+			<TransitionTab element={element} trackId={trackId} />
 		),
 	};
 }
@@ -188,6 +309,21 @@ function buildTextTab({ element }: { element: TextElement }): PropertiesTabDef {
 				paramKeys={TEXT_PARAM_KEYS}
 				sectionKey="text"
 			/>
+		),
+	};
+}
+
+function buildTextAnimationTab({
+	element,
+}: {
+	element: TextElement;
+}): PropertiesTabDef {
+	return {
+		id: "animation",
+		label: "Animation",
+		icon: <HugeiconsIcon icon={Motion02Icon} size={16} />,
+		content: ({ trackId }) => (
+			<TextAnimationTab element={element} trackId={trackId} />
 		),
 	};
 }
@@ -229,6 +365,7 @@ function getTextConfig({
 		defaultTab: "text",
 		tabs: [
 			buildTextTab({ element }),
+			buildTextAnimationTab({ element }),
 			buildTransformTab({ element }),
 			buildBlendingTab({ element }),
 		],
@@ -247,11 +384,17 @@ function getVideoConfig({
 		defaultTab: "transform",
 		tabs: [
 			buildTransformTab({ element }),
+			buildCropTab({ element }),
 			...(showAudioTab ? [buildAudioTab({ element })] : []),
 			buildSpeedTab({ element }),
 			buildBlendingTab({ element }),
+			buildAdjustTab({ element }),
+			buildLutTab({ element }),
+			buildChromaKeyTab({ element }),
+			buildFilterTab({ element }),
 			buildMasksTab({ element }),
 			buildClipEffectsTab({ element }),
+			buildTransitionTab({ element }),
 		],
 	};
 }
@@ -265,9 +408,15 @@ function getImageConfig({
 		defaultTab: "transform",
 		tabs: [
 			buildTransformTab({ element }),
+			buildCropTab({ element }),
 			buildBlendingTab({ element }),
+			buildAdjustTab({ element }),
+			buildLutTab({ element }),
+			buildChromaKeyTab({ element }),
+			buildFilterTab({ element }),
 			buildMasksTab({ element }),
 			buildClipEffectsTab({ element }),
+			buildTransitionTab({ element }),
 		],
 	};
 }
@@ -320,6 +469,21 @@ function getEffectConfig({
 }: {
 	element: EffectElement;
 }): ElementPropertiesConfig {
+	if (element.effectType === "adjust") {
+		return {
+			defaultTab: "adjust",
+			tabs: [
+				{
+					id: "adjust",
+					label: "Adjust",
+					icon: <HugeiconsIcon icon={SlidersVerticalIcon} size={16} />,
+					content: ({ trackId }) => (
+						<StandaloneAdjustTab element={element} trackId={trackId} />
+					),
+				},
+			],
+		};
+	}
 	return {
 		defaultTab: "effects",
 		tabs: [buildStandaloneEffectTab({ element })],

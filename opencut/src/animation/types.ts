@@ -16,6 +16,14 @@ export const ANIMATION_PROPERTY_PATHS = [
 	"background.offsetX",
 	"background.offsetY",
 	"background.cornerRadius",
+	"stroke.color",
+	"stroke.width",
+	"shadow.color",
+	"shadow.x",
+	"shadow.y",
+	"shadow.blur",
+	"glow.color",
+	"glow.radius",
 ] as const;
 
 export type AnimationPropertyPath = (typeof ANIMATION_PROPERTY_PATHS)[number];
@@ -38,7 +46,7 @@ export interface NumericSpec {
 }
 export type AnimationColorPropertyPath = Extract<
 	AnimationPropertyPath,
-	"color" | "background.color"
+	"color" | "background.color" | "stroke.color" | "shadow.color" | "glow.color"
 >;
 export type AnimationNumericPropertyPath = Exclude<
 	AnimationPropertyPath,

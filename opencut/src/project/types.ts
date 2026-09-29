@@ -1,6 +1,7 @@
 import type { FrameRate } from "opencut-wasm";
 import type { TScene } from "@/timeline/types";
 import type { MediaTime } from "@/wasm";
+import type { ProductionState } from "./production-types";
 
 export type TBackground =
 	| {
@@ -27,12 +28,14 @@ export interface TProjectMetadata {
 }
 
 export interface TProjectSettings {
+	musicProductions?: import("@/media/original-music").MusicProvenance[];
 	fps: FrameRate;
 	canvasSize: TCanvasSize;
 	canvasSizeMode?: "preset" | "custom";
 	lastCustomCanvasSize?: TCanvasSize | null;
 	originalCanvasSize?: TCanvasSize | null;
 	background: TBackground;
+	production?: ProductionState;
 }
 
 export interface TTimelineViewState {

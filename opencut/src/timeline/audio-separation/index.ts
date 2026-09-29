@@ -93,11 +93,20 @@ export function buildSeparatedAudioElement({
 					? sourceElement.params.volume
 					: DEFAULTS.element.volume,
 			muted: sourceElement.params.muted === true,
+			...(typeof sourceElement.params.fadeInSeconds === "number"
+				? { fadeInSeconds: sourceElement.params.fadeInSeconds }
+				: {}),
+			...(typeof sourceElement.params.fadeOutSeconds === "number"
+				? { fadeOutSeconds: sourceElement.params.fadeOutSeconds }
+				: {}),
 		},
 		retime: sourceElement.retime
 			? {
 					rate: sourceElement.retime.rate,
 					maintainPitch: sourceElement.retime.maintainPitch,
+					...(sourceElement.retime.curve
+						? { curve: sourceElement.retime.curve }
+						: {}),
 				}
 			: undefined,
 		animations: cloneVolumeAnimations({

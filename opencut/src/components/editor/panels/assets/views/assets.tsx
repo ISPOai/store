@@ -1,12 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { PanelView } from "@/components/editor/panels/assets/views/base-panel";
 import { MediaDragOverlay } from "@/components/editor/panels/assets/drag-overlay";
 import { DraggableItem } from "@/components/editor/panels/assets/draggable-item";
+import { AssetPreviewDialog } from "./asset-preview-dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { files, type PowerboxPickResult } from "@ispo/sdk";
 import {
 	ContextMenu,
 	ContextMenuContent,
@@ -25,21 +27,19 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { DEFAULT_NEW_ELEMENT_DURATION } from "@/timeline/creation";
-import { mediaTimeFromSeconds, type MediaTime } from "@/wasm";
+import { mediaTimeToSeconds, type MediaTime } from "@/wasm";
 import { useEditor } from "@/editor/use-editor";
 import { useFileUpload } from "@/media/use-file-upload";
 import { invokeAction } from "@/actions";
 import { processMediaAssets } from "@/media/processing";
 import { showMediaUploadToast } from "@/media/upload-toast";
-import { files as filesApi, fs } from "@ispo/sdk";
 import {
 	SelectableItem,
 	SelectableSurface,
 	useSelection,
 	useSelectionScope,
 } from "@/selection";
-import { buildElementFromMedia } from "@/timeline/element-utils";
+import { runArrangeTimeline } from "@/timeline/arrange";
 import {
 	type MediaSortKey,
 	type MediaSortOrder,
@@ -50,7 +50,6 @@ import { MASKABLE_ELEMENT_TYPES } from "@/timeline";
 import type { MediaAsset } from "@/media/types";
 import { cn } from "@/utils/ui";
 import {
-	CloudUploadIcon,
 	GridViewIcon,
 	LeftToRightListDashIcon,
 	SortingOneNineIcon,
@@ -116,39 +115,43 @@ export function MediaView() {
 		}
 	};
 
-	// Add a file from the user's home Files library via the host (the files.pick
-	// powerbox). The host shows the library picker, copies the chosen file into
-	// THIS project's sandbox, and returns a handle we read back as real bytes —
-	// so binary media (mp3/wav/mp4) works, unlike the text-only shared picker.
+	// The powerbox returns one host-minted controlled URL for every pick. Consume
+	// that reference directly; private filesystem paths are not part of the pick
+	// contract.
+	const pickResultToFile = async (
+		result: PowerboxPickResult,
+	): Promise<File | null> => {
+		try {
+			if (!result.url) throw new Error("Files did not provide a controlled reference");
+			const response = await fetch(result.url);
+			if (!response.ok) throw new Error(`Files returned ${response.status}`);
+			const content = await response.blob();
+			return new File([content], result.name, { type: result.mimeType });
+		} catch (error) {
+			console.error("Failed to load picked file:", result.name, error);
+			return null;
+		}
+	};
+
+	// Import via the host Files powerbox (spec §19). This opens the host-owned
+	// picker that browses the WHOLE Files library — every app's published media —
+	// not just OpenCut's own (empty) shared subtree. The picker modal IS the
+	// consent; the descriptor's `files: ["pick"]` request is all that's needed.
 	const handleAddFromFiles = async () => {
 		try {
-			const selection = await filesApi.pick({
-				accept: ["audio/", "video/", "image/"],
+			const picked = await files.pick({
+				accept: ["image/", "video/", "audio/"],
+				multiple: true,
 			});
-			const picked = Array.isArray(selection) ? selection[0] : selection;
-			if (!picked) return;
-
-			// Small Files picks arrive as a private project copy (`path`). Larger
-			// media can instead arrive as a controlled, seekable `url`. Both are
-			// valid powerbox results; never pass an absent optional path to fs.
-			let content: Uint8Array | Blob;
-			if (picked.path) {
-				content = await fs.readBinary(picked.path);
-			} else if (picked.url) {
-				const response = await fetch(picked.url);
-				if (!response.ok) {
-					throw new Error(`Files attachment read failed (${response.status})`);
-				}
-				content = await response.blob();
-			} else {
-				throw new Error("Files attachment did not include readable content");
-			}
-
-			const file = new File([content], picked.name, { type: picked.mimeType });
-			await processFiles({ files: [file] });
+			if (!picked) return; // user cancelled the picker
+			const results = Array.isArray(picked) ? picked : [picked];
+			const loaded = (await Promise.all(results.map(pickResultToFile))).filter(
+				(file): file is File => file !== null,
+			);
+			if (loaded.length > 0) await processFiles({ files: loaded });
 		} catch (error) {
-			console.error("Add from Files failed:", error);
-			toast.error("Couldn't add the file from Files.");
+			console.error("Import from Files failed:", error);
+			toast.error("Import failed");
 		}
 	};
 
@@ -244,11 +247,11 @@ export function MediaView() {
 			>
 				{isDragOver || filteredMediaItems.length === 0 ? (
 					<MediaDragOverlay
-						isVisible={true}
-						isProcessing={isProcessing}
-						progress={progress}
-						onClick={handleAddFromFiles}
-					/>
+							isVisible={true}
+							isProcessing={isProcessing}
+							progress={progress}
+							onClick={handleAddFromFiles}
+						/>
 				) : (
 					<SelectableSurface
 						ariaLabel="Assets"
@@ -285,8 +288,7 @@ function MediaAssetDraggable({
 	variant: "card" | "compact";
 	isRounded?: boolean;
 }) {
-	const editor = useEditor();
-
+	// Mounted drag/drop continues through the editor-owned arrangement domain.
 	const addElementAtTime = ({
 		asset,
 		startTime,
@@ -294,21 +296,14 @@ function MediaAssetDraggable({
 		asset: MediaAsset;
 		startTime: MediaTime;
 	}) => {
-		const duration =
-			asset.duration != null
-				? mediaTimeFromSeconds({ seconds: asset.duration })
-				: DEFAULT_NEW_ELEMENT_DURATION;
-		const element = buildElementFromMedia({
-			mediaId: asset.id,
-			mediaType: asset.type,
-			name: asset.name,
-			duration,
-			startTime,
-		});
-		editor.timeline.insertElement({
-			element,
-			placement: { mode: "auto" },
-		});
+		runArrangeTimeline({
+				items: [{ mediaId: asset.id }],
+				atSeconds: mediaTimeToSeconds({ time: startTime }),
+			})
+			.catch((error) => {
+				console.error("Failed to add media to timeline:", error);
+				toast.error("Failed to add media to timeline");
+			});
 	};
 
 	return (
@@ -338,9 +333,11 @@ function MediaItemWithContextMenu({
 	item,
 	children,
 	onRemove,
+	onPreview,
 }: {
 	item: MediaAsset;
 	children: React.ReactNode;
+	onPreview: () => void;
 	onRemove: ({
 		event,
 		ids,
@@ -358,6 +355,7 @@ function MediaItemWithContextMenu({
 		<ContextMenu>
 			<ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
 			<ContextMenuContent>
+				<ContextMenuItem onSelect={onPreview}>Preview</ContextMenuItem>
 				<ContextMenuItem>Export clips</ContextMenuItem>
 				<ContextMenuItem
 					variant="destructive"
@@ -388,6 +386,9 @@ function MediaItemList({
 	}) => void;
 }) {
 	const isGrid = mode === "grid";
+	const [previewId, setPreviewId] = useState<string | null>(null);
+	const previewItem = items.find((item) => item.id === previewId);
+	const previewTrigger = useRef<HTMLElement | null>(null);
 
 	return (
 		<div
@@ -397,8 +398,23 @@ function MediaItemList({
 			}
 		>
 			{items.map((item) => (
-				<MediaItemWithContextMenu item={item} onRemove={onRemove} key={item.id}>
-					<SelectableItem className={cn(!isGrid && "w-full")} id={item.id}>
+				<MediaItemWithContextMenu item={item} onRemove={onRemove} key={item.id}
+					onPreview={() => setPreviewId(item.id)}>
+					<SelectableItem className={cn(!isGrid && "w-full")} id={item.id}
+						aria-label={item.name}
+						onDoubleClick={(event) => {
+							if ((event.target as HTMLElement).closest('[aria-label="Add to timeline"]')) return;
+							event.stopPropagation();
+							previewTrigger.current = event.currentTarget;
+							setPreviewId(item.id);
+						}}
+						onKeyDown={(event) => {
+							if (event.key !== "Enter") return;
+							event.preventDefault();
+							event.stopPropagation();
+							previewTrigger.current = event.currentTarget;
+							setPreviewId(item.id);
+						}}>
 						<MediaAssetDraggable
 							item={item}
 							preview={
@@ -413,6 +429,9 @@ function MediaItemList({
 					</SelectableItem>
 				</MediaItemWithContextMenu>
 			))}
+			<AssetPreviewDialog item={previewItem} items={items} onNavigate={setPreviewId}
+				onClose={() => setPreviewId(null)}
+				onRestoreFocus={() => previewTrigger.current?.focus()} />
 		</div>
 	);
 }
@@ -638,12 +657,11 @@ function MediaActions({
 			</TooltipProvider>
 			<Button
 				variant="outline"
-				onClick={onImport}
 				disabled={isProcessing}
 				size="sm"
 				className="items-center justify-center gap-1.5"
+				onClick={onImport}
 			>
-				<HugeiconsIcon icon={CloudUploadIcon} />
 				Import
 			</Button>
 		</div>

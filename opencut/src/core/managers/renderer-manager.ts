@@ -1,6 +1,8 @@
 import type { EditorCore } from "@/core";
 import type { RootNode } from "@/services/renderer/nodes/root-node";
 import type { ExportOptions, ExportResult } from "@/export";
+import { isAudioOnlyExportFormat } from "@/export";
+import { applyExportResolution } from "@/export/resolution";
 import { CanvasRenderer } from "@/services/renderer/canvas-renderer";
 import { SceneExporter } from "@/services/renderer/scene-exporter";
 import { buildScene } from "@/services/renderer/scene-builder";
@@ -45,13 +47,10 @@ export class RendererManager {
 			return snapshot;
 		}
 
-		const saved = await saveBlobToFiles({
-			blob: snapshot.blob,
-			filename: snapshot.filename,
-		});
-		return saved
-			? { success: true }
-			: { success: false, error: "Save cancelled" };
+		// Powerbox Save dialog; a cancelled dialog is a deliberate user choice,
+		// not a failure, so it still resolves success.
+		await saveBlobToFiles({ blob: snapshot.blob, filename: snapshot.filename });
+		return { success: true };
 	}
 
 	async copySnapshot(): Promise<{ success: boolean; error?: string }> {
@@ -152,7 +151,8 @@ export class RendererManager {
 		onProgress?: ({ progress }: { progress: number }) => void;
 		onCancel?: () => boolean;
 	}): Promise<ExportResult> {
-		const { format, quality, fps, includeAudio } = options;
+		const { format, quality, fps, includeAudio, resolution, bitrate, movCodec } =
+			options;
 
 		try {
 			const tracks = this.editor.scenes.getActiveScene().tracks;
@@ -169,10 +169,16 @@ export class RendererManager {
 			}
 
 			const exportFps = fps ?? activeProject.settings.fps;
-			const canvasSize = activeProject.settings.canvasSize;
+			const canvasSize = applyExportResolution({
+				canvasSize: activeProject.settings.canvasSize,
+				resolution,
+			});
+
+			const shouldIncludeAudio =
+				isAudioOnlyExportFormat(format) || (includeAudio ?? true);
 
 			let audioBuffer: AudioBuffer | null = null;
-			if (includeAudio) {
+			if (shouldIncludeAudio) {
 				onProgress?.({ progress: 0.05 });
 				audioBuffer = await createTimelineAudioBuffer({
 					tracks,
@@ -195,12 +201,14 @@ export class RendererManager {
 				fps: exportFps,
 				format,
 				quality,
-				shouldIncludeAudio: !!includeAudio,
+				shouldIncludeAudio,
 				audioBuffer: audioBuffer || undefined,
+				bitrate,
+				movCodec,
 			});
 
 			exporter.on("progress", (progress) => {
-				const adjustedProgress = includeAudio
+				const adjustedProgress = shouldIncludeAudio
 					? 0.05 + progress * 0.95
 					: progress;
 				onProgress?.({ progress: adjustedProgress });

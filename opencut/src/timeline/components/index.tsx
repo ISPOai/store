@@ -341,8 +341,10 @@ export function Timeline() {
 		handleMouseDown: handleSelectionMouseDown,
 		isSelecting,
 		shouldIgnoreClick,
+		getLastMouseClientX: getSelectionMouseClientX,
 	} = useBoxSelect({
 		containerRef: tracksContainerRef,
+		scrollContainerRef: tracksScrollRef,
 		selectedIds: selectedElements,
 		anchorId: null,
 		getIsAdditiveSelection: (event) =>
@@ -403,6 +405,14 @@ export function Timeline() {
 		contentWidth: dynamicTimelineWidth,
 	});
 
+	useEdgeAutoScroll({
+		isActive: isSelecting,
+		getMouseClientX: getSelectionMouseClientX,
+		rulerScrollRef,
+		tracksScrollRef,
+		contentWidth: dynamicTimelineWidth,
+	});
+
 	const showSnapIndicator =
 		snappingEnabled &&
 		currentSnapPoint !== null &&
@@ -431,7 +441,7 @@ export function Timeline() {
 	return (
 		<section
 			className={
-				"panel bg-background relative flex h-full flex-col overflow-hidden rounded-sm border"
+				"bg-background relative flex h-full flex-col overflow-hidden"
 			}
 			{...dragProps}
 			aria-label="Timeline"

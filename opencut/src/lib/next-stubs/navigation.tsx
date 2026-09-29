@@ -41,6 +41,12 @@ function setCurrentProjectId(next: string): void {
 	for (const fn of listeners) fn();
 }
 
+// Programmatic route switch for non-component callers (e.g. the create-project
+// ISPO command handler). Equivalent to router.replace(`/editor/${projectId}`).
+export function navigateToEditorProject(projectId: string): void {
+	setCurrentProjectId(projectId);
+}
+
 function subscribe(fn: () => void): () => void {
 	listeners.add(fn);
 	return () => {

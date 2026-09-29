@@ -8,6 +8,7 @@ import { useKeyboardShortcutsHelp } from "@/actions/use-keyboard-shortcuts-help"
 import { EditableTimecode } from "@/components/editable-timecode";
 import { Button } from "@/components/ui/button";
 import {
+	DashboardSpeed02Icon,
 	FullScreenIcon,
 	PauseIcon,
 	PlayIcon,
@@ -31,6 +32,12 @@ import {
 	TooltipContent,
 } from "@/components/ui/tooltip";
 import type { MediaTime } from "@/wasm";
+import {
+	MAX_PLAYBACK_RATE,
+	MIN_PLAYBACK_RATE,
+} from "@/core/managers/playback-manager";
+import { NumberField } from "@/components/ui/number-field";
+import { cn } from "@/utils/ui";
 
 export function PreviewToolbar({
 	onToggleFullscreen,
@@ -42,6 +49,7 @@ export function PreviewToolbar({
 			<TimecodeDisplay />
 			<PlayPauseButton />
 			<div className="justify-self-end flex items-center gap-2.5">
+				<PlaybackRateField />
 				<ZoomSelect />
 				<Separator orientation="vertical" className="h-4" />
 				{/* v0.4.0 */}
@@ -134,6 +142,55 @@ function ZoomSelect() {
 				))}
 			</SelectContent>
 		</Select>
+	);
+}
+
+function formatPlaybackRate(rate: number): string {
+	return String(Math.round(rate * 100) / 100);
+}
+
+function PlaybackRateField() {
+	const editor = useEditor();
+	const playbackRate = useEditor((e) => e.playback.getPlaybackRate());
+	const [draft, setDraft] = useState<string | null>(null);
+
+	const setRate = (rate: number) => {
+		if (!Number.isFinite(rate) || rate <= 0) return;
+		editor.playback.setPlaybackRate({ rate: Math.round(rate * 100) / 100 });
+	};
+
+	return (
+		<Tooltip delayDuration={200}>
+			<TooltipTrigger asChild>
+				<div className="w-24">
+					<NumberField
+						aria-label="Playback speed"
+						icon={<HugeiconsIcon icon={DashboardSpeed02Icon} />}
+						suffix="×"
+						className={cn("tabular-nums", playbackRate !== 1 && "text-primary")}
+						value={draft ?? formatPlaybackRate(playbackRate)}
+						scrubRanges={[
+							{ from: MIN_PLAYBACK_RATE, to: 1, pixelsPerUnit: 160 },
+							{ from: 1, to: MAX_PLAYBACK_RATE, pixelsPerUnit: 24 },
+						]}
+						scrubClamp={{ min: MIN_PLAYBACK_RATE, max: MAX_PLAYBACK_RATE }}
+						onScrub={setRate}
+						onFocus={() => setDraft(formatPlaybackRate(playbackRate))}
+						onChange={(event) => setDraft(event.target.value)}
+						onBlur={() => {
+							if (draft != null) setRate(parseFloat(draft.replace(",", ".")));
+							setDraft(null);
+						}}
+						onReset={() => editor.playback.setPlaybackRate({ rate: 1 })}
+						isDefault={playbackRate === 1}
+					/>
+				</div>
+			</TooltipTrigger>
+			<TooltipContent>
+				Playback speed — type any value ({MIN_PLAYBACK_RATE}–{MAX_PLAYBACK_RATE}
+				×) or drag the icon
+			</TooltipContent>
+		</Tooltip>
 	);
 }
 

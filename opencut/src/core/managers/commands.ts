@@ -14,7 +14,7 @@ export class CommandManager {
 	public isRippleEnabled = false;
 	private history: CommandHistoryEntry[] = [];
 	private redoStack: CommandHistoryEntry[] = [];
-	private reactors: Array<() => void> = [];
+	private reactors = new Set<() => void>();
 
 	constructor(private editor: EditorCore) {}
 
@@ -44,8 +44,9 @@ export class CommandManager {
 		this.redoStack = [];
 	}
 
-	registerReactor(reactor: () => void): void {
-		this.reactors.push(reactor);
+	registerReactor(reactor: () => void): () => void {
+		this.reactors.add(reactor);
+		return () => this.reactors.delete(reactor);
 	}
 
 	undo(): void {
@@ -64,6 +65,7 @@ export class CommandManager {
 				});
 			}
 			this.redoStack.push(entry);
+			this.runReactors();
 		}
 	}
 

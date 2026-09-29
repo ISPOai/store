@@ -50,7 +50,7 @@ const TabsTrigger = React.forwardRef<
 		<TabsPrimitive.Trigger
 			ref={ref}
 			className={cn(
-				"ring-offset-background focus-visible:ring-ring inline-flex cursor-pointer items-center justify-center text-sm font-medium whitespace-nowrap focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50",
+				"ring-offset-background inline-flex cursor-pointer items-center justify-center text-sm font-medium whitespace-nowrap disabled:pointer-events-none disabled:opacity-50",
 				variant === "default" &&
 					"border border-transparent data-[state=active]:bg-secondary data-[state=active]:border-secondary-border data-[state=active]:text-secondary-foreground rounded-md px-2.5 h-6.5",
 				variant === "underline" &&
@@ -72,7 +72,7 @@ const TabsContent = React.forwardRef<
 		<TabsPrimitive.Content
 			ref={ref}
 			className={cn(
-				"ring-offset-background focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-hidden",
+				"ring-offset-background ",
 				variant === "underline" && "px-4",
 				className,
 			)}

@@ -289,7 +289,9 @@ function EffectSection({
 				className={cn("p-0", onToggle && !effect.enabled && "opacity-50")}
 			>
 				<SectionFields>
-					{definition.params.map((param) => (
+					{definition.params
+						.filter((param) => !param.hidden)
+						.map((param) => (
 						<div key={param.key} className="flex flex-col gap-3.5">
 							<div className="px-4">
 								<PropertyParamField

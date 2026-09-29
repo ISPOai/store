@@ -1,3 +1,5 @@
+import type { SoundEffectKind } from "@/media/sound-effects";
+
 export interface SoundEffect {
 	id: number;
 	name: string;
@@ -19,10 +21,13 @@ export interface SoundEffect {
 	downloads: number;
 	rating: number;
 	ratingCount: number;
+	// Set for locally synthesized effects; when present, playback and
+	// timeline placement synthesize from this kind instead of a remote URL.
+	kind?: SoundEffectKind;
 }
 
 export interface SavedSound {
-	id: number; // freesound id
+	id: number; // freesound id, or a stable id for a local synthesized effect
 	name: string;
 	username: string;
 	previewUrl?: string;
@@ -31,6 +36,8 @@ export interface SavedSound {
 	tags: string[];
 	license: string;
 	savedAt: string; // iso date string
+	// Set for locally synthesized effects saved by the user.
+	kind?: SoundEffectKind;
 }
 
 export interface SavedSoundsData {

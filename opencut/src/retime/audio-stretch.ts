@@ -1,5 +1,6 @@
 import { PitchShifter } from "soundtouchjs";
 import { clampRetimeRate, shouldMaintainPitch } from "@/retime/rate";
+import { isSpeedCurvePresent } from "@/retime/curve";
 import type { RetimeConfig } from "@/timeline";
 import { getSourceTimeAtClipTime } from "./resolve";
 
@@ -56,7 +57,7 @@ function buildResampledBuffer({
 		for (let i = 0; i < outputLength; i++) {
 			const clipTime = i / targetSampleRate;
 			const sourceTime =
-				trimStart + getSourceTimeAtClipTime({ clipTime, retime });
+				trimStart + getSourceTimeAtClipTime({ clipTime, retime, clipDuration });
 			outputData[i] = sampleLinear({
 				channelData: sourceData,
 				position: sourceTime * sourceBuffer.sampleRate,
@@ -157,7 +158,11 @@ export async function renderRetimedBuffer({
 }): Promise<AudioBuffer> {
 	const targetSampleRate = audioContext.sampleRate;
 	const rate = clampRetimeRate({ rate: retime?.rate ?? 1 });
+	const hasCurve = isSpeedCurvePresent({ curve: retime?.curve });
+	// Pitch preservation requires a single constant tempo (soundtouchjs). A
+	// velocity curve varies the rate over time, so it always resamples instead.
 	const usePitchPreservation =
+		!hasCurve &&
 		shouldMaintainPitch({ rate, maintainPitch }) &&
 		Math.abs(rate - 1) > RATE_EPSILON;
 

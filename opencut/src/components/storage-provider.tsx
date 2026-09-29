@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useEditor } from "@/editor/use-editor";
 import { storageService } from "@/services/storage/service";
+import { useLutStore } from "@/effects/lut/lut-store";
 
 interface StorageContextType {
 	isInitialized: boolean;
@@ -54,6 +55,7 @@ export function StorageProvider({ children }: StorageProviderProps) {
 				}
 
 				await editor.project.loadAllProjects();
+				void useLutStore.getState().loadUserLuts();
 
 				setStatus({
 					isInitialized: true,

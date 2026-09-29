@@ -59,28 +59,40 @@ export class WaveformCache {
 			return buildSourceWaveformSummary({ sourceKey, buffer: audioBuffer });
 		}
 
-		let arrayBuffer: ArrayBuffer | null = null;
-		if (sourceFile) {
-			arrayBuffer = await sourceFile.arrayBuffer();
-		} else if (audioUrl) {
-			const response = await fetch(audioUrl);
-			if (!response.ok) {
-				throw new Error(`Failed to fetch waveform source: ${response.status}`);
-			}
-			arrayBuffer = await response.arrayBuffer();
-		}
+		const buffer = await decodeAudioSource({ sourceKey, sourceFile, audioUrl });
+		return buildSourceWaveformSummary({ sourceKey, buffer });
+	}
+}
 
-		if (!arrayBuffer) {
-			throw new Error(`No waveform source available for ${sourceKey}`);
+export async function decodeAudioSource({
+	sourceKey,
+	sourceFile,
+	audioUrl,
+}: {
+	sourceKey: string;
+	sourceFile?: File;
+	audioUrl?: string;
+}): Promise<AudioBuffer> {
+	let arrayBuffer: ArrayBuffer | null = null;
+	if (sourceFile) {
+		arrayBuffer = await sourceFile.arrayBuffer();
+	} else if (audioUrl) {
+		const response = await fetch(audioUrl);
+		if (!response.ok) {
+			throw new Error(`Failed to fetch audio source: ${response.status}`);
 		}
+		arrayBuffer = await response.arrayBuffer();
+	}
 
-		const audioContext = createAudioContext();
-		try {
-			const buffer = await audioContext.decodeAudioData(arrayBuffer.slice(0));
-			return buildSourceWaveformSummary({ sourceKey, buffer });
-		} finally {
-			void audioContext.close();
-		}
+	if (!arrayBuffer) {
+		throw new Error(`No audio source available for ${sourceKey}`);
+	}
+
+	const audioContext = createAudioContext();
+	try {
+		return await audioContext.decodeAudioData(arrayBuffer.slice(0));
+	} finally {
+		void audioContext.close();
 	}
 }
 

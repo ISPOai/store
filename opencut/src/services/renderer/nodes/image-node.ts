@@ -6,6 +6,7 @@ import {
 
 export interface ImageNodeParams extends VisualNodeParams {
 	url: string;
+	fit?: "cover" | "contain";
 	maxSourceSize?: number;
 }
 

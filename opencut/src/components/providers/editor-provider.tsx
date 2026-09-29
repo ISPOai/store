@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { AppReadyBeacon } from "@ispo/sdk/react";
 import { EditorCore } from "@/core";
 import { useEditor } from "@/editor/use-editor";
 import { useKeybindingsListener } from "@/actions/use-keybindings";
@@ -14,6 +15,9 @@ import {
 	initializeGpuRenderer,
 	isGpuAvailable,
 } from "@/services/renderer/gpu-renderer";
+import { runCreateProject } from "@/project/create-project";
+import { markEditorReady } from "@/services/editor-ready";
+import { startMountedProductionPendingJobPoller } from "@/project/production-pending-job-poller";
 
 interface EditorProviderProps {
 	projectId: string;
@@ -56,10 +60,8 @@ export function EditorProvider({ projectId, children }: EditorProviderProps) {
 
 				if (isNotFound) {
 					try {
-						const newProjectId = await editor.project.createNewProject({
-							name: "Untitled Project",
-						});
-						router.replace(`/editor/${newProjectId}`);
+						const created = await runCreateProject({});
+						router.replace(`/editor/${created.projectId}`);
 					} catch (_createErr) {
 						setError("Failed to create project");
 						setIsLoading(false);
@@ -110,12 +112,15 @@ export function EditorProvider({ projectId, children }: EditorProviderProps) {
 
 	if (!activeProject) {
 		return (
-			<div className="bg-background flex h-screen w-screen items-center justify-center">
-				<div className="flex flex-col items-center gap-4">
-					<Loader2 className="text-muted-foreground size-8 animate-spin" />
-					<p className="text-muted-foreground text-sm">Exiting project...</p>
-				</div>
-			</div>
+				<>
+					<AppReadyBeacon />
+					<div className="bg-background flex h-screen w-screen items-center justify-center">
+						<div className="flex flex-col items-center gap-4">
+							<Loader2 className="text-muted-foreground size-8 animate-spin" />
+							<p className="text-muted-foreground text-sm">Exiting project...</p>
+						</div>
+					</div>
+				</>
 		);
 	}
 
@@ -137,6 +142,8 @@ function EditorRuntimeBindings() {
 		editor.command.isRippleEnabled = rippleEditingEnabled;
 	}, [editor, rippleEditingEnabled]);
 
+	useEffect(() => markEditorReady(editor), [editor]);
+
 	useEffect(() => {
 		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
 			if (!editor.save.getIsDirty()) return;
@@ -150,5 +157,22 @@ function EditorRuntimeBindings() {
 
 	useEditorActions();
 	useKeybindingsListener();
+	return (
+		<>
+			<ProductionPendingJobPollerBinding />
+			<AppReadyBeacon />
+		</>
+	);
+}
+
+function ProductionPendingJobPollerBinding() {
+	const editor = useEditor();
+	const editId = useEditor((current) => current.project.getActiveOrNull()?.metadata.id ?? null);
+
+	useEffect(() => {
+		if (!editId) return;
+		return startMountedProductionPendingJobPoller(editor.media, editId);
+	}, [editId, editor.media]);
+
 	return null;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -11,24 +11,15 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-	DropdownMenu,
-	DropdownMenuCheckboxItem,
-	DropdownMenuContent,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useInfiniteScroll } from "@/hooks/use-infinite-scroll";
-import { useSoundSearch } from "@/sounds/use-sound-search";
 import { useSoundsStore } from "@/sounds/sounds-store";
 import type { SavedSound, SoundEffect } from "@/sounds/types";
-import { cn } from "@/utils/ui";
+import { soundEffectWav } from "@/media/sound-effects";
 import {
 	FavouriteIcon,
-	FilterMailIcon,
 	PauseIcon,
 	PlayIcon,
 	PlusSignIcon,
@@ -63,138 +54,45 @@ export function SoundsView() {
 	);
 }
 
-function SoundEffectsView() {
-	const {
-		topSoundEffects,
-		isLoading,
-		searchQuery,
-		setSearchQuery,
-		scrollPosition,
-		setScrollPosition,
-		loadSavedSounds,
-		showCommercialOnly,
-		toggleCommercialFilter,
-		hasLoaded,
-		setTopSoundEffects,
-		setLoading,
-		setError,
-		setHasLoaded,
-		setCurrentPage,
-		setHasNextPage,
-		setTotalCount,
-	} = useSoundsStore();
-	const {
-		results: searchResults,
-		isLoading: isSearching,
-		loadMore,
-		hasNextPage,
-		isLoadingMore,
-	} = useSoundSearch({
-		query: searchQuery,
-		commercialOnly: showCommercialOnly,
-	});
+function matchesQuery({
+	sound,
+	query,
+}: {
+	sound: SoundEffect;
+	query: string;
+}): boolean {
+	const needle = query.trim().toLowerCase();
+	if (!needle) return true;
+	return [sound.name, sound.description, ...(sound.tags ?? [])]
+		.filter(Boolean)
+		.some((value) => value.toLowerCase().includes(needle));
+}
 
+function SoundEffectsView() {
+	const { localSoundEffects, loadSavedSounds } = useSoundsStore();
+	const [searchQuery, setSearchQuery] = useState("");
 	const [playingId, setPlayingId] = useState<number | null>(null);
 	const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(
 		null,
 	);
-
-	const { scrollAreaRef, handleScroll } = useInfiniteScroll({
-		onLoadMore: loadMore,
-		hasMore: hasNextPage,
-		isLoading: isLoadingMore || isSearching,
-	});
 
 	useEffect(() => {
 		loadSavedSounds();
 	}, [loadSavedSounds]);
 
 	useEffect(() => {
-		if (hasLoaded) {
-			return;
-		}
-
-		let shouldIgnore = false;
-
-		const fetchTopSounds = async () => {
-			try {
-				if (!shouldIgnore) {
-					setLoading({ loading: true });
-					setError({ error: null });
-				}
-
-				const response = await fetch(
-					"/api/sounds/search?page_size=50&sort=downloads",
-				);
-
-				if (!shouldIgnore) {
-					if (!response.ok) {
-						throw new Error(`Failed to fetch: ${response.status}`);
-					}
-
-					const data = await response.json();
-					setTopSoundEffects({ sounds: data.results });
-					setHasLoaded({ loaded: true });
-
-					setCurrentPage({ page: 1 });
-					setHasNextPage({ hasNext: !!data.next });
-					setTotalCount({ count: data.count });
-				}
-			} catch (error) {
-				if (!shouldIgnore) {
-					console.error("Failed to fetch top sounds:", error);
-					setError({
-						error:
-							error instanceof Error ? error.message : "Failed to load sounds",
-					});
-				}
-			} finally {
-				if (!shouldIgnore) {
-					setLoading({ loading: false });
-				}
-			}
-		};
-
-		const timeoutId = setTimeout(fetchTopSounds, 100, {});
-
 		return () => {
-			shouldIgnore = true;
-			clearTimeout(timeoutId);
+			audioElement?.pause();
 		};
-	}, [
-		hasLoaded,
-		setTopSoundEffects,
-		setLoading,
-		setError,
-		setHasLoaded,
-		setCurrentPage,
-		setHasNextPage,
-		setTotalCount,
-	]);
+	}, [audioElement]);
 
-	useEffect(() => {
-		if (!scrollAreaRef.current || scrollPosition <= 0) {
-			return;
-		}
-
-		const restoreScrollPosition = () => {
-			scrollAreaRef.current?.scrollTo({ top: scrollPosition });
-		};
-
-		const timeoutId = setTimeout(restoreScrollPosition, 100, {});
-
-		return () => clearTimeout(timeoutId);
-	}, [scrollPosition, scrollAreaRef]);
-
-	const handleScrollWithPosition = ({
-		currentTarget,
-	}: React.UIEvent<HTMLDivElement>) => {
-		const { scrollTop } = currentTarget;
-		setScrollPosition({ position: scrollTop });
-		handleScroll({ currentTarget } as React.UIEvent<HTMLDivElement>);
-	};
-
-	const displayedSounds = searchQuery ? searchResults : topSoundEffects;
+	const displayedSounds = useMemo(
+		() =>
+			localSoundEffects.filter((sound) =>
+				matchesQuery({ sound, query: searchQuery }),
+			),
+		[localSoundEffects, searchQuery],
+	);
 
 	const playSound = ({ sound }: { sound: SoundEffect }) => {
 		if (playingId === sound.id) {
@@ -205,79 +103,48 @@ function SoundEffectsView() {
 
 		audioElement?.pause();
 
-		if (sound.previewUrl) {
-			const audio = new Audio(sound.previewUrl);
-			audio.addEventListener("ended", () => {
-				setPlayingId(null);
-			});
-			audio.addEventListener("error", () => {
-				setPlayingId(null);
-			});
-			audio.play().catch((error) => {
-				console.error("Failed to play sound preview:", error);
-				setPlayingId(null);
-			});
+		const sourceUrl =
+			sound.kind !== undefined
+				? URL.createObjectURL(
+						new Blob([soundEffectWav(sound.kind).bytes], {
+							type: "audio/wav",
+						}),
+					)
+				: sound.previewUrl;
 
-			setAudioElement(audio);
-			setPlayingId(sound.id);
-		}
+		if (!sourceUrl) return;
+
+		const audio = new Audio(sourceUrl);
+		const cleanup = () => {
+			if (sound.kind !== undefined) URL.revokeObjectURL(sourceUrl);
+			setPlayingId(null);
+		};
+		audio.addEventListener("ended", cleanup);
+		audio.addEventListener("error", cleanup);
+		audio.play().catch((error) => {
+			console.error("Failed to play sound preview:", error);
+			cleanup();
+		});
+
+		setAudioElement(audio);
+		setPlayingId(sound.id);
 	};
 
 	return (
 		<div className="mt-1 flex h-full flex-col gap-5">
-			<div className="flex items-center gap-3">
-				<Input
-					placeholder="Search sound effects"
-					className="w-full"
-					containerClassName="w-full"
-					value={searchQuery}
-					onChange={({ currentTarget }) =>
-						setSearchQuery({ query: currentTarget.value })
-					}
-					showClearIcon
-					onClear={() => setSearchQuery({ query: "" })}
-				/>
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button
-							variant="text"
-							size="icon"
-							className={cn(showCommercialOnly && "text-primary")}
-						>
-							<HugeiconsIcon icon={FilterMailIcon} />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent align="end" className="w-56">
-						<DropdownMenuCheckboxItem
-							checked={showCommercialOnly}
-							onCheckedChange={() => toggleCommercialFilter()}
-						>
-							Show only commercially licensed
-						</DropdownMenuCheckboxItem>
-						<div className="text-muted-foreground px-2 py-1.5 text-xs">
-							{showCommercialOnly
-								? "Only showing sounds licensed for commercial use"
-								: "Showing all sounds regardless of license"}
-						</div>
-					</DropdownMenuContent>
-				</DropdownMenu>
-			</div>
+			<Input
+				placeholder="Search sound effects"
+				className="w-full"
+				containerClassName="w-full"
+				value={searchQuery}
+				onChange={({ currentTarget }) => setSearchQuery(currentTarget.value)}
+				showClearIcon
+				onClear={() => setSearchQuery("")}
+			/>
 
 			<div className="relative h-full overflow-hidden">
-				<ScrollArea
-					className="h-full flex-1"
-					ref={scrollAreaRef}
-					onScrollCapture={handleScrollWithPosition}
-				>
+				<ScrollArea className="h-full flex-1">
 					<div className="flex flex-col gap-4">
-						{isLoading && !searchQuery && (
-							<div className="text-muted-foreground text-sm">
-								Loading sounds...
-							</div>
-						)}
-						{isSearching && searchQuery && (
-							<div className="text-muted-foreground text-sm">Searching...</div>
-						)}
 						{displayedSounds.map((sound) => (
 							<AudioItem
 								key={sound.id}
@@ -286,14 +153,9 @@ function SoundEffectsView() {
 								onPlay={playSound}
 							/>
 						))}
-						{!isLoading && !isSearching && displayedSounds.length === 0 && (
+						{displayedSounds.length === 0 && (
 							<div className="text-muted-foreground text-sm">
-								{searchQuery ? "No sounds found" : "No sounds available"}
-							</div>
-						)}
-						{isLoadingMore && (
-							<div className="text-muted-foreground py-4 text-center text-sm">
-								Loading more sounds...
+								No sounds found
 							</div>
 						)}
 					</div>
@@ -323,6 +185,12 @@ function SavedSoundsView() {
 		loadSavedSounds();
 	}, [loadSavedSounds]);
 
+	useEffect(() => {
+		return () => {
+			audioElement?.pause();
+		};
+	}, [audioElement]);
+
 	const playSound = ({ sound }: { sound: SoundEffect }) => {
 		if (playingId === sound.id) {
 			audioElement?.pause();
@@ -332,22 +200,31 @@ function SavedSoundsView() {
 
 		audioElement?.pause();
 
-		if (sound.previewUrl) {
-			const audio = new Audio(sound.previewUrl);
-			audio.addEventListener("ended", () => {
-				setPlayingId(null);
-			});
-			audio.addEventListener("error", () => {
-				setPlayingId(null);
-			});
-			audio.play().catch((error) => {
-				console.error("Failed to play sound preview:", error);
-				setPlayingId(null);
-			});
+		const sourceUrl =
+			sound.kind !== undefined
+				? URL.createObjectURL(
+						new Blob([soundEffectWav(sound.kind).bytes], {
+							type: "audio/wav",
+						}),
+					)
+				: sound.previewUrl;
 
-			setAudioElement(audio);
-			setPlayingId(sound.id);
-		}
+		if (!sourceUrl) return;
+
+		const audio = new Audio(sourceUrl);
+		const cleanup = () => {
+			if (sound.kind !== undefined) URL.revokeObjectURL(sourceUrl);
+			setPlayingId(null);
+		};
+		audio.addEventListener("ended", cleanup);
+		audio.addEventListener("error", cleanup);
+		audio.play().catch((error) => {
+			console.error("Failed to play sound preview:", error);
+			cleanup();
+		});
+
+		setAudioElement(audio);
+		setPlayingId(sound.id);
 	};
 
 	const convertToSoundEffect = ({
@@ -375,6 +252,7 @@ function SavedSoundsView() {
 		downloads: 0,
 		rating: 0,
 		ratingCount: 0,
+		kind: savedSound.kind,
 	});
 
 	if (isLoadingSavedSounds) {
@@ -526,7 +404,7 @@ function AudioItem({ sound, isPlaying, onPlay }: AudioItemProps) {
 				<div className="min-w-0 flex-1 overflow-hidden">
 					<p className="truncate text-sm font-medium">{sound.name}</p>
 					<span className="text-muted-foreground block truncate text-xs">
-						{sound.username}
+						{sound.description || sound.username}
 					</span>
 				</div>
 			</button>

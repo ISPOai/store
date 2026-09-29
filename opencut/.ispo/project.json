@@ -7,30 +7,601 @@
   "mode": "edit",
   "root": "",
   "requests": {
-    "fs": "self",
-    "shared": [
-      "read"
-    ],
+    "fs": "none",
+    "folders": [],
+    "ai": [],
     "ui": [
       "notify"
     ],
     "agent": [],
     "dialog": [],
     "files": [
-      "pick"
+      "pick",
+      "publish"
     ],
+    "assets": [],
+    "sites": [],
     "chrome": [],
+    "capability": [],
+    "spec": [],
+    "evaluations": [],
     "promptHistory": [],
-    "entities": {},
+    "cloud": [],
+    "community": [],
+    "assistant": [],
+    "entities": {
+      "opencut.project": [
+        "create",
+        "read",
+        "query",
+        "update",
+        "delete"
+      ],
+      "opencut.media-metadata": [
+        "create",
+        "read",
+        "query",
+        "update",
+        "delete"
+      ],
+      "opencut.media-file": [
+        "create",
+        "read",
+        "query",
+        "update",
+        "delete"
+      ],
+      "opencut.saved-sounds": [
+        "create",
+        "read",
+        "query",
+        "update",
+        "delete"
+      ],
+      "opencut.migration": [
+        "create",
+        "read",
+        "query"
+      ],
+      "opencut.lut": [
+        "create",
+        "read",
+        "query",
+        "update",
+        "delete"
+      ]
+    },
     "devices": [],
     "connectors": {
-      "google": {
-        "calendar": []
-      }
+      "google.calendar": [],
+      "google.mail": []
     }
   },
   "env": [],
-  "entityTypes": [],
+  "entityTypes": [
+    {
+      "id": "opencut.project",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "storageKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "value": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "metadata": {
+                "type": "object",
+                "additionalProperties": true,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100
+                  },
+                  "updatedAt": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100
+                  }
+                },
+                "required": [
+                  "id",
+                  "name",
+                  "createdAt",
+                  "updatedAt"
+                ]
+              },
+              "scenes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "currentSceneId": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "settings": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "version": {
+                "type": "number"
+              },
+              "timelineViewState": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "required": [
+              "metadata",
+              "scenes",
+              "currentSceneId",
+              "settings",
+              "version"
+            ]
+          }
+        },
+        "required": [
+          "storageKey",
+          "value"
+        ]
+      },
+      "indexes": [
+        {
+          "fields": [
+            "storageKey"
+          ],
+          "unique": true
+        }
+      ],
+      "display": {
+        "labelField": "storageKey",
+        "summaryFields": [
+          "value.metadata.name"
+        ]
+      }
+    },
+    {
+      "id": "opencut.media-metadata",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "storageKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "value": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "image",
+                  "video",
+                  "audio"
+                ]
+              },
+              "size": {
+                "type": "number",
+                "minimum": 0
+              },
+              "lastModified": {
+                "type": "number",
+                "minimum": 0
+              },
+              "width": {
+                "type": "number",
+                "minimum": 0
+              },
+              "height": {
+                "type": "number",
+                "minimum": 0
+              },
+              "duration": {
+                "type": "number",
+                "minimum": 0
+              },
+              "fps": {
+                "type": "number",
+                "minimum": 0
+              },
+              "hasAudio": {
+                "type": "boolean"
+              },
+              "ephemeral": {
+                "type": "boolean"
+              },
+              "thumbnailUrl": {
+                "type": "string",
+                "maxLength": 1000000
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "type",
+              "size",
+              "lastModified"
+            ]
+          }
+        },
+        "required": [
+          "storageKey",
+          "value"
+        ]
+      },
+      "indexes": [
+        {
+          "fields": [
+            "storageKey"
+          ],
+          "unique": true
+        }
+      ],
+      "display": {
+        "labelField": "value.name",
+        "summaryFields": [
+          "value.type",
+          "value.size"
+        ]
+      }
+    },
+    {
+      "id": "opencut.media-file",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "storageKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "value": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "storageKey": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "publicId": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 300
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000
+              },
+              "mimeType": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "size": {
+                "type": "number",
+                "minimum": 0
+              },
+              "lastModified": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "storageKey",
+              "publicId",
+              "name",
+              "mimeType",
+              "size",
+              "lastModified"
+            ]
+          }
+        },
+        "required": [
+          "storageKey",
+          "value"
+        ]
+      },
+      "indexes": [
+        {
+          "fields": [
+            "storageKey"
+          ],
+          "unique": true
+        }
+      ],
+      "display": {
+        "labelField": "value.name",
+        "summaryFields": [
+          "value.mimeType",
+          "value.size"
+        ]
+      }
+    },
+    {
+      "id": "opencut.saved-sounds",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "storageKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "value": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "sounds": {
+                "type": "array",
+                "maxItems": 5000,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1000
+                    },
+                    "username": {
+                      "type": "string",
+                      "maxLength": 500
+                    },
+                    "previewUrl": {
+                      "type": "string",
+                      "maxLength": 5000
+                    },
+                    "downloadUrl": {
+                      "type": "string",
+                      "maxLength": 5000
+                    },
+                    "duration": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "tags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "maxLength": 500
+                      },
+                      "maxItems": 500
+                    },
+                    "license": {
+                      "type": "string",
+                      "maxLength": 1000
+                    },
+                    "savedAt": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "username",
+                    "duration",
+                    "tags",
+                    "license",
+                    "savedAt"
+                  ]
+                }
+              },
+              "lastModified": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              }
+            },
+            "required": [
+              "sounds",
+              "lastModified"
+            ]
+          }
+        },
+        "required": [
+          "storageKey",
+          "value"
+        ]
+      },
+      "indexes": [
+        {
+          "fields": [
+            "storageKey"
+          ],
+          "unique": true
+        }
+      ],
+      "display": {
+        "labelField": "storageKey",
+        "summaryFields": [
+          "value.lastModified"
+        ]
+      }
+    },
+    {
+      "id": "opencut.migration",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "completedAt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "projectCount": {
+            "type": "number",
+            "minimum": 0
+          },
+          "mediaCount": {
+            "type": "number",
+            "minimum": 0
+          },
+          "sharedFallbackCount": {
+            "type": "number",
+            "minimum": 0
+          },
+          "savedSoundsImported": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "completedAt",
+          "projectCount",
+          "mediaCount",
+          "sharedFallbackCount",
+          "savedSoundsImported"
+        ]
+      },
+      "indexes": [
+        {
+          "fields": [
+            "key"
+          ],
+          "unique": true
+        }
+      ],
+      "display": {
+        "labelField": "key",
+        "summaryFields": [
+          "completedAt"
+        ]
+      }
+    },
+    {
+      "id": "opencut.lut",
+      "schemaVersion": 1,
+      "schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "storageKey": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "value": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "luts": {
+                "type": "array",
+                "maxItems": 500,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 1000
+                    },
+                    "cube": {
+                      "type": "string",
+                      "maxLength": 8000000
+                    },
+                    "importedAt": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 100
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "cube",
+                    "importedAt"
+                  ]
+                }
+              },
+              "lastModified": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 100
+              }
+            },
+            "required": [
+              "luts",
+              "lastModified"
+            ]
+          }
+        },
+        "required": [
+          "storageKey",
+          "value"
+        ]
+      },
+      "indexes": [
+        {
+          "fields": [
+            "storageKey"
+          ],
+          "unique": true
+        }
+      ],
+      "display": {
+        "labelField": "storageKey",
+        "summaryFields": [
+          "value.lastModified"
+        ]
+      }
+    }
+  ],
   "egress": {
     "connect": []
   }

@@ -14,6 +14,7 @@ import {
 	Menu02Icon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { files } from "@ispo/sdk";
 import { cn } from "@/utils/ui";
 import { DEFAULT_LOGO_URL, SITE_URL } from "@/site/brand";
 import { SOCIAL_LINKS } from "@/site/social";
@@ -74,15 +75,18 @@ export function Header() {
 								Copy SVG
 							</ContextMenuItem>
 							<ContextMenuItem
-								onClick={() => {
-									const a = document.createElement("a");
-									a.href = DEFAULT_LOGO_URL;
-									a.download = "opencut-logo.svg";
-									a.click();
+								onClick={async () => {
+									const res = await fetch(DEFAULT_LOGO_URL);
+									const svg = await res.text();
+									await files.save({
+										content: svg,
+										name: "opencut-logo.svg",
+										accept: ["image/"],
+									});
 								}}
 							>
 								<HugeiconsIcon icon={Download01Icon} />
-								Download SVG
+								Save SVG to Files
 							</ContextMenuItem>
 							<Link href="/brand">
 								<ContextMenuItem>

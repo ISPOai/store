@@ -19,6 +19,9 @@ const PROPERTY_GROUPS: PropertyGroupDefinition[] = [
 	{ matchesPath: (path) => path.startsWith("transform.") || path === "opacity" },
 	{ matchesPath: (path) => path === "volume" || path === "color" },
 	{ matchesPath: (path) => path.startsWith("background.") },
+	{ matchesPath: (path) => path.startsWith("stroke.") },
+	{ matchesPath: (path) => path.startsWith("shadow.") },
+	{ matchesPath: (path) => path.startsWith("glow.") },
 	{ matchesPath: (path) => path.startsWith("params.") },
 	{ matchesPath: (path) => path.startsWith("effects.") },
 ];
@@ -38,6 +41,14 @@ const PROPERTY_LABELS: Partial<Record<string, string>> = {
 	"background.offsetX": "BG Offset X",
 	"background.offsetY": "BG Offset Y",
 	"background.cornerRadius": "Corner Radius",
+	"stroke.color": "Stroke Color",
+	"stroke.width": "Stroke Width",
+	"shadow.color": "Shadow Color",
+	"shadow.x": "Shadow X",
+	"shadow.y": "Shadow Y",
+	"shadow.blur": "Shadow Blur",
+	"glow.color": "Glow Color",
+	"glow.radius": "Glow Radius",
 };
 
 export function getPropertyLabel(path: AnimationPath): string {

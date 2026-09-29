@@ -12,6 +12,14 @@ import type {
 import { DEFAULTS } from "@/timeline/defaults";
 import { VOLUME_DB_MAX, VOLUME_DB_MIN } from "@/timeline/audio-constants";
 import {
+	REVERB_DECAY_DEFAULT_SECONDS,
+	REVERB_DECAY_MAX_SECONDS,
+	REVERB_DECAY_MIN_SECONDS,
+	REVERB_WET_DEFAULT,
+	REVERB_WET_MAX,
+	REVERB_WET_MIN,
+} from "@/media/reverb";
+import {
 	CORNER_RADIUS_MAX,
 	CORNER_RADIUS_MIN,
 } from "@/text/background";
@@ -154,6 +162,63 @@ const visualElementParams: ElementParamDefinition[] = [
 	},
 ];
 
+const cropElementParams: ElementParamDefinition[] = [
+	{
+		key: "crop.left",
+		label: "Crop Left",
+		type: "number",
+		default: 0,
+		min: 0,
+		max: 1,
+		step: 0.01,
+		keyframable: false,
+	},
+	{
+		key: "crop.top",
+		label: "Crop Top",
+		type: "number",
+		default: 0,
+		min: 0,
+		max: 1,
+		step: 0.01,
+		keyframable: false,
+	},
+	{
+		key: "crop.right",
+		label: "Crop Right",
+		type: "number",
+		default: 0,
+		min: 0,
+		max: 1,
+		step: 0.01,
+		keyframable: false,
+	},
+	{
+		key: "crop.bottom",
+		label: "Crop Bottom",
+		type: "number",
+		default: 0,
+		min: 0,
+		max: 1,
+		step: 0.01,
+		keyframable: false,
+	},
+	{
+		key: "flipX",
+		label: "Flip Horizontal",
+		type: "boolean",
+		default: false,
+		keyframable: false,
+	},
+	{
+		key: "flipY",
+		label: "Flip Vertical",
+		type: "boolean",
+		default: false,
+		keyframable: false,
+	},
+];
+
 const audioElementParams: ElementParamDefinition[] = [
 	{
 		key: "volume",
@@ -170,6 +235,48 @@ const audioElementParams: ElementParamDefinition[] = [
 		type: "boolean",
 		default: false,
 		keyframable: false,
+	},
+	{
+		key: "reverb.wet",
+		label: "Reverb",
+		type: "number",
+		default: REVERB_WET_DEFAULT,
+		min: REVERB_WET_MIN,
+		max: REVERB_WET_MAX,
+		step: 0.01,
+		// The send level is a constant per clip in both the playback graph and the
+		// export mixdown, so it is deliberately not keyframable.
+		keyframable: false,
+	},
+	{
+		key: "reverb.decay",
+		label: "Reverb Decay",
+		type: "number",
+		default: REVERB_DECAY_DEFAULT_SECONDS,
+		min: REVERB_DECAY_MIN_SECONDS,
+		max: REVERB_DECAY_MAX_SECONDS,
+		step: 0.05,
+		keyframable: false,
+	},
+	{
+		key: "fadeInSeconds",
+		label: "Fade In",
+		type: "number",
+		default: 0,
+		min: 0,
+		step: 0.1,
+		keyframable: false,
+		shortLabel: "s",
+	},
+	{
+		key: "fadeOutSeconds",
+		label: "Fade Out",
+		type: "number",
+		default: 0,
+		min: 0,
+		step: 0.1,
+		keyframable: false,
+		shortLabel: "s",
 	},
 ];
 
@@ -324,6 +431,74 @@ const textElementParams: ElementParamDefinition[] = [
 		step: 1,
 		dependencies: [{ param: "background.enabled", equals: true }],
 	},
+	{
+		key: "stroke.color",
+		label: "Stroke Color",
+		type: "color",
+		default: DEFAULTS.text.stroke.color,
+	},
+	{
+		key: "stroke.width",
+		label: "Stroke Width",
+		type: "number",
+		default: DEFAULTS.text.stroke.width,
+		min: 0,
+		max: 100,
+		step: 1,
+		shortLabel: "W",
+	},
+	{
+		key: "shadow.color",
+		label: "Shadow Color",
+		type: "color",
+		default: DEFAULTS.text.shadow.color,
+	},
+	{
+		key: "shadow.x",
+		label: "Shadow X",
+		type: "number",
+		default: DEFAULTS.text.shadow.x,
+		min: -100,
+		max: 100,
+		step: 1,
+		shortLabel: "X",
+	},
+	{
+		key: "shadow.y",
+		label: "Shadow Y",
+		type: "number",
+		default: DEFAULTS.text.shadow.y,
+		min: -100,
+		max: 100,
+		step: 1,
+		shortLabel: "Y",
+	},
+	{
+		key: "shadow.blur",
+		label: "Shadow Blur",
+		type: "number",
+		default: DEFAULTS.text.shadow.blur,
+		min: 0,
+		max: 100,
+		step: 1,
+		shortLabel: "B",
+	},
+	{
+		key: "glow.color",
+		label: "Glow Color",
+		type: "color",
+		default: DEFAULTS.text.glow.color,
+	},
+	{
+		key: "glow.radius",
+		label: "Glow Radius",
+		type: "number",
+		default: DEFAULTS.text.glow.radius,
+		min: 0,
+		max: 100,
+		step: 1,
+		shortLabel: "R",
+	},
 ];
 
 export const elementParamRegistry = new DefinitionRegistry<
@@ -333,9 +508,12 @@ export const elementParamRegistry = new DefinitionRegistry<
 
 elementParamRegistry.register({
 	key: "video",
-	definition: [...visualElementParams, ...audioElementParams],
+	definition: [...visualElementParams, ...cropElementParams, ...audioElementParams],
 });
-elementParamRegistry.register({ key: "image", definition: visualElementParams });
+elementParamRegistry.register({
+	key: "image",
+	definition: [...visualElementParams, ...cropElementParams],
+});
 elementParamRegistry.register({
 	key: "text",
 	definition: [...textElementParams, ...visualElementParams],
