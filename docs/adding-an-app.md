@@ -77,6 +77,59 @@ Before writing anything, read the upstream project and answer, in writing:
 the app's one job, the state plan, the egress plan, and the dropped features
 with reasons.
 
+## Phase 0.5 — Put the original in the human's hands before you ask them anything
+
+Phase 0 is you reading the code. This phase is the human *using* the app. Do it
+**before** the scoping questions and long before any implementation.
+
+The reason is narrow and practical: the scoping questions in Phase 0 and Phase 2
+have no obvious right answers — what to keep, what to drop, where exports go,
+what the agent should drive. A human who has clicked around the real app answers
+those from a picture in their head. A human who has only read your summary is
+guessing, and you will build the wrong thing confidently. Getting upstream
+running costs minutes; discovering in Phase 6 that the human wanted a different
+app costs the whole port.
+
+**Do this:**
+
+1. Clone upstream into scratch space — never into the store repo. Phase 1
+   governs what gets copied in, and that comes later.
+2. Get it running and **give the human a URL.** Name the two or three routes
+   that actually matter (`/editor` beats the landing page).
+3. Say plainly **what is expected to be broken**, so the human does not report
+   scaffolding as a defect: auth flows, cloud sync, anything needing API keys.
+4. Say what you served **if it is not a plain upstream build** — a substituted
+   dist, a demo shell, a subset. The human is evaluating what is on screen; they
+   need to know how faithful it is.
+5. **Then** ask your scoping questions, batched into one round, not dripped out.
+6. Stop the server when the human is done with it.
+
+**Getting upstream to boot — traps that have actually cost time:**
+
+- **The package manager may not be on `PATH`.** `npx --yes pnpm@10 install` runs
+  the right pnpm without installing anything globally or touching the machine's
+  toolchain.
+- **Many apps refuse to boot without environment variables**, even for
+  client-only screens — a Supabase client validating its URL in middleware will
+  500 the whole site on a placeholder like `x.y.z`. Write *syntactically valid*
+  dummy values: a parseable `https://` URL, a JWT-shaped string. **Never ask the
+  human for real credentials and never enter any.** The goal is to see the UI,
+  not to exercise the backend.
+- **A source build can fail on grounds that have nothing to do with the app** —
+  a Node version the repo predates, a native module, a codegen step. Do not
+  fight it. Serve upstream's **published dist** (`npm pack <pkg>`) behind the
+  same static app shell, and tell the human that is what you did. Mermaid's
+  build dies on Node 26 inside `langium`; its editor runs perfectly against the
+  published `mermaid.min.js` it loads anyway.
+- **The repo may be a library, not an app.** Find the app inside it (Phase 0
+  rule 1) — usually an `examples/`, `demo/`, or `*-editor` package — and tell
+  the human they are looking at a demo shell rather than a product, because that
+  changes what "port this" should even mean.
+
+**Deliverable:** a live URL, a short note saying what the human is looking at
+and what is expected broken, and the scoping questions — in that order, in one
+message.
+
 ## Phase 1 — Take the code once; do not track upstream
 
 The store's model is **boilerplate, taken once**. We copy what is useful at a
@@ -528,6 +581,7 @@ hand follow-up work to and lets parallel agent runs coexist without collisions.
 
 ```
 Phase 0  □ adaptation plan written (one job, state plan, egress plan, dropped features)
+Phase 0.5 □ upstream running  □ URL + "what's expected broken" given to the human  □ scoping questions asked AFTER they looked
 Phase 1  □ code taken once at a recorded SHA  □ UPSTREAM.md  □ attribution headers
 Phase 2  □ requests/egress/env minimal, justified per key  □ capabilitySummary matches
 Phase 3  □ command export + ready()  □ no <a download>  □ handlers use ctx.sdk
