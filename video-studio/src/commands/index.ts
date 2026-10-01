@@ -34,9 +34,8 @@ const PROJECT_ID = projectIdFromLocation()
 function ports(sdk: {
   entities: CommandPorts['entities']
   files: CommandPorts['files']
-  dialog: CommandPorts['dialog']
 }): CommandPorts {
-  return { projectId: PROJECT_ID, entities: sdk.entities, files: sdk.files, dialog: sdk.dialog }
+  return { projectId: PROJECT_ID, entities: sdk.entities, files: sdk.files }
 }
 
 export const createCompositionCommand = commands.define(

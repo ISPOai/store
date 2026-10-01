@@ -1,21 +1,22 @@
 // Video Studio entry (solid target, non-React readiness path).
 //
 // Contract order, per the host bootstrap:
-//   1. The host-owned bootstrap calls connectToHost() BEFORE importing this
-//      bundle — the entry never owns the connection. The theme channel and
-//      lifecycle acks ride it.
+//   1. The host-owned bootstrap establishes the runtime connection before
+//      importing this bundle — the entry never owns the connection. The theme
+//      channel and lifecycle acks ride it.
 //   2. Mount visible DOM through solid-js/web render().
 //   3. Wire the host lifecycle (will-sleep releases playback, audio, and the
 //      render loop; did-wake restarts the loop) — before readiness.
 //   4. Register the bundled font for both UI text and canvas text layout.
-//   5. Report first visual readiness with notifyAppReady after mount.
+//   5. Report first visual readiness with runtime.readiness.notify after mount.
 //   6. Command exposure readiness waits for durable startup state: the
 //      command catalog is published with the bundle, but `.ready()` fires
 //      only after the initial project list proves the entity store usable.
 import './index.css'
 import interVariableUrl from '../assets/fonts/inter-variable.ttf'
 import { render } from 'solid-js/web'
-import { dialog, entities, files, lifecycle, notifyAppReady } from '@ispo/sdk'
+import { entities, files, lifecycle } from '@ispo/sdk'
+import { runtime } from '@ispo/sdk/runtime'
 import type { FontSource } from '@diffusionstudio/runtime'
 import { AppController } from './app/app-controller.ts'
 import { bindAssistantContext } from './app/assistant-context.ts'
@@ -38,7 +39,7 @@ async function loadBundledFont(): Promise<FontSource> {
 }
 
 const rootEl = document.getElementById('root')
-const controller = new AppController({ entities, files, dialog })
+const controller = new AppController({ entities, files })
 
 if (rootEl) {
   render(() => {
@@ -49,8 +50,8 @@ if (rootEl) {
   }, rootEl)
 }
 
-lifecycle.onWillSleep(() => controller.sleep())
-lifecycle.onDidWake(() => controller.wake())
+lifecycle.sleep.subscribe(() => controller.sleep())
+lifecycle.wake.subscribe(() => controller.wake())
 
 void loadBundledFont().then((fontSource) => {
   controller.registerFonts([fontSource])
@@ -60,4 +61,4 @@ void controller.boot().then((durable) => {
   if (durable) projectCommands.ready()
 })
 
-notifyAppReady({ source: 'video-studio-mount' })
+runtime.readiness.notify({ source: 'video-studio-mount' })

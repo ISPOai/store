@@ -7,7 +7,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { deliverExport, filesDelivery, offPlatformDelivery, exportFileName } from './export-delivery.ts'
 import { ExportJobService } from '../domain/export-jobs.ts'
-import type { DialogPort, EntitiesPort, EntityRow, FilesPort } from '../sdk-port.ts'
+import type { EntitiesPort, EntityRow, FilesPort } from '../sdk-port.ts'
 
 interface StoreEntity {
   type: string
@@ -69,6 +69,7 @@ class MemoryEntities implements EntitiesPort {
 
 class FakeFiles implements FilesPort {
   public answer: { path: string; publicId?: string } | null | Error = { path: '/Files/Video Studio/out.mp4', publicId: 'pub_1' }
+  public exportAnswer: { saved: boolean } | Error = { saved: true }
   public saves = 0
 
   public async pick(): Promise<null> {
@@ -81,18 +82,24 @@ class FakeFiles implements FilesPort {
     if (this.answer instanceof Error) throw this.answer
     return this.answer
   }
+
+  public async export(args: { data: Uint8Array; defaultName: string; filters?: { name: string; extensions: string[] }[] }): Promise<{ saved: boolean }> {
+    assert.ok(args.data.byteLength > 0)
+    assert.ok(args.defaultName.endsWith('.mp4') || args.defaultName.endsWith('.webm'))
+    if (this.exportAnswer instanceof Error) throw this.exportAnswer
+    return this.exportAnswer
+  }
 }
 
-class FakeDialog implements DialogPort {
-  public answer: { saved: boolean } | Error = { saved: true }
+class FakeExportFiles extends FakeFiles {
   public asks = 0
 
-  public async saveAs(args: { data: Uint8Array; defaultName: string }): Promise<{ saved: boolean }> {
+  public override async export(args: { data: Uint8Array; defaultName: string; filters?: { name: string; extensions: string[] }[] }): Promise<{ saved: boolean }> {
     this.asks += 1
     assert.ok(args.data.byteLength > 0)
     assert.ok(args.defaultName.endsWith('.mp4') || args.defaultName.endsWith('.webm'))
-    if (this.answer instanceof Error) throw this.answer
-    return this.answer
+    if (this.exportAnswer instanceof Error) throw this.exportAnswer
+    return this.exportAnswer
   }
 }
 
@@ -150,11 +157,11 @@ test('a save transport failure marks the job failed with the bounded message', a
 test('off-platform delivery records success without any path', async () => {
   const entities = new MemoryEntities()
   const jobs = new ExportJobService(entities)
-  const dialog = new FakeDialog()
+  const files = new FakeExportFiles()
   const job = await jobs.create('comp-1', 'mp4')
-  const outcome = await deliverExport({ jobs, deliver: offPlatformDelivery(dialog) }, job.id, BYTES, 'mp4')
+  const outcome = await deliverExport({ jobs, deliver: offPlatformDelivery(files) }, job.id, BYTES, 'mp4')
   assert.deepEqual(outcome, { kind: 'delivered', resultPath: null, resultPublicId: null })
-  assert.equal(dialog.asks, 1)
+  assert.equal(files.asks, 1)
   const stored = entities.find<{ state: string; resultPath: string | null }>('video.export-job', job.id)
   if (stored === undefined) throw new Error('job row missing')
   assert.equal(stored.state, 'succeeded')
@@ -165,14 +172,14 @@ test('declining the OS save dialog cancels, and its failure fails the job', asyn
   const entities = new MemoryEntities()
   const jobs = new ExportJobService(entities)
 
-  const declined = new FakeDialog()
-  declined.answer = { saved: false }
+  const declined = new FakeExportFiles()
+  declined.exportAnswer = { saved: false }
   const jobA = await jobs.create('comp-1', 'webm')
   const canceled = await deliverExport({ jobs, deliver: offPlatformDelivery(declined) }, jobA.id, BYTES, 'webm')
   assert.equal(canceled.kind, 'canceled')
 
-  const broken = new FakeDialog()
-  broken.answer = new Error('dialog crashed')
+  const broken = new FakeExportFiles()
+  broken.exportAnswer = new Error('dialog crashed')
   const jobB = await jobs.create('comp-1', 'webm')
   const failed = await deliverExport({ jobs, deliver: offPlatformDelivery(broken) }, jobB.id, BYTES, 'webm')
   assert.equal(failed.kind, 'failed')

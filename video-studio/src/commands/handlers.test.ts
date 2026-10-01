@@ -11,7 +11,7 @@ import {
   type CommandPorts,
   type ExportJobStarterArgs,
 } from './handlers.ts'
-import type { DialogPort, EntitiesPort, EntityRow, FilesPort } from '../sdk-port.ts'
+import type { EntitiesPort, EntityRow, FilesPort } from '../sdk-port.ts'
 
 interface StoreEntity {
   type: string
@@ -85,10 +85,7 @@ class MemoryFiles implements FilesPort {
   public async save(): Promise<null> {
     return null
   }
-}
-
-class MemoryDialog implements DialogPort {
-  public async saveAs(): Promise<{ saved: boolean }> {
+  public async export(): Promise<{ saved: boolean }> {
     return { saved: false }
   }
 }
@@ -105,7 +102,6 @@ function ports(): TestPorts {
       projectId: 'proj_test',
       entities,
       files: new MemoryFiles(),
-      dialog: new MemoryDialog(),
     },
     entities,
   }

@@ -23,7 +23,7 @@ An offline video editor for ISPO, adapted from the open-source
 - Export renders through the vendored encoder into memory and delivers to a
   destination the user chooses: the Files library through the powerbox save,
   or an explicit off-platform save through the OS save dialog
-  (`dialog.saveAs`, display names only — no OS path is ever recorded).
+  (`files.export`, display names only — no OS path is ever recorded).
   Every non-delivered outcome (cancel, refusal, failure) leaves the
   composition untouched; a `video.export-job` record tracks each run. When
   this frame lacks the browser capabilities export needs (cross-origin

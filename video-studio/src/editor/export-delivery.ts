@@ -3,8 +3,8 @@
 // destinations exist, both explicit user intents:
 //
 //   'files'    — the powerbox save; the user picks a Files library location.
-//   'computer' — the OS save dialog (`dialog.saveAs`); explicit off-platform
-//                export outside ISPO. The dialog returns only display names,
+//   'computer' — the OS save dialog (`files.export`); explicit off-platform
+//                export outside ISPO. The export returns only display names,
 //                never an OS path, so the job records no result path.
 //
 // Every non-delivered outcome (cancel, dialog refusal, transport failure)
@@ -12,7 +12,7 @@
 // editor's own autosave/history never ride on the export path.
 import type { ExportFormat } from '../domain/schema.ts'
 import type { ExportJobResultInput, ExportJobService } from '../domain/export-jobs.ts'
-import type { DialogPort, FilesPort } from '../sdk-port.ts'
+import type { FilesPort } from '../sdk-port.ts'
 
 export type ExportDestination = 'files' | 'computer'
 
@@ -45,9 +45,9 @@ export function filesDelivery(files: FilesPort): ByteDelivery {
 }
 
 /** Explicit off-platform delivery through the OS save dialog. */
-export function offPlatformDelivery(dialog: DialogPort): ByteDelivery {
+export function offPlatformDelivery(files: FilesPort): ByteDelivery {
   return async (bytes, format) => {
-    const answer = await dialog.saveAs({
+    const answer = await files.export({
       data: bytes,
       defaultName: exportFileName(format),
       filters: [{ name: format === 'webm' ? 'WebM video' : 'MP4 video', extensions: [format] }],

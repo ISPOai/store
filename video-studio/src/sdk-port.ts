@@ -49,11 +49,8 @@ export interface FilesSaveResult {
 export interface FilesPort {
   pick(args?: { accept?: string[]; multiple?: boolean }): Promise<PowerboxPick | PowerboxPick[] | null>
   save(args: { content: string | Uint8Array; name?: string; accept?: string[] }): Promise<FilesSaveResult | null>
-}
-
-/** The OS save dialog port: explicit off-platform export, display names only. */
-export interface DialogPort {
-  saveAs(args: {
+  /** Export bytes to a user-selected OS location. */
+  export(args: {
     data: Uint8Array
     defaultName: string
     filters?: { name: string; extensions: string[] }[]
@@ -63,7 +60,6 @@ export interface DialogPort {
 export interface SdkPort {
   readonly entities: EntitiesPort
   readonly files: FilesPort
-  readonly dialog: DialogPort
 }
 
 export type {

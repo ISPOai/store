@@ -88,7 +88,8 @@ Add a first-party `solid` target rather than allowing per-project build plugins:
 - either add a reviewed host-owned TypeGPU transform or remove the one
   frame-triage feature that requires it from v1;
 - preserve the same bootstrap, build-id acknowledgement, HMR/full-reload, CSP,
-  and `notifyAppReady()` contract as React.
+  and `runtime.readiness.notify()` contract as React (imported from
+  `@ispo/sdk/runtime`).
 
 This host work changes the SDK surface and must update both bundled `ispo-sdk`
 skill copies and their lock hashes as required by the root repository guidance.
@@ -135,7 +136,7 @@ host-allocated `loopback-server` process reached only through same-origin
 | --- | --- |
 | Electron `window.desktop` bridge | Framework-free `@ispo/sdk` calls and local browser engine state |
 | Native open/folder dialogs | `files.pick` for object-scoped media selection |
-| Native save dialog | `files.save`/`files.publish`; `dialog.saveAs` only for explicit off-platform export |
+| Native save dialog | `files.save`/`files.publish`; `files.export` only for explicit off-platform export |
 | Project-root paths and file watchers | No iframe paths; host-minted Files references plus explicit app state |
 | `package.json` as an app database | Declared Entities for projects, timelines, folders, assets, and export jobs |
 | IndexedDB preferences | Keep only disposable UI preferences; meaningful records belong in Entities |
@@ -200,7 +201,7 @@ Exit: all legal gates pass and a minimal isolated Solid project exports a
 - Vendor only the upstream web/editor and engine files required by the offline
   path; exclude Electron, updater, deep links, desktop assets, CLI socket,
   account, billing, generation, and telemetry modules.
-- Replace router assumptions and call core `notifyAppReady()` after the first
+- Replace router assumptions and call `runtime.readiness.notify()` after the first
   visible Solid paint.
 - Start with no network or environment requests.
 

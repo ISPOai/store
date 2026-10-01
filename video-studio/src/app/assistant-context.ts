@@ -3,7 +3,7 @@
 // materially changes. Bound from the root view so the publish effect runs
 // inside a component lifecycle; cleared when the app unmounts.
 import { createEffect, onCleanup } from 'solid-js'
-import { assistant } from '@ispo/sdk'
+import { ui } from '@ispo/sdk'
 import { buildAssistantBrief } from '../domain/assistant-brief.ts'
 import type { AppController } from './app-controller.ts'
 
@@ -22,9 +22,9 @@ export function bindAssistantContext(controller: AppController): void {
     const serialized = JSON.stringify(brief)
     if (serialized === lastPublished) return
     lastPublished = serialized
-    assistant.context.replace(brief)
+    ui.context.set(brief)
   })
   onCleanup(() => {
-    assistant.context.clear()
+    ui.context.clear()
   })
 }

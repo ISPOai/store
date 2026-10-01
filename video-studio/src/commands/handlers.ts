@@ -14,13 +14,12 @@ import { ExportJobService, type ExportJobRow } from '../domain/export-jobs.ts'
 import { clipNodeForAsset, insertClipIntoDocument } from '../domain/clip-nodes.ts'
 import { inspectTimeline } from '../domain/timeline-inspect.ts'
 import { ASSET_TYPE } from '../domain/media-assets.ts'
-import type { DialogPort, EntitiesPort, FilesPort } from '../sdk-port.ts'
+import type { EntitiesPort, FilesPort } from '../sdk-port.ts'
 
 export interface CommandPorts {
   readonly projectId: string
   readonly entities: EntitiesPort
   readonly files: FilesPort
-  readonly dialog: DialogPort
 }
 
 /** The wire form of one inspect-timeline result row. */

@@ -599,7 +599,7 @@ export class AppController {
           files: this.sdk.files,
           fps: this.fps(),
           projectId: editor.projectId,
-          deliver: offPlatformDelivery(this.sdk.dialog),
+          deliver: offPlatformDelivery(this.sdk.files),
           destination: 'computer',
         },
         editor.session.currentDocument(),
